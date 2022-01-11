@@ -1,0 +1,7 @@
+C:\libs\DirectXTK-master\MakeSpriteFont\bin\Debug\MakeSpriteFont.exe.config
+C:\libs\DirectXTK-master\MakeSpriteFont\bin\Debug\MakeSpriteFont.exe
+C:\libs\DirectXTK-master\MakeSpriteFont\bin\Debug\MakeSpriteFont.pdb
+C:\libs\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.csprojAssemblyReference.cache
+C:\libs\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.csproj.CoreCompileInputs.cache
+C:\libs\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.exe
+C:\libs\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.pdb

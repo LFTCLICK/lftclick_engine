@@ -1,0 +1,19 @@
+{
+  "Level": [
+    {
+      "prefab": "player.json",
+      "overrides": {
+        "0": {
+          "speed": 300
+        },
+        "2": {
+    "startX": 100,
+    "startY": 100,
+    "scaleX": 1,
+    "scaleY": 1,
+    "rot": 0
+        }
+      }
+    }
+  ]
+}

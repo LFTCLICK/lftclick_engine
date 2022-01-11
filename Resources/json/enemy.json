@@ -1,0 +1,15 @@
+{
+      "2": {
+        "startX": 400,
+        "startY": 400
+      },
+      "1": {
+        "image": ".Resources\\images\\enemy.bmp",
+        "dstH": 30,
+        "dstW": 30
+      },
+      "3": {
+        "waitTime": 3,
+        "speed": -150
+      }
+}

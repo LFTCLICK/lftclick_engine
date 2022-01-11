@@ -1,0 +1,15 @@
+{
+  "5": {
+    "speed": 17,
+    "speedDelta": 5,
+    "maxSpeed": 200,
+    "startX": 0,
+    "startY": 0,
+    "startZ": 0
+  },
+  "6": {
+    "floorHeight": 110,
+    "floorGap": 110,
+    "numOfSpikesPerLevel": 3
+  }
+}

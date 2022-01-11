@@ -1,0 +1,45 @@
+{
+  "1": {
+    "startX": -20.5,
+    "startY": 80.5,
+    "scaleX": 28,
+    "scaleY": 28,
+    "rot": 0,
+    "zPos": 10
+  },
+  "2": {
+    "vertices" : [
+    {
+        "pos": [-0.5,-0.5,0],
+        "uv": [0,1]
+    },
+    {
+        "pos": [-0.5,0.5,0],
+        "uv": [0,0]
+    },
+    {
+        "pos": [0.5,0.5,0],
+        "uv": [0.5,0]
+    },
+    {
+        "pos": [0.5,-0.5,0],
+        "uv": [0.5,1]
+    }
+    ],
+    "indicies": [0, 1, 2, 2, 3, 0],
+    "scale": 1,
+    "image": "Resources\\images\\slow.png"
+
+  },
+  "4": {
+    "center": [0.0, 0.0, 0.0],
+    "width": 28,
+    "height": 28,
+    "trigger": true,
+    "deleteOnCollison": true
+  },
+  "7": {
+    "animationTime": 0.4,
+    "offsetDenominator": 2
+  }
+}
