@@ -13,14 +13,20 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\Components">
-      <UniqueIdentifier>{eaeb839b-af78-493f-927e-c8fdfa960fc9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{1856f23c-347c-4eee-bf7c-4b0c92ea47fd}</UniqueIdentifier>
     </Filter>
     <Filter Include="Graphics">
       <UniqueIdentifier>{b20c89db-e838-4404-a413-238d7e92371b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components\Headers">
+      <UniqueIdentifier>{1eb8766e-bbad-498d-b462-b3c29e972668}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Headers">
+      <UniqueIdentifier>{931e20d6-698d-4775-a51c-273741d8c306}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\ImGUI">
+      <UniqueIdentifier>{802cb82c-e8f3-4524-b4e6-8bc865683697}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -78,47 +84,38 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui_tables.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui_widgets.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui_demo.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui_draw.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\imgui-1.82\backends\imgui_impl_dx11.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\imgui-1.82\backends\imgui_impl_sdl.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Components\AnimationHelper.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="LFT Click Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui_demo.cpp">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui_draw.cpp">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\backends\imgui_impl_dx11.cpp">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\backends\imgui_impl_sdl.cpp">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui_tables.cpp">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui_widgets.cpp">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui.cpp">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Components\Component.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Transform.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Drawable.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="FrameRateControler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -140,24 +137,6 @@
     <ClInclude Include="Vector2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Graphics.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\GameObject.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\GameObjectManager.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Collider.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\MeshCollider.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\SquareCollider.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Messages.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -167,35 +146,62 @@
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Components\AnimationHelper.h">
+      <Filter>Components\Headers</Filter>
+    </ClInclude>
     <ClInclude Include="Components\Camera.h">
-      <Filter>Components</Filter>
+      <Filter>Components\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Libraries\imgui-1.82\imstb_rectpack.h">
-      <Filter>Graphics</Filter>
+    <ClInclude Include="Components\Collider.h">
+      <Filter>Components\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Libraries\imgui-1.82\imstb_textedit.h">
-      <Filter>Graphics</Filter>
+    <ClInclude Include="Components\Component.h">
+      <Filter>Components\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h">
-      <Filter>Graphics</Filter>
+    <ClInclude Include="Components\Drawable.h">
+      <Filter>Components\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\GameObject.h">
+      <Filter>Components\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\GameObjectManager.h">
+      <Filter>Components\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\MeshCollider.h">
+      <Filter>Components\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SquareCollider.h">
+      <Filter>Components\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Transform.h">
+      <Filter>Components\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Graphics.h">
+      <Filter>Graphics\Headers</Filter>
     </ClInclude>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Libraries\imgui-1.82\imgui_internal.h">
-      <Filter>Graphics</Filter>
+      <Filter>Graphics\ImGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\Libraries\imgui-1.82\backends\imgui_impl_dx11.h">
-      <Filter>Graphics</Filter>
+      <Filter>Graphics\ImGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\Libraries\imgui-1.82\backends\imgui_impl_sdl.h">
-      <Filter>Graphics</Filter>
+      <Filter>Graphics\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\imgui_internal.h">
+      <Filter>Graphics\ImGUI</Filter>
     </ClInclude>
     <ClInclude Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.h">
-      <Filter>Graphics</Filter>
+      <Filter>Graphics\ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="Components\AnimationHelper.h">
-      <Filter>Components</Filter>
+    <ClInclude Include="..\Libraries\imgui-1.82\imstb_rectpack.h">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\imstb_textedit.h">
+      <Filter>Graphics\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h">
+      <Filter>Graphics\ImGUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -214,7 +220,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
-      <Filter>Graphics</Filter>
+      <Filter>Graphics\ImGUI</Filter>
     </Text>
   </ItemGroup>
 </Project>

@@ -29,6 +29,7 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_dx11.h"
 #include <time.h>
+#include "Components/Drawable.h"
 
 using json = nlohmann::json;
 
@@ -41,10 +42,8 @@ GameObjectManager *gom;
 int main(int argc, char *args[])
 {
 	SDL_Window *pWindow;
-	Uint32 frameTimeTicks = 16;
-	int error = 0;
-	bool isRunning = true;
-
+	int error = 0;					//temp varrible for the SDL initialization
+	
 	//Init SDL
 	if ((error = SDL_Init(SDL_INIT_VIDEO)) < 0)
 	{
@@ -52,6 +51,7 @@ int main(int argc, char *args[])
 		return 1;
 	}
 
+	//Create SDL window
 	pWindow = SDL_CreateWindow("LFT Click Engine Demo",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
@@ -59,32 +59,44 @@ int main(int argc, char *args[])
 		windowHeight,
 		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
 	);
-
-	if (pWindow == NULL)
+	if (pWindow == NULL) //error check
 	{
 		std::cout << "Couldn't create window " << SDL_GetError();
 		return 1;
 	}
+	//load in and set icon
 	SDL_Surface* icon = ResourceManager::getInstance().GetResource("Resources\\images\\icon.bmp");
 	SDL_SetWindowIcon(pWindow, icon);
 
+	//Get handle to SDL window for DirectX
 	HWND sdlWindow = GetActiveWindow();
 	Graphics::getInstance().init(sdlWindow, windowWidth, windowHeight);
-	
-	gom = new GameObjectManager();
-	EventManager::getInstance().init(gom);
-	gof = new GameObjectFactory();
 
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
-	ImGui_ImplSDL2_InitForD3D(pWindow);
-	ImGui_ImplDX11_Init(Graphics::getInstance().GetDevice(), Graphics::getInstance().GetContext());
+	////imgui setup
+	//IMGUI_CHECKVERSION();
+	//ImGui::CreateContext();
+	//ImGuiIO& io = ImGui::GetIO(); (void)io;
+	//ImGui::StyleColorsDark();
+	//ImGui_ImplSDL2_InitForD3D(pWindow);
+	//ImGui_ImplDX11_Init(Graphics::getInstance().GetDevice(), Graphics::getInstance().GetContext());
+
 	std::fstream data("Resources/json/menu.json");
 	json dataJson;
 	data >> dataJson;
 	data.close();
+
+
+
+	//
+	gom = new GameObjectManager();
+	EventManager::getInstance().init(gom);
+	gof = new GameObjectFactory();
+	
+
+	Uint32 frameTimeTicks = 16;		//
+	bool isRunning = true;
+
+
 	FrameRateControler::getInstance().Init(6);
 	bool masterLoop = true;
 	bool playGame = false;
@@ -97,12 +109,16 @@ int main(int argc, char *args[])
 		{
 			gom->Deserialize(gof, dataJson);
 
+			GameObject* temp = gom->FindObjectOfTag("controls");
+			Drawable* controlsGaphics = temp->getComponent<Drawable>();
+
 			gom->FindObjectOfTag("controls")->isActive = false;
 			gom->FindObjectOfTag("credits")->isActive = false;
 
 
 			GameManager::getInstance().gom = gom;
-			GameManager::getInstance().mainCamera = (Camera*)gom->FindObjectOfTag("camera")->hasComp(Component::CAMERA);
+			GameManager::getInstance().mainCamera = gom->FindObjectOfTag("camera")->getComponent<Camera>();
+			GameObject* cloneTest = gom->CloneObject(gom->FindObjectOfTag("camera"));
 
 			gom->Start();
 			isRunning = true;
@@ -224,7 +240,7 @@ int main(int argc, char *args[])
 			gom->Deserialize(gof, dataJson2);
 			GameObject* playerObj = gom->FindObjectOfTag("player");
 
-			GameManager::getInstance().mainCamera = (Camera*)gom->FindObjectOfTag("camera")->hasComp(Component::CAMERA);
+			GameManager::getInstance().mainCamera = gom->FindObjectOfTag("camera")->getComponent<Camera>();
 			gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0, currentTime;

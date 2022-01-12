@@ -21,4 +21,5 @@ public:
 
 private:
 	Component* const CreateComp(json::iterator type, GameObject* currentObj);
+	friend class GameObject;
 };

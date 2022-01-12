@@ -19,14 +19,14 @@ class Transform : public Component {
 public:
 	Transform();
 	Transform(json j, GameObject* parent);
-	Component* clone(GameObject* newParent);
 	void Init(Vector2D const & v);
 	void Move(float deltaX, float deltaY);
 	void SetPos(float newX, float newY);
 	void Rotate(float angleDelta);
-	void Start();
-	void Update();
-	int getCompId();
+	virtual void Start();
+	virtual void Update();
+	virtual int getCompId();
+	virtual Component* Clone(GameObject* newParent);
 	void HandleMessage(Message* e);
 	Vector2D CurrentPos();
 	DirectX::XMFLOAT4X4 GetXMMatrix();

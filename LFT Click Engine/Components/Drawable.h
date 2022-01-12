@@ -23,11 +23,11 @@ class Drawable : public Component
 public:
 	Drawable();
 	Drawable(json j, GameObject* parent);
-	Component* clone(GameObject* newParent);
-	void Start();
-	void Update();
-	void Draw();
-	int getCompId();
+	virtual Component* Clone(GameObject* newParent);
+	virtual void Start();
+	virtual void Update();
+	virtual void Draw();
+	virtual int getCompId();
 	~Drawable() = default;
 	float xOffset, yOffset;
 	float xFlip;

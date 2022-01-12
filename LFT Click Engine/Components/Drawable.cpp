@@ -57,7 +57,7 @@ Drawable::Drawable(json j, GameObject * parent)
 	//DX11 Setup
 }
 
-Component * Drawable::clone(GameObject * newParent)
+Component * Drawable::Clone(GameObject * newParent)
 {
 	Drawable* toReturn = new Drawable();
 

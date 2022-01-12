@@ -23,7 +23,7 @@ public:
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::ANIMATION_HELPER; };
 	
-	Component* clone(GameObject* newParent);
+	virtual Component* Clone(GameObject* newParent);
 	AnimationHelper() {};
 	AnimationHelper(json j, GameObject* parent);
 

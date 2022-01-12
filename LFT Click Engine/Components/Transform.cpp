@@ -26,7 +26,7 @@ Transform::Transform(json j, GameObject * parent)
 	zPos = j["zPos"];
 }
 
-Component * Transform::clone(GameObject* newParent)
+Component * Transform::Clone(GameObject* newParent)
 {
 	Transform* toReturn = new Transform();
 	toReturn->parent = newParent;

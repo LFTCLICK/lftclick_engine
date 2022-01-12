@@ -23,11 +23,11 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override;
+	virtual Component* Clone(GameObject* newParent);
 
 	Camera();
 	Camera(json j, GameObject* parent);
 
-	Component* clone(GameObject* newParent);
 	
 
 	void SetPos(float x, float y, float z);

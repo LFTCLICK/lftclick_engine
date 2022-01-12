@@ -9,6 +9,9 @@
 // ---------------------------------------------------------------------------
 #pragma once
 #include "../Messages.h"
+
+class GameObject;
+
 class Component
 {
 public:
@@ -16,6 +19,7 @@ public:
 	Component();
 	virtual void Start() = 0;
 	virtual void Update() = 0;
+	virtual Component* Clone(GameObject* newParent) = 0;
 	virtual int getCompId() = 0;
 	virtual void HandleMessage(Message* e) {};
 	~Component();

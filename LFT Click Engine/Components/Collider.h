@@ -17,7 +17,7 @@ public:
 	virtual void Update() = 0;
 	virtual int getCompId() = 0;
 
-	virtual Component* clone(GameObject* newParent) = 0;
+	virtual Component* Clone(GameObject* newParent) = 0;
 	virtual void CollisionCheck(GameObject* toCheck) = 0;
 protected:
 	bool isTrigger;

@@ -21,11 +21,11 @@ public:
 	MeshCollider();
 	MeshCollider(json j, GameObject* parent);
 
-	void Start();
-	void Update();
+	virtual void Start();
+	virtual void Update();
 	int getCompId();
 
-	Component* clone(GameObject* newParent);
+	virtual Component* Clone(GameObject* newParent);
 	void CollisionCheck(GameObject* toCheck);
 private:
 	GameObject* parent;

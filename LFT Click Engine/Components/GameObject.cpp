@@ -11,53 +11,39 @@
 
 GameObject::GameObject()
 {
-	comps = std::list<Component*>();
+	comps = std::map<int, Component*>();
 	isActive = true;
 }
 
 void GameObject::Update()
 {
-	for (Component* c : comps)
-		c->Update();
+	for(const auto& c : comps)
+		c.second->Update();
 }
 
 void GameObject::Start()
 {
-	for (Component* c : comps)
-		c->Start();
-}
-
-void GameObject::Add(Component* c)
-{
-	comps.emplace_back(c);
-}
-
-void GameObject::Remove(Component * c)
-{
-	comps.remove(c);
+	for (const auto& c : comps)
+		c.second->Start();
 }
 
 void GameObject::HandleMessage(Message * e)
 {
-	for (Component* c : comps)
-		c->HandleMessage(e);
+	for (const auto& c : comps)
+		c.second->HandleMessage(e);
 }
 
-Component * GameObject::hasComp(Component::ComponentType comType)
-{
-	for (Component* c : comps)
-	{
-		if (c->getCompId() == comType)
-			return c;
-	}
-	return nullptr;
-}
 
 GameObject::~GameObject()
 {
-	/*for (Component* c : comps)
-	{
-		delete c;
-	}*/
 	comps.clear();
+}
+
+GameObject * GameObject::Clone()
+{
+	GameObject* toReturn = new GameObject();
+	toReturn->tag = tag;
+	for (const auto& c : comps)
+		toReturn->comps[c.first] = c.second->Clone(toReturn);
+	return toReturn;
 }

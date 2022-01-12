@@ -11,6 +11,8 @@
 #include <iostream>
 #include "Drawable.h"
 #include "Collider.h"
+#include "MeshCollider.h"
+#include "SquareCollider.h"
 GameObjectManager::GameObjectManager()
 {
 	gameObjectList = std::list<GameObject*>();
@@ -37,7 +39,7 @@ void GameObjectManager::Draw()
 	{
 		if (g->isActive)
 		{
-			Drawable* s = dynamic_cast<Drawable*>(g->hasComp(Component::DRAWABLE));
+			Drawable* s = g->getComponent<Drawable>();
 			if (s != nullptr)
 			{
 				s->Draw();
@@ -52,9 +54,9 @@ void GameObjectManager::DoCollision(GameObject* toCheckWith)
 	{
 		if (g->isActive)
 		{
-			Collider* s = dynamic_cast<Collider*>(g->hasComp(Component::MESH_COLLIDER));
+			Collider* s = dynamic_cast<Collider*>(g->getComponent<MeshCollider>());
 			if (s == nullptr)
-				s = dynamic_cast<Collider*>(g->hasComp(Component::SQUARE_COLLLIDER));
+				s = dynamic_cast<Collider*>(g->getComponent<SquareCollider>());
 			if (s != nullptr)
 			{
 				s->CollisionCheck(toCheckWith);

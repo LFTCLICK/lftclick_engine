@@ -10,7 +10,7 @@
 #pragma once
 #include "Component.h"
 #include "../Messages.h"
-#include <list>
+#include <map>
 
 class GameObject
 {
@@ -18,14 +18,32 @@ public:
 	GameObject();
 	void Update();
 	void Start();
-	void Add(Component* c);
-	void Remove(Component* c);
+	template <typename T>
+	void Add(T* c)
+	{
+		comps[c->getCompId()] = (Component*)c;
+	}
+	template <typename T>
+	void Remove(T* c)
+	{
+		comps.erase(c->getCompId());
+	}
 	void HandleMessage(Message* e);
-	Component* hasComp(Component::ComponentType comType);
+	template <typename T>
+	T* getComponent()
+	{
+		T temp;
+		auto toFind = comps.find(temp.getCompId());
+		if (toFind == comps.end())
+			return nullptr;
+		return (T*)comps[temp.getCompId()];
+	}
 	~GameObject();
 public:
 	std::string tag;
 	bool isActive;
 private:
-	std::list<Component*> comps;
+	std::map<int, Component*> comps;
+	GameObject* Clone();//ONLY FACTORY SHOULD TOUCH THIS
+	friend class GameObjectFactory;
 };

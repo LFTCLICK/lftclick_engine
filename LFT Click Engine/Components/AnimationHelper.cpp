@@ -11,7 +11,7 @@
 
 void AnimationHelper::Start()
 {
-	draw = (Drawable*)parent->hasComp(ComponentType::DRAWABLE);
+	draw = parent->getComponent<Drawable>();
 	timer = 0;
 }
 
@@ -27,7 +27,7 @@ void AnimationHelper::Update()
 	timer += FrameRateControler::getInstance().DeltaTime();
 }
 
-Component * AnimationHelper::clone(GameObject * newParent)
+Component * AnimationHelper::Clone(GameObject * newParent)
 {
 	AnimationHelper* toReturn = new AnimationHelper();
 	toReturn->parent = newParent;

@@ -20,14 +20,14 @@ class SquareCollider : public Collider {
 public:
 	// Inherited via Component
 	SquareCollider();
-	void Start();
-	void Update();
+	virtual void Start();
+	virtual void Update();
 	int getCompId();
 	DirectX::XMFLOAT4 center;
 	float width;
 	float height;
 
-	Component* clone(GameObject* newParent);
+	virtual Component* Clone(GameObject* newParent);
 	void CollisionCheck(GameObject* toCheck);
 	float* getPoints();
 	SquareCollider(json j, GameObject* parent);

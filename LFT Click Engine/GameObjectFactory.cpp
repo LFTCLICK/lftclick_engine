@@ -45,27 +45,28 @@ GameObject * const GameObjectFactory::CreateObject(json curentObj)
 
 GameObject * const GameObjectFactory::CloneObject(GameObject* toClone)
 {
-	GameObject* toReturn = new GameObject();
-	toReturn->tag = toClone->tag;
-	Component* currentComp = toClone->hasComp(Component::TRANSFORM);
-	if (currentComp != nullptr)
-		toReturn->Add(((Transform*)currentComp)->clone(toReturn));
-	currentComp = toClone->hasComp(Component::DRAWABLE);
-	if (currentComp != nullptr)
-		toReturn->Add(((Drawable*)currentComp)->clone(toReturn));
-	currentComp = toClone->hasComp(Component::MESH_COLLIDER);
-	if (currentComp != nullptr)
-		toReturn->Add(((MeshCollider*)currentComp)->clone(toReturn));
-	currentComp = toClone->hasComp(Component::SQUARE_COLLLIDER);
-	if (currentComp != nullptr)
-		toReturn->Add(((SquareCollider*)currentComp)->clone(toReturn));
-	currentComp = toClone->hasComp(Component::CAMERA);
-	if (currentComp != nullptr)
-		toReturn->Add(((Camera*)currentComp)->clone(toReturn));
-	currentComp = toClone->hasComp(Component::ANIMATION_HELPER);
-	if (currentComp != nullptr)
-		toReturn->Add(((AnimationHelper*)currentComp)->clone(toReturn));
-	return toReturn;
+	//commenting old stuff out in case the friend change isn't liked
+	//GameObject* toReturn = new GameObject();
+	//toReturn->tag = toClone->tag;
+	//Component* currentComp = toClone->getComponent<Transform>();
+	//if (currentComp != nullptr)
+	//	toReturn->Add(((Transform*)currentComp)->Clone(toReturn));
+	//currentComp = toClone->getComponent<Drawable>();
+	//if (currentComp != nullptr)
+	//	toReturn->Add(((Drawable*)currentComp)->Clone(toReturn));
+	//currentComp = toClone->getComponent<Drawable>();
+	//if (currentComp != nullptr)
+	//	toReturn->Add(((MeshCollider*)currentComp)->Clone(toReturn));
+	//currentComp = toClone->getComponent<SquareCollider>();
+	//if (currentComp != nullptr)
+	//	toReturn->Add(((SquareCollider*)currentComp)->Clone(toReturn));
+	//currentComp = toClone->getComponent<Camera>();
+	//if (currentComp != nullptr)
+	//	toReturn->Add(((Camera*)currentComp)->Clone(toReturn));
+	//currentComp = toClone->getComponent<AnimationHelper>();
+	//if (currentComp != nullptr)
+	//	toReturn->Add(((AnimationHelper*)currentComp)->Clone(toReturn));
+	return toClone->Clone();
 }
 
 Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject* currentObj)

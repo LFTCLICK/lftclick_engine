@@ -29,7 +29,7 @@ Camera::Camera(json j, GameObject * parent)
 	speed = startingSpeed;
 }
 
-Component * Camera::clone(GameObject * newParent)
+Component * Camera::Clone(GameObject * newParent)
 {
 	Camera* toReturn = new Camera();
 	toReturn->xPos = xPos;

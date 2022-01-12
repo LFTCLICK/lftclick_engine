@@ -16,8 +16,8 @@ SquareCollider::SquareCollider()
 
 void SquareCollider::Start()
 {
-	float scaleX = ((Transform*)parent->hasComp(ComponentType::TRANSFORM))->scale.x;
-	float scaleY = ((Transform*)parent->hasComp(ComponentType::TRANSFORM))->scale.y;
+	float scaleX = parent->getComponent<Transform>()->scale.x;
+	float scaleY = parent->getComponent<Transform>()->scale.y;
 	center.x *= scaleX;
 	center.y *= scaleY;
 	points = new float[8];
@@ -40,7 +40,7 @@ int SquareCollider::getCompId()
 	return ComponentType::SQUARE_COLLLIDER;
 }
 
-Component * SquareCollider::clone(GameObject * newParent)
+Component * SquareCollider::Clone(GameObject * newParent)
 {
 	SquareCollider* toReturn = new SquareCollider();
 	toReturn->parent = newParent;
@@ -56,9 +56,9 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 {
 	if (toCheck != parent)
 	{
-		SquareCollider* toCheckCollider = ((SquareCollider*)toCheck->hasComp(ComponentType::SQUARE_COLLLIDER));
-		DirectX::XMVECTOR myPos = DirectX::XMVectorAdd(((Transform*)parent->hasComp(ComponentType::TRANSFORM))->GetPosXMVector(), DirectX::XMLoadFloat4(&center));
-		DirectX::XMVECTOR toCheckPos = DirectX::XMVectorAdd(((Transform*)toCheck->hasComp(ComponentType::TRANSFORM))->GetPosXMVector(), DirectX::XMLoadFloat4(&toCheckCollider->center));
+		SquareCollider* toCheckCollider = toCheck->getComponent<SquareCollider>();
+		DirectX::XMVECTOR myPos = DirectX::XMVectorAdd(toCheck->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&center));
+		DirectX::XMVECTOR toCheckPos = DirectX::XMVectorAdd(toCheck->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&toCheckCollider->center));
 		int returnVal = StaticRectToStaticRect(&myPos, width, height, &toCheckPos, toCheckCollider->width, toCheckCollider->height);
 		if (returnVal == 1)
 		{

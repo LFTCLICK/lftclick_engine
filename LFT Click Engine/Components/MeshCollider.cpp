@@ -30,7 +30,7 @@ MeshCollider::MeshCollider(json j, GameObject * parent)
 
 void MeshCollider::Start()
 {
-	trans = ((Transform*)parent->hasComp(ComponentType::TRANSFORM));
+	trans = parent->getComponent<Transform>();
 	int arrayIndex = 0;
 	if (!arrayResized)
 	{
@@ -55,7 +55,7 @@ int MeshCollider::getCompId()
 
 
 
-Component * MeshCollider::clone(GameObject * newParent)
+Component * MeshCollider::Clone(GameObject * newParent)
 {
 	MeshCollider* toReturn = new MeshCollider();
 	toReturn->parent = newParent;
@@ -72,7 +72,7 @@ void MeshCollider::CollisionCheck(GameObject* toCheck)
 {
 	if (toCheck != parent)
 	{
-		Transform* playerTransform = ((Transform*)toCheck->hasComp(ComponentType::TRANSFORM));
+		Transform* playerTransform = toCheck->getComponent<Transform>();
 		float minDistance = playerTransform->scale.y + trans->scale.y + 500;
 		minDistance *= minDistance;
 		if (XM2DSquareDistance(&playerTransform->GetPosXMVector(), &trans->GetPosXMVector()) < minDistance)//skip some calculations
@@ -84,7 +84,7 @@ void MeshCollider::CollisionCheck(GameObject* toCheck)
 				actualPointArray[i + 1] = pointArray[i + 1] + trans->GetPosXMVector().m128_f32[1];
 			}
 
-			SquareCollider* toCheckCollider = ((SquareCollider*)toCheck->hasComp(ComponentType::SQUARE_COLLLIDER));
+			SquareCollider* toCheckCollider = toCheck->getComponent<SquareCollider>();
 			float* playerPointArray = new float[8];
 			float* orginPointArray = toCheckCollider->getPoints();
 			for (int i = 0; i < 8; i += 2)
