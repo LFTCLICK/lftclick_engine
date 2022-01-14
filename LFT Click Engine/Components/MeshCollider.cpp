@@ -75,7 +75,9 @@ void MeshCollider::CollisionCheck(GameObject* toCheck)
 		Transform* playerTransform = toCheck->getComponent<Transform>();
 		float minDistance = playerTransform->scale.y + trans->scale.y + 500;
 		minDistance *= minDistance;
-		if (XM2DSquareDistance(&playerTransform->GetPosXMVector(), &trans->GetPosXMVector()) < minDistance)//skip some calculations
+		DirectX::XMVECTOR pT = playerTransform->GetPosXMVector();
+		DirectX::XMVECTOR t = trans->GetPosXMVector();
+		if (XM2DSquareDistance(&pT, &t) < minDistance)//skip some calculations
 		{
 			float* actualPointArray = new float[arraySize];
 			for (int i = 0; i < arraySize; i += 2)
