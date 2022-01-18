@@ -45,32 +45,12 @@ GameObject * const GameObjectFactory::CreateObject(json curentObj)
 
 GameObject * const GameObjectFactory::CloneObject(GameObject* toClone)
 {
-	//commenting old stuff out in case the friend change isn't liked
-	//GameObject* toReturn = new GameObject();
-	//toReturn->tag = toClone->tag;
-	//Component* currentComp = toClone->getComponent<Transform>();
-	//if (currentComp != nullptr)
-	//	toReturn->Add(((Transform*)currentComp)->Clone(toReturn));
-	//currentComp = toClone->getComponent<Drawable>();
-	//if (currentComp != nullptr)
-	//	toReturn->Add(((Drawable*)currentComp)->Clone(toReturn));
-	//currentComp = toClone->getComponent<Drawable>();
-	//if (currentComp != nullptr)
-	//	toReturn->Add(((MeshCollider*)currentComp)->Clone(toReturn));
-	//currentComp = toClone->getComponent<SquareCollider>();
-	//if (currentComp != nullptr)
-	//	toReturn->Add(((SquareCollider*)currentComp)->Clone(toReturn));
-	//currentComp = toClone->getComponent<Camera>();
-	//if (currentComp != nullptr)
-	//	toReturn->Add(((Camera*)currentComp)->Clone(toReturn));
-	//currentComp = toClone->getComponent<AnimationHelper>();
-	//if (currentComp != nullptr)
-	//	toReturn->Add(((AnimationHelper*)currentComp)->Clone(toReturn));
 	return toClone->Clone();
 }
 
 Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject* currentObj)
 {
+	//Not sure if there's a nicer way to do this, perhaps a parallel array/map?
 	Component * currentComp = nullptr;
 	int compID = std::stoi(type.key());
 	if (compID == Component::TRANSFORM)

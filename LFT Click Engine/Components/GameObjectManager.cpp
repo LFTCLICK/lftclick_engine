@@ -29,6 +29,7 @@ void GameObjectManager::Update()
 
 void GameObjectManager::Start()
 {
+	//note that even if the object is inactive start is called
 	for (GameObject* g : gameObjectList)
 		g->Start();
 }

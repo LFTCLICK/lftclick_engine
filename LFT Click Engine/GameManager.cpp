@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 #include "GameManager.h"
 
+//probably should be removed
 GameManager::GameManager()
 {
 	playerDead = false;

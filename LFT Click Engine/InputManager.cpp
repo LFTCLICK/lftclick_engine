@@ -25,16 +25,16 @@ Input_Manager::~Input_Manager()
 void Input_Manager::Update()
 {
 	int numberOfItems = 0;
-	const Uint8* currentKeyStates = SDL_GetKeyboardState(&numberOfItems);
+	const Uint8* currentKeyStates = SDL_GetKeyboardState(&numberOfItems);//getting keyboard
 	if (numberOfItems > 512)
 		numberOfItems = 512;
 	memcpy(mPreviousState, mCurrentState, 512);
 	memcpy(mCurrentState, currentKeyStates, numberOfItems * sizeof(Uint8));
 	memcpy(mouseButtonPreviousState, mouseButtonCurrentState, 3);
 
-	Uint32 buttons = SDL_GetMouseState(&mousePos[0], &mousePos[1]);
+	Uint32 buttons = SDL_GetMouseState(&mousePos[0], &mousePos[1]);//getting mouse pos
 
-	mouseButtonCurrentState[0] = (buttons & SDL_BUTTON_LMASK) != 0;
+	mouseButtonCurrentState[0] = (buttons & SDL_BUTTON_LMASK) != 0;//get mouse buttons
 	mouseButtonCurrentState[1] = (buttons & SDL_BUTTON_RMASK) != 0;
 	mouseButtonCurrentState[2] = (buttons & SDL_BUTTON_MMASK) != 0;
 }

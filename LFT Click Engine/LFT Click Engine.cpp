@@ -244,6 +244,7 @@ int main(int argc, char *args[])
 			gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0, currentTime;
+			FrameRateControler::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
 			while (isRunning)
 			{
 				FrameRateControler::getInstance().StartOfFrame();
@@ -253,7 +254,7 @@ int main(int argc, char *args[])
 				ImGui::NewFrame();
 
 				SDL_Event e;
-				while (SDL_PollEvent(&e) != 0)
+				while (SDL_PollEvent(&e) != 0)//must be called before input manager
 				{
 					if (e.type == SDL_QUIT)
 					{
@@ -273,13 +274,13 @@ int main(int argc, char *args[])
 					}
 				}
 				Input_Manager::getInstance().Update();
-				gom->Update();
-				gom->DoCollision(playerObj);
-				EventManager::getInstance().Update();
-				Graphics::getInstance().ClearBuffer(0x7CA3FF);
-				gom->Draw();
+				gom->Update();//update gameobjects
+				gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
+				EventManager::getInstance().Update();//process timed events
+				Graphics::getInstance().ClearBuffer(0x7CA3FF);//clear screen
+				gom->Draw();//do drawing
 
-				bool open = true;
+				bool open = true;//ImGui stuff
 				ImGui::SetNextWindowPos({ 0,0});
 				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 				ImGui::Text("Score: %08d", (int)GameManager::getInstance().playerScore);
@@ -314,10 +315,10 @@ int main(int argc, char *args[])
 					ImGui::End();
 				}
 
-				ImGui::Render();
+				ImGui::Render();//ImGui
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-				Graphics::getInstance().EndFrame();
-				FrameRateControler::getInstance().EndOfFrame();
+				Graphics::getInstance().EndFrame();//present frame
+				FrameRateControler::getInstance().EndOfFrame();//sleep
 
 			}
 			gom->DeleteAll();

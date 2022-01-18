@@ -10,10 +10,10 @@
 
 void EventManager::init(GameObjectManager * gom)
 {
-	this->gom = gom;
+	this->gom = gom;//need GameObjectManager for global brodcast
 }
 
-void EventManager::BroadcastMessage(Message * m)
+void EventManager::BroadcastMessage(Message * m)//sends message to every gameobject
 {
 	gom->BroadcastMessage(m);
 	delete m;
@@ -34,7 +34,7 @@ void EventManager::AddedTimedMessage(Message * m)
 	messageQueue.push_back(m);
 }
 
-void EventManager::Update()
+void EventManager::Update()//handles timed messages
 {
 	std::list<Message*>::iterator it = messageQueue.begin();
 	while (it != messageQueue.end())
