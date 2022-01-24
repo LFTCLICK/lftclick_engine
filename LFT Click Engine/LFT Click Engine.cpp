@@ -73,27 +73,24 @@ int main(int argc, char *args[])
 	Graphics::getInstance().init(sdlWindow, windowWidth, windowHeight);
 
 	////imgui setup
-	//IMGUI_CHECKVERSION();
-	//ImGui::CreateContext();
-	//ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//ImGui::StyleColorsDark();
-	//ImGui_ImplSDL2_InitForD3D(pWindow);
-	//ImGui_ImplDX11_Init(Graphics::getInstance().GetDevice(), Graphics::getInstance().GetContext());
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplSDL2_InitForD3D(pWindow);
+	ImGui_ImplDX11_Init(Graphics::getInstance().GetDevice(), Graphics::getInstance().GetContext());
 
 	std::fstream data("Resources/json/menu.json");
 	json dataJson;
 	data >> dataJson;
 	data.close();
 
-
-
-	//
 	gom = new GameObjectManager();
 	EventManager::getInstance().init(gom);
 	gof = new GameObjectFactory();
 	
 
-	Uint32 frameTimeTicks = 16;		//
+	Uint32 frameTimeTicks = 16;		
 	bool isRunning = true;
 
 
