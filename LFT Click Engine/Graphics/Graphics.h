@@ -14,6 +14,17 @@
 #include <string>
 #include <vector>
 
+namespace DX
+{
+	inline void ThrowIfFailed(HRESULT hr)
+	{
+		if (FAILED(hr))
+		{
+			throw std::exception();
+		}
+	}
+}
+
 class Graphics
 {
 public:
@@ -41,7 +52,7 @@ public:
 	void ClearBuffer(float red, float green, float blue) noexcept
 	{
 		const float color[] = { red,green,blue,1.0f };
-		pContext->ClearRenderTargetView(pTarget.Get(), color);
+		pContext->ClearRenderTargetView(pRTV.Get(), color);
 		pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 	}
 	void Draw();
@@ -50,12 +61,25 @@ public:
 	ID3D11DeviceContext* GetContext();
 	ID3D11Device* GetDevice();
 
+private:
+	void OnResize();
+	void UpdateClientSizeVars();
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTarget;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRTV;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDSBuffer;
 	int width, height;
+
+	DXGI_FORMAT m_BackBufferFormat;
+	DXGI_FORMAT m_DepthStencilBufferFormat;
+	DXGI_FORMAT m_DepthStencilViewFormat;
+
+	D3D11_VIEWPORT m_ScreenViewport;
+
+	UINT m_MSAAQuality;
+	UINT M_MSAASampleCount;
 };
