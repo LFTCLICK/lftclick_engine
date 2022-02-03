@@ -15,6 +15,7 @@ GameObject::GameObject()
 	isActive = true;
 }
 
+//will not be called if isActive is set to false
 void GameObject::Update()
 {
 	for(const auto& c : comps)
