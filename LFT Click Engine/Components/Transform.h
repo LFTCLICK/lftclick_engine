@@ -22,6 +22,7 @@ public:
 	void Init(Vector2D const & v);
 	void Move(float deltaX, float deltaY);
 	void SetPos(float newX, float newY);
+	void SetPos(float newX, float newY, float newZ);
 	void Rotate(float angleDelta);
 	virtual void Start();
 	virtual void Update();

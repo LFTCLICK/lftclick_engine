@@ -5,3 +5,9 @@ C:\libs\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.csprojAssemblyR
 C:\libs\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.csproj.CoreCompileInputs.cache
 C:\libs\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.exe
 C:\libs\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.pdb
+C:\Users\Nanami\Documents\c++\LFT Click Engine\Libraries\DirectXTK-master\MakeSpriteFont\bin\Debug\MakeSpriteFont.exe
+C:\Users\Nanami\Documents\c++\LFT Click Engine\Libraries\DirectXTK-master\MakeSpriteFont\bin\Debug\MakeSpriteFont.pdb
+C:\Users\Nanami\Documents\c++\LFT Click Engine\Libraries\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.csproj.AssemblyReference.cache
+C:\Users\Nanami\Documents\c++\LFT Click Engine\Libraries\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.csproj.CoreCompileInputs.cache
+C:\Users\Nanami\Documents\c++\LFT Click Engine\Libraries\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.exe
+C:\Users\Nanami\Documents\c++\LFT Click Engine\Libraries\DirectXTK-master\MakeSpriteFont\obj\Debug\MakeSpriteFont.pdb

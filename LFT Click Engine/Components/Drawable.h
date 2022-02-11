@@ -36,16 +36,16 @@ private:
 	int drawSize;
 	bool useTextures;
 	bool hasRasterizer = false;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pVertexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> pIndexBuffer;
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> pPixelShader;
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> pInputLayout;
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> pVertexShader;
-	Microsoft::WRL::ComPtr<ID3D11Resource> pTextureResource;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> pShaderResourceView;
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> pSampler;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> pRasterizer;
-	Microsoft::WRL::ComPtr<ID3D11BlendState> pBlender;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> vertBuf;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuf;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertShader;
+	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
+	Microsoft::WRL::ComPtr<ID3D11Resource> texture;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> sampState;
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
 	DirectX::XMMATRIX pTransformationMatrix;
 	struct Vertex
 	{
