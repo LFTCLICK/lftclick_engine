@@ -30,10 +30,8 @@ Graphics::Graphics() :
 {
 }
 
-void Graphics::init(HWND hWnd, int width, int height)
+void Graphics::init(HWND hWnd, int initWidth, int initHeight)
 {
-	this->width = width;
-	this->height = height;
 	//setup devices
 
 	UINT flags = 0;
@@ -105,7 +103,7 @@ void Graphics::init(HWND hWnd, int width, int height)
 	//disable ALT-enter fullscreen
 	dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
 
-	OnResize();
+	OnResize(initWidth, initHeight);
 }
 
 void Graphics::UpdateClientSizeVars()
@@ -113,8 +111,10 @@ void Graphics::UpdateClientSizeVars()
 	//TODO -> Get current width/height from resized window
 }
 
-void Graphics::OnResize()
+void Graphics::OnResize(int newWidth, int newHeight)
 {
+	this->width = newWidth;
+	this->height = newHeight;
 	UpdateClientSizeVars();
 
 	pRTV.Reset();
@@ -173,7 +173,7 @@ void Graphics::Draw()
 void Graphics::EndFrame()
 {
 	HRESULT hr;
-	if (FAILED(hr = pSwap->Present(0u, 0u)))
+	if (FAILED(hr = pSwap->Present(0, 0)))
 	{
 		//throw hr
 	}

@@ -35,7 +35,7 @@ public:
 		return instance;
 	}
 	Graphics();
-	void init(HWND hWnd, int width, int height);
+	void init(HWND hWnd, int initWidth, int initHeight);
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics() = default;
@@ -60,9 +60,9 @@ public:
 	int getHeight();
 	ID3D11DeviceContext* GetContext();
 	ID3D11Device* GetDevice();
+	void OnResize(int newWidth, int newHeight);
 
 private:
-	void OnResize();
 	void UpdateClientSizeVars();
 
 private:

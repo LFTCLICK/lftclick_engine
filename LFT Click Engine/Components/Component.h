@@ -15,7 +15,7 @@ class GameObject;
 class Component
 {
 public:
-	enum ComponentType{PLAYER, TRANSFORM, DRAWABLE, MESH_COLLIDER, SQUARE_COLLLIDER, CAMERA, LEVEL_SPAWNING, ANIMATION_HELPER};
+	enum ComponentType{asda, TRANSFORM, DRAWABLE, MESH_COLLIDER, SQUARE_COLLLIDER, CAMERA, ANIMATION_HELPER};
 	Component();
 	virtual void Start() = 0;
 	virtual void Update() = 0;

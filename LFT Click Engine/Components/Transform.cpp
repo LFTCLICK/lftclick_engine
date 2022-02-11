@@ -54,6 +54,12 @@ void Transform::SetPos(float newX, float newY)
 	pos.x = newX;
 	pos.y = newY;
 }
+void Transform::SetPos(float newX, float newY, float newZ)
+{
+	pos.x = newX;
+	pos.y = newY;
+	zPos = newZ;
+}
 
 void Transform::Rotate(float angleDelta)
 {
