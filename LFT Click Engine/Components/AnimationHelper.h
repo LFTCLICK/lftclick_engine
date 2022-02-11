@@ -12,6 +12,7 @@
 #include "Component.h"
 #include <json.hpp>
 #include "Drawable.h"
+#include <iostream>
 
 using json = nlohmann::json;
 class AnimationHelper : public Component

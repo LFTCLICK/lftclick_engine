@@ -6,10 +6,5 @@
     "startX": 0,
     "startY": 0,
     "startZ": 0
-  },
-  "6": {
-    "floorHeight": 110,
-    "floorGap": 110,
-    "numOfSpikesPerLevel": 3
   }
 }

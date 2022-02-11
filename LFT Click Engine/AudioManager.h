@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	FMODAudioManager.h
+// File Name		:	AudioManager.h
 // Author			:	Chris Fitch
 // Creation Date	:	2022/01/27
 // Purpose			:	FMOD Audio Handling Header
@@ -45,12 +45,18 @@ struct FMODEngine {
 class AudioManager
 {
 public:
-	AudioManager();
-	~AudioManager();
+    static AudioManager& getInstance()
+    {
+        static AudioManager instance;
+        return instance;
+    }
+    AudioManager(AudioManager const&) = delete;
+    void operator=(AudioManager const&) = delete;
 	void Init();
     void Update();
+    void Term();
 
-    void Load(std::string name, bool loop); 
+    void Load(std::string name, bool loop = false);
     void LoadLoop(std::string name);
     void Unload(std::string name);
     int Play(std::string name, float x = 0, float y = 0, float volume = 100.f);
@@ -65,6 +71,7 @@ public:
     void LoadEvent(std::string name);
 
 private:
+    AudioManager();
     FMODEngine* engine;
     void SetPaused(int channelID, bool paused);
 

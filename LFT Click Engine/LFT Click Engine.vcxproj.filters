@@ -114,6 +114,12 @@
     <ClCompile Include="..\Libraries\imgui-1.82\imgui.cpp">
       <Filter>Graphics\ImGUI</Filter>
     </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Audible.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FrameRateControler.h">
@@ -202,6 +208,12 @@
     </ClInclude>
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h">
       <Filter>Graphics\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Audible.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

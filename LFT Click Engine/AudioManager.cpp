@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	FMODAudioManager.cpp
+// File Name		:	AudioManager.cpp
 // Author			:	Chris Fitch
 // Creation Date	:	2022/01/27
 // Purpose			:	FMOD Audio Handling 
@@ -45,11 +45,6 @@ AudioManager::AudioManager() : engine(nullptr) {
 
 }
 
-// Audio Manager destructor.
-AudioManager::~AudioManager() {
-
-}
-
 
 // Initializes the manager and FMOD engine. Should run only on game initialization.
 void AudioManager::Init() {
@@ -61,8 +56,13 @@ void AudioManager::Update() {
 	engine->Update();
 }
 
+// Terminates the manager and FMOD engine. Should run only on game termination.
+void AudioManager::Term() {
+	delete engine;
+}
+
 // Loads a sound into FMOD's memory and into the internal sounds map.
-void AudioManager::Load(std::string name, bool loop = false) {
+void AudioManager::Load(std::string name, bool loop) {
 	if (engine->sounds.find(name) == engine->sounds.end()) {
 		FMOD_MODE fmod_mode = 
 			FMOD_2D | 
@@ -76,7 +76,7 @@ void AudioManager::Load(std::string name, bool loop = false) {
 
 // Loads a sound and tells FMOD to loop it when playing.
 void AudioManager::LoadLoop(std::string name) {
-	Play(name, true);
+	Load(name, true);
 }
 
 // Unloads a sound from FMOD's memory.
@@ -93,7 +93,7 @@ void AudioManager::Unload(std::string name) {
 // 
 // The volume value given is divided by 100 when being sent to FMOD,
 // as FMOD's volume operates between 0 and 1.
-int AudioManager::Play(std::string name, float x = 0, float y = 0, float volume = 1.f) {
+int AudioManager::Play(std::string name, float x, float y, float volume) {
 	auto sound = engine->sounds.find(name);
 	if (sound == engine->sounds.end()) {
 		std::cout << name << " was not preloaded, loading from source instead.";
@@ -117,8 +117,8 @@ int AudioManager::Play(std::string name, float x = 0, float y = 0, float volume 
 	}
 }
 
-int AudioManager::Play(std::string name, Vector2D position, float volume = 1.f) {
-	AudioManager::Play(name, position.x, position.y, volume);
+int AudioManager::Play(std::string name, Vector2D position, float volume) {
+	return AudioManager::Play(name, position.x, position.y, volume);
 }
 
 // Pauses a channel.
