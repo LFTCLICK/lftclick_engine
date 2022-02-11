@@ -37,6 +37,8 @@ void MeshCollider::Start()
 		arrayResized = true;
 		for (DirectX::XMVECTOR c : vertices)
 		{
+			//since vertices are within the range of -.5 to .5 they are scaled to make the object bigger. Currently this is based off of transform's scale like in unity.
+			//Important note that this never updates with scale like unity does, this should be fixed
 			pointArray[arrayIndex + 0] = c.m128_f32[0] * trans->scale.x;
 			pointArray[arrayIndex + 1] = c.m128_f32[1] * trans->scale.y;
 			arrayIndex += 2;

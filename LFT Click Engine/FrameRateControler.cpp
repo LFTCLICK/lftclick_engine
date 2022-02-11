@@ -9,6 +9,9 @@
 #include "FrameRateControler.h"
 #include <iostream>
 
+//This has to be called if there is a considerable gap (especially because of loading) between end and start of frame
+//ticksSinceLastFrame is used for DeltaTime and if there is a big gap due to loading the start of the game thinks the player needs to move a lot farther than they should
+
 void FrameRateControler::Init(Uint32 ticksPerFrame)
 {
 	frameTimeTicks = ticksPerFrame;
@@ -16,6 +19,7 @@ void FrameRateControler::Init(Uint32 ticksPerFrame)
 	ticksSinceLastFrame = 0;
 }
 
+//sets the start of the frame time and the ammount of time since the last start was called
 void FrameRateControler::StartOfFrame()
 {
 	if(startOfFrameTime!=0)

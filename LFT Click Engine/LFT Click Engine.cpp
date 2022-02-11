@@ -280,7 +280,7 @@ int main(int argc, char* args[])
 				gom->Draw();//do drawing
 
 				bool open = true;//ImGui stuff
-				ImGui::SetNextWindowPos({ 0,0 });
+				ImGui::SetNextWindowPos({0,0});
 				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 				ImGui::Text("Score: %08d", (int)GameManager::getInstance().playerScore);
 				ImGui::End();
