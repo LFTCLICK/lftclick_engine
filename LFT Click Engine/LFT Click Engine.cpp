@@ -30,20 +30,21 @@
 #include "imgui_impl_dx11.h"
 #include <time.h>
 #include "Components/Drawable.h"
+#include "conio.h"
 
 using json = nlohmann::json;
 
 int windowWidth = 1000;
 int windowHeight = 1000;
 
-GameObjectFactory *gof;
-GameObjectManager *gom;
+GameObjectFactory* gof;
+GameObjectManager* gom;
 
-int main(int argc, char *args[])
+int main(int argc, char* args[])
 {
-	SDL_Window *pWindow;
+	SDL_Window* pWindow;
 	int error = 0;					//temp varrible for the SDL initialization
-	
+
 	//Init SDL
 	if ((error = SDL_Init(SDL_INIT_VIDEO)) < 0)
 	{
@@ -88,9 +89,9 @@ int main(int argc, char *args[])
 	gom = new GameObjectManager();
 	EventManager::getInstance().init(gom);
 	gof = new GameObjectFactory();
-	
 
-	Uint32 frameTimeTicks = 16;		
+
+	Uint32 frameTimeTicks = 16;
 	bool isRunning = true;
 
 
@@ -143,6 +144,7 @@ int main(int argc, char *args[])
 						windowWidth -= minChange;
 						windowHeight -= minChange;
 						SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
+						Graphics::getInstance().OnResize(windowWidth, windowHeight);
 					}
 				}
 				Input_Manager::getInstance().Update();
@@ -156,7 +158,7 @@ int main(int argc, char *args[])
 				bool open = true;
 				if (menuIndex == 0)
 				{
-					ImGui::SetNextWindowPos({ roundf((windowWidth/2)-50), roundf(windowHeight*.6f) });
+					ImGui::SetNextWindowPos({ roundf((windowWidth / 2) - 50), roundf(windowHeight * .6f) });
 					ImGui::Begin("mainMenu", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
 					if (ImGui::Button("Play", { 100,50 }))
 					{
@@ -182,9 +184,9 @@ int main(int argc, char *args[])
 						isRunning = false;
 						masterLoop = false;
 					}
-					
+
 					ImGui::End();
-					
+
 					ImGui::SetNextWindowPos({ 0,950 });
 					ImGui::Begin("passiveAgressiveMouseInput", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
 					std::string toShow = "Could you move your mouse please?";
@@ -203,7 +205,7 @@ int main(int argc, char *args[])
 				}
 				else if (menuIndex == 1)
 				{
-					ImGui::SetNextWindowPos({ roundf((windowWidth / 2) - 50), roundf(windowHeight*.6f) });
+					ImGui::SetNextWindowPos({ roundf((windowWidth / 2) - 50), roundf(windowHeight * .6f) });
 					ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
 
 					if (ImGui::Button("Back", { 100,50 }))
@@ -240,7 +242,7 @@ int main(int argc, char *args[])
 			GameManager::getInstance().mainCamera = gom->FindObjectOfTag("camera")->getComponent<Camera>();
 			gom->Start();
 			isRunning = true;
-			unsigned int lastTime = 0, currentTime;
+			unsigned int lastTime = 0;
 			FrameRateControler::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
 			while (isRunning)
 			{
@@ -278,7 +280,7 @@ int main(int argc, char *args[])
 				gom->Draw();//do drawing
 
 				bool open = true;//ImGui stuff
-				ImGui::SetNextWindowPos({ 0,0});
+				ImGui::SetNextWindowPos({0,0});
 				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 				ImGui::Text("Score: %08d", (int)GameManager::getInstance().playerScore);
 				ImGui::End();
@@ -325,17 +327,17 @@ int main(int argc, char *args[])
 			GameManager::getInstance().playerScore = 0;
 		}
 	}
-	
 
-	
+
+
 	// Cleanup
 	gom->DeleteAll();
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-	SDL_FreeSurface(icon);
+	//SDL_FreeSurface(icon);
 	SDL_DestroyWindow(pWindow);
 
 	SDL_Quit();
-    return 0;
+	return 0;
 }
