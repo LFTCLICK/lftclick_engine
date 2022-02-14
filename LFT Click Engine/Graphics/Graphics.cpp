@@ -22,7 +22,7 @@ namespace dx = DirectX;
 
 Graphics::Graphics() :
 	width(0), height(0),
-	m_BackBufferFormat(DXGI_FORMAT_R8G8B8A8_UNORM),
+	m_BackBufferFormat(DXGI_FORMAT_B8G8R8A8_UNORM),
 	m_DepthStencilBufferFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
 	m_DepthStencilViewFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
 	m_MSAAQuality(0),
@@ -182,12 +182,12 @@ void Graphics::EndFrame()
 
 int Graphics::getWidth()
 {
-	return width;
+	return this->width;
 }
 
 int Graphics::getHeight()
 {
-	return height;
+	return this->height;
 }
 
 ID3D11DeviceContext * Graphics::GetContext()

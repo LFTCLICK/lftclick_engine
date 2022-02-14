@@ -1,8 +1,0 @@
-{
-  "Level": [
-    {
-      "prefab": "turret.json",
-      "tag":    "turret"
-    }    
-  ]
-}

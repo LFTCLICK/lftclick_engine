@@ -181,8 +181,8 @@
     <ClCompile Include="..\Libraries\imgui-1.82\imgui_tables.cpp" />
     <ClCompile Include="..\Libraries\imgui-1.82\imgui_widgets.cpp" />
     <ClCompile Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="Components\SpriteAnimator.cpp" />
     <ClCompile Include="LFT Click Engine.cpp" />
-    <ClCompile Include="Components\AnimationHelper.cpp" />
     <ClCompile Include="Components\Camera.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Components\MeshCollider.cpp" />
@@ -211,7 +211,6 @@
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_textedit.h" />
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h" />
     <ClInclude Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.h" />
-    <ClInclude Include="Components\AnimationHelper.h" />
     <ClInclude Include="Components\Camera.h" />
     <ClInclude Include="Components\Collider.h" />
     <ClInclude Include="Components\Component.h" />
@@ -219,6 +218,7 @@
     <ClInclude Include="Components\GameObject.h" />
     <ClInclude Include="Components\GameObjectManager.h" />
     <ClInclude Include="Components\MeshCollider.h" />
+    <ClInclude Include="Components\SpriteAnimator.h" />
     <ClInclude Include="Components\SquareCollider.h" />
     <ClInclude Include="Components\Transform.h" />
     <ClInclude Include="EventManager.h" />
