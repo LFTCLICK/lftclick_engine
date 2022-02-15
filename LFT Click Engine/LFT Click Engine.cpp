@@ -34,8 +34,8 @@
 
 using json = nlohmann::json;
 
-int windowWidth = 1000;
-int windowHeight = 1000;
+int windowWidth = 1600;
+int windowHeight = 900;
 
 GameObjectFactory* gof;
 GameObjectManager* gom;
@@ -124,7 +124,7 @@ int main(int argc, char* args[])
 			int oldMouseY = 0;
 			while (isRunning)
 			{
-				FrameRateControler::getInstance().StartOfFrame();
+				FrameRateControler::getInstance().Tick();
 				SDL_Event e;
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -224,7 +224,6 @@ int main(int argc, char* args[])
 				ImGui::Render();
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 				Graphics::getInstance().EndFrame();
-				FrameRateControler::getInstance().EndOfFrame();
 			}
 			gom->DeleteAll();
 		}
@@ -246,7 +245,7 @@ int main(int argc, char* args[])
 			FrameRateControler::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
 			while (isRunning)
 			{
-				FrameRateControler::getInstance().StartOfFrame();
+				FrameRateControler::getInstance().Tick();
 
 				ImGui_ImplDX11_NewFrame();
 				ImGui_ImplSDL2_NewFrame();
@@ -317,15 +316,19 @@ int main(int argc, char* args[])
 				ImGui::Render();//ImGui
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 				Graphics::getInstance().EndFrame();//present frame
-				FrameRateControler::getInstance().EndOfFrame();//sleep
 
 			}
+
 			gom->DeleteAll();
+
 			EventManager::getInstance().Reset();
 			GameManager::getInstance().playerDead = false;
 			GameManager::getInstance().playerRestart = false;
 			GameManager::getInstance().playerScore = 0;
 		}
+
+	
+
 	}
 
 

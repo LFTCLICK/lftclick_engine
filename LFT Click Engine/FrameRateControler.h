@@ -21,13 +21,18 @@ public:
 	FrameRateControler(FrameRateControler const&) = delete;
 	void operator=(FrameRateControler const&) = delete;
 	void Init(Uint32 ticksPerFrame);
-	void StartOfFrame();
-	void EndOfFrame();
+	//void StartOfFrame();
+	//void EndOfFrame();
+
+	void Tick();
+	void Reset();
 	float DeltaTime();
 private:
 	FrameRateControler();
-	Uint32 startOfFrameTime;
-	Uint32 currentTime;
-	Uint32 frameTimeTicks;
-	Uint32 ticksSinceLastFrame;
+	
+	__int64 m_CurrentTime;
+	__int64 m_PreviousTime;
+
+	double m_DeltaTime;
+	double m_SecondsPerCount;
 };
