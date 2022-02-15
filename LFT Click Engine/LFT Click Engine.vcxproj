@@ -181,6 +181,8 @@
     <ClCompile Include="..\Libraries\imgui-1.82\imgui_tables.cpp" />
     <ClCompile Include="..\Libraries\imgui-1.82\imgui_widgets.cpp" />
     <ClCompile Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="Components\Player.cpp" />
+    <ClCompile Include="Components\Player.h" />
     <ClCompile Include="Components\SpriteAnimator.cpp" />
     <ClCompile Include="LFT Click Engine.cpp" />
     <ClCompile Include="Components\Camera.cpp" />

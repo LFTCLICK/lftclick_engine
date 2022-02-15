@@ -274,41 +274,7 @@ int main(int argc, char* args[])
  				Graphics::getInstance().ClearBuffer(0x7CA3FF);//clear screen
 				gom->Draw();//do drawing
 
-				bool open = true;//ImGui stuff
-				ImGui::SetNextWindowPos({0,0});
-				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-				ImGui::Text("Score: %08d", (int)GameManager::getInstance().playerScore);
-				ImGui::End();
-
-				if (GameManager::getInstance().playerDead)
-				{
-					ImGui::SetNextWindowPos({ 450,600 });
-					ImGui::Begin("mainMenu", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
-					if (ImGui::Button("Restart", { 100,50 }) || GameManager::getInstance().playerRestart)
-					{
-						isRunning = false;
-						playGame = true;
-						doMenu = false;
-						masterLoop = true;
-					}
-					if (ImGui::Button("Main Menu", { 100,50 }))
-					{
-						isRunning = false;
-						playGame = false;
-						doMenu = true;
-						masterLoop = true;
-					}
-					if (ImGui::Button("Quit", { 100,50 }))
-					{
-						isRunning = false;
-						playGame = false;
-						doMenu = false;
-						masterLoop = false;
-					}
-
-					ImGui::End();
-				}
-
+				
 				ImGui::Render();//ImGui
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 				Graphics::getInstance().EndFrame();//present frame

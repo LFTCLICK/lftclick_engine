@@ -16,6 +16,7 @@
 #include "Components/SquareCollider.h"
 #include "Components/Camera.h"
 #include "Components/SpriteAnimator.h"
+#include "Components/Player.h"
 #include <json.hpp>
 #include <string> 
 #include <fstream>
@@ -65,5 +66,7 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new Camera(type.value(), currentObj);
 	else if (compID == Component::SPRITE_ANIMATOR)
 		currentComp = new SpriteAnimator(type.value(), currentObj);
+	else if (compID == Component::PLAYER)
+		currentComp = new Player(type.value(), currentObj);
 	return currentComp;
 }

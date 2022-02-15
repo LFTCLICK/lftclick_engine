@@ -114,6 +114,12 @@
     <ClCompile Include="Components\SpriteAnimator.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Player.h">
+      <Filter>Components\Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Player.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FrameRateControler.h">

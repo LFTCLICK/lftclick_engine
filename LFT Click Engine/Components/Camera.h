@@ -32,6 +32,8 @@ public:
 
 	void SetPos(float x, float y, float z);
 	void SetRot(float x, float y, float z);
+
+	void Move(float x, float y, float z = 0.0f);
 	
 	DirectX::XMVECTOR getPos();
 	DirectX::XMVECTOR getRot();
@@ -39,8 +41,6 @@ public:
 	void Render();
 	void GetViewMatrix(DirectX::XMMATRIX &toReturn);
 	DirectX::XMMATRIX GetProjectionMatrix();
-
-	void SlowCamera();
 
 	float xPos, yPos, zPos, xRot, yRot, zRot;
 	float maxSpeed;
