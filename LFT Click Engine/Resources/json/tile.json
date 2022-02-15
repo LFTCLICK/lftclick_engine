@@ -1,11 +1,11 @@
 {
   "1": {
-    "startX": -270.0,
-    "startY": 390.0,
-    "scaleX": 64,
-    "scaleY": 64,
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 256,
+    "scaleY": 256,
     "rot": 0,
-    "zPos": 20
+    "zPos": 10
   },
   "2": {
     "vertices" : [
@@ -28,7 +28,7 @@
     ],
     "indicies": [0, 1, 2, 2, 3, 0],
     "scale": 1,
-    "image": ".Resources\\images\\sign.png"
+    "image": "Resources\\images\\wall.png"
 
   }
 }

@@ -15,7 +15,7 @@ class GameObject;
 class Component
 {
 public:
-  enum ComponentType{TEMP_HOLDER_DELETE_LATER, TRANSFORM, DRAWABLE, MESH_COLLIDER, SQUARE_COLLLIDER, CAMERA, ANIMATION_HELPER};
+  enum ComponentType{TEMP_HOLDER_DELETE_LATER, TRANSFORM, DRAWABLE, MESH_COLLIDER, SQUARE_COLLLIDER, CAMERA, SPRITE_ANIMATOR};
 	Component();
 	virtual void Start() = 0;//called after the gameobject is made/cloned, comps are called in order of the ComponentType enum. But don't rely on this please
 	virtual void Update() = 0;//called every frame
