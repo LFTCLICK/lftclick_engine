@@ -11,25 +11,25 @@
 
 
 // FMOD Engine constructor.
-FMODEngine::FMODEngine() : system(NULL), studioSystem(NULL), newChannelID(0) {
-	FMOD::Studio::System::create(&studioSystem);
-	studioSystem->initialize(32, FMOD_STUDIO_INIT_LIVEUPDATE, FMOD_INIT_PROFILE_ENABLE, NULL);
-	studioSystem->getCoreSystem(&system);
+FMODEngine::FMODEngine() : system(nullptr) {
+	FMOD::System_Create(&system);
+	void* extraDriverData = nullptr;
+	system->init(2047, FMOD_INIT_NORMAL, extraDriverData);
 }
 
 // FMOD Engine destructor.
 FMODEngine::~FMODEngine() {
-	studioSystem->unloadAll();
-	studioSystem->release();
+	system->close();
+	system->release();
 }
 
 // Update the FMOD engine. Normally called by the audio manager. Should run every frame.
 void FMODEngine::Update() {
-	for (std::map<int, FMOD::Channel*>::iterator current = channels.begin(), end = channels.end(); current != end; ++current)
+	for (auto current = channels.begin(), end = channels.end(); current != end; ++current)
 		if (ChannelIsPlaying(current->second)) current++;
 		else current = channels.erase(current);
 			
-	studioSystem->update();
+	system->update();
 }
 
 // Returns whether the given channel is currently playing.
@@ -62,28 +62,23 @@ void AudioManager::Term() {
 }
 
 // Loads a sound into FMOD's memory and into the internal sounds map.
-void AudioManager::Load(std::string name, bool loop) {
+void AudioManager::LoadSound(std::string name, bool loop, bool compressed) {
 	if (engine->sounds.find(name) == engine->sounds.end()) {
 		FMOD_MODE fmod_mode = 
 			FMOD_2D | 
-			FMOD_CREATECOMPRESSEDSAMPLE | 
+			(compressed ? FMOD_CREATECOMPRESSEDSAMPLE : FMOD_CREATESAMPLE) | 
 			(loop ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF);
 		FMOD::Sound* sound = nullptr;
-		engine->system->createSound(name.c_str(), fmod_mode, nullptr, &sound);
+		CheckResult(__func__, engine->system->createSound(name.c_str(), fmod_mode, nullptr, &sound));
 		engine->sounds[name] = sound;
 	}
 }
 
-// Loads a sound and tells FMOD to loop it when playing.
-void AudioManager::LoadLoop(std::string name) {
-	Load(name, true);
-}
-
 // Unloads a sound from FMOD's memory.
-void AudioManager::Unload(std::string name) {
+void AudioManager::UnloadSound(std::string name) {
 	auto sound = engine->sounds.find(name);
 	if (sound != engine->sounds.end()) {
-		sound->second->release();
+		CheckResult(__func__, sound->second->release());
 		engine->sounds.erase(sound);
 	}
 }
@@ -93,32 +88,43 @@ void AudioManager::Unload(std::string name) {
 // 
 // The volume value given is divided by 100 when being sent to FMOD,
 // as FMOD's volume operates between 0 and 1.
-int AudioManager::Play(std::string name, float x, float y, float volume) {
+int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, float x, float y, bool startPaused) {
 	auto sound = engine->sounds.find(name);
 	if (sound == engine->sounds.end()) {
-		std::cout << name << " was not preloaded, loading from source instead.";
-		AudioManager::Load(name);
+		std::cout << name << " was not preloaded, loading from source instead." << std::endl;
+		AudioManager::LoadSound(name);
 		sound = engine->sounds.find(name);
 	}
 
 	if (sound != engine->sounds.end()) {
 		FMOD::Channel* channel = nullptr;
-		engine->system->playSound(sound->second, nullptr, true, &channel);
+		auto channelGroupIt = engine->channelGroups.find(channelGroupName);
+		FMOD::ChannelGroup* channelGroup = (channelGroupIt == engine->channelGroups.end() ? nullptr : channelGroupIt->second);
+		CheckResult(__func__, engine->system->playSound(sound->second, channelGroup, true, &channel));
+
 		FMOD_VECTOR position = { x, y, 0 };
-		channel->set3DAttributes(&position, nullptr);
-		channel->setVolume(volume / VOLUME_DIV);
-		channel->setPaused(false);
-		engine->channels[engine->newChannelID] = channel;
-		return engine->newChannelID++;
+		CheckResult(__func__, channel->set3DAttributes(&position, nullptr));
+		CheckResult(__func__, channel->setVolume(volume / VOLUME_DIV));
+		CheckResult(__func__, channel->setPaused(false));
+
+		int channelIndex = 0;
+		CheckResult(__func__, channel->getIndex(&channelIndex));
+		engine->channels[channelIndex] = channel;
+		return channelIndex;
 	}
 	else {
 		std::cout << name << " could not be loaded.";
 		return -1;
 	}
 }
-
-int AudioManager::Play(std::string name, Vector2D position, float volume) {
-	return AudioManager::Play(name, position.x, position.y, volume);
+int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, Vector2D position, bool startPaused) {
+	return AudioManager::PlaySound(name, channelGroupName, position.x, position.y, volume);
+}
+int AudioManager::PlaySound(std::string name, float volume, Vector2D position, bool startPaused) {
+	return AudioManager::PlaySound(name, "", position.x, position.y, volume);
+}
+int AudioManager::PlaySound(std::string name, float volume, float x, float y, bool startPaused) {
+	return AudioManager::PlaySound(name, "", x, y, volume);
 }
 
 // Pauses a channel.
@@ -135,7 +141,26 @@ void AudioManager::Unpause(int channelID) {
 void AudioManager::SetPaused(int channelID, bool paused) {
 	auto channel = engine->channels.find(channelID);
 	if (channel != engine->channels.end())
-		channel->second->setPaused(paused);
+		CheckResult(__func__, channel->second->setPaused(paused));
+}
+
+// Returns whether a channel group is paused.
+bool AudioManager::IsPaused(int channelID) {
+	bool paused = false;
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end())
+		CheckResult(__func__, channel->second->getPaused(&paused));
+	return paused;
+}
+
+// Gets the channel's volume between 1 and 100.
+float AudioManager::GetVolume(int channelID) {
+	float volume = 0;
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end()) {
+		CheckResult(__func__, channel->second->getVolume(&volume));
+	}
+	return volume * VOLUME_DIV;
 }
 
 // Sets volume on a channel between 1 and 100.
@@ -144,7 +169,17 @@ void AudioManager::SetPaused(int channelID, bool paused) {
 void AudioManager::SetVolume(int channelID, float volume) {
 	auto channel = engine->channels.find(channelID);
 	if (channel != engine->channels.end())
-		channel->second->setVolume(volume / VOLUME_DIV);
+		CheckResult(__func__, channel->second->setVolume(volume / VOLUME_DIV));
+}
+
+// Gets the channel's world position.
+Vector2D AudioManager::GetPosition(int channelID) {
+	FMOD_VECTOR position = { 0, 0, 0 }, velocity = { 0, 0, 0 };
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end()) {
+		CheckResult(__func__, channel->second->get3DAttributes(&position, &velocity));
+	}
+	return Vector2D({ position.x, position.y });
 }
 
 // Sets the channel's world position.
@@ -152,40 +187,242 @@ void AudioManager::SetPosition(int channelID, float x, float y) {
 	auto channel = engine->channels.find(channelID);
 	if (channel != engine->channels.end()) {
 		FMOD_VECTOR position = {x, y, 0};
-		channel->second->set3DAttributes(&position, NULL);
+		CheckResult(__func__, channel->second->set3DAttributes(&position, NULL));
 	}
 }
-
-// Sets the channel's world position.
 void AudioManager::SetPosition(int channelID, Vector2D position) {
 	AudioManager::SetPosition(channelID, position.x, position.y);
 }
 
-void AudioManager::LoadBank(std::string name) {
-	if (engine->banks.find(name) == engine->banks.end()) {
-		FMOD::Studio::Bank* bank;
-		engine->studioSystem->loadBankFile(name.c_str(), FMOD_STUDIO_LOAD_BANK_NORMAL, &bank);
-		if (bank) {
-			engine->banks[name] = bank;
-		}
+// Gets the channel's pitch, with 0.5 being an octave down and 2 being an octave up.
+float AudioManager::GetPitch(int channelID) {
+	float pitch = 0;
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end()) {
+		CheckResult(__func__, channel->second->getPitch(&pitch));
+	}
+	return pitch;
+}
+
+// Sets the channel's pitch, with 0.5 being an octave down and 2 being an octave up.
+void AudioManager::SetPitch(int channelID, float pitch) {
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end()) {
+		CheckResult(__func__, channel->second->setPitch(pitch));
 	}
 }
 
-void AudioManager::LoadEvent(std::string name) {
-	auto eventIterator = engine->events.find(name);
-	if (eventIterator == engine->events.end()) {
-		FMOD::Studio::EventDescription* eventDescription = nullptr;
-		FMOD::Studio::EventInstance* eventInstance = nullptr;
-		engine->studioSystem->getEvent(name.c_str(), &eventDescription);
+// Gets the channel's frequency (aka speed).
+float AudioManager::GetFrequency(int channelID) {
+	float frequency = 0;
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end()) {
+		CheckResult(__func__, channel->second->getFrequency(&frequency));
+	}
+	return frequency;
+}
 
-		if (eventDescription) {
-			eventDescription->createInstance(&eventInstance);
-			if (eventInstance)
-				engine->events[name] = eventInstance;
-			else
-				std::cout << name << " event instance could not be loaded.";
-		}
-		else 
-			std::cout << name << " event description could not be loaded.";
+// Sets the channel's frequency (aka speed). Shouldn't be applied without first using GetFrequency.
+// Negative value makes playback go backwards, but sample must have been loaded non-compressed.
+void AudioManager::SetFrequency(int channelID, float frequency) {
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end()) {
+		CheckResult(__func__, channel->second->setFrequency(frequency));
+	}
+}
+
+// Returns whether the channel is currently playing.
+bool AudioManager::IsPlaying(int channelID) {
+	bool isPlaying = false;
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end()) 
+		CheckResult(__func__, channel->second->isPlaying(&isPlaying));
+	return isPlaying;
+}
+
+// Stops the channel and frees up the memory.
+void AudioManager::Stop(int channelID) {
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end())
+		CheckResult(__func__, channel->second->stop());
+}
+
+
+
+// Pauses a channel group
+void AudioManager::PauseGroup(std::string channelGroupName) {
+	AudioManager::SetGroupPaused(channelGroupName, false);
+}
+
+// Unpauses a channel group
+void AudioManager::UnpauseGroup(std::string channelGroupName) {
+	AudioManager::SetGroupPaused(channelGroupName, false);
+}
+
+// Sets whether a channel group is paused.
+void AudioManager::SetGroupPaused(std::string channelGroupName, bool paused) {
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end())
+		CheckResult(__func__, channelGroup->second->setPaused(paused));
+}
+
+// Returns whether a channel group is paused.
+bool AudioManager::IsGroupPaused(std::string channelGroupName) {
+	bool paused = false;
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end())
+		CheckResult(__func__, channelGroup->second->getPaused(&paused));
+	return paused;
+}
+
+// Returns the channel group's volume between 1 and 100.
+float AudioManager::GetGroupVolume(std::string channelGroupName) {
+	float volume = 0;
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end()) {
+		CheckResult(__func__, channelGroup->second->getVolume(&volume));
+	}
+	return volume * VOLUME_DIV;
+}
+
+// Sets volume on a channel group between 1 and 100.
+// The volume value given is divided by 100 when being sent to FMOD,
+// as FMOD's volume operates between 0 and 1.
+void AudioManager::SetGroupVolume(std::string channelGroupName, float volume) {
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end())
+		CheckResult(__func__, channelGroup->second->setVolume(volume / VOLUME_DIV));
+}
+
+// Returns the channel group's world position.
+Vector2D AudioManager::GetGroupPosition(std::string channelGroupName) {
+	FMOD_VECTOR position = { 0, 0, 0 }, velocity = { 0, 0, 0 };
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end()) {
+		CheckResult(__func__, channelGroup->second->get3DAttributes(&position, &velocity));
+	}
+	return Vector2D({ position.x, position.y });
+}
+
+// Sets the channel group's world position.
+void AudioManager::SetGroupPosition(std::string channelGroupName, float x, float y) {
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end()) {
+		FMOD_VECTOR position = { x, y, 0 };
+		CheckResult(__func__, channelGroup->second->set3DAttributes(&position, NULL));
+	}
+}
+void AudioManager::SetGroupPosition(std::string channelGroupName, Vector2D position) {
+	AudioManager::SetGroupPosition(channelGroupName, position.x, position.y);
+}
+
+// Returns the channel group's pitch, with 0.5 being an octave down and 2 being an octave up.
+float AudioManager::GetGroupPitch(std::string channelGroupName) {
+	float pitch = 0;
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end()) {
+		CheckResult(__func__, channelGroup->second->getPitch(&pitch));
+	}
+	return pitch;
+}
+
+// Sets the channel group's pitch, with 0.5 being an octave down and 2 being an octave up.
+void AudioManager::SetGroupPitch(std::string channelGroupName, float pitch) {
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end()) {
+		CheckResult(__func__, channelGroup->second->setPitch(pitch));
+	}
+}
+
+// Returns whether the channel group is currently playing.
+bool AudioManager::IsGroupPlaying(std::string channelGroupName) {
+	bool isPlaying = false;
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end())
+		CheckResult(__func__, channelGroup->second->isPlaying(&isPlaying));
+	return isPlaying;
+}
+
+// Stops the channel group and frees up the memory.
+void AudioManager::StopGroup(std::string channelGroupName) {
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end())
+		CheckResult(__func__, channelGroup->second->stop());
+}
+
+
+
+void AudioManager::LoadChannelGroup(std::string name) {
+	if (engine->channelGroups.find(name) == engine->channelGroups.end()) {
+		FMOD::ChannelGroup* channelGroup;
+		CheckResult(__func__, engine->system->createChannelGroup(name.c_str(), &channelGroup));
+		engine->channelGroups[name] = channelGroup;
+	}
+}
+
+void AudioManager::UnloadChannelGroup(std::string name) {
+	auto channelGroup = engine->channelGroups.find(name);
+	if (channelGroup != engine->channelGroups.end()) {
+		CheckResult(__func__, channelGroup->second->release());
+	}
+}
+
+void AudioManager::AddToChannelGroup(std::string channelGroupName, int channelID) {
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end())
+		AddToChannelGroup(channelGroupName, channel->second);
+}
+void AudioManager::AddToChannelGroup(std::string channelGroupName, FMOD::Channel* channel) {
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end())
+		channel->setChannelGroup(channelGroup->second);
+}
+void AudioManager::AddToChannelGroup(FMOD::ChannelGroup* channelGroup, int channelID) {
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end())
+		channel->second->setChannelGroup(channelGroup);
+}
+
+
+
+void AudioManager::LoadSoundGroup(std::string name) {
+	auto soundGroup = engine->soundGroups.find(name);
+	if (soundGroup == engine->soundGroups.end()) {
+		CheckResult(__func__, engine->system->createSoundGroup(name.c_str(), &(soundGroup->second)));
+	}
+}
+
+void AudioManager::UnloadSoundGroup(std::string name) {
+	auto soundGroup = engine->soundGroups.find(name);
+	if (soundGroup != engine->soundGroups.end()) {
+		CheckResult(__func__, soundGroup->second->release());
+	}
+}
+
+void AudioManager::AddToSoundGroup(std::string soundGroupName, std::string soundName) {
+	auto sound = engine->sounds.find(soundName);
+	if (sound != engine->sounds.end())
+		AddToSoundGroup(soundGroupName, sound->second);
+}
+void AudioManager::AddToSoundGroup(std::string soundGroupName, FMOD::Sound* sound) {
+	auto soundGroup = engine->soundGroups.find(soundGroupName);
+	if (soundGroup != engine->soundGroups.end())
+		sound->setSoundGroup(soundGroup->second);
+}
+void AudioManager::AddToSoundGroup(FMOD::SoundGroup* soundGroup, std::string soundName) {
+	auto sound = engine->sounds.find(soundName);
+	if (sound != engine->sounds.end())
+		sound->second->setSoundGroup(soundGroup);
+}
+
+
+// Prints the result of an FMOD function if it's anything but FMOD_OK
+void AudioManager::CheckResult(std::string functionName, FMOD_RESULT e) {
+	if (e != FMOD_OK) {
+		auto FMODResultString = FMOD_RESULT_STRINGS.find(e);
+		if (FMODResultString == FMOD_RESULT_STRINGS.end())
+			std::cout << functionName << " failed with FMOD_RESULT enum " << e << std::endl;
+		else
+			std::cout << functionName << " failed with FMOD_RESULT type " << FMODResultString->second << std::endl;
 	}
 }
