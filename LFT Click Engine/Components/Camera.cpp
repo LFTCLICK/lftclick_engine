@@ -10,6 +10,7 @@
 #include <directxmath.h>
 #include <iostream>
 #include "../FrameRateControler.h"
+#include "../Graphics/Graphics.h"
 
 using json = nlohmann::json;
 Camera::Camera()
@@ -99,7 +100,7 @@ DirectX::XMMATRIX Camera::GetProjectionMatrix()
 {
 	DirectX::XMMATRIX translation;
 	GetViewMatrix(translation);
-	return translation * DirectX::XMMatrixOrthographicLH(1000, 1000, 0.00001f, 1000);
+	return translation * DirectX::XMMatrixOrthographicLH(Graphics::getInstance().getWidth(), Graphics::getInstance().getHeight(), 0.00001f, 1000);
 }
 
 void Camera::SlowCamera()

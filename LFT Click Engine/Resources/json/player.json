@@ -1,12 +1,4 @@
 {
-  "0": {
-    "speed": 475,
-    "animationLength": 0.08,
-    "slideCenter": [0, -0.3125, 0],
-    "slideWidth": 52.0,
-    "slideHeight": 26.0,
-    "gravitySpeed": 300.0
-  },
   "1": {
     "startX": -450.5,
     "startY": 384.5,
@@ -20,7 +12,7 @@
     "vertices" : [
     {
         "pos": [-0.5,-0.5,0],
-        "uv": [0,0.25]
+        "uv": [0,1]
     },
     {
         "pos": [-0.5,0.5,0],
@@ -28,11 +20,11 @@
     },
     {
         "pos": [0.5,0.5,0],
-        "uv": [0.5,0]
+        "uv": [0.25,0]
     },
     {
         "pos": [0.5,-0.5,0],
-        "uv": [0.5,0.25]
+        "uv": [0.25,1]
     }
     ],
     "indicies": [0, 1, 2, 2, 3, 0],
@@ -45,5 +37,10 @@
     "height": 48,
     "trigger": false,
     "deleteOnCollison": false
+  },
+  "6": {
+    "spriteSheetWidth": 4,
+    "spriteSheetHeight": 1,
+    "frameTime": 0.15
   }
 }

@@ -138,11 +138,8 @@ int main(int argc, char* args[])
 					}
 					if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
 					{
-						int xDelta = windowWidth - e.window.data1;
-						int yDelta = windowHeight - e.window.data2;
-						int minChange = std::min(xDelta, yDelta);
-						windowWidth -= minChange;
-						windowHeight -= minChange;
+						windowWidth = e.window.data1;
+						windowHeight = e.window.data2;
 						SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
 						Graphics::getInstance().OnResize(windowWidth, windowHeight);
 					}
@@ -232,7 +229,7 @@ int main(int argc, char* args[])
 		if (playGame)
 		{
 
-			std::fstream other("./Resources/json/prefabs.json");
+			std::fstream other("./Resources/json/demo.json");
 			json dataJson2;
 			other >> dataJson2;
 			other.close();
@@ -264,19 +261,17 @@ int main(int argc, char* args[])
 					}
 					if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
 					{
-						int xDelta = windowWidth - e.window.data1;
-						int yDelta = windowHeight - e.window.data2;
-						int minChange = std::min(xDelta, yDelta);
-						windowWidth -= minChange;
-						windowHeight -= minChange;
+						windowWidth = e.window.data1;
+						windowHeight = e.window.data2;
 						SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
+						Graphics::getInstance().OnResize(windowWidth, windowHeight);
 					}
 				}
 				Input_Manager::getInstance().Update();
 				gom->Update();//update gameobjects
 				gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
 				EventManager::getInstance().Update();//process timed events
-				Graphics::getInstance().ClearBuffer(0x7CA3FF);//clear screen
+ 				Graphics::getInstance().ClearBuffer(0x7CA3FF);//clear screen
 				gom->Draw();//do drawing
 
 				bool open = true;//ImGui stuff
