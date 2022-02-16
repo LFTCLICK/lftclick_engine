@@ -23,6 +23,7 @@
 #include "Graphics/Graphics.h"
 #include "Components/Transform.h"
 #include "EventManager.h"
+#include "AudioManager.h"
 #include "Messages.h"
 #include "GameManager.h"
 #include "imgui.h"
@@ -85,7 +86,6 @@ int main(int argc, char* args[])
 	json dataJson;
 	data >> dataJson;
 	data.close();
-
 	gom = new GameObjectManager();
 	EventManager::getInstance().init(gom);
 	gof = new GameObjectFactory();
@@ -96,6 +96,7 @@ int main(int argc, char* args[])
 
 
 	FrameRateControler::getInstance().Init(6);
+	AudioManager::getInstance().Init();
 	bool masterLoop = true;
 	bool playGame = false;
 	bool doMenu = true;
@@ -103,6 +104,8 @@ int main(int argc, char* args[])
 	srand(time(NULL));
 	while (masterLoop)
 	{
+		AudioManager::getInstance().Update();
+
 		if (doMenu)
 		{
 			gom->Deserialize(gof, dataJson);
@@ -297,6 +300,7 @@ int main(int argc, char* args[])
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 	//SDL_FreeSurface(icon);
+	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
 
 	SDL_Quit();

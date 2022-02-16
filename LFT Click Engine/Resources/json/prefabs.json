@@ -1,36 +1,40 @@
 {
   "Level": [
     {
+      "prefab": "Resources\\json\\background_music.json",
+      "tag": "background_music"
+    },
+    {
       "prefab": "Resources\\json\\player.json",
-      "tag":    "player"
+      "tag": "player"
     },
     {
       "prefab": "Resources\\json\\spike.json",
-      "tag":    "spike"
+      "tag": "spike"
     },
     {
       "prefab": "Resources\\json\\floor.json",
-      "tag":    "floor"
+      "tag": "floor"
     },
     {
       "prefab": "Resources\\json\\turret.json",
-      "tag":    "turret"
+      "tag": "turret"
     },
     {
       "prefab": "Resources\\json\\camera.json",
-      "tag":    "camera"
+      "tag": "camera"
     },
     {
       "prefab": "Resources\\json\\invin.json",
-      "tag":    "invin"
+      "tag": "invin"
     },
     {
       "prefab": "Resources\\json\\slow.json",
-      "tag":    "slow"
+      "tag": "slow"
     },
     {
       "prefab": "Resources\\json\\sign.json",
-      "tag":    "sign"
-    }    
+      "tag": "sign"
+    }
   ]
 }

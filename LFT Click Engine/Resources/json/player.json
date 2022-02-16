@@ -6,33 +6,33 @@
     "scaleY": 64,
     "rot": 0,
     "zPos": 5
-    
+
   },
   "2": {
-    "vertices" : [
-    {
-        "pos": [-0.5,-0.5,0],
-        "uv": [0,1]
-    },
-    {
-        "pos": [-0.5,0.5,0],
-        "uv": [0,0]
-    },
-    {
-        "pos": [0.5,0.5,0],
-        "uv": [0.25,0]
-    },
-    {
-        "pos": [0.5,-0.5,0],
-        "uv": [0.25,1]
-    }
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 0.25, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 0.25, 1 ]
+      }
     ],
-    "indicies": [0, 1, 2, 2, 3, 0],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
     "image": "Resources\\images\\player_sprite_sheet.png"
   },
   "4": {
-    "center": [0.0, 0.0, 0.0],
+    "center": [ 0.0, 0.0, 0.0 ],
     "width": 64,
     "height": 64,
     "trigger": false,
@@ -45,5 +45,20 @@
   },
   "7": {
     "playerSpeed": 350
+  },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\sounds\\walking.mp3",
+        "loop": true,
+        "volume": 25,
+        "playEvents": [
+          1001
+        ],
+        "stopEvents": [
+          1002
+        ]
+      }
+    ]
   }
 }

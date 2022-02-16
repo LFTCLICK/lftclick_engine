@@ -38,7 +38,7 @@
     "trigger": true,
     "deleteOnCollison": true
   },
-  "7": {
+  "6": {
     "animationTime": 0.4,
     "offsetDenominator": 2
   }
