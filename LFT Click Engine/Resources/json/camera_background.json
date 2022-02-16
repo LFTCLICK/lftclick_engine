@@ -7,11 +7,6 @@
     "startY": 0,
     "startZ": 0
   },
-  "6": {
-    "floorHeight": 110,
-    "floorGap": 110,
-    "numOfSpikesPerLevel": 3
-  },
   "1": {
     "startX": 0.5,
     "startY": 0.5,
@@ -42,6 +37,5 @@
     "indicies": [0, 1, 2, 2, 3, 0],
     "scale": 1,
     "image": ".Resources\\images\\bg_tiled.png"
-
   }
 }

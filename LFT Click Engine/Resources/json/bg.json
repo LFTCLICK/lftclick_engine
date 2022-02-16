@@ -1,0 +1,46 @@
+{
+  "1": {
+    "startX": 0.5,
+    "startY": 0.5,
+    "scaleX": 2560,
+    "scaleY": 2560,
+    "rot": 0,
+    "zPos": 15
+  },
+  "2": {
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 10 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 10, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 10, 10 ]
+      }
+    ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "scale": 1,
+    "image": "Resources\\images\\bg.png"
+
+  },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\music\\background.mp3",
+        "loop": true,
+        "volume": 12,
+        "playEvents": [
+          1000
+        ]
+      }
+    ]
+  }
+}

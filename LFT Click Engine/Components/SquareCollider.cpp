@@ -57,7 +57,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 	if (toCheck != parent)
 	{
 		SquareCollider* toCheckCollider = toCheck->getComponent<SquareCollider>();
-		DirectX::XMVECTOR myPos = DirectX::XMVectorAdd(toCheck->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&center));
+		DirectX::XMVECTOR myPos = DirectX::XMVectorAdd(parent->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&center));
 		DirectX::XMVECTOR toCheckPos = DirectX::XMVectorAdd(toCheck->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&toCheckCollider->center));
 		int returnVal = StaticRectToStaticRect(&myPos, width, height, &toCheckPos, toCheckCollider->width, toCheckCollider->height);
 		if (returnVal == 1)

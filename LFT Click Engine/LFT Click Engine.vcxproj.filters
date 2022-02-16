@@ -84,9 +84,6 @@
     <ClCompile Include="GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\AnimationHelper.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="LFT Click Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -113,6 +110,21 @@
     </ClCompile>
     <ClCompile Include="..\Libraries\imgui-1.82\imgui.cpp">
       <Filter>Graphics\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Audible.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\SpriteAnimator.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Player.h">
+      <Filter>Components\Headers</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Player.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -145,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\AnimationHelper.h">
-      <Filter>Components\Headers</Filter>
     </ClInclude>
     <ClInclude Include="Components\Camera.h">
       <Filter>Components\Headers</Filter>
@@ -202,6 +211,15 @@
     </ClInclude>
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h">
       <Filter>Graphics\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Audible.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\SpriteAnimator.h">
+      <Filter>Components\Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

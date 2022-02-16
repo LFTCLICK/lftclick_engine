@@ -1,0 +1,14 @@
+{
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\music\\background.mp3",
+        "loop": true,
+        "volume": 10,
+        "playEvents": [
+          1000
+        ]
+      }
+    ]
+  }
+}

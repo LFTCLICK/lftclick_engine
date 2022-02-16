@@ -1,0 +1,20 @@
+{
+  "Level": [
+    {
+      "prefab": "Resources\\json\\tile.json",
+      "tag": "tile"
+    },
+    {
+      "prefab": "Resources\\json\\bg.json",
+      "tag": "bg"
+    },
+    {
+      "prefab": "Resources\\json\\camera.json",
+      "tag": "camera"
+    },
+    {
+      "prefab": "Resources\\json\\player.json",
+      "tag": "player"
+    }
+  ]
+}

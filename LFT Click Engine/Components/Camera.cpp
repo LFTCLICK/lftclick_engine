@@ -10,6 +10,7 @@
 #include <directxmath.h>
 #include <iostream>
 #include "../FrameRateControler.h"
+#include "../Graphics/Graphics.h"
 
 using json = nlohmann::json;
 Camera::Camera()
@@ -74,6 +75,13 @@ void Camera::SetRot(float x, float y, float z)
 	zRot = z;
 }
 
+void Camera::Move(float x, float y, float z)
+{
+	xPos += x;
+	yPos += y;
+	zPos += z;
+}
+
 DirectX::XMVECTOR Camera::getPos()
 {
 	return DirectX::XMVECTOR{ xPos, yPos, zPos, 1 };
@@ -86,12 +94,12 @@ DirectX::XMVECTOR Camera::getRot()
 
 void Camera::Render()
 {
-	viewMatrix = DirectX::XMMatrixTranslation(xPos, yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot) *  DirectX::XMMatrixIdentity();
+	viewMatrix = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot) *  DirectX::XMMatrixIdentity();
 }
 
 void Camera::GetViewMatrix(DirectX::XMMATRIX & toReturn)
 {
-	toReturn = DirectX::XMMatrixTranslation(xPos, yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot) *  DirectX::XMMatrixIdentity();
+	toReturn = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot) *  DirectX::XMMatrixIdentity();
 	//toReturn = viewMatrix;
 }
 
@@ -99,16 +107,7 @@ DirectX::XMMATRIX Camera::GetProjectionMatrix()
 {
 	DirectX::XMMATRIX translation;
 	GetViewMatrix(translation);
-	return translation * DirectX::XMMatrixOrthographicLH(1000, 1000, 0.00001f, 1000);
-}
-
-void Camera::SlowCamera()
-{
-	speed -= startingSpeed;
-	speed /= 2;
-	speed += startingSpeed;
-	//if (speed < startingSpeed)
-	//	speed = startingSpeed;
+	return translation * DirectX::XMMatrixOrthographicLH(Graphics::getInstance().getWidth(), Graphics::getInstance().getHeight(), 0.00001f, 1000);
 }
 
 int Camera::getCompId()
