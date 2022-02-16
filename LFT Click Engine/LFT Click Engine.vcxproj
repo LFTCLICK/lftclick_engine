@@ -187,8 +187,10 @@
     <ClCompile Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Components\Audible.cpp" />
+    <ClCompile Include="Components\Player.cpp" />
+    <ClCompile Include="Components\Player.h" />
+    <ClCompile Include="Components\SpriteAnimator.cpp" />
     <ClCompile Include="LFT Click Engine.cpp" />
-    <ClCompile Include="Components\AnimationHelper.cpp" />
     <ClCompile Include="Components\Camera.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Components\MeshCollider.cpp" />
@@ -227,6 +229,7 @@
     <ClInclude Include="Components\GameObject.h" />
     <ClInclude Include="Components\GameObjectManager.h" />
     <ClInclude Include="Components\MeshCollider.h" />
+    <ClInclude Include="Components\SpriteAnimator.h" />
     <ClInclude Include="Components\SquareCollider.h" />
     <ClInclude Include="Components\Transform.h" />
     <ClInclude Include="EventManager.h" />

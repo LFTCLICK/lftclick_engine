@@ -15,8 +15,9 @@
 #include "Components/MeshCollider.h"
 #include "Components/SquareCollider.h"
 #include "Components/Camera.h"
-#include "Components/AnimationHelper.h"
 #include "Components/Audible.h"
+#include "Components/SpriteAnimator.h"
+#include "Components/Player.h"
 #include <json.hpp>
 #include <string> 
 #include <fstream>
@@ -66,9 +67,11 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new SquareCollider(type.value(), currentObj);
 	else if (compID == Component::CAMERA)
 		currentComp = new Camera(type.value(), currentObj);
-	else if (compID == Component::ANIMATION_HELPER)
-		currentComp = new AnimationHelper(type.value(), currentObj);
 	else if (compID == Component::AUDIBLE)
 		currentComp = new Audible(type.value(), currentObj);
+	else if (compID == Component::SPRITE_ANIMATOR)
+		currentComp = new SpriteAnimator(type.value(), currentObj);
+	else if (compID == Component::PLAYER)
+		currentComp = new Player(type.value(), currentObj);
 	return currentComp;
 }

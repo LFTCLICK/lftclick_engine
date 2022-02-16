@@ -1,11 +1,11 @@
 {
   "1": {
-    "startX": -300.5,
-    "startY": 22.5,
-    "scaleX": 33,
-    "scaleY": 28,
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 256,
+    "scaleY": 256,
     "rot": 0,
-    "zPos": 5
+    "zPos": 10
   },
   "2": {
     "vertices" : [
@@ -19,24 +19,23 @@
     },
     {
         "pos": [0.5,0.5,0],
-        "uv": [1.0001,0]
+        "uv": [1,0]
     },
     {
         "pos": [0.5,-0.5,0],
-        "uv": [1.0001,1]
+        "uv": [1,1]
     }
     ],
     "indicies": [0, 1, 2, 2, 3, 0],
     "scale": 1,
-    "image": ".Resources\\images\\spike.png"
+    "image": "Resources\\images\\wall.png"
 
   },
-  "3": {
-    "vertices": [
-        [-0.45,-0.45,0],
-        [0.0,0.45,0],
-        [0.45,-0.45,0]
-    ],
-    "trigger": true
+  "4": {
+    "center": [0.0, -0.0, 0.0],
+    "width": 256,
+    "height": 256,
+    "trigger": false,
+    "deleteOnCollison": false
   }
 }
