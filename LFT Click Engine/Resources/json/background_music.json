@@ -1,11 +1,12 @@
 {
-  "7": {
+  "8": {
     "sounds": [
       {
-        "name": "..\\Resources\\music\\background.mp3",
+        "name": ".\\Resources\\music\\background.mp3",
         "loop": true,
+        "volume": 10,
         "playEvents": [
-          "onStart"
+          1000
         ]
       }
     ]

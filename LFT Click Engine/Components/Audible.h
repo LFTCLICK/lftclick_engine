@@ -20,15 +20,17 @@
 #include <vector>
 #include <algorithm>
 
-#define PLAY_ON_START "onStart"
+#define ON_START 1000
+#define ON_MOVE 1001
+#define ON_HALT 1002
 
 struct SoundInfo {
 	std::string name;
 	bool loop = false;
 	bool compressed = true;
 	float volume = 100.f;
-	std::vector<std::string> playEvents;
-	std::vector<std::string> stopEvents;
+	std::vector<int> playEvents;
+	std::vector<int> stopEvents;
 };
 
 class Audible : public Component
@@ -42,6 +44,7 @@ public:
 
 	Audible() : parent(nullptr), am(&AudioManager::getInstance()), sounds({}), position({ 0, 0 }), positionOffset({ 0, 0 }) {}
 	Audible(json j, GameObject* parent);
+	~Audible();
 
 	void PlaySound(SoundInfo sound);
 	void Unpause();
@@ -57,17 +60,20 @@ public:
 	void SetPitch(float pitch);
 	bool IsPlaying();
 	void Stop();
+	void StopSound(std::string soundName);
 
-	void HandleMessage(Message* e);
+	virtual void HandleMessage(Message* e) override;
 
 	Vector2D positionOffset;
 
-private:
+protected:
 	GameObject* parent;
 	AudioManager* am;
+	Vector2D oldPosition;
 	Vector2D position;
+	bool wasMoving;
 	std::string channelGroupName;
 
 	std::vector<SoundInfo> sounds;
-	std::vector<int> channels;
+	std::map<int, std::string> channels;
 };
