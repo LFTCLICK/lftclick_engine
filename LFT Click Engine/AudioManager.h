@@ -75,9 +75,9 @@ public:
     float GetVolume(int channelID);
     void SetVolume(int channelID, float volume);
     void Mute(int channelID) { SetVolume(channelID, 0); }
-    Vector2D GetPosition(int channelID);
-    void SetPosition(int channelID, float x, float y);
-    void SetPosition(int channelID, Vector2D position);
+    Vector2D GetSpatialPosition(int channelID);
+    void SetSpatialPosition(int channelID, float x, float y);
+    void SetSpatialPosition(int channelID, Vector2D position);
     float GetPitch(int channelID);
     void SetPitch(int channelID, float pitch);
     float GetFrequency(int channelID);
@@ -105,9 +105,9 @@ public:
     float GetGroupVolume(std::string channelGroupName);
     void SetGroupVolume(std::string channelGroupName, float volume);
     void MuteGroup(std::string channelGroupName) { SetGroupVolume(channelGroupName, 0); }
-    Vector2D GetGroupPosition(std::string channelGroupName);
-    void SetGroupPosition(std::string channelGroupName, float x, float y);
-    void SetGroupPosition(std::string channelGroupName, Vector2D position);
+    Vector2D GetGroupSpatialPosition(std::string channelGroupName);
+    void SetGroupSpatialPosition(std::string channelGroupName, float x, float y);
+    void SetGroupSpatialPosition(std::string channelGroupName, Vector2D position);
     float GetGroupPitch(std::string channelGroupName);
     void SetGroupPitch(std::string channelGroupName, float pitch);
     bool IsGroupPlaying(std::string channelGroupName);

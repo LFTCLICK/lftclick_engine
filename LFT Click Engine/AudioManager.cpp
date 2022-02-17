@@ -65,7 +65,7 @@ void AudioManager::Term() {
 void AudioManager::LoadSound(std::string name, bool loop, bool compressed) {
 	if (engine->sounds.find(name) == engine->sounds.end()) {
 		FMOD_MODE fmod_mode = 
-			FMOD_2D | 
+			FMOD_3D | 
 			(compressed ? FMOD_CREATECOMPRESSEDSAMPLE : FMOD_CREATESAMPLE) | 
 			(loop ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF);
 		FMOD::Sound* sound = nullptr;
@@ -173,7 +173,7 @@ void AudioManager::SetVolume(int channelID, float volume) {
 }
 
 // Gets the channel's world position.
-Vector2D AudioManager::GetPosition(int channelID) {
+Vector2D AudioManager::GetSpatialPosition(int channelID) {
 	FMOD_VECTOR position = { 0, 0, 0 }, velocity = { 0, 0, 0 };
 	auto channel = engine->channels.find(channelID);
 	if (channel != engine->channels.end()) {
@@ -183,15 +183,15 @@ Vector2D AudioManager::GetPosition(int channelID) {
 }
 
 // Sets the channel's world position.
-void AudioManager::SetPosition(int channelID, float x, float y) {
+void AudioManager::SetSpatialPosition(int channelID, float x, float y) {
 	auto channel = engine->channels.find(channelID);
 	if (channel != engine->channels.end()) {
 		FMOD_VECTOR position = {x, y, 0};
 		CheckResult(__func__, channel->second->set3DAttributes(&position, NULL));
 	}
 }
-void AudioManager::SetPosition(int channelID, Vector2D position) {
-	AudioManager::SetPosition(channelID, position.x, position.y);
+void AudioManager::SetSpatialPosition(int channelID, Vector2D position) {
+	AudioManager::SetSpatialPosition(channelID, position.x, position.y);
 }
 
 // Gets the channel's pitch, with 0.5 being an octave down and 2 being an octave up.
@@ -295,7 +295,7 @@ void AudioManager::SetGroupVolume(std::string channelGroupName, float volume) {
 }
 
 // Returns the channel group's world position.
-Vector2D AudioManager::GetGroupPosition(std::string channelGroupName) {
+Vector2D AudioManager::GetGroupSpatialPosition(std::string channelGroupName) {
 	FMOD_VECTOR position = { 0, 0, 0 }, velocity = { 0, 0, 0 };
 	auto channelGroup = engine->channelGroups.find(channelGroupName);
 	if (channelGroup != engine->channelGroups.end()) {
@@ -305,15 +305,19 @@ Vector2D AudioManager::GetGroupPosition(std::string channelGroupName) {
 }
 
 // Sets the channel group's world position.
-void AudioManager::SetGroupPosition(std::string channelGroupName, float x, float y) {
+void AudioManager::SetGroupSpatialPosition(std::string channelGroupName, float x, float y) {
 	auto channelGroup = engine->channelGroups.find(channelGroupName);
 	if (channelGroup != engine->channelGroups.end()) {
 		FMOD_VECTOR position = { x, y, 0 };
 		CheckResult(__func__, channelGroup->second->set3DAttributes(&position, NULL));
+
+		//float aud = 0;
+		//CheckResult(__func__, channelGroup->second->getAudibility(&aud));
+		//std::cout << "Audibility: " << aud << std::endl;
 	}
 }
-void AudioManager::SetGroupPosition(std::string channelGroupName, Vector2D position) {
-	AudioManager::SetGroupPosition(channelGroupName, position.x, position.y);
+void AudioManager::SetGroupSpatialPosition(std::string channelGroupName, Vector2D position) {
+	AudioManager::SetGroupSpatialPosition(channelGroupName, position.x, position.y);
 }
 
 // Returns the channel group's pitch, with 0.5 being an octave down and 2 being an octave up.
@@ -356,6 +360,7 @@ void AudioManager::LoadChannelGroup(std::string name) {
 	if (engine->channelGroups.find(name) == engine->channelGroups.end()) {
 		FMOD::ChannelGroup* channelGroup;
 		CheckResult(__func__, engine->system->createChannelGroup(name.c_str(), &channelGroup));
+		channelGroup->setMode(FMOD_3D);
 		engine->channelGroups[name] = channelGroup;
 	}
 }

@@ -36,7 +36,8 @@
       {
         "name": ".\\Resources\\music\\background.mp3",
         "loop": true,
-        "volume": 12,
+        "compressed": true,
+        "volume": 0,
         "playEvents": [
           1000
         ]

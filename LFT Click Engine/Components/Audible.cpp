@@ -50,12 +50,10 @@ void Audible::Update() {
 
 	Vector2DSet(&oldPosition, position.x, position.y);
 
-	/*
 	Vector2D finalPos = { position.x, position.y };
 	if (positionOffset.x == 0 && positionOffset.y == 0)
 		Vector2DAdd(&finalPos, &finalPos, &positionOffset);
-	SetPosition(finalPos);
-	*/
+	SetSpatialPosition(finalPos);
 }
 
 Component* Audible::Clone(GameObject* newParent) {
@@ -128,15 +126,15 @@ float Audible::GetVolume() {
 	return am->GetGroupVolume(channelGroupName);
 }
 
-Vector2D Audible::GetPosition() {
-	return am->GetGroupPosition(channelGroupName);
+Vector2D Audible::GetSpatialPosition() {
+	return am->GetGroupSpatialPosition(channelGroupName);
 }
 
-void Audible::SetPosition(float x, float y) {
-	am->SetGroupPosition(channelGroupName, x, y);
+void Audible::SetSpatialPosition(float x, float y) {
+	am->SetGroupSpatialPosition(channelGroupName, x, y);
 }
-void Audible::SetPosition(Vector2D position) {
-	am->SetGroupPosition(channelGroupName, position);
+void Audible::SetSpatialPosition(Vector2D position) {
+	am->SetGroupSpatialPosition(channelGroupName, position);
 }
 
 float Audible::GetPitch() {

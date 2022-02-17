@@ -53,9 +53,9 @@ public:
 	void SetVolume(float volume);
 	void Mute();
 	float GetVolume();
-	Vector2D GetPosition();
-	void SetPosition(float x, float y);
-	void SetPosition(Vector2D position);
+	Vector2D GetSpatialPosition();
+	void SetSpatialPosition(float x, float y);
+	void SetSpatialPosition(Vector2D position);
 	float GetPitch();
 	void SetPitch(float pitch);
 	bool IsPlaying();
