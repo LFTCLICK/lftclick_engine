@@ -14,7 +14,7 @@
 #include <SDL_syswm.h>
 #include <Windows.h>
 #include "InputManager.h"
-#include "FrameRateControler.h"
+#include "FrameRateController.h"
 #include "ResourceManager.h"
 #include "GameObjectFactory.h"
 #include "Components/GameObjectManager.h"
@@ -95,7 +95,7 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 
 
-	FrameRateControler::getInstance().Init(6);
+	FrameRateController::getInstance().Init(6);
 	bool masterLoop = true;
 	bool playGame = false;
 	bool doMenu = true;
@@ -124,7 +124,7 @@ int main(int argc, char* args[])
 			int oldMouseY = 0;
 			while (isRunning)
 			{
-				FrameRateControler::getInstance().Tick();
+				FrameRateController::getInstance().Tick();
 				SDL_Event e;
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -239,10 +239,10 @@ int main(int argc, char* args[])
 			gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0;
-			FrameRateControler::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
+			FrameRateController::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
 			while (isRunning)
 			{
-				FrameRateControler::getInstance().Tick();
+				FrameRateController::getInstance().Tick();
 
 				ImGui_ImplDX11_NewFrame();
 				ImGui_ImplSDL2_NewFrame();

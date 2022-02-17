@@ -1,5 +1,5 @@
 #include "SpriteAnimator.h"
-#include "../FrameRateControler.h"
+#include "../FrameRateController.h"
 
 void SpriteAnimator::Start()
 {
@@ -17,7 +17,7 @@ void SpriteAnimator::Update()
 		if (draw->xOffset >= 1.001)
 			draw->xOffset = 0;
 	}
-	timer += FrameRateControler::getInstance().DeltaTime();
+	timer += FrameRateController::getInstance().DeltaTime();
 }
 
 Component* SpriteAnimator::Clone(GameObject* newParent)
