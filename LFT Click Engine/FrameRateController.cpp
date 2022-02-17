@@ -6,22 +6,18 @@
 // Purpose			:	Implementation
 // History			:
 // ---------------------------------------------------------------------------
-#include "FrameRateControler.h"
+#include "FrameRateController.h"
 #include <iostream>
 #include <Windows.h>
 //This has to be called if there is a considerable gap (especially because of loading) between end and start of frame
 //ticksSinceLastFrame is used for DeltaTime and if there is a big gap due to loading the start of the game thinks the player needs to move a lot farther than they should
 
-void FrameRateControler::Init(Uint32 ticksPerFrame)
+void FrameRateController::Init(Uint32 ticksPerFrame)
 {
-	/*frameTimeTicks = ticksPerFrame;
-	startOfFrameTime = 0;
-	ticksSinceLastFrame = 0;*/
-
 	Reset();
 }
 
-FrameRateControler::FrameRateControler() :
+FrameRateController::FrameRateController() :
 	m_CurrentTime(0), m_PreviousTime(0),
 	m_DeltaTime(0)
 {
@@ -33,7 +29,7 @@ FrameRateControler::FrameRateControler() :
 	Reset();
 }
 
-void FrameRateControler::Reset()
+void FrameRateController::Reset()
 {
 	__int64 currentTime;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
@@ -60,7 +56,7 @@ void FrameRateControler::Reset()
 //		std::cout << 1000.0f / (SDL_GetTicks() - startOfFrameTime) << " FPS" << std::endl;
 //}
 
-void FrameRateControler::Tick()
+void FrameRateController::Tick()
 {
 	__int64 currentTime;
 	QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
@@ -75,7 +71,7 @@ void FrameRateControler::Tick()
 	std::cout << m_DeltaTime << " Deltatime (Seconds)" << std::endl;
 }
 
-float FrameRateControler::DeltaTime()
+float FrameRateController::DeltaTime()
 {
 	return static_cast<float>(m_DeltaTime);
 }

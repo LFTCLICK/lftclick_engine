@@ -42,7 +42,7 @@
     <ClCompile Include="Components\Drawable.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="FrameRateControler.cpp">
+    <ClCompile Include="FrameRateController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObjectFactory.cpp">
@@ -134,7 +134,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FrameRateControler.h">
+    <ClInclude Include="FrameRateController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectFactory.h">

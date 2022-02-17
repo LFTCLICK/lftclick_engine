@@ -4,7 +4,7 @@
 // Author			:	Vance Howald
 // Creation Date	:	2021/10/06
 // Purpose			:	implementation of the 'play' game state
-// History			: 
+// History			:
 // 2021/10/29		-	Added component based arch
 // 2021/12/01		-	Added messaging
 // ---------------------------------------------------------------------------
@@ -14,7 +14,7 @@
 #include <SDL_syswm.h>
 #include <Windows.h>
 #include "InputManager.h"
-#include "FrameRateControler.h"
+#include "FrameRateController.h"
 #include "ResourceManager.h"
 #include "GameObjectFactory.h"
 #include "Components/GameObjectManager.h"
@@ -40,7 +40,7 @@ extern "C"
 #include "LUA/include/lauxlib.h"
 #include "LUA/include/lua.h"
 #include "LUA/include/lualib.h"
-#include "LUA/include/luaconf.h" 
+#include "LUA/include/luaconf.h"
 }
 
 // Linking lua library
@@ -62,11 +62,8 @@ bool CheckLua(lua_State* L, int r)
 
 using json = nlohmann::json;
 
-<<<<<<< HEAD
-=======
 int windowWidth = 1600;
 int windowHeight = 900;
->>>>>>> 588ad45... Updated FrameRateController to use Windows QPC
 
 GameObjectFactory* gof;
 GameObjectManager* gom;
@@ -149,7 +146,7 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 
 
-	FrameRateControler::getInstance().Init(6);
+	FrameRateController::getInstance().Init(6);
 	AudioManager::getInstance().Init();
 	bool masterLoop = true;
 	bool playGame = false;
@@ -181,7 +178,7 @@ int main(int argc, char* args[])
 			int oldMouseY = 0;
 			while (isRunning)
 			{
-				FrameRateControler::getInstance().Tick();
+				FrameRateController::getInstance().Tick();
 				SDL_Event e;
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -294,10 +291,10 @@ int main(int argc, char* args[])
 			gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0;
-			FrameRateControler::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
+			FrameRateController::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
 			while (isRunning)
 			{
-				FrameRateControler::getInstance().Tick();
+				FrameRateController::getInstance().Tick();
 
 				ImGui_ImplDX11_NewFrame();
 				ImGui_ImplSDL2_NewFrame();
@@ -336,7 +333,7 @@ int main(int argc, char* args[])
 					ImGui::Text("FPS: %03f", 1.0f/FrameRateControler::getInstance().DeltaTime());
 					ImGui::End();
 				}
-				
+
 				ImGui::Render();//ImGui
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 				Graphics::getInstance().EndFrame();//present frame
@@ -351,7 +348,7 @@ int main(int argc, char* args[])
 			GameManager::getInstance().playerScore = 0;
 		}
 
-	
+
 
 	}
 
