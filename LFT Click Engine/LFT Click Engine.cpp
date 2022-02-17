@@ -272,7 +272,8 @@ int main(int argc, char* args[])
 				}
 				Input_Manager::getInstance().Update();
 				gom->Update();//update gameobjects
-				gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
+				EventManager::getInstance().ProcessCollision();
+							  //gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
 				EventManager::getInstance().Update();//process timed events
  				Graphics::getInstance().ClearBuffer(0x7CA3FF);//clear screen
 				gom->Draw();//do drawing

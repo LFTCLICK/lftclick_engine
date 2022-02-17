@@ -28,9 +28,10 @@ public:
 	void AddedTimedMessage(Message* m);
 	void Update();
 	void Subscribe(Message::MessageID id, GameObject* g);
-	bool removeOld(const Message& m) { return SDL_GetTicks() >= m.tickTime; }
+	void Unsubscribe(Message::MessageID id, GameObject* g);
+	bool RemoveOld(const Message& m) { return SDL_GetTicks() >= m.tickTime; }
 	void Reset();
-
+	void ProcessCollision();
 
 private:
 	GameObjectManager* gom;
