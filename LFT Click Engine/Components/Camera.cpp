@@ -9,7 +9,7 @@
 #include "Camera.h"
 #include <directxmath.h>
 #include <iostream>
-#include "../FrameRateControler.h"
+#include "../FrameRateController.h"
 #include "../Graphics/Graphics.h"
 
 using json = nlohmann::json;
@@ -55,8 +55,8 @@ void Camera::Start()
 
 void Camera::Update()
 {
-	yPos += speed * FrameRateControler::getInstance().DeltaTime();
-	speed += speedDelta * FrameRateControler::getInstance().DeltaTime();
+	yPos += speed * FrameRateController::getInstance().DeltaTime();
+	speed += speedDelta * FrameRateController::getInstance().DeltaTime();
 	if (speed >= maxSpeed)
 		speed = maxSpeed;
 }
