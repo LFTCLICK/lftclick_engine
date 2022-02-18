@@ -14,7 +14,7 @@
 #include <SDL_syswm.h>
 #include <Windows.h>
 #include "InputManager.h"
-#include "FrameRateControler.h"
+#include "FrameRateController.h"
 #include "ResourceManager.h"
 #include "GameObjectFactory.h"
 #include "Components/GameObjectManager.h"
@@ -62,6 +62,8 @@ bool CheckLua(lua_State* L, int r)
 
 using json = nlohmann::json;
 
+int windowWidth = 1000;
+int windowHeight = 1000;
 
 GameObjectFactory* gof;
 GameObjectManager* gom;
@@ -144,7 +146,7 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 
 
-	FrameRateControler::getInstance().Init(6);
+	FrameRateController::getInstance().Init(6);
 	AudioManager::getInstance().Init();
 	bool masterLoop = true;
 	bool playGame = false;
@@ -176,7 +178,7 @@ int main(int argc, char* args[])
 			int oldMouseY = 0;
 			while (isRunning)
 			{
-				FrameRateControler::getInstance().StartOfFrame();
+				FrameRateController::getInstance().Tick();
 				SDL_Event e;
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -271,7 +273,6 @@ int main(int argc, char* args[])
 				ImGui::Render();
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 				Graphics::getInstance().EndFrame();
-				FrameRateControler::getInstance().EndOfFrame();
 			}
 			gom->DeleteAll();
 		}
@@ -290,10 +291,10 @@ int main(int argc, char* args[])
 			gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0;
-			FrameRateControler::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
+			FrameRateController::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
 			while (isRunning)
 			{
-				FrameRateControler::getInstance().StartOfFrame();
+				FrameRateController::getInstance().Tick();
 
 				ImGui_ImplDX11_NewFrame();
 				ImGui_ImplSDL2_NewFrame();
@@ -319,7 +320,8 @@ int main(int argc, char* args[])
 				}
 				Input_Manager::getInstance().Update();
 				gom->Update();//update gameobjects
-				gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
+				EventManager::getInstance().ProcessCollision();
+							  //gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
 				EventManager::getInstance().Update();//process timed events
  				Graphics::getInstance().ClearBuffer(0x7CA3FF);//clear screen
 				gom->Draw();//do drawing
@@ -328,15 +330,19 @@ int main(int argc, char* args[])
 				ImGui::Render();//ImGui
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 				Graphics::getInstance().EndFrame();//present frame
-				FrameRateControler::getInstance().EndOfFrame();//sleep
 
 			}
+
 			gom->DeleteAll();
+
 			EventManager::getInstance().Reset();
 			GameManager::getInstance().playerDead = false;
 			GameManager::getInstance().playerRestart = false;
 			GameManager::getInstance().playerScore = 0;
 		}
+
+	
+
 	}
 
 
@@ -346,7 +352,10 @@ int main(int argc, char* args[])
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-	//SDL_FreeSurface(icon);
+
+	delete gom;
+	delete gof;
+	
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
 

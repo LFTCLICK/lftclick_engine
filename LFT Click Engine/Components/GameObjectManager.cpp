@@ -53,7 +53,7 @@ void GameObjectManager::DoCollision(GameObject* toCheckWith)
 {
 	for (GameObject* g : gameObjectList)
 	{
-		if (g->isActive)
+		if (g->isActive && g!=toCheckWith)
 		{
 			Collider* s = dynamic_cast<Collider*>(g->getComponent<MeshCollider>());
 			if (s == nullptr)

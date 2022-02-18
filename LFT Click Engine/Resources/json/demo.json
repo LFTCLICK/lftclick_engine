@@ -5,12 +5,20 @@
       "tag": "tile"
     },
     {
+      "prefab": "Resources\\json\\5thSprite.json",
+      "tag": "5thSprite"
+    },
+    {
       "prefab": "Resources\\json\\bg.json",
       "tag": "bg"
     },
     {
       "prefab": "Resources\\json\\camera.json",
       "tag": "camera"
+    },
+    {
+      "prefab": "Resources\\json\\bullet.json",
+      "tag": "bullet"
     },
     {
       "prefab": "Resources\\json\\player.json",

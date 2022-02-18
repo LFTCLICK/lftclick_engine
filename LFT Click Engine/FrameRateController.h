@@ -10,24 +10,27 @@
 #pragma once
 #include <SDL.h>
 
-class FrameRateControler
+class FrameRateController
 {
 public:
-	static FrameRateControler& getInstance()
+	static FrameRateController& getInstance()
 	{
-		static FrameRateControler instance;
+		static FrameRateController instance;
 		return instance;
 	}
-	FrameRateControler(FrameRateControler const&) = delete;
-	void operator=(FrameRateControler const&) = delete;
+	FrameRateController(FrameRateController const&) = delete;
+	void operator=(FrameRateController const&) = delete;
 	void Init(Uint32 ticksPerFrame);
-	void StartOfFrame();
-	void EndOfFrame();
+
+	void Tick();
+	void Reset();
 	float DeltaTime();
 private:
-	FrameRateControler();
-	Uint32 startOfFrameTime;
-	Uint32 currentTime;
-	Uint32 frameTimeTicks;
-	Uint32 ticksSinceLastFrame;
+	FrameRateController();
+	
+	__int64 m_CurrentTime;
+	__int64 m_PreviousTime;
+
+	double m_DeltaTime;
+	double m_SecondsPerCount;
 };

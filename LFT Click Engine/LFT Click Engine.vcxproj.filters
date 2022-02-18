@@ -42,7 +42,7 @@
     <ClCompile Include="Components\Drawable.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="FrameRateControler.cpp">
+    <ClCompile Include="FrameRateController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObjectFactory.cpp">
@@ -129,9 +129,12 @@
     <ClCompile Include="Components\Player.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Bullet.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FrameRateControler.h">
+    <ClInclude Include="FrameRateController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObjectFactory.h">
@@ -223,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="Components\SpriteAnimator.h">
       <Filter>Components\Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\AnimationHelper.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
