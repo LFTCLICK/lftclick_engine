@@ -33,10 +33,35 @@
 #include "Components/Drawable.h"
 #include "conio.h"
 
+
+// Integrating LUA
+extern "C"
+{
+#include "LUA/include/lauxlib.h"
+#include "LUA/include/lua.h"
+#include "LUA/include/lualib.h"
+#include "LUA/include/luaconf.h" 
+}
+
+// Linking lua library
+#ifdef _WIN64
+#pragma comment(lib, "LUA/liblua54.a")
+#endif
+
+// Error checking for LUA
+bool CheckLua(lua_State* L, int r)
+{
+	if (r != LUA_OK)
+	{
+		std::string errormsg = lua_tostring(L, -1);
+		std::cout << errormsg << std::endl;
+		return false;
+	}
+	return true;
+}
+
 using json = nlohmann::json;
 
-int windowWidth = 1000;
-int windowHeight = 1000;
 
 GameObjectFactory* gof;
 GameObjectManager* gom;
@@ -46,8 +71,31 @@ int main(int argc, char* args[])
 	SDL_Window* pWindow;
 	int error = 0;					//temp varrible for the SDL initialization
 
+	int windowWidth, windowHeight;
+
+	// Create Lua State
+	lua_State* L = luaL_newstate();
+
+	// Adding standard libraries to Lua Virtual Machine
+	luaL_openlibs(L);
+
+	if (CheckLua(L, luaL_dofile(L, "Resources\\LuaScripts\\ConfigurationScript.lua")))
+	{
+		lua_getglobal(L, "windowWidth");
+		if (lua_isnumber(L, -1))
+		{
+			windowWidth = (float)lua_tonumber(L, -1);
+		}
+
+		lua_getglobal(L, "windowHeight");
+		if (lua_isnumber(L, -1))
+		{
+			windowHeight = (float)lua_tonumber(L, -1);
+		}
+	}
+
 	//Init SDL
-	if ((error = SDL_Init(SDL_INIT_VIDEO)) < 0)
+	if ((error = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK)) < 0)
 	{
 		std::cout << "SDL_Init failled, erorr" << error << std::endl;
 		return 1;
@@ -69,6 +117,7 @@ int main(int argc, char* args[])
 	//load in and set icon
 	SDL_Surface* icon = ResourceManager::getInstance().GetResource("Resources\\images\\icon.bmp");
 	SDL_SetWindowIcon(pWindow, icon);
+
 
 	//Get handle to SDL window for DirectX
 	HWND sdlWindow = GetActiveWindow();
@@ -218,8 +267,6 @@ int main(int argc, char* args[])
 					ImGui::End();
 
 				}
-
-
 				gom->Draw();
 				ImGui::Render();
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -311,6 +358,7 @@ int main(int argc, char* args[])
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
 
+	lua_close(L);
 	SDL_Quit();
 	return 0;
 }
