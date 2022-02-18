@@ -187,6 +187,7 @@
     <ClCompile Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.cpp" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Components\Audible.cpp" />
+    <ClCompile Include="Components\Bullet.cpp" />
     <ClCompile Include="Components\Player.cpp" />
     <ClCompile Include="Components\Player.h" />
     <ClCompile Include="Components\SpriteAnimator.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Components\AnimationHelper.h" />
     <ClInclude Include="Components\Audible.h" />
+    <ClInclude Include="Components\Bullet.h" />
     <ClInclude Include="Components\Camera.h" />
     <ClInclude Include="Components\Collider.h" />
     <ClInclude Include="Components\Component.h" />
