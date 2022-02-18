@@ -23,6 +23,7 @@
 #include "Graphics/Graphics.h"
 #include "Components/Transform.h"
 #include "EventManager.h"
+#include "AudioManager.h"
 #include "Messages.h"
 #include "GameManager.h"
 #include "imgui.h"
@@ -85,7 +86,6 @@ int main(int argc, char* args[])
 	json dataJson;
 	data >> dataJson;
 	data.close();
-
 	gom = new GameObjectManager();
 	EventManager::getInstance().init(gom);
 	gof = new GameObjectFactory();
@@ -95,7 +95,8 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 
 
-	FrameRateController::getInstance().Init(6);
+	FrameRateControler::getInstance().Init(6);
+	AudioManager::getInstance().Init();
 	bool masterLoop = true;
 	bool playGame = false;
 	bool doMenu = true;
@@ -103,6 +104,8 @@ int main(int argc, char* args[])
 	srand(time(NULL));
 	while (masterLoop)
 	{
+		AudioManager::getInstance().Update();
+
 		if (doMenu)
 		{
 			gom->Deserialize(gof, dataJson);
@@ -268,46 +271,13 @@ int main(int argc, char* args[])
 				}
 				Input_Manager::getInstance().Update();
 				gom->Update();//update gameobjects
-				gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
+				EventManager::getInstance().ProcessCollision();
+							  //gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
 				EventManager::getInstance().Update();//process timed events
  				Graphics::getInstance().ClearBuffer(0x7CA3FF);//clear screen
 				gom->Draw();//do drawing
 
-				bool open = true;//ImGui stuff
-				ImGui::SetNextWindowPos({0,0});
-				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-				ImGui::Text("Score: %08d", (int)GameManager::getInstance().playerScore);
-				ImGui::End();
-
-				if (GameManager::getInstance().playerDead)
-				{
-					ImGui::SetNextWindowPos({ 450,600 });
-					ImGui::Begin("mainMenu", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
-					if (ImGui::Button("Restart", { 100,50 }) || GameManager::getInstance().playerRestart)
-					{
-						isRunning = false;
-						playGame = true;
-						doMenu = false;
-						masterLoop = true;
-					}
-					if (ImGui::Button("Main Menu", { 100,50 }))
-					{
-						isRunning = false;
-						playGame = false;
-						doMenu = true;
-						masterLoop = true;
-					}
-					if (ImGui::Button("Quit", { 100,50 }))
-					{
-						isRunning = false;
-						playGame = false;
-						doMenu = false;
-						masterLoop = false;
-					}
-
-					ImGui::End();
-				}
-
+				
 				ImGui::Render();//ImGui
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 				Graphics::getInstance().EndFrame();//present frame
@@ -334,6 +304,7 @@ int main(int argc, char* args[])
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 	//SDL_FreeSurface(icon);
+	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
 
 	SDL_Quit();
