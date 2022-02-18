@@ -7,7 +7,7 @@
 // History			: 
 // ---------------------------------------------------------------------------
 #include "Bullet.h"
-#include "../FrameRateControler.h"
+#include "../FrameRateController.h"
 
 
 void Bullet::Start()
@@ -23,9 +23,9 @@ void Bullet::Update()
 		timer = 0;
 		speed *= -1;
 	}
-	trans->Move(0, speed * FrameRateControler::getInstance().DeltaTime());
+	trans->Move(0, speed * FrameRateController::getInstance().DeltaTime());
 	
-	timer += FrameRateControler::getInstance().DeltaTime();
+	timer += FrameRateController::getInstance().DeltaTime();
 }
 
 Component* Bullet::Clone(GameObject* newParent)
