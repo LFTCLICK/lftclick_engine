@@ -19,6 +19,7 @@ LFT\ Click\ Engine/[Dd]ebug/*
 LFT\ Click\ Engine/[Dd]ebugPublic/*
 LFT\ Click\ Engine/[Rr]elease/*
 LFT\ Click\ Engine/[Rr]eleases/*
+LFT\ Click\ Engine/imgui.ini
 #x64/
 #x86/
 #bld/
