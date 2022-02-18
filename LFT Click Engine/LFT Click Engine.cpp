@@ -277,7 +277,14 @@ int main(int argc, char* args[])
 				EventManager::getInstance().Update();//process timed events
  				Graphics::getInstance().ClearBuffer(0x7CA3FF);//clear screen
 				gom->Draw();//do drawing
-
+				bool open = true;
+				if (true)
+				{
+					ImGui::SetNextWindowPos({ 0,0 });
+					ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+					ImGui::Text("FPS: %03f", 1.0f/FrameRateControler::getInstance().DeltaTime());
+					ImGui::End();
+				}
 				
 				ImGui::Render();//ImGui
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

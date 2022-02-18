@@ -12,6 +12,7 @@
 GameManager::GameManager()
 {
 	playerDead = false;
+	debugMode = false;
 	playerScore = 0;
 	playerRestart = false;
 }

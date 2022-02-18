@@ -25,6 +25,7 @@ public:
 
 public:
 	bool playerDead;
+	bool debugMode;
 	bool playerRestart;
 	float playerScore;
 	Camera* mainCamera;
