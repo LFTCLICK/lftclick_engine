@@ -41,7 +41,7 @@
   "6": {
     "spriteSheetWidth": 4,
     "spriteSheetHeight": 1,
-    "frameTime": 0.15
+    "frameTime": 0.25
   },
   "7": {
     "playerSpeed": 350

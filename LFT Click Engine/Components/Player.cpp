@@ -28,6 +28,15 @@ void Player::Update()
 		cam->Move(playerSpeed * FrameRateControler::getInstance().DeltaTime(), 0.0f);
 	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_LEFT))
 		cam->Move(-playerSpeed * FrameRateControler::getInstance().DeltaTime(), 0.0f);
+
+	if (Input_Manager::getInstance().isJoyStickMovedUp(SDL_CONTROLLER_AXIS_LEFTY))
+		myTransform->Move(0, playerSpeed * FrameRateControler::getInstance().DeltaTime());
+	if (Input_Manager::getInstance().isJoyStickMovedDown(SDL_CONTROLLER_AXIS_LEFTY))
+		myTransform->Move(0, -playerSpeed * FrameRateControler::getInstance().DeltaTime());
+	if (Input_Manager::getInstance().isJoyStickMovedRight(SDL_CONTROLLER_AXIS_LEFTX))
+		myTransform->Move(playerSpeed * FrameRateControler::getInstance().DeltaTime(), 0);
+	if (Input_Manager::getInstance().isJoyStickMovedLeft(SDL_CONTROLLER_AXIS_LEFTX))
+		myTransform->Move(-playerSpeed * FrameRateControler::getInstance().DeltaTime(), 0);
 }
 
 Component* Player::Clone(GameObject* newParent)

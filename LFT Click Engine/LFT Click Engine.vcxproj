@@ -289,6 +289,9 @@
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LuaScripts\ConfigurationScript.lua" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

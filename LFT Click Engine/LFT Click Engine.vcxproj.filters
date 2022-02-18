@@ -28,6 +28,9 @@
     <Filter Include="Graphics\ImGUI">
       <UniqueIdentifier>{802cb82c-e8f3-4524-b4e6-8bc865683697}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Lua Scripts">
+      <UniqueIdentifier>{a09a766b-8563-4e14-9b11-2e8763827523}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Components\Component.cpp">
@@ -221,6 +224,9 @@
     <ClInclude Include="Components\SpriteAnimator.h">
       <Filter>Components\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Components\AnimationHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="TestPixelShader.hlsl">
@@ -240,5 +246,10 @@
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
       <Filter>Graphics\ImGUI</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LuaScripts\ConfigurationScript.lua">
+      <Filter>Lua Scripts</Filter>
+    </None>
   </ItemGroup>
 </Project>

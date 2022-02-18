@@ -30,6 +30,12 @@ public:
 	bool isMouseButtonPressed(unsigned int buttonIndex);
 	bool isMouseButtonReleased(unsigned int buttonIndex);
 	bool isMouseButtonTriggered(unsigned int buttonIndex);
+	bool isJoyStickMovedUp(unsigned int joystickValue);
+	bool isJoyStickMovedDown(unsigned int joystickValue);
+	bool isJoyStickMovedLeft(unsigned int joystickValue);
+	bool isJoyStickMovedRight(unsigned int joystickValue);
+
+	
 
 private:
 	Input_Manager();
@@ -38,4 +44,7 @@ private:
 	int mousePos[2];
 	bool mouseButtonCurrentState[3];
 	bool mouseButtonPreviousState[3];
+
+	Sint16 mCurrentAxesState[6];
+	Sint16 mPreviousAxesState[6];
 };

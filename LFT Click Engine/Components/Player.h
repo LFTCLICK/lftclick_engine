@@ -35,4 +35,6 @@ private:
 	Transform* myTransform;
 	Camera* cam;
 	float playerSpeed;
+
+	float deadZone = 8000;
 };
