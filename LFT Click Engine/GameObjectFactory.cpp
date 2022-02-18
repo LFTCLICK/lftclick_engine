@@ -18,6 +18,7 @@
 #include "Components/Audible.h"
 #include "Components/SpriteAnimator.h"
 #include "Components/Player.h"
+#include "Components/Bullet.h"
 #include <json.hpp>
 #include <string> 
 #include <fstream>
@@ -73,5 +74,7 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new SpriteAnimator(type.value(), currentObj);
 	else if (compID == Component::PLAYER)
 		currentComp = new Player(type.value(), currentObj);
+	else if (compID == Component::BULLET)
+		currentComp = new Bullet(type.value(), currentObj);
 	return currentComp;
 }
