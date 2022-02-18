@@ -95,7 +95,7 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 
 
-	FrameRateControler::getInstance().Init(6);
+	FrameRateController::getInstance().Init(6);
 	AudioManager::getInstance().Init();
 	bool masterLoop = true;
 	bool playGame = false;
@@ -303,7 +303,10 @@ int main(int argc, char* args[])
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-	//SDL_FreeSurface(icon);
+
+	delete gom;
+	delete gof;
+	
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
 

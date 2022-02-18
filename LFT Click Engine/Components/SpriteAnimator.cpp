@@ -14,7 +14,7 @@ void SpriteAnimator::Update()
 	{
 		timer = 0;
 		draw->xOffset += offset;
-		if (draw->xOffset >= 1.001)
+		if (draw->xOffset >= .9)
 			draw->xOffset = 0;
 	}
 	timer += FrameRateController::getInstance().DeltaTime();

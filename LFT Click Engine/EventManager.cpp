@@ -54,8 +54,25 @@ void EventManager::Subscribe(Message::MessageID id, GameObject * g)
 	subscriptions[id].push_back(g);
 }
 
+void EventManager::Unsubscribe(Message::MessageID id, GameObject* g)
+{
+	subscriptions[id].remove(g);
+}
+
 void EventManager::Reset()
 {
 	messageQueue.clear();
 	subscriptions.clear();
+}
+
+void EventManager::ProcessCollision()
+{
+	for (std::unordered_map<Message::MessageID, std::list<GameObject*>>::iterator outerLoop = subscriptions.begin(); outerLoop != subscriptions.end(); outerLoop++)
+	{
+	
+		for (std::list<GameObject*>::iterator innerLoop = outerLoop->second.begin(); innerLoop != outerLoop->second.end(); innerLoop++)
+		{
+			gom->DoCollision(*innerLoop);
+		}
+	}
 }
