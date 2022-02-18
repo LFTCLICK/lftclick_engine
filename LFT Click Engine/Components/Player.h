@@ -5,7 +5,7 @@
 // Author			:	Vance Howald
 // Creation Date	:	2021/2/13
 // Purpose			:	Animator
-// History			: 
+// History			:
 // ---------------------------------------------------------------------------
 
 #include "GameObject.h"

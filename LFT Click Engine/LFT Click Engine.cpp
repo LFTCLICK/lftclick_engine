@@ -359,7 +359,10 @@ int main(int argc, char* args[])
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-	//SDL_FreeSurface(icon);
+
+	delete gom;
+	delete gof;
+
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
 

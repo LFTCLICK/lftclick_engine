@@ -230,12 +230,9 @@
     <ClInclude Include="Components\AnimationHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="Components\Bullet.h">
       <Filter>Components\Headers</Filter>
     </ClInclude>
-=======
->>>>>>> 9449213... Integrated LUA
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="TestPixelShader.hlsl">

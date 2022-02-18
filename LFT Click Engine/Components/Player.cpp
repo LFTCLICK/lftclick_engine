@@ -1,6 +1,6 @@
 #include "Player.h"
 #include "../GameManager.h"
-#include "../FrameRateControler.h"
+#include "../FrameRateController.h"
 
 void Player::Start()
 {

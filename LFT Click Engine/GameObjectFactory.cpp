@@ -20,7 +20,7 @@
 #include "Components/Player.h"
 #include "Components/Bullet.h"
 #include <json.hpp>
-#include <string> 
+#include <string>
 #include <fstream>
 #include <iostream>
 using json = nlohmann::json;
@@ -34,7 +34,7 @@ GameObject * const GameObjectFactory::CreateObject(json curentObj)
 {
 	GameObject* toReturn = new GameObject();
 	std::string path = curentObj["prefab"];
-	
+
 	std::fstream pefabFile(path);
 	json prefab;
 	pefabFile >> prefab;
