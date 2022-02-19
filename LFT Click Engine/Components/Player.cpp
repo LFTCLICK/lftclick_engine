@@ -12,20 +12,20 @@ void Player::Start()
 void Player::Update()
 {
 	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_W))
-		myTransform->Move(0, playerSpeed * FrameRateControler::getInstance().DeltaTime());
+		myTransform->Move(0, playerSpeed * FrameRateController::getInstance().DeltaTime());
 	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_S))
-		myTransform->Move(0, -playerSpeed * FrameRateControler::getInstance().DeltaTime());
+		myTransform->Move(0, -playerSpeed * FrameRateController::getInstance().DeltaTime());
 	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_D))
-		myTransform->Move(playerSpeed * FrameRateControler::getInstance().DeltaTime(), 0);
+		myTransform->Move(playerSpeed * FrameRateController::getInstance().DeltaTime(), 0);
 	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_A))
-		myTransform->Move(-playerSpeed * FrameRateControler::getInstance().DeltaTime(), 0);
+		myTransform->Move(-playerSpeed * FrameRateController::getInstance().DeltaTime(), 0);
 
 	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_UP))
-		cam->Move(0.0f, playerSpeed * FrameRateControler::getInstance().DeltaTime());
+		cam->Move(0.0f, playerSpeed * FrameRateController::getInstance().DeltaTime());
 	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_DOWN))
-		cam->Move(0.0f, -playerSpeed * FrameRateControler::getInstance().DeltaTime());
+		cam->Move(0.0f, -playerSpeed * FrameRateController::getInstance().DeltaTime());
 	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_RIGHT))
-		cam->Move(playerSpeed * FrameRateControler::getInstance().DeltaTime(), 0.0f);
+		cam->Move(playerSpeed * FrameRateController::getInstance().DeltaTime(), 0.0f);
 	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_LEFT))
 		cam->Move(-playerSpeed * FrameRateController::getInstance().DeltaTime(), 0.0f);
 

@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	FrameRateControler.cpp
+// File Name		:	FrameRateController.cpp
 // Author			:	Vance Howald
 // Creation Date	:	2021/10/06
 // Purpose			:	Implementation
@@ -40,14 +40,14 @@ void FrameRateController::Reset()
 
 
 ////sets the start of the frame time and the ammount of time since the last start was called
-//void FrameRateControler::StartOfFrame()
+//void FrameRateController::StartOfFrame()
 //{
 //	if(startOfFrameTime!=0)
 //		ticksSinceLastFrame = SDL_GetTicks() - startOfFrameTime;
 //	startOfFrameTime = SDL_GetTicks();
 //}
 //
-//void FrameRateControler::EndOfFrame()
+//void FrameRateController::EndOfFrame()
 //{
 //	currentTime = SDL_GetTicks();
 //	if (currentTime - startOfFrameTime < frameTimeTicks)

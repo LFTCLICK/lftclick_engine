@@ -330,7 +330,7 @@ int main(int argc, char* args[])
 				{
 					ImGui::SetNextWindowPos({ 0,0 });
 					ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-					ImGui::Text("FPS: %03f", 1.0f/FrameRateControler::getInstance().DeltaTime());
+					ImGui::Text("FPS: %03f", 1.0f/FrameRateController::getInstance().DeltaTime());
 					ImGui::End();
 				}
 

@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	FrameRateControler.h
+// File Name		:	FrameRateController.h
 // Author			:	Vance Howald
 // Creation Date	:	2021/10/06
 // Purpose			:	Frame Controler
