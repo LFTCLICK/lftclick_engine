@@ -15,7 +15,8 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include "../EventManager.h"
-#include "../Graphics/Graphics.h"
+#include "../Graphics.h"
+
 
 using json = nlohmann::json;
 class Drawable : public Component

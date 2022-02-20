@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	LFTClick Engine.cpp
+// File Name		:	main.cpp
 // Author			:	Vance Howald
 // Creation Date	:	2021/10/06
 // Purpose			:	implementation of the 'play' game state
@@ -20,7 +20,7 @@
 #include "Components/GameObjectManager.h"
 #include <fstream>
 #include <json.hpp>
-#include "Graphics/Graphics.h"
+#include "Graphics.h"
 #include "Components/Transform.h"
 #include "EventManager.h"
 #include "AudioManager.h"
@@ -45,7 +45,7 @@ extern "C"
 
 // Linking lua library
 #ifdef _WIN64
-#pragma comment(lib, "LUA/liblua54.a")
+#pragma comment(lib, "liblua54.a")
 #endif
 
 // Error checking for LUA

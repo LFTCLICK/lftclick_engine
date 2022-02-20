@@ -79,9 +79,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\Libraries;..\Libraries\SDL2-2.0.14\include;..\Libraries\imgui-1.82\backends;..\Libraries\imgui-1.82;..\Libraries\DirectXTK-master\Inc;..\Libraries\DirectXTK12-master\Src;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\Libraries;..\Libraries\SDL2-2.0.14\include;..\Libraries\imgui-1.82\backends;..\Libraries\imgui-1.82;..\Libraries\DirectXTK-master\Inc;..\Libraries\DirectXTK12-master\Src;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <SourcePath>$(VC_SourcePath);;..\Libraries\imgui-1.82\backends</SourcePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);..\Libraries\SDL2-2.0.14\lib\x64;..\Libraries\DirectXTK-master\Bin\Desktop_2019\x64\Debug</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);..\Libraries\SDL2-2.0.14\lib\x64;..\Libraries\DirectXTK-master\Bin\Desktop_2019\x64\Debug;..\Libraries\LUA</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -129,7 +129,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>DirectXTK.lib;dxguid.lib;SDL2.lib;SDL2main.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;fmodL_vc.lib;fmodstudioL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Libraries\FMOD Studio API Windows\api\studio\lib\x64;..\Libraries\FMOD Studio API Windows\api\core\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Libraries\FMOD Studio API Windows\api\studio\lib\x64;..\Libraries\FMOD Studio API Windows\api\core\lib\x64;..\Libraries\LUA;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -191,7 +191,8 @@
     <ClCompile Include="Components\Player.cpp" />
     <ClCompile Include="Components\Player.h" />
     <ClCompile Include="Components\SpriteAnimator.cpp" />
-    <ClCompile Include="LFT Click Engine.cpp" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Components\Camera.cpp" />
     <ClCompile Include="Components\Component.cpp" />
     <ClCompile Include="Components\MeshCollider.cpp" />
@@ -204,7 +205,6 @@
     <ClCompile Include="FrameRateController.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObjectFactory.cpp" />
-    <ClCompile Include="Graphics\Graphics.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Math2D.cpp" />
     <ClCompile Include="Matrix2D.cpp" />
@@ -238,7 +238,7 @@
     <ClInclude Include="FrameRateController.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObjectFactory.h" />
-    <ClInclude Include="Graphics\Graphics.h" />
+    <ClInclude Include="Graphics.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Math2D.h" />
     <ClInclude Include="Matrix2D.h" />

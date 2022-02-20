@@ -10,7 +10,7 @@
 #include <directxmath.h>
 #include <iostream>
 #include "../FrameRateController.h"
-#include "../Graphics/Graphics.h"
+#include "../Graphics.h"
 
 using json = nlohmann::json;
 Camera::Camera()
