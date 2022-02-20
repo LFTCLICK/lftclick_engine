@@ -59,110 +59,80 @@
     <ClCompile Include="..\Libraries\imgui-1.82\imgui.cpp">
       <Filter>Dependencies\ImGUI</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Player.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\Audible.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EventManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FrameRateController.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObjectFactory.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Math2D.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix2D.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vector2D.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\Bullet.cpp">
+    <ClCompile Include="Src\Components\Audible.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Camera.cpp">
+    <ClCompile Include="Src\Components\Bullet.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Component.cpp">
+    <ClCompile Include="Src\Components\Camera.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Drawable.cpp">
+    <ClCompile Include="Src\Components\Component.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\GameObject.cpp">
+    <ClCompile Include="Src\Components\Drawable.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\GameObjectManager.cpp">
+    <ClCompile Include="Src\Components\GameObject.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\MeshCollider.cpp">
+    <ClCompile Include="Src\Components\GameObjectManager.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Player.cpp">
+    <ClCompile Include="Src\Components\MeshCollider.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\SpriteAnimator.cpp">
+    <ClCompile Include="Src\Components\Player.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\SquareCollider.cpp">
+    <ClCompile Include="Src\Components\SpriteAnimator.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\Transform.cpp">
+    <ClCompile Include="Src\Components\SquareCollider.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics.cpp">
+    <ClCompile Include="Src\Components\Transform.cpp">
+      <Filter>Engine\Components\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AudioManager.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\EventManager.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\FrameRateController.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameManager.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObjectFactory.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\InputManager.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\main.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Math2D.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Matrix2D.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ResourceManager.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Vector2D.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Components\Camera.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Collider.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Component.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Drawable.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\GameObject.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\GameObjectManager.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\MeshCollider.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\SquareCollider.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Transform.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
       <Filter>Dependencies\ImGUI</Filter>
     </ClInclude>
@@ -187,52 +157,82 @@
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h">
       <Filter>Dependencies\ImGUI</Filter>
     </ClInclude>
-    <ClInclude Include="Components\SpriteAnimator.h">
+    <ClInclude Include="Src\Components\Audible.h">
       <Filter>Engine\Components\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Bullet.h">
+    <ClInclude Include="Src\Components\Bullet.h">
       <Filter>Engine\Components\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\AnimationHelper.h">
+    <ClInclude Include="Src\Components\Camera.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Collider.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Component.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Drawable.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\GameObject.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\GameObjectManager.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\MeshCollider.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Player.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\SpriteAnimator.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\SquareCollider.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Transform.h">
+      <Filter>Engine\Components\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AudioManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Audible.h">
+    <ClInclude Include="Src\EventManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AudioManager.h">
+    <ClInclude Include="Src\FMODResultStrings.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventManager.h">
+    <ClInclude Include="Src\FrameRateController.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FrameRateController.h">
+    <ClInclude Include="Src\GameManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
+    <ClInclude Include="Src\GameObjectFactory.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameObjectFactory.h">
+    <ClInclude Include="Src\Graphics.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.h">
+    <ClInclude Include="Src\InputManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Math2D.h">
+    <ClInclude Include="Src\Math2D.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix2D.h">
+    <ClInclude Include="Src\Matrix2D.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Messages.h">
+    <ClInclude Include="Src\Messages.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
+    <ClInclude Include="Src\ResourceManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2D.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics.h">
+    <ClInclude Include="Src\Vector2D.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -259,5 +259,6 @@
     <None Include="Resources\LuaScripts\ConfigurationScript.lua">
       <Filter>Lua Scripts</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
