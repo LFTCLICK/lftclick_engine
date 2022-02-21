@@ -18,6 +18,19 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_dx11.h"
 
-
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
+
+// Integrating LUA
+extern "C"
+{
+#include "LUA/include/lauxlib.h"
+#include "LUA/include/lua.h"
+#include "LUA/include/lualib.h"
+#include "LUA/include/luaconf.h"
+}
+
+// Linking lua library
+#ifdef _WIN64
+#pragma comment(lib, "liblua54.a")
+#endif

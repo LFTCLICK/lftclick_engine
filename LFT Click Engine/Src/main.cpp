@@ -23,22 +23,15 @@
 #include "Messages.h"
 #include "GameManager.h"
 #include "Components/Drawable.h"
-#include "conio.h"
 
 
-// Integrating LUA
-extern "C"
-{
-#include "LUA/include/lauxlib.h"
-#include "LUA/include/lua.h"
-#include "LUA/include/lualib.h"
-#include "LUA/include/luaconf.h"
-}
+using json = nlohmann::json;
 
-// Linking lua library
-#ifdef _WIN64
-#pragma comment(lib, "liblua54.a")
-#endif
+int windowWidth = 1600;
+int windowHeight = 900;
+
+GameObjectFactory* gof;
+GameObjectManager* gom;
 
 // Error checking for LUA
 bool CheckLua(lua_State* L, int r)
@@ -51,14 +44,6 @@ bool CheckLua(lua_State* L, int r)
 	}
 	return true;
 }
-
-using json = nlohmann::json;
-
-int windowWidth = 1600;
-int windowHeight = 900;
-
-GameObjectFactory* gof;
-GameObjectManager* gom;
 
 int main(int argc, char* args[])
 {
@@ -340,11 +325,7 @@ int main(int argc, char* args[])
 			GameManager::getInstance().playerScore = 0;
 		}
 
-
-
 	}
-
-
 
 	// Cleanup
 	gom->DeleteAll();
