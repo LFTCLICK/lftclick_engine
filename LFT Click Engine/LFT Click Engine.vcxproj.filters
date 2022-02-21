@@ -237,20 +237,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="TestPixelShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="TestVertexShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="PixelShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
       <Filter>Dependencies\ImGUI</Filter>
     </Text>
@@ -260,5 +246,13 @@
       <Filter>Lua Scripts</Filter>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Src\Shaders\PixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Src\Shaders\VertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

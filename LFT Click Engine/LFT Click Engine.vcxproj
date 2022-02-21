@@ -247,53 +247,51 @@
     <ClInclude Include="Src\Vector2D.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PixelShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="TestPixelShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="TestVertexShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Resources\LuaScripts\ConfigurationScript.lua" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Src\Shaders\PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">g_CompiledPS</VariableName>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Src\Shaders\Compiled\Compiled_PS.h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">g_CompiledPS</VariableName>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)\Src\Shaders\Compiled\Compiled_PS.h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ObjectFileOutput>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">g_CompiledPS</VariableName>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)\Src\Shaders\Compiled\Compiled_PS.h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ObjectFileOutput>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">g_CompiledPS</VariableName>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\Src\Shaders\Compiled\Compiled_PS.h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Src\Shaders\VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)\Src\Shaders\Compiled\Compiled_VS.h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)\Src\Shaders\Compiled\Compiled_VS.h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Src\Shaders\Compiled\Compiled_VS.h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ObjectFileOutput>
+      <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\Src\Shaders\Compiled\Compiled_VS.h</HeaderFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ObjectFileOutput>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">g_CompiledVS</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">g_CompiledVS</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">g_CompiledVS</VariableName>
+      <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">g_CompiledVS</VariableName>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

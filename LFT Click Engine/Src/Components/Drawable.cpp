@@ -13,6 +13,11 @@
 #include "Camera.h"
 #include "../GameManager.h"
 
+namespace
+{
+#include "Shaders/Compiled/Compiled_PS.h"
+#include "Shaders/Compiled/Compiled_VS.h"
+}
 
 namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;
@@ -85,12 +90,9 @@ Drawable::Drawable(json j, GameObject* parent)
 	sdIndex.pSysMem = &(indices[0]);
 	Graphics::getInstance().GetDevice()->CreateBuffer(&indexBufDes, &sdIndex, &indexBuf);
 
-	wrl::ComPtr<ID3DBlob> pBlob;
-	D3DReadFileToBlob(L"PixelShader.cso", &pBlob);
-	Graphics::getInstance().GetDevice()->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pixelShader);
 
-	D3DReadFileToBlob(L"VertexShader.cso", &pBlob);
-	Graphics::getInstance().GetDevice()->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &vertShader);
+	Graphics::getInstance().GetDevice()->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
+	Graphics::getInstance().GetDevice()->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
 
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
@@ -99,8 +101,8 @@ Drawable::Drawable(json j, GameObject* parent)
 	};
 	Graphics::getInstance().GetDevice()->CreateInputLayout(
 		ied, (UINT)std::size(ied),
-		pBlob->GetBufferPointer(),
-		pBlob->GetBufferSize(),
+		g_CompiledVS,
+		sizeof(g_CompiledVS),
 		&inputLayout
 	);
 
