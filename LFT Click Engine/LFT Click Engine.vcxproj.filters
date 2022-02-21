@@ -77,9 +77,6 @@
     <ClCompile Include="Src\Components\GameObject.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Components\GameObjectManager.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Components\MeshCollider.cpp">
       <Filter>Engine\Components\Source Files</Filter>
     </ClCompile>
@@ -119,19 +116,13 @@
     <ClCompile Include="Src\main.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Math2D.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Matrix2D.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Src\ResourceManager.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Vector2D.cpp">
+    <ClCompile Include="Src\pch.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\pch.cpp">
+    <ClCompile Include="Src\GameObjectManager.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -181,9 +172,6 @@
     <ClInclude Include="Src\Components\GameObject.h">
       <Filter>Engine\Components\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Components\GameObjectManager.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Components\MeshCollider.h">
       <Filter>Engine\Components\Header Files</Filter>
     </ClInclude>
@@ -223,22 +211,16 @@
     <ClInclude Include="Src\InputManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Math2D.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Matrix2D.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Messages.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Src\ResourceManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Vector2D.h">
+    <ClInclude Include="Src\pch.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\pch.h">
+    <ClInclude Include="Src\GameObjectManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

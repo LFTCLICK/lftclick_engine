@@ -6,8 +6,10 @@
 // Purpose			:	Event Handling 
 // History			:
 // ---------------------------------------------------------------------------
+
 #pragma once
-#include "Components/GameObjectManager.h"
+
+#include "GameObjectManager.h"
 #include "Components/GameObject.h"
 #include <list>
 #include "Messages.h"

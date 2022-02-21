@@ -15,7 +15,7 @@
 #include "FrameRateController.h"
 #include "ResourceManager.h"
 #include "GameObjectFactory.h"
-#include "Components/GameObjectManager.h"
+#include "GameObjectManager.h"
 #include "Graphics.h"
 #include "Components/Transform.h"
 #include "EventManager.h"
@@ -175,7 +175,7 @@ int main(int argc, char* args[])
 						Graphics::getInstance().OnResize(windowWidth, windowHeight);
 					}
 				}
-				Input_Manager::getInstance().Update();
+				InputManager::getInstance().Update();
 
 				// Start the Dear ImGui frame
 				ImGui_ImplDX11_NewFrame();
@@ -218,16 +218,16 @@ int main(int argc, char* args[])
 					ImGui::SetNextWindowPos({ 0,950 });
 					ImGui::Begin("passiveAgressiveMouseInput", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
 					std::string toShow = "Could you move your mouse please?";
-					if (Input_Manager::getInstance().mouseX() != oldMouseX || Input_Manager::getInstance().mouseY() != oldMouseY)
+					if (InputManager::getInstance().mouseX() != oldMouseX || InputManager::getInstance().mouseY() != oldMouseY)
 						toShow = "YAYYYYY I love it when you move your mouse";
-					if (Input_Manager::getInstance().isMouseButtonPressed(0))
+					if (InputManager::getInstance().isMouseButtonPressed(0))
 						toShow = "Left mouse is a good button";
-					if (Input_Manager::getInstance().isMouseButtonPressed(1))
+					if (InputManager::getInstance().isMouseButtonPressed(1))
 						toShow = "I really like right mouse";
-					if (Input_Manager::getInstance().isMouseButtonPressed(2))
+					if (InputManager::getInstance().isMouseButtonPressed(2))
 						toShow = "MIDDLE MOUSE!!!!";
-					oldMouseX = Input_Manager::getInstance().mouseX();
-					oldMouseY = Input_Manager::getInstance().mouseY();
+					oldMouseX = InputManager::getInstance().mouseX();
+					oldMouseY = InputManager::getInstance().mouseY();
 					ImGui::Text(toShow.c_str());
 					ImGui::End();
 				}
@@ -295,7 +295,7 @@ int main(int argc, char* args[])
 						Graphics::getInstance().OnResize(windowWidth, windowHeight);
 					}
 				}
-				Input_Manager::getInstance().Update();
+				InputManager::getInstance().Update();
 				gom->Update();//update gameobjects
 				EventManager::getInstance().ProcessCollision();
 							  //gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change

@@ -59,6 +59,7 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 	Component * currentComp = nullptr;
 	int compID = std::stoi(type.key());
 	std::cout << compID << std::endl;
+
 	if (compID == Component::TRANSFORM)
 		currentComp = new Transform(type.value(), currentObj);
 	else if (compID == Component::DRAWABLE)

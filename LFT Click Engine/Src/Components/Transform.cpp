@@ -17,7 +17,7 @@ Transform::Transform()
 Transform::Transform(json j, GameObject * parent)
 {
 	this->parent = parent;
-	pos = Vector2D();
+	pos = DirectX::SimpleMath::Vector2(0.0f, 0.0f);
 	pos.x = j["startX"];
 	pos.y = j["startY"];
 	scale.x = j["scaleX"];
@@ -38,9 +38,9 @@ Component * Transform::Clone(GameObject* newParent)
 	return (Component*)toReturn;
 }
 
-void Transform::Init(Vector2D const & v)
+void Transform::Init(DirectX::SimpleMath::Vector2 const & v)
 {
-	pos = Vector2D(v);
+	pos = DirectX::SimpleMath::Vector2(v);
 }
 
 void Transform::Move(float deltaX, float deltaY)
@@ -83,7 +83,7 @@ void Transform::HandleMessage(Message * e)
 {
 }
 
-Vector2D Transform::CurrentPos()
+DirectX::SimpleMath::Vector2 Transform::CurrentPos()
 {
 	return pos;
 }

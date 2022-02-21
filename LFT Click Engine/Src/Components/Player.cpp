@@ -12,31 +12,31 @@ void Player::Start()
 
 void Player::Update()
 {
-	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_W))
+	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_W))
 		myTransform->Move(0, playerSpeed * FrameRateController::getInstance().DeltaTime());
-	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_S))
+	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_S))
 		myTransform->Move(0, -playerSpeed * FrameRateController::getInstance().DeltaTime());
-	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_D))
+	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_D))
 		myTransform->Move(playerSpeed * FrameRateController::getInstance().DeltaTime(), 0);
-	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_A))
+	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_A))
 		myTransform->Move(-playerSpeed * FrameRateController::getInstance().DeltaTime(), 0);
 
-	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_UP))
+	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_UP))
 		cam->Move(0.0f, playerSpeed * FrameRateController::getInstance().DeltaTime());
-	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_DOWN))
+	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_DOWN))
 		cam->Move(0.0f, -playerSpeed * FrameRateController::getInstance().DeltaTime());
-	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_RIGHT))
+	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_RIGHT))
 		cam->Move(playerSpeed * FrameRateController::getInstance().DeltaTime(), 0.0f);
-	if (Input_Manager::getInstance().isKeyPressed(SDL_SCANCODE_LEFT))
+	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_LEFT))
 		cam->Move(-playerSpeed * FrameRateController::getInstance().DeltaTime(), 0.0f);
 
-	if (Input_Manager::getInstance().isJoyStickMovedUp(SDL_CONTROLLER_AXIS_LEFTY))
+	if (InputManager::getInstance().isJoyStickMovedUp(SDL_CONTROLLER_AXIS_LEFTY))
 		myTransform->Move(0, playerSpeed * FrameRateController::getInstance().DeltaTime());
-	if (Input_Manager::getInstance().isJoyStickMovedDown(SDL_CONTROLLER_AXIS_LEFTY))
+	if (InputManager::getInstance().isJoyStickMovedDown(SDL_CONTROLLER_AXIS_LEFTY))
 		myTransform->Move(0, -playerSpeed * FrameRateController::getInstance().DeltaTime());
-	if (Input_Manager::getInstance().isJoyStickMovedRight(SDL_CONTROLLER_AXIS_LEFTX))
+	if (InputManager::getInstance().isJoyStickMovedRight(SDL_CONTROLLER_AXIS_LEFTX))
 		myTransform->Move(playerSpeed * FrameRateController::getInstance().DeltaTime(), 0);
-	if (Input_Manager::getInstance().isJoyStickMovedLeft(SDL_CONTROLLER_AXIS_LEFTX))
+	if (InputManager::getInstance().isJoyStickMovedLeft(SDL_CONTROLLER_AXIS_LEFTX))
 		myTransform->Move(-playerSpeed * FrameRateController::getInstance().DeltaTime(), 0);
 }
 
