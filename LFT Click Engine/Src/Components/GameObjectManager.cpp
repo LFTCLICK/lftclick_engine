@@ -7,12 +7,13 @@
 // History			:
 // 2021/12/01		-	Added collider handeling and message sending
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "GameObjectManager.h"
-#include <iostream>
 #include "Drawable.h"
 #include "Collider.h"
 #include "MeshCollider.h"
 #include "SquareCollider.h"
+
 GameObjectManager::GameObjectManager()
 {
 	gameObjectList = std::list<GameObject*>();

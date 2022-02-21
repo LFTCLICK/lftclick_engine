@@ -6,13 +6,9 @@
 // Purpose			:	Implementation
 // History			:
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "InputManager.h"
-#include <memory.h>
-#include <SDL_keyboard.h>
-#include <SDL_mouse.h>
-#include <SDL_joystick.h>
-#include <SDL_gamecontroller.h>
-#include <iostream>
+
 
 SDL_Joystick* gGameController = nullptr;
 

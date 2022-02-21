@@ -11,6 +11,7 @@
 // 2021/12/01		-	Fixed SAT
 // ---------------------------------------------------------------------------
 
+#include "pch.h"
 #include "Math2D.h"
 #include "stdio.h"
 #include <limits.h>

@@ -1,5 +1,6 @@
+#include "pch.h"
 #include "SpriteAnimator.h"
-#include "../FrameRateController.h"
+#include "FrameRateController.h"
 
 void SpriteAnimator::Start()
 {

@@ -6,11 +6,10 @@
 // Purpose			:	implementation of Camera object
 // History			: 
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "Camera.h"
-#include <directxmath.h>
-#include <iostream>
-#include "../FrameRateController.h"
-#include "../Graphics.h"
+#include "FrameRateController.h"
+#include "Graphics.h"
 
 using json = nlohmann::json;
 Camera::Camera()

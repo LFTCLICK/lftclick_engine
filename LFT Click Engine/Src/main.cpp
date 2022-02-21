@@ -9,27 +9,19 @@
 // 2021/12/01		-	Added messaging
 // ---------------------------------------------------------------------------
 #define no_init_all deprecated
-#include <iostream>
-#include <SDL.h>
-#include <SDL_syswm.h>
-#include <Windows.h>
+
+#include "pch.h"
 #include "InputManager.h"
 #include "FrameRateController.h"
 #include "ResourceManager.h"
 #include "GameObjectFactory.h"
 #include "Components/GameObjectManager.h"
-#include <fstream>
-#include <json.hpp>
 #include "Graphics.h"
 #include "Components/Transform.h"
 #include "EventManager.h"
 #include "AudioManager.h"
 #include "Messages.h"
 #include "GameManager.h"
-#include "imgui.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_dx11.h"
-#include <time.h>
 #include "Components/Drawable.h"
 #include "conio.h"
 

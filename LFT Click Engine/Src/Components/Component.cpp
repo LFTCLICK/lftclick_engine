@@ -6,6 +6,7 @@
 // Purpose			:	Empty component implement
 // History			:
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "Component.h"
 
 Component::Component()

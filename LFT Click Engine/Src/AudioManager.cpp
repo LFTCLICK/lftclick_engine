@@ -6,6 +6,8 @@
 // Purpose			:	FMOD Audio Handling 
 // History			:
 // ---------------------------------------------------------------------------
+
+#include "pch.h"
 #include "AudioManager.h"
 
 

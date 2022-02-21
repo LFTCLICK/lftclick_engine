@@ -5,9 +5,11 @@
 // Creation Date	:	2021/10/28
 // Purpose			:	Mesh collision handling
 // ---------------------------------------------------------------------------
+
+#include "pch.h"
 #include "MeshCollider.h"
 #include "SquareCollider.h"
-#include "../Math2D.h"
+#include "Math2D.h"
 
 MeshCollider::MeshCollider()
 {

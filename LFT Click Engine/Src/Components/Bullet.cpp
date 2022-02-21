@@ -6,8 +6,9 @@
 // Purpose			:	Animates grabables
 // History			: 
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "Bullet.h"
-#include "../FrameRateController.h"
+#include "FrameRateController.h"
 
 
 void Bullet::Start()

@@ -8,7 +8,7 @@
 // - 2021/09/13		:	- initial implementation
 // - 2021/09/29		:	- added vector to angle
 // ---------------------------------------------------------------------------
-
+#include "pch.h"
 #include "Vector2D.h"
 
 #define EPSILON 0.0001

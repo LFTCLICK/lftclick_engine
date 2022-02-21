@@ -7,6 +7,7 @@
 // History			:
 // ---------------------------------------------------------------------------
 
+#include "pch.h"
 #include "Audible.h"
 
 using json = nlohmann::json;

@@ -6,6 +6,7 @@
 // Purpose			:	Implementation
 // History			:
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "FrameRateController.h"
 #include <iostream>
 #include <Windows.h>

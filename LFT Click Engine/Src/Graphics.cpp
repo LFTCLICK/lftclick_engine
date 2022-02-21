@@ -7,14 +7,13 @@
 // History			:
 // 2021/12/01		-	Fixed color space issue
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "Graphics.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <WICTextureLoader.h>
 
 
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "D3DCompiler.lib")
 
 namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;

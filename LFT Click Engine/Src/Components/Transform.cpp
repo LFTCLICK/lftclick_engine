@@ -7,8 +7,8 @@
 // History			:
 // 2021/12/01		-	GetPosXMVector added
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "Transform.h"
-#include <iostream>
 
 Transform::Transform()
 {

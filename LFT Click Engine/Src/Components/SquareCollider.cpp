@@ -6,8 +6,9 @@
 // Purpose			:	Square collider handling
 // History			:
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "SquareCollider.h"
-#include "../Math2D.h"
+#include "Math2D.h"
 #include"Transform.h"
 
 SquareCollider::SquareCollider()

@@ -6,6 +6,7 @@
 // Purpose			:	Event Handling 
 // History			:
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "EventManager.h"
 
 void EventManager::init(GameObjectManager * gom)

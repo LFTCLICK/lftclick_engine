@@ -7,6 +7,7 @@
 // History			:
 // 2021/12/01		:	Added messaging
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "GameObject.h"
 
 GameObject::GameObject()

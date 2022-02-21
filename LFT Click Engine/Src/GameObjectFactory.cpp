@@ -8,6 +8,7 @@
 // 2021/10/29		-	Added Drawable comp
 // 2021/12/01		-	Added collider
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "GameObjectFactory.h"
 #include "Components/Component.h"
 #include "Components/Transform.h"

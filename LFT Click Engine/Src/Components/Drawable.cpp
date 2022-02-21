@@ -7,6 +7,8 @@
 // History			:
 // ---------------------------------------------------------------------------
 #define no_init_all
+
+#include "pch.h"
 #include "Drawable.h"
 #include <d3dcompiler.h>
 #include <WICTextureLoader.h>

@@ -6,6 +6,7 @@
 // Purpose			:	Global values for game management
 // History			:
 // ---------------------------------------------------------------------------
+#include "pch.h"
 #include "GameManager.h"
 
 //probably should be removed
