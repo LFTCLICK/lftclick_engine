@@ -8,7 +8,6 @@
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "SquareCollider.h"
-#include "Math2D.h"
 #include"Transform.h"
 
 SquareCollider::SquareCollider()
@@ -60,15 +59,30 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 		SquareCollider* toCheckCollider = toCheck->getComponent<SquareCollider>();
 		DirectX::XMVECTOR myPos = DirectX::XMVectorAdd(parent->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&center));
 		DirectX::XMVECTOR toCheckPos = DirectX::XMVectorAdd(toCheck->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&toCheckCollider->center));
-		int returnVal = StaticRectToStaticRect(&myPos, width, height, &toCheckPos, toCheckCollider->width, toCheckCollider->height);
-		if (returnVal == 1)
+		
+		DirectX::XMFLOAT2 myPosf;
+		DirectX::XMStoreFloat2(&myPosf, myPos);
+
+		DirectX::XMFLOAT2 toCheckPosf;
+		DirectX::XMStoreFloat2(&toCheckPosf, toCheckPos);
+
+		DirectX::SimpleMath::Rectangle a = DirectX::SimpleMath::Rectangle(myPosf.x, myPosf.y, width, height);
+		DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(toCheckPosf.x, toCheckPosf.y, 
+			toCheckCollider->width, toCheckCollider->height);
+
+		bool intersects = a.Intersects(b);
+
+		std::cout << "Intersects: " << intersects << std::endl;
+
+		if (intersects)
 		{
 			if (isTrigger)
-			{	EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(parent->tag));
+			{	
+				EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(parent->tag));
 			}
 			else
 			{
-				Vector2D delta;
+				DirectX::SimpleMath::Vector2 delta;
 				DirectX::XMVECTOR difference = DirectX::XMVectorSubtract(myPos, toCheckPos);
 				difference.m128_f32[0] = fabs(difference.m128_f32[0]) - ((width + toCheckCollider->width) / 2);
 				difference.m128_f32[1] = fabs(difference.m128_f32[1]) - ((height + toCheckCollider->height) / 2);
@@ -76,22 +90,22 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 				{
 					if (myPos.m128_f32[1] < toCheckPos.m128_f32[1])
 					{
-						Vector2DSet(&delta, 0, -difference.m128_f32[1]);
+						delta = DirectX::SimpleMath::Vector2(0.0f, -difference.m128_f32[1]);
 					}
 					else
 					{
-						Vector2DSet(&delta, 0, difference.m128_f32[1]);
+						delta = DirectX::SimpleMath::Vector2(0.0f, difference.m128_f32[1]);
 					}
 				}
 				else
 				{
 					if (myPos.m128_f32[0] < toCheckPos.m128_f32[0])
 					{
-						Vector2DSet(&delta, -difference.m128_f32[0], 0);
+						delta = DirectX::SimpleMath::Vector2(-difference.m128_f32[0], 0);
 					}
 					else
 					{
-						Vector2DSet(&delta, difference.m128_f32[0], 0);
+						delta = DirectX::SimpleMath::Vector2(difference.m128_f32[0], 0);
 					}
 				}
 				if (difference.m128_f32[1] > 0.1 || difference.m128_f32[1] < 0.1)

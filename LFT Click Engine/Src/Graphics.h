@@ -56,8 +56,8 @@ public:
 		pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 	}
 	void Draw();
-	int getWidth();
-	int getHeight();
+	int GetWidth();
+	int GetHeight();
 	ID3D11DeviceContext* GetContext();
 	ID3D11Device* GetDevice();
 	void OnResize(int newWidth, int newHeight);

@@ -9,7 +9,6 @@
 #include "pch.h"
 #include "MeshCollider.h"
 #include "SquareCollider.h"
-#include "Math2D.h"
 
 MeshCollider::MeshCollider()
 {
@@ -72,6 +71,90 @@ Component * MeshCollider::Clone(GameObject * newParent)
 	return (Component*)toReturn;
 }
 
+int SATCollision(float* p1, int p1Size, float* p2, int p2Size, DirectX::XMVECTOR* moveDistance)
+{
+	int numberOfCollisions = 0;
+	int trialCounter = 0;
+	float leastDistanceToMove = FLT_MAX;
+	DirectX::XMVECTOR leastDistanceToMoveVec;
+	while (trialCounter < 2)
+	{
+		int i = 0;
+		while (i < p1Size)
+		{
+			DirectX::XMVECTOR currentNormal;
+			currentNormal = DirectX::XMVectorSet(-(p1[(i + 1) % p1Size] - p1[(i + 3) % p1Size]), p1[i % p1Size] - p1[(i + 2) % p1Size], 0, 1);//normal of vector is (-(y1-y2), (x1-x2))
+			currentNormal = DirectX::XMVectorScale(currentNormal, 1 / DirectX::XMVector3Length(currentNormal).m128_f32[0]);
+			int p1MinSATProjection, p2MinSATProjection, p1MaxSATProjection, p2MaxSATProjection;
+			p1MinSATProjection = p2MinSATProjection = INT_MAX;
+			p1MaxSATProjection = p2MaxSATProjection = INT_MIN;
+			int j = 0;
+			while (j < p1Size)
+			{
+				DirectX::XMVECTOR temp;
+				temp = DirectX::XMVectorSet(p1[j], p1[j + 1], 0, 1);
+				float dotP = DirectX::XMVector3Dot(temp, currentNormal).m128_f32[0];
+				if (dotP < p1MinSATProjection)
+					p1MinSATProjection = dotP;
+				if (dotP > p1MaxSATProjection)
+					p1MaxSATProjection = dotP;
+				j += 2;
+			}
+			j = 0;
+			while (j < p2Size)
+			{
+				DirectX::XMVECTOR temp;
+				temp = DirectX::XMVectorSet(p2[j], p2[j + 1], 0, 1);
+				float dotP = DirectX::XMVector3Dot(temp, currentNormal).m128_f32[0];
+				if (dotP < p2MinSATProjection)
+					p2MinSATProjection = dotP;
+				if (dotP > p2MaxSATProjection)
+					p2MaxSATProjection = dotP;
+				j += 2;
+			}
+			if (!(p2MinSATProjection > p1MaxSATProjection || p2MaxSATProjection < p1MinSATProjection))
+			{
+				if (fabsf(p2MinSATProjection - p1MaxSATProjection) < fabsf(p2MaxSATProjection - p1MinSATProjection))
+				{
+					if (fabsf(p2MinSATProjection - p1MaxSATProjection) < fabsf(leastDistanceToMove))
+					{
+						leastDistanceToMove = p2MinSATProjection - p1MaxSATProjection;
+						leastDistanceToMoveVec = DirectX::XMVectorSet(currentNormal.m128_f32[0], currentNormal.m128_f32[1], 0, 1);
+						if (trialCounter != 0)
+							leastDistanceToMove *= -1;
+					}
+				}
+				else
+				{
+					if (fabsf(p2MaxSATProjection - p1MinSATProjection) < fabsf(leastDistanceToMove))
+					{
+						leastDistanceToMove = p2MaxSATProjection - p1MinSATProjection;
+						leastDistanceToMoveVec = DirectX::XMVectorSet(currentNormal.m128_f32[0], currentNormal.m128_f32[1], 0, 1);
+						if (trialCounter == 0)
+							leastDistanceToMove *= -1;
+					}
+				}
+				numberOfCollisions++;
+			}
+			i += 2;
+		}
+		trialCounter++;
+		int tempSize = p1Size;
+		p1Size = p2Size;
+		p2Size = tempSize;
+		float* tempP;
+		tempP = p1;
+		p1 = p2;
+		p2 = tempP;
+	}
+	if ((p1Size + p2Size) / 2 == numberOfCollisions)
+	{
+		*moveDistance = DirectX::XMVectorScale(leastDistanceToMoveVec, leastDistanceToMove);
+		return 1;
+	}
+	return 0;
+}
+
 void MeshCollider::CollisionCheck(GameObject* toCheck)
 {
 	if (toCheck != parent)
@@ -81,7 +164,8 @@ void MeshCollider::CollisionCheck(GameObject* toCheck)
 		minDistance *= minDistance;
 		DirectX::XMVECTOR pT = playerTransform->GetPosXMVector();
 		DirectX::XMVECTOR t = trans->GetPosXMVector();
-		if (XM2DSquareDistance(&pT, &t) < minDistance)//skip some calculations
+
+		if (DirectX::SimpleMath::Vector2::DistanceSquared(pT, t) < minDistance)//skip some calculations
 		{
 			float* actualPointArray = new float[arraySize];
 			for (int i = 0; i < arraySize; i += 2)
@@ -106,8 +190,7 @@ void MeshCollider::CollisionCheck(GameObject* toCheck)
 					EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(parent->tag));
 				else
 				{
-					Vector2D delta;
-					Vector2DSet(&delta, 0, 0);
+					DirectX::SimpleMath::Vector2 delta(0.0f, 0.0f);
 					EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, delta));
 				}
 			}

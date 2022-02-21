@@ -106,7 +106,7 @@ DirectX::XMMATRIX Camera::GetProjectionMatrix()
 {
 	DirectX::XMMATRIX translation;
 	GetViewMatrix(translation);
-	return translation * DirectX::XMMatrixOrthographicLH(Graphics::getInstance().getWidth(), Graphics::getInstance().getHeight(), 0.00001f, 1000);
+	return translation * DirectX::XMMatrixOrthographicLH(Graphics::getInstance().GetWidth(), Graphics::getInstance().GetHeight(), 0.00001f, 1000);
 }
 
 int Camera::getCompId()

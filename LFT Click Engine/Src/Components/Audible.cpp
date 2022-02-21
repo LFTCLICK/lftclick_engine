@@ -37,7 +37,7 @@ void Audible::Update() {
 
 	if (transformComp != nullptr) {
 		position = transformComp->CurrentPos();
-		bool isMoving = Vector2DSquareDistance(&oldPosition, &position) > 0;
+		bool isMoving = DirectX::SimpleMath::Vector2::DistanceSquared(oldPosition, position) > 0;
 		if (isMoving != wasMoving) {
 			wasMoving = isMoving;
 			for (auto sound : sounds) {
@@ -49,7 +49,7 @@ void Audible::Update() {
 		}
 	}
 
-	Vector2DSet(&oldPosition, position.x, position.y);
+	oldPosition = position;
 
 	/*
 	Vector2D finalPos = { position.x, position.y };
@@ -68,9 +68,6 @@ Audible::Audible(json j, GameObject* parent) :
 	parent(parent), 
 	am(&AudioManager::getInstance()), 
 	sounds({}), 
-	oldPosition({ 0, 0 }), 
-	position({ 0, 0 }), 
-	positionOffset({ 0, 0 }), 
 	wasMoving(false) 
 {
 	if (j.contains("sounds")) {
@@ -129,14 +126,14 @@ float Audible::GetVolume() {
 	return am->GetGroupVolume(channelGroupName);
 }
 
-Vector2D Audible::GetPosition() {
+DirectX::SimpleMath::Vector2 Audible::GetPosition() {
 	return am->GetGroupPosition(channelGroupName);
 }
 
 void Audible::SetPosition(float x, float y) {
 	am->SetGroupPosition(channelGroupName, x, y);
 }
-void Audible::SetPosition(Vector2D position) {
+void Audible::SetPosition(DirectX::SimpleMath::Vector2 position) {
 	am->SetGroupPosition(channelGroupName, position);
 }
 

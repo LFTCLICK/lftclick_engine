@@ -10,17 +10,17 @@
 #pragma once
 #include <SDL_stdinc.h>
 
-class Input_Manager
+class InputManager
 {
 public:
-	static Input_Manager& getInstance()
+	static InputManager& getInstance()
 	{
-		static Input_Manager instance;
+		static InputManager instance;
 		return instance;
 	}
-	Input_Manager(Input_Manager const&) = delete;
-	void operator=(Input_Manager const&) = delete;
-	~Input_Manager();
+	InputManager(InputManager const&) = delete;
+	void operator=(InputManager const&) = delete;
+	~InputManager();
 	void Update();
 	bool isKeyPressed(unsigned int KeyScanValue);
 	bool isKeyReleased(unsigned int keyScanValue);
@@ -38,7 +38,7 @@ public:
 	
 
 private:
-	Input_Manager();
+	InputManager();
 	Uint8 mCurrentState[512];
 	Uint8 mPreviousState[512];
 	int mousePos[2];

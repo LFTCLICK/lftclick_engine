@@ -6,10 +6,11 @@
 // Purpose			:	Message objects
 // History			:
 // ---------------------------------------------------------------------------
-#pragma once
-#include <string>
-#include "Vector2D.h"
 
+#pragma once
+
+#include <string>
+#include "SimpleMath.h"
 class Message
 {
 public:
@@ -23,14 +24,14 @@ public:
 class CollisionMessage : public Message
 {
 public:
-	CollisionMessage(std::string sourceObjectTag, Vector2D deltaPos = { 0,0 }, uint32_t runAtTick = 0) : deltaPos(deltaPos)
+	CollisionMessage(std::string sourceObjectTag, DirectX::SimpleMath::Vector2 deltaPos = { 0,0 }, uint32_t runAtTick = 0) : deltaPos(deltaPos)
 	{
 		id = Message::MessageID::COLLISION;
 		tickTime = runAtTick;
 		Message::sourceObjectTag = sourceObjectTag;
 
 	};
-	Vector2D deltaPos;
+	DirectX::SimpleMath::Vector2 deltaPos;
 };
 
 class DamageCollisionMessage : public Message

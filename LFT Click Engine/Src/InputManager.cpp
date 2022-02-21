@@ -12,7 +12,7 @@
 
 SDL_Joystick* gGameController = nullptr;
 
-Input_Manager::Input_Manager()
+InputManager::InputManager()
 {
 	memset(mCurrentState, 0, 512 * sizeof(Uint8));
 	memset(mouseButtonCurrentState, 0, 3 * sizeof(bool));
@@ -22,14 +22,14 @@ Input_Manager::Input_Manager()
 	gGameController = SDL_JoystickOpen(0);
 }
 
-Input_Manager::~Input_Manager()
+InputManager::~InputManager()
 {
 	//Close game controller
 	SDL_JoystickClose(gGameController);
 	gGameController = NULL;
 }
 
-void Input_Manager::Update()
+void InputManager::Update()
 {
 	int numberOfItems = 0;
 	
@@ -54,68 +54,67 @@ void Input_Manager::Update()
 	mouseButtonCurrentState[2] = (buttons & SDL_BUTTON_MMASK) != 0;
 }
 
-bool Input_Manager::isKeyPressed(unsigned int keyScanValue)
+bool InputManager::isKeyPressed(unsigned int keyScanValue)
 {
 	if (keyScanValue >= 512)
 		return false;
 	return mCurrentState[keyScanValue]!=0;
 }
 
-bool Input_Manager::isKeyReleased(unsigned int keyScanValue)
+bool InputManager::isKeyReleased(unsigned int keyScanValue)
 {
 	if (keyScanValue >= 512)
 		return false;
 	return mPreviousState[keyScanValue] != 0 && mCurrentState[keyScanValue] == 0;
 }
 
-bool Input_Manager::isKeyTriggered(unsigned int keyScanValue)
+bool InputManager::isKeyTriggered(unsigned int keyScanValue)
 {
 	if (keyScanValue >= 512)
 		return false;
 	return mPreviousState[keyScanValue] == 0 && mCurrentState[keyScanValue] != 0;
 }
 
-int Input_Manager::mouseX()
+int InputManager::mouseX()
 {
 	return mousePos[0];
 }
 
-int Input_Manager::mouseY()
+int InputManager::mouseY()
 {
 	return mousePos[1];
 }
 
-bool Input_Manager::isMouseButtonPressed(unsigned int buttonIndex)
+bool InputManager::isMouseButtonPressed(unsigned int buttonIndex)
 {
 	if (buttonIndex >= 3)
 		return false;
 	return mouseButtonCurrentState[buttonIndex];
 }
 
-bool Input_Manager::isMouseButtonReleased(unsigned int buttonIndex)
+bool InputManager::isMouseButtonReleased(unsigned int buttonIndex)
 {
 	if (buttonIndex >= 3)
 		return false;
 	return  mouseButtonPreviousState[buttonIndex] && mouseButtonCurrentState[buttonIndex];
 }
 
-bool Input_Manager::isMouseButtonTriggered(unsigned int buttonIndex)
+bool InputManager::isMouseButtonTriggered(unsigned int buttonIndex)
 {
 	if (buttonIndex >= 3)
 		return false;
 	return  mouseButtonPreviousState[buttonIndex] && !mouseButtonCurrentState[buttonIndex];
 }
 
-bool Input_Manager::isJoyStickMovedUp(unsigned int joystickValue)
+bool InputManager::isJoyStickMovedUp(unsigned int joystickValue)
 {
-	std::cout << "Controller Input";
 	if (mCurrentAxesState[joystickValue] > -8000)
 		return false;
 	return true;
 	//return mCurrentAxesState[0];
 }
 
-bool Input_Manager::isJoyStickMovedDown(unsigned int joystickValue)
+bool InputManager::isJoyStickMovedDown(unsigned int joystickValue)
 {
 	if (mCurrentAxesState[joystickValue] < 8000)
 		return false;
@@ -123,7 +122,7 @@ bool Input_Manager::isJoyStickMovedDown(unsigned int joystickValue)
 	//return mCurrentAxesState[0];
 }
 
-bool Input_Manager::isJoyStickMovedLeft(unsigned int joystickValue)
+bool InputManager::isJoyStickMovedLeft(unsigned int joystickValue)
 {
 	if (mCurrentAxesState[joystickValue] > -8000)
 		return false;
@@ -131,7 +130,7 @@ bool Input_Manager::isJoyStickMovedLeft(unsigned int joystickValue)
 	//return mCurrentAxesState[1];
 }
 
-bool Input_Manager::isJoyStickMovedRight(unsigned int joystickValue)
+bool InputManager::isJoyStickMovedRight(unsigned int joystickValue)
 {
 	if (mCurrentAxesState[joystickValue] < 8000)
 		return false;

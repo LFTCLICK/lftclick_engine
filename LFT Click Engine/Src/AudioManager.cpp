@@ -119,10 +119,10 @@ int AudioManager::PlaySound(std::string name, std::string channelGroupName, floa
 		return -1;
 	}
 }
-int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, Vector2D position, bool startPaused) {
+int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, DirectX::SimpleMath::Vector2 position, bool startPaused) {
 	return AudioManager::PlaySound(name, channelGroupName, position.x, position.y, volume);
 }
-int AudioManager::PlaySound(std::string name, float volume, Vector2D position, bool startPaused) {
+int AudioManager::PlaySound(std::string name, float volume, DirectX::SimpleMath::Vector2 position, bool startPaused) {
 	return AudioManager::PlaySound(name, "", position.x, position.y, volume);
 }
 int AudioManager::PlaySound(std::string name, float volume, float x, float y, bool startPaused) {
@@ -175,13 +175,13 @@ void AudioManager::SetVolume(int channelID, float volume) {
 }
 
 // Gets the channel's world position.
-Vector2D AudioManager::GetPosition(int channelID) {
+DirectX::SimpleMath::Vector2 AudioManager::GetPosition(int channelID) {
 	FMOD_VECTOR position = { 0, 0, 0 }, velocity = { 0, 0, 0 };
 	auto channel = engine->channels.find(channelID);
 	if (channel != engine->channels.end()) {
 		CheckResult(__func__, channel->second->get3DAttributes(&position, &velocity));
 	}
-	return Vector2D({ position.x, position.y });
+	return DirectX::SimpleMath::Vector2(position.x, position.y);
 }
 
 // Sets the channel's world position.
@@ -192,7 +192,7 @@ void AudioManager::SetPosition(int channelID, float x, float y) {
 		CheckResult(__func__, channel->second->set3DAttributes(&position, NULL));
 	}
 }
-void AudioManager::SetPosition(int channelID, Vector2D position) {
+void AudioManager::SetPosition(int channelID, DirectX::SimpleMath::Vector2 position) {
 	AudioManager::SetPosition(channelID, position.x, position.y);
 }
 
@@ -297,13 +297,13 @@ void AudioManager::SetGroupVolume(std::string channelGroupName, float volume) {
 }
 
 // Returns the channel group's world position.
-Vector2D AudioManager::GetGroupPosition(std::string channelGroupName) {
+DirectX::SimpleMath::Vector2 AudioManager::GetGroupPosition(std::string channelGroupName) {
 	FMOD_VECTOR position = { 0, 0, 0 }, velocity = { 0, 0, 0 };
 	auto channelGroup = engine->channelGroups.find(channelGroupName);
 	if (channelGroup != engine->channelGroups.end()) {
 		CheckResult(__func__, channelGroup->second->get3DAttributes(&position, &velocity));
 	}
-	return Vector2D({ position.x, position.y });
+	return DirectX::SimpleMath::Vector2(position.x, position.y);
 }
 
 // Sets the channel group's world position.
@@ -314,7 +314,7 @@ void AudioManager::SetGroupPosition(std::string channelGroupName, float x, float
 		CheckResult(__func__, channelGroup->second->set3DAttributes(&position, NULL));
 	}
 }
-void AudioManager::SetGroupPosition(std::string channelGroupName, Vector2D position) {
+void AudioManager::SetGroupPosition(std::string channelGroupName, DirectX::SimpleMath::Vector2 position) {
 	AudioManager::SetGroupPosition(channelGroupName, position.x, position.y);
 }
 

@@ -8,11 +8,13 @@
 // 2021/12/01		-	Added collider handeling and message sending
 // ---------------------------------------------------------------------------
 #pragma once
+
 #include <list>
 #include <json.hpp>
-#include "GameObject.h"
-#include "../GameObjectFactory.h"
+#include "Components\GameObject.h"
+#include "GameObjectFactory.h"
 #include <SDL.h>
+
 using json = nlohmann::json;
 
 class GameObjectManager

@@ -12,7 +12,7 @@
 #include <json.hpp>
 #include <DirectXMath.h>
 #include <vector>
-#include "../EventManager.h"
+#include "EventManager.h"
 
 using json = nlohmann::json;
 

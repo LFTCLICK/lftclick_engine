@@ -11,10 +11,9 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "Transform.h"
-#include "../Vector2D.h"
 #include <json.hpp>
-#include "../AudioManager.h"
-#include "../EventManager.h"
+#include "AudioManager.h"
+#include "EventManager.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -42,7 +41,7 @@ public:
 	virtual int getCompId() override { return ComponentType::AUDIBLE; };
 	virtual Component* Clone(GameObject* newParent);
 
-	Audible() : parent(nullptr), am(&AudioManager::getInstance()), sounds({}), position({ 0, 0 }), positionOffset({ 0, 0 }) {}
+	Audible() : parent(nullptr), am(&AudioManager::getInstance()), sounds({}), position(0, 0), positionOffset(0, 0) {}
 	Audible(json j, GameObject* parent);
 	~Audible();
 
@@ -53,9 +52,9 @@ public:
 	void SetVolume(float volume);
 	void Mute();
 	float GetVolume();
-	Vector2D GetPosition();
+	DirectX::SimpleMath::Vector2 GetPosition();
 	void SetPosition(float x, float y);
-	void SetPosition(Vector2D position);
+	void SetPosition(DirectX::SimpleMath::Vector2 position);
 	float GetPitch();
 	void SetPitch(float pitch);
 	bool IsPlaying();
@@ -64,13 +63,13 @@ public:
 
 	virtual void HandleMessage(Message* e) override;
 
-	Vector2D positionOffset;
+	DirectX::SimpleMath::Vector2 positionOffset;
 
 protected:
 	GameObject* parent;
 	AudioManager* am;
-	Vector2D oldPosition;
-	Vector2D position;
+	DirectX::SimpleMath::Vector2 oldPosition;
+	DirectX::SimpleMath::Vector2 position;
 	bool wasMoving;
 	std::string channelGroupName;
 

@@ -13,8 +13,6 @@
 #include <DirectXMath.h>
 #include <WICTextureLoader.h>
 
-
-
 namespace wrl = Microsoft::WRL;
 namespace dx = DirectX;
 
@@ -179,12 +177,12 @@ void Graphics::EndFrame()
 
 }
 
-int Graphics::getWidth()
+int Graphics::GetWidth()
 {
 	return this->width;
 }
 
-int Graphics::getHeight()
+int Graphics::GetHeight()
 {
 	return this->height;
 }

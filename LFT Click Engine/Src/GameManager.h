@@ -7,8 +7,8 @@
 // History			: 
 // ---------------------------------------------------------------------------
 #pragma once
-#include ".//Components/Camera.h"
-#include "Components/GameObjectManager.h"
+#include "Components\Camera.h"
+#include "GameObjectManager.h"
 
 class GameManager
 {

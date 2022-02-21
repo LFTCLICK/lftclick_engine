@@ -12,11 +12,13 @@
 #include <SDL_mouse.h>
 #include <SDL_joystick.h>
 #include <SDL_gamecontroller.h>
-#include <directxmath.h>
+#include <DirectXMath.h>
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_dx11.h"
+
+#include "SimpleMath.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")

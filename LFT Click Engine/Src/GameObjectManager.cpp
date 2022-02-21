@@ -9,10 +9,10 @@
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "GameObjectManager.h"
-#include "Drawable.h"
-#include "Collider.h"
-#include "MeshCollider.h"
-#include "SquareCollider.h"
+#include "Components\Drawable.h"
+#include "Components\Collider.h"
+#include "Components\MeshCollider.h"
+#include "Components\SquareCollider.h"
 
 GameObjectManager::GameObjectManager()
 {

@@ -11,7 +11,7 @@
 #include <vector>
 #include <DirectXMath.h>
 #include "Transform.h"
-#include "../EventManager.h"
+#include "EventManager.h"
 
 using json = nlohmann::json;
 

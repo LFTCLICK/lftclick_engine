@@ -68,8 +68,6 @@ void FrameRateController::Tick()
 
 	if (m_DeltaTime < 0.0)
 		m_DeltaTime = 0.0;
-
-	std::cout << m_DeltaTime << " Deltatime (Seconds)" << std::endl;
 }
 
 float FrameRateController::DeltaTime()
