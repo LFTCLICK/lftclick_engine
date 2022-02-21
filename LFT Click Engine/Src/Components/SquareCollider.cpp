@@ -66,13 +66,11 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 		DirectX::XMFLOAT2 toCheckPosf;
 		DirectX::XMStoreFloat2(&toCheckPosf, toCheckPos);
 
-		DirectX::SimpleMath::Rectangle a = DirectX::SimpleMath::Rectangle(myPosf.x, myPosf.y, width, height);
-		DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(toCheckPosf.x, toCheckPosf.y, 
+		DirectX::SimpleMath::Rectangle a = DirectX::SimpleMath::Rectangle(myPosf.x-(width/2), myPosf.y-(height/2), width, height);
+		DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(toCheckPosf.x-(toCheckCollider->width/2), toCheckPosf.y-(toCheckCollider->height/2),
 			toCheckCollider->width, toCheckCollider->height);
 
 		bool intersects = a.Intersects(b);
-
-		std::cout << "Intersects: " << intersects << std::endl;
 
 		if (intersects)
 		{
