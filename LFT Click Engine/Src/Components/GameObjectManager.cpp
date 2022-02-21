@@ -76,8 +76,12 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 		{
 			GameObject* returned = gof->CreateObject(currentObj.value());
 			if (isPrefab)//make it inactive if it's a prefab
+			{
 				returned->isActive = false;
-			gameObjectList.push_back(returned);
+				prefabList.push_back(returned);
+			}
+			else
+				gameObjectList.push_back(returned);
 		}
 	}
 }
@@ -91,12 +95,14 @@ void GameObjectManager::DeleteAll()
 {
 	for (GameObject* g : gameObjectList)
 		delete g;
+	for (GameObject* g : prefabList)
+		delete g;
 	gameObjectList.clear();
 }
 
-GameObject * GameObjectManager::CloneObjectOfTag(GameObjectFactory * gof, std::string tag)
+GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::string tag)
 {
-	for (GameObject* g : gameObjectList)
+	for (GameObject* g : prefabList)
 	{
 		if (g->tag == tag)
 		{

@@ -134,7 +134,8 @@ int main(int argc, char* args[])
 	{
 		AudioManager::getInstance().Update();
 
-		if (doMenu)
+		//if (doMenu)
+		if (false)
 		{
 			gom->Deserialize(gof, dataJson);
 

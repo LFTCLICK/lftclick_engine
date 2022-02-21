@@ -1,5 +1,5 @@
 {
-  "Level": [
+  "Prefabs": [
     {
       "prefab": "Resources\\json\\tile.json",
       "tag": "tile"
@@ -24,5 +24,39 @@
       "prefab": "Resources\\json\\player.json",
       "tag": "player"
     }
+  ],
+  "Level": [
+  {
+    "object": "tile",
+    "overrides": []
+  },
+  {
+    "object": "5thSprite",
+    "overrides": [
+    "1": {
+    "startX": -300.0,
+    "startY": -300.0,
+    "scaleX": 128,
+    "scaleY": 128,
+    "rot": 0,
+    "zPos": 10
+  }]
+  },
+  {
+    "object": "bg",
+    "overrides": []
+  },
+  {
+    "object": "camera",
+    "overrides": []
+  },
+  {
+    "object": "bullet",
+    "overrides": []
+  },
+  {
+    "object": "player",
+    "overrides": []
+  },
   ]
 }

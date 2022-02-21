@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "FrameRateController.h"
 #include "Graphics.h"
+#include "../GameManager.h"
 
 using json = nlohmann::json;
 Camera::Camera()
@@ -19,14 +20,13 @@ Camera::Camera()
 
 Camera::Camera(json j, GameObject * parent)
 {
-	startingSpeed = j["speed"];
 	xPos = j["startX"];
 	yPos = j["startY"];
 	zPos = j["startZ"];
-	speedDelta = j["speedDelta"];
-	maxSpeed = j["maxSpeed"];
 	this->parent = parent;
 	speed = startingSpeed;
+	if (j["isMainCamera"])
+		GameManager::getInstance().mainCamera = this;
 }
 
 Component * Camera::Clone(GameObject * newParent)
@@ -38,9 +38,6 @@ Component * Camera::Clone(GameObject * newParent)
 	toReturn->xRot = xRot;
 	toReturn->yRot = yRot;
 	toReturn->zRot = zRot;
-	toReturn->speed = speed;
-	toReturn->speedDelta = speedDelta;
-	toReturn->startingSpeed = startingSpeed;
 	toReturn->parent = newParent;
 	return (Component*)toReturn;
 }
@@ -54,10 +51,6 @@ void Camera::Start()
 
 void Camera::Update()
 {
-	yPos += speed * FrameRateController::getInstance().DeltaTime();
-	speed += speedDelta * FrameRateController::getInstance().DeltaTime();
-	if (speed >= maxSpeed)
-		speed = maxSpeed;
 }
 
 void Camera::SetPos(float x, float y, float z)

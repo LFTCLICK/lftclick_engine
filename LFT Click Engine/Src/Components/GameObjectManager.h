@@ -26,7 +26,7 @@ public:
 	void Deserialize(GameObjectFactory * gof, json j, bool isPrefab = false);
 	void AddGameObject(GameObject* go);
 	void DeleteAll();
-	GameObject* CloneObjectOfTag(GameObjectFactory * gof, std::string tag);
+	GameObject* ClonePrefabOfTag(GameObjectFactory * gof, std::string tag);
 	GameObject* CloneObject(GameObject* go);
 	GameObject* FindObjectOfTag(std::string tag);
 	void BroadcastMessage(Message* m);
@@ -35,4 +35,5 @@ public:
 private:
 	GameObjectFactory * gof;
 	std::list<GameObject*> gameObjectList;
+	std::list<GameObject*> prefabList;
 };
