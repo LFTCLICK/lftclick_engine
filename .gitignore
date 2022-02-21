@@ -20,6 +20,8 @@ LFT\ Click\ Engine/[Dd]ebugPublic/*
 LFT\ Click\ Engine/[Rr]elease/*
 LFT\ Click\ Engine/[Rr]eleases/*
 LFT\ Click\ Engine/imgui.ini
+LFT\ Click\ Engine/Src/Shaders/Compiled
+
 #x64/
 #x86/
 #bld/
