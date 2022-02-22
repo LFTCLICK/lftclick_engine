@@ -19,6 +19,7 @@ class Transform : public Component {
 public:
 	Transform();
 	Transform(json j, GameObject* parent);
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 	void Init(Vector2D const & v);
 	void Move(float deltaX, float deltaY);
 	void SetPos(float newX, float newY);

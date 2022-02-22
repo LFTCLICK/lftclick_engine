@@ -41,9 +41,11 @@ public:
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::AUDIBLE; };
 	virtual Component* Clone(GameObject* newParent);
+	virtual void HandleMessage(Message* e) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	Audible() : parent(nullptr), am(&AudioManager::getInstance()), sounds({}), position({ 0, 0 }), positionOffset({ 0, 0 }) {}
-	Audible(json j, GameObject* parent);
+	//Audible(json j, GameObject* parent);
 	~Audible();
 
 	void PlaySound(SoundInfo sound);
@@ -62,7 +64,6 @@ public:
 	void Stop();
 	void StopSound(std::string soundName);
 
-	virtual void HandleMessage(Message* e) override;
 
 	Vector2D positionOffset;
 

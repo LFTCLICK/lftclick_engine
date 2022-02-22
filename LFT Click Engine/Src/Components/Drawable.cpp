@@ -40,7 +40,102 @@ Drawable::Drawable()
 	xOffset = yOffset = 0;
 }
 
-Drawable::Drawable(json j, GameObject* parent)
+//Drawable::Drawable(json j, GameObject* parent)
+//{
+//	alphaOverride = 1;
+//	xOffset = yOffset = 0;
+//	xFlip = 1;
+//	this->parent = parent;
+//
+//	useTextures = true;
+//	std::vector<Vertex> vertexVector;
+//	std::vector<unsigned short> indices;
+//	json vertexData = j["vertices"];
+//
+//	for (json::iterator vertex = vertexData.begin(); vertex != vertexData.end(); ++vertex)//process data or overrides
+//	{
+//		Vertex temp = {};
+//		temp.cordY = vertex.value()["pos"][1];
+//		temp.cordX = vertex.value()["pos"][0];
+//		temp.cordZ = vertex.value()["pos"][2];
+//		temp.textureX = vertex.value()["uv"][0];
+//		temp.textureY = vertex.value()["uv"][1];
+//		vertexVector.push_back(temp);
+//
+//	}
+//	json indicies = j["indicies"];
+//	drawSize = 0;
+//	for (json::iterator index = indicies.begin(); index != indicies.end(); ++index)//process data or overrides
+//	{
+//		indices.push_back(index.value());
+//		++drawSize;
+//	}
+//	D3D11_BUFFER_DESC vertBufDes = {};
+//	vertBufDes.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+//	vertBufDes.Usage = D3D11_USAGE_DEFAULT;
+//	vertBufDes.CPUAccessFlags = 0;
+//	vertBufDes.MiscFlags = 0;
+//	vertBufDes.ByteWidth = vertexVector.size() * sizeof(Vertex);
+//	vertBufDes.StructureByteStride = sizeof(Vertex);
+//	D3D11_SUBRESOURCE_DATA sd = {};
+//	sd.pSysMem = &(vertexVector[0]);
+//	Graphics::getInstance().GetDevice()->CreateBuffer(&vertBufDes, &sd, &vertBuf);
+//
+//	D3D11_BUFFER_DESC indexBufDes = {};
+//	indexBufDes.BindFlags = D3D11_BIND_INDEX_BUFFER;
+//	indexBufDes.Usage = D3D11_USAGE_DEFAULT;
+//	indexBufDes.CPUAccessFlags = 0;
+//	indexBufDes.MiscFlags = 0;
+//	indexBufDes.ByteWidth = indices.size() * sizeof(unsigned short);
+//	indexBufDes.StructureByteStride = sizeof(unsigned short);
+//	D3D11_SUBRESOURCE_DATA sdIndex = {};
+//	sdIndex.pSysMem = &(indices[0]);
+//	Graphics::getInstance().GetDevice()->CreateBuffer(&indexBufDes, &sdIndex, &indexBuf);
+//
+//
+//	Graphics::getInstance().GetDevice()->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
+//	Graphics::getInstance().GetDevice()->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
+//
+//	const D3D11_INPUT_ELEMENT_DESC ied[] =
+//	{
+//		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+//		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+//	};
+//	Graphics::getInstance().GetDevice()->CreateInputLayout(
+//		ied, (UINT)std::size(ied),
+//		g_CompiledVS,
+//		sizeof(g_CompiledVS),
+//		&inputLayout
+//	);
+//
+//	std::wstring sprite = utf8_decode(j["image"]);
+//	//force DTK to not load the texture as srgb
+//	DirectX::CreateWICTextureFromFileEx(Graphics::getInstance().GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, &texture, &shaderResourceView);
+//	//	DirectX::CreateWICTextureFromFile(Graphics::getInstance().GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
+//
+//	D3D11_SAMPLER_DESC sampDes = {};
+//	sampDes.Filter = D3D11_FILTER_MINIMUM_MIN_MAG_MIP_POINT;
+//	sampDes.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+//	sampDes.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+//	sampDes.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+//
+//	Graphics::getInstance().GetDevice()->CreateSamplerState(&sampDes, &sampState);
+//
+//	D3D11_BLEND_DESC blendDesc = {};
+//	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+//	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+//	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+//	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+//	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+//	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+//	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+//	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+//
+//	Graphics::getInstance().GetDevice()->CreateBlendState(&blendDesc, &blendState);
+//
+//}
+
+void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	alphaOverride = 1;
 	xOffset = yOffset = 0;
@@ -111,7 +206,7 @@ Drawable::Drawable(json j, GameObject* parent)
 	std::wstring sprite = utf8_decode(j["image"]);
 	//force DTK to not load the texture as srgb
 	DirectX::CreateWICTextureFromFileEx(Graphics::getInstance().GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, &texture, &shaderResourceView);
-//	DirectX::CreateWICTextureFromFile(Graphics::getInstance().GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
+	//	DirectX::CreateWICTextureFromFile(Graphics::getInstance().GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
 
 	D3D11_SAMPLER_DESC sampDes = {};
 	sampDes.Filter = D3D11_FILTER_MINIMUM_MIN_MAG_MIP_POINT;
@@ -132,7 +227,6 @@ Drawable::Drawable(json j, GameObject* parent)
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	Graphics::getInstance().GetDevice()->CreateBlendState(&blendDesc, &blendState);
-
 }
 
 Component* Drawable::Clone(GameObject* newParent)

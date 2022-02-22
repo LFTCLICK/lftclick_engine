@@ -24,9 +24,10 @@ public:
 	virtual void Update() override;
 	virtual int getCompId() override;
 	virtual Component* Clone(GameObject* newParent);
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	Camera();
-	Camera(json j, GameObject* parent);
+	//Camera(json j, GameObject* parent);
 
 	
 

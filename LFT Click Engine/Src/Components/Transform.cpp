@@ -14,7 +14,19 @@ Transform::Transform()
 {
 }
 
-Transform::Transform(json j, GameObject * parent)
+//Transform::Transform(json j, GameObject * parent)
+//{
+//	this->parent = parent;
+//	pos = Vector2D();
+//	pos.x = j["startX"];
+//	pos.y = j["startY"];
+//	scale.x = j["scaleX"];
+//	scale.y = j["scaleY"];
+//	rotation = j["rot"];
+//	zPos = j["zPos"];
+//}
+
+void Transform::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	this->parent = parent;
 	pos = Vector2D();

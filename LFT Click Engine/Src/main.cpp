@@ -255,7 +255,8 @@ int main(int argc, char* args[])
 			gom->DeleteAll();
 		}
 
-		if (playGame)
+		//if (playGame)
+		if (true)
 		{
 
 			std::fstream other("./Resources/json/demo.json");
@@ -263,10 +264,10 @@ int main(int argc, char* args[])
 			other >> dataJson2;
 			other.close();
 			gom->Deserialize(gof, dataJson2);
-			GameObject* playerObj = gom->FindObjectOfTag("player");
+			//GameObject* playerObj = gom->FindObjectOfTag("player");
 
 			GameManager::getInstance().mainCamera = gom->FindObjectOfTag("camera")->getComponent<Camera>();
-			gom->Start();
+			//gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0;
 			FrameRateController::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long

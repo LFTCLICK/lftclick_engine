@@ -70,19 +70,30 @@ void GameObjectManager::DoCollision(GameObject* toCheckWith)
 void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPrefab)
 {
 	this->gof = gof;
-	for (json::iterator level = j.begin(); level != j.end(); ++level)
+	json prefabsJSON = j["Prefabs"];
+	for (json::iterator prefabs = prefabsJSON.begin(); prefabs != prefabsJSON.end(); ++prefabs)
 	{
-		for (json::iterator currentObj = level.value().begin(); currentObj != level.value().end(); ++currentObj)
+		GameObject* returned = gof->CreateObject(prefabs.value());
+		returned->isActive = false;
+		prefabList.push_back(returned);
+	}
+	prefabsJSON = j["Level"];
+	for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
+	{
+		GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"]);
+
+		json overrideList = currentObj.value()["overrides"];
+		for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
 		{
-			GameObject* returned = gof->CreateObject(currentObj.value());
-			if (isPrefab)//make it inactive if it's a prefab
+			json actualOverride = c.value();
+			for (json::iterator realOverrides = actualOverride.begin(); realOverrides != actualOverride.end(); ++realOverrides)
 			{
-				returned->isActive = false;
-				prefabList.push_back(returned);
+				int val = std::stoi(realOverrides.key());
+				newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
 			}
-			else
-				gameObjectList.push_back(returned);
 		}
+		newOne->Start();
+
 	}
 }
 
@@ -98,6 +109,7 @@ void GameObjectManager::DeleteAll()
 	for (GameObject* g : prefabList)
 		delete g;
 	gameObjectList.clear();
+	prefabList.clear();
 }
 
 GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::string tag)

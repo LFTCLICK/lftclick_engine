@@ -18,16 +18,16 @@ Camera::Camera()
 	viewMatrix = DirectX::XMMatrixIdentity();
 }
 
-Camera::Camera(json j, GameObject * parent)
-{
-	xPos = j["startX"];
-	yPos = j["startY"];
-	zPos = j["startZ"];
-	this->parent = parent;
-	speed = startingSpeed;
-	if (j["isMainCamera"])
-		GameManager::getInstance().mainCamera = this;
-}
+//Camera::Camera(json j, GameObject * parent)
+//{
+//	xPos = j["startX"];
+//	yPos = j["startY"];
+//	zPos = j["startZ"];
+//	this->parent = parent;
+//	speed = startingSpeed;
+//	if (j["isMainCamera"])
+//		GameManager::getInstance().mainCamera = this;
+//}
 
 Component * Camera::Clone(GameObject * newParent)
 {
@@ -40,6 +40,17 @@ Component * Camera::Clone(GameObject * newParent)
 	toReturn->zRot = zRot;
 	toReturn->parent = newParent;
 	return (Component*)toReturn;
+}
+
+void Camera::Deserialize(nlohmann::json j, GameObject* parent)
+{
+	xPos = j["startX"];
+	yPos = j["startY"];
+	zPos = j["startZ"];
+	this->parent = parent;
+	speed = startingSpeed;
+	if (j["isMainCamera"])
+		GameManager::getInstance().mainCamera = this;
 }
 
 void Camera::Start()

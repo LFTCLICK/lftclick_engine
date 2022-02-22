@@ -30,7 +30,8 @@ public:
 	virtual Component* Clone(GameObject* newParent);
 	void CollisionCheck(GameObject* toCheck);
 	float* getPoints();
-	SquareCollider(json j, GameObject* parent);
+	//SquareCollider(json j, GameObject* parent);
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 private:
 	GameObject* parent;

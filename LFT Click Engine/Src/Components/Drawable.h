@@ -8,12 +8,10 @@
 // 2021/12/01		-	Added messaging
 // ---------------------------------------------------------------------------
 #pragma once
+#include "pch.h"
 #include "GameObject.h"
 #include "Transform.h"
 #include "../InputManager.h"
-#include <json.hpp>
-#include <DirectXMath.h>
-#include <d3d11.h>
 #include "../EventManager.h"
 #include "../Graphics.h"
 
@@ -23,7 +21,8 @@ class Drawable : public Component
 {
 public:
 	Drawable();
-	Drawable(json j, GameObject* parent);
+	//Drawable(json j, GameObject* parent);
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 	virtual Component* Clone(GameObject* newParent);
 	virtual void Start();
 	virtual void Update();

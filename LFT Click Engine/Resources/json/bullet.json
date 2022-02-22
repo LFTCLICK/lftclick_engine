@@ -1,7 +1,7 @@
 {
   "1": {
-    "startX": 450.5,
-    "startY": -384.5,
+    "startX": 0.5,
+    "startY": 0.5,
     "scaleX": 32,
     "scaleY": 32,
     "rot": 0,
@@ -33,8 +33,8 @@
   },
   "4": {
     "center": [ 0.0, 0.0, 0.0 ],
-    "width": 64,
-    "height": 64,
+    "width": 32,
+    "height": 32,
     "trigger": true,
     "deleteOnCollison": true
   },

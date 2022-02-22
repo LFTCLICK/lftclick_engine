@@ -29,6 +29,13 @@ void Bullet::Update()
 	timer += FrameRateController::getInstance().DeltaTime();
 }
 
+void Bullet::Deserialize(nlohmann::json j, GameObject* parent)
+{
+	this->parent = parent;
+	animationTime = j["animationTime"];
+	speed = j["speed"];
+}
+
 Component* Bullet::Clone(GameObject* newParent)
 {
 	Bullet* toReturn = new Bullet();
@@ -39,8 +46,8 @@ Component* Bullet::Clone(GameObject* newParent)
 	return toReturn;
 }
 
-Bullet::Bullet(json j, GameObject* parent) : parent(parent)
-{
-	animationTime = j["animationTime"];
-	speed = j["speed"];
-}
+//Bullet::Bullet(json j, GameObject* parent) : parent(parent)
+//{
+//	animationTime = j["animationTime"];
+//	speed = j["speed"];
+//}

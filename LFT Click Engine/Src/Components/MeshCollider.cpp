@@ -15,7 +15,7 @@ MeshCollider::MeshCollider()
 {
 }
 
-MeshCollider::MeshCollider(json j, GameObject * parent)
+void MeshCollider::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	this->parent = parent;
 	arraySize = 0;
@@ -23,12 +23,27 @@ MeshCollider::MeshCollider(json j, GameObject * parent)
 	{
 		DirectX::XMVECTOR current = { vertex.value()[0],vertex.value()[1],vertex.value()[2],0 };
 		vertices.push_back(current);
-		arraySize+=2;
+		arraySize += 2;
 	}
 	pointArray = new float[arraySize];
 	isTrigger = j["trigger"];
 	arrayResized = false;
 }
+
+//MeshCollider::MeshCollider(json j, GameObject * parent)
+//{
+//	this->parent = parent;
+//	arraySize = 0;
+//	for (json::iterator vertex = j["vertices"].begin(); vertex != j["vertices"].end(); ++vertex)//process data or overrides
+//	{
+//		DirectX::XMVECTOR current = { vertex.value()[0],vertex.value()[1],vertex.value()[2],0 };
+//		vertices.push_back(current);
+//		arraySize+=2;
+//	}
+//	pointArray = new float[arraySize];
+//	isTrigger = j["trigger"];
+//	arrayResized = false;
+//}
 
 void MeshCollider::Start()
 {
