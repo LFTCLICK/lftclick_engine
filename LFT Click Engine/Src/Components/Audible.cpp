@@ -68,55 +68,8 @@ Component* Audible::Clone(GameObject* newParent) {
 	toReturn->position = position;
 	toReturn->positionOffset = positionOffset;
 	toReturn->wasMoving = wasMoving;
-	//if (j.contains("sounds")) {
-	//	for (auto it = std::begin(j["sounds"]); it != std::end(j["sounds"]); it++) {
-	//		SoundInfo soundInfo;
-	//		auto sound = *it;
-	//
-	//		if (sound.contains("name")) soundInfo.name = sound["name"];
-	//		if (sound.contains("loop")) soundInfo.loop = sound["loop"];
-	//		if (sound.contains("compressed")) soundInfo.compressed = sound["compressed"];
-	//		if (sound.contains("volume")) soundInfo.volume = sound["volume"];
-	//
-	//		if (sound.contains("playEvents"))
-	//			soundInfo.playEvents.insert(soundInfo.playEvents.begin(), std::begin(sound["playEvents"]), std::end(sound["playEvents"]));
-	//		if (sound.contains("stopEvents"))
-	//			soundInfo.stopEvents.insert(soundInfo.stopEvents.begin(), std::begin(sound["stopEvents"]), std::end(sound["stopEvents"]));
-	//
-	//		sounds.push_back(soundInfo);
-	//	}
-	//}
 	return toReturn;
 }
-
-//Audible::Audible(json j, GameObject* parent) : 
-//	parent(parent), 
-//	am(&AudioManager::getInstance()), 
-//	sounds({}), 
-//	oldPosition({ 0, 0 }), 
-//	position({ 0, 0 }), 
-//	positionOffset({ 0, 0 }), 
-//	wasMoving(false) 
-//{
-//	if (j.contains("sounds")) {
-//		for (auto it = std::begin(j["sounds"]); it != std::end(j["sounds"]); it++) {
-//			SoundInfo soundInfo;
-//			auto sound = *it;
-//
-//			if (sound.contains("name")) soundInfo.name = sound["name"];
-//			if (sound.contains("loop")) soundInfo.loop = sound["loop"];
-//			if (sound.contains("compressed")) soundInfo.compressed = sound["compressed"];
-//			if (sound.contains("volume")) soundInfo.volume = sound["volume"];
-//
-//			if (sound.contains("playEvents"))
-//				soundInfo.playEvents.insert(soundInfo.playEvents.begin(), std::begin(sound["playEvents"]), std::end(sound["playEvents"]));
-//			if (sound.contains("stopEvents"))
-//				soundInfo.stopEvents.insert(soundInfo.stopEvents.begin(), std::begin(sound["stopEvents"]), std::end(sound["stopEvents"]));
-//
-//			sounds.push_back(soundInfo);
-//		}
-//	}
-//}
 
 Audible::~Audible() {
 	Stop();

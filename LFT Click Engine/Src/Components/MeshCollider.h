@@ -19,7 +19,6 @@ class MeshCollider : public Collider {
 public:
 	// Inherited via Component
 	MeshCollider();
-	//MeshCollider(json j, GameObject* parent);
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	virtual void Start();

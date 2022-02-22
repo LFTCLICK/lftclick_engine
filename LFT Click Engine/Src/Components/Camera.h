@@ -27,7 +27,6 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	Camera();
-	//Camera(json j, GameObject* parent);
 
 	
 

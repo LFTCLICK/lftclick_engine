@@ -45,9 +45,3 @@ Component* Bullet::Clone(GameObject* newParent)
 	toReturn->timer = 0;
 	return toReturn;
 }
-
-//Bullet::Bullet(json j, GameObject* parent) : parent(parent)
-//{
-//	animationTime = j["animationTime"];
-//	speed = j["speed"];
-//}

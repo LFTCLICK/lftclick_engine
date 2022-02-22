@@ -26,7 +26,6 @@ public:
 
 	virtual Component* Clone(GameObject* newParent);
 	Bullet() {};
-	//Bullet(json j, GameObject* parent);
 
 private:
 	GameObject* parent;

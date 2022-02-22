@@ -21,7 +21,6 @@ class Drawable : public Component
 {
 public:
 	Drawable();
-	//Drawable(json j, GameObject* parent);
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 	virtual Component* Clone(GameObject* newParent);
 	virtual void Start();

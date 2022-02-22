@@ -18,17 +18,6 @@ Camera::Camera()
 	viewMatrix = DirectX::XMMatrixIdentity();
 }
 
-//Camera::Camera(json j, GameObject * parent)
-//{
-//	xPos = j["startX"];
-//	yPos = j["startY"];
-//	zPos = j["startZ"];
-//	this->parent = parent;
-//	speed = startingSpeed;
-//	if (j["isMainCamera"])
-//		GameManager::getInstance().mainCamera = this;
-//}
-
 Component * Camera::Clone(GameObject * newParent)
 {
 	Camera* toReturn = new Camera();

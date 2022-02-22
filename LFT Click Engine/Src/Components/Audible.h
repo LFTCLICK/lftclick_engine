@@ -45,7 +45,6 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	Audible() : parent(nullptr), am(&AudioManager::getInstance()), sounds({}), position({ 0, 0 }), positionOffset({ 0, 0 }) {}
-	//Audible(json j, GameObject* parent);
 	~Audible();
 
 	void PlaySound(SoundInfo sound);
