@@ -114,9 +114,9 @@ int main(int argc, char* args[])
 	json dataJson;
 	data >> dataJson;
 	data.close();
-	gom = new GameObjectManager();
+	gom = &GameObjectManager::getInstance();
 	EventManager::getInstance().init(gom);
-	gof = new GameObjectFactory();
+	gof = &GameObjectFactory::getInstance();
 
 
 	Uint32 frameTimeTicks = 16;
@@ -132,10 +132,9 @@ int main(int argc, char* args[])
 	srand(time(NULL));
 	while (masterLoop)
 	{
-		AudioManager::getInstance().Update();
-
 		if (doMenu)
 		{
+
 			gom->Deserialize(gof, dataJson);
 
 			GameObject* temp = gom->FindObjectOfTag("controls");
@@ -175,6 +174,7 @@ int main(int argc, char* args[])
 						Graphics::getInstance().OnResize(windowWidth, windowHeight);
 					}
 				}
+				AudioManager::getInstance().Update();
 				InputManager::getInstance().Update();
 
 				// Start the Dear ImGui frame
@@ -264,7 +264,7 @@ int main(int argc, char* args[])
 			gom->Deserialize(gof, dataJson2);
 			GameObject* playerObj = gom->FindObjectOfTag("player");
 
-			GameManager::getInstance().mainCamera = gom->FindObjectOfTag("camera")->getComponent<Camera>();
+			GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
 			gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0;
@@ -295,6 +295,7 @@ int main(int argc, char* args[])
 						Graphics::getInstance().OnResize(windowWidth, windowHeight);
 					}
 				}
+				AudioManager::getInstance().Update();
 				InputManager::getInstance().Update();
 				gom->Update();//update gameobjects
 				EventManager::getInstance().ProcessCollision();

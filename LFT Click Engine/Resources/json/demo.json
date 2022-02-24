@@ -13,14 +13,6 @@
       "tag": "bg"
     },
     {
-      "prefab": "Resources\\json\\camera.json",
-      "tag": "camera"
-    },
-    {
-      "prefab": "Resources\\json\\bullet.json",
-      "tag": "bullet"
-    },
-    {
       "prefab": "Resources\\json\\player.json",
       "tag": "player"
     }

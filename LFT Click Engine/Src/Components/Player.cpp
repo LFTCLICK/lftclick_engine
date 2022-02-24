@@ -6,6 +6,7 @@
 void Player::Start()
 {
 	myTransform = parent->getComponent<Transform>();
+	gun = parent->getComponent<Gun>();
 	cam = GameManager::getInstance().mainCamera;
 	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
 }
@@ -29,6 +30,12 @@ void Player::Update()
 		cam->Move(playerSpeed * FrameRateController::getInstance().DeltaTime(), 0.0f);
 	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_LEFT))
 		cam->Move(-playerSpeed * FrameRateController::getInstance().DeltaTime(), 0.0f);
+
+	if (InputManager::getInstance().isMouseButtonTriggered(0)) { 
+		float targetX = (float)(InputManager::getInstance().mouseX() - 400) + cam->xPos;
+		float targetY = -1 * (float)(InputManager::getInstance().mouseY() - 400) + cam->yPos;
+		gun->Fire(0, targetX, targetY);
+	}
 
 	if (InputManager::getInstance().isJoyStickMovedUp(SDL_CONTROLLER_AXIS_LEFTY))
 		myTransform->Move(0, playerSpeed * FrameRateController::getInstance().DeltaTime());

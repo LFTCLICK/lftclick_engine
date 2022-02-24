@@ -27,6 +27,8 @@ public:
 	bool isKeyTriggered(unsigned int keyScanValue);
 	int mouseX();
 	int mouseY();
+	int mouseDeltaX();
+	int mouseDeltaY();
 	bool isMouseButtonPressed(unsigned int buttonIndex);
 	bool isMouseButtonReleased(unsigned int buttonIndex);
 	bool isMouseButtonTriggered(unsigned int buttonIndex);
@@ -41,7 +43,8 @@ private:
 	InputManager();
 	Uint8 mCurrentState[512];
 	Uint8 mPreviousState[512];
-	int mousePos[2];
+	int currentMousePos[2];
+	int previousMousePos[2];
 	bool mouseButtonCurrentState[3];
 	bool mouseButtonPreviousState[3];
 

@@ -47,17 +47,28 @@ Component * Camera::Clone(GameObject * newParent)
 
 void Camera::Start()
 {
+	trans = parent->getComponent<Transform>();
 	xRot = 0;
 	yRot = 0;
 	zRot = 0;
 }
 
 void Camera::Update()
-{
+{ 
+	if (trans != nullptr) {
+		auto pos = trans->CurrentPos();
+		xPos = pos.x;
+		yPos = pos.y;
+	}
+
+
+	/* Old Pengi Panic code I believe?
+	
 	yPos += speed * FrameRateController::getInstance().DeltaTime();
 	speed += speedDelta * FrameRateController::getInstance().DeltaTime();
 	if (speed >= maxSpeed)
 		speed = maxSpeed;
+	*/
 }
 
 void Camera::SetPos(float x, float y, float z)

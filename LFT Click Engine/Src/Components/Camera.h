@@ -47,5 +47,6 @@ public:
 private:
 	float speed, speedDelta, startingSpeed;
 	GameObject* parent;
+	Transform* trans;
 	DirectX::XMMATRIX viewMatrix;
 };
