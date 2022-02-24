@@ -19,6 +19,21 @@ void Bullet::Start()
 
 void Bullet::Update()
 {
+	trans->Move(
+		direction.x * speed * FrameRateController::getInstance().DeltaTime(),
+		direction.y * speed * FrameRateController::getInstance().DeltaTime()
+	);
+	/* Currently not working as I don't know how to let the GOM know about object deletion.
+	
+	if (!liveForever) {
+		timer += FrameRateController::getInstance().DeltaTime();
+		if (timer > keepAliveTime) 
+			delete parent;
+	}
+	*/
+
+
+	/* Older Bullet code for reference
 	if (timer >= animationTime)
 	{
 		timer = 0;
@@ -27,6 +42,7 @@ void Bullet::Update()
 	trans->Move(0, speed * FrameRateController::getInstance().DeltaTime());
 	
 	timer += FrameRateController::getInstance().DeltaTime();
+	*/
 }
 
 Component* Bullet::Clone(GameObject* newParent)
@@ -35,12 +51,16 @@ Component* Bullet::Clone(GameObject* newParent)
 	toReturn->parent = newParent;
 	toReturn->animationTime = animationTime;
 	toReturn->speed = speed;
+	toReturn->direction = direction;
 	toReturn->timer = 0;
+	toReturn->keepAliveTime = keepAliveTime;
+	toReturn->trans = trans;
 	return toReturn;
 }
 
-Bullet::Bullet(json j, GameObject* parent) : parent(parent)
+Bullet::Bullet(json j, GameObject* parent) : parent(parent), liveForever(false)
 {
 	animationTime = j["animationTime"];
+	keepAliveTime = j["keepAliveTime"];
 	speed = j["speed"];
 }

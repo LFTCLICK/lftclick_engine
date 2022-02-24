@@ -40,7 +40,8 @@
   },
   "9": {
     "animationTime": 1,
-    "speed": 200
+    "speed": 500,
+    "keepAliveTime": 3
   },
   "6": {
     "spriteSheetWidth": 5,

@@ -20,6 +20,7 @@
 #include "Components/SpriteAnimator.h"
 #include "Components/Player.h"
 #include "Components/Bullet.h"
+#include "Components/Gun.h"
 #include <json.hpp>
 #include <string>
 #include <fstream>
@@ -31,20 +32,20 @@ GameObjectFactory::GameObjectFactory()
 }
 
 
-GameObject * const GameObjectFactory::CreateObject(json curentObj)
+GameObject * const GameObjectFactory::CreateObject(json currentObj)
 {
 	GameObject* toReturn = new GameObject();
-	std::string path = curentObj["prefab"];
+	std::string path = currentObj["prefab"];
 
-	std::fstream pefabFile(path);
+	std::fstream prefabFile(path);
 	json prefab;
-	pefabFile >> prefab;
-	pefabFile.close();
+	prefabFile >> prefab;
+	prefabFile.close();
 	for (json::iterator type = prefab.begin(); type != prefab.end(); ++type)
 	{
 		toReturn->Add(CreateComp(type, toReturn));
 	}
-	toReturn->tag = curentObj["tag"];
+	toReturn->tag = currentObj["tag"];
 	return toReturn;
 }
 
@@ -78,5 +79,7 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new Player(type.value(), currentObj);
 	else if (compID == Component::BULLET)
 		currentComp = new Bullet(type.value(), currentObj);
+	else if (compID == Component::GUN)
+		currentComp = new Gun(type.value(), currentObj);
 	return currentComp;
 }

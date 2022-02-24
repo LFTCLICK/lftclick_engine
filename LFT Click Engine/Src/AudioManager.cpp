@@ -27,9 +27,9 @@ FMODEngine::~FMODEngine() {
 
 // Update the FMOD engine. Normally called by the audio manager. Should run every frame.
 void FMODEngine::Update() {
-	for (auto current = channels.begin(), end = channels.end(); current != end; ++current)
-		if (ChannelIsPlaying(current->second)) current++;
-		else current = channels.erase(current);
+	//for (auto current = channels.begin(), end = channels.end(); current != end; ++current)
+		//if (ChannelIsPlaying(current->second)) current++;
+		//else current = channels.erase(current);
 			
 	system->update();
 }

@@ -13,6 +13,7 @@
 #include <json.hpp>
 #include "Drawable.h"
 #include "Camera.h"
+#include "Gun.h"
 
 using json = nlohmann::json;
 class Player : public Component
@@ -34,6 +35,7 @@ private:
 	GameObject* parent;
 	Transform* myTransform;
 	Camera* cam;
+	Gun* gun;
 	float playerSpeed;
 
 	float deadZone = 8000;

@@ -11,6 +11,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Component.h"
+#include "GameObjectManager.h"
 #include <json.hpp>
 
 using json = nlohmann::json;
@@ -27,8 +28,12 @@ public:
 	Bullet() {};
 	Bullet(json j, GameObject* parent);
 
+public:
+	DirectX::SimpleMath::Vector2 direction;
+	bool liveForever;
+	float animationTime, speed, timer, keepAliveTime;
+
 private:
 	GameObject* parent;
 	Transform* trans;
-	float animationTime, speed, timer;
 };

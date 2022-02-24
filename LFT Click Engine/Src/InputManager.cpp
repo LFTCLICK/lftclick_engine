@@ -47,7 +47,9 @@ void InputManager::Update()
 	}
 
 	memcpy(mouseButtonPreviousState, mouseButtonCurrentState, 3);
-	Uint32 buttons = SDL_GetMouseState(&mousePos[0], &mousePos[1]);//getting mouse pos
+	previousMousePos[0] = currentMousePos[0];
+	previousMousePos[1] = currentMousePos[1];
+	Uint32 buttons = SDL_GetMouseState(&currentMousePos[0], &currentMousePos[1]);//getting mouse pos
 
 	mouseButtonCurrentState[0] = (buttons & SDL_BUTTON_LMASK) != 0;//get mouse buttons
 	mouseButtonCurrentState[1] = (buttons & SDL_BUTTON_RMASK) != 0;
@@ -77,12 +79,22 @@ bool InputManager::isKeyTriggered(unsigned int keyScanValue)
 
 int InputManager::mouseX()
 {
-	return mousePos[0];
+	return currentMousePos[0];
 }
 
 int InputManager::mouseY()
 {
-	return mousePos[1];
+	return currentMousePos[1];
+}
+
+int InputManager::mouseDeltaX()
+{
+	return currentMousePos[0] - previousMousePos[0];
+}
+
+int InputManager::mouseDeltaY()
+{
+	return currentMousePos[1] - previousMousePos[1];
 }
 
 bool InputManager::isMouseButtonPressed(unsigned int buttonIndex)

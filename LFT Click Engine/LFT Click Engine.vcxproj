@@ -251,6 +251,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Src\Components\Gun.cpp" />
     <ClCompile Include="Src\Components\MeshCollider.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
@@ -354,6 +355,7 @@
     <ClInclude Include="Src\Components\Component.h" />
     <ClInclude Include="Src\Components\Drawable.h" />
     <ClInclude Include="Src\Components\GameObject.h" />
+    <ClInclude Include="Src\Components\Gun.h" />
     <ClInclude Include="Src\Components\MeshCollider.h" />
     <ClInclude Include="Src\Components\Player.h" />
     <ClInclude Include="Src\Components\SpriteAnimator.h" />
@@ -417,6 +419,9 @@
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">g_CompiledVS</VariableName>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">g_CompiledVS</VariableName>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Users\GBX\Downloads\bullet2.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

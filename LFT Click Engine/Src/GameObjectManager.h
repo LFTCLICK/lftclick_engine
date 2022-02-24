@@ -20,7 +20,11 @@ using json = nlohmann::json;
 class GameObjectManager
 {
 public:
-	GameObjectManager();
+	static GameObjectManager& getInstance()
+	{
+		static GameObjectManager instance;
+		return instance;
+	}
 	void Update();
 	void Start();
 	void Draw();
@@ -35,6 +39,7 @@ public:
 	~GameObjectManager();
 
 private:
+	GameObjectManager();
 	GameObjectFactory * gof;
 	std::list<GameObject*> gameObjectList;
 };
