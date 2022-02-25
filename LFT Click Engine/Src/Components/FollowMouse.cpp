@@ -9,19 +9,19 @@
 #include "pch.h"
 #include "Gun.h"
 #include "FollowMouse.h"
+#include "GameManager.h"
 #include "FrameRateController.h"
 using json = nlohmann::json;
 
 void FollowMouse::Start()
 {
-	cam = gom->FindObjectOfTag("player")->getComponent<Camera>();
 	trans = parent->getComponent<Transform>();
 }
 
 void FollowMouse::Update()
 {
-	float targetX = (float)(InputManager::getInstance().mouseX() - 400) + cam->xPos;
-	float targetY = -1 * (float)(InputManager::getInstance().mouseY() - 400) + cam->yPos;
+	float targetX = (float)(InputManager::getInstance().mouseX() - 400) + GameManager::getInstance().mainCamera->xPos;
+	float targetY = -1 * (float)(InputManager::getInstance().mouseY() - 400) + GameManager::getInstance().mainCamera->yPos;
 	trans->SetPos(targetX, targetY);
 }
 
@@ -33,8 +33,8 @@ void FollowMouse::Deserialize(nlohmann::json j, GameObject* parent)
 Component* FollowMouse::Clone(GameObject* newParent)
 {
 	FollowMouse* toReturn = new FollowMouse();
+	toReturn->parent = newParent;
 	toReturn->trans = trans;
-	toReturn->cam = cam;
 	toReturn->gom = gom;
 	return toReturn;
 }

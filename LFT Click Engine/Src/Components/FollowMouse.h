@@ -24,7 +24,7 @@ public:
 	// Inherited via Component
 	virtual void Start() override;
 	virtual void Update() override;
-	virtual int getCompId() override { return ComponentType::GUN; };
+	virtual int getCompId() override { return ComponentType::FOLLOW_MOUSE; };
 	virtual Component* Clone(GameObject* newParent);
 	virtual void HandleMessage(Message* e) override;
 
@@ -37,8 +37,6 @@ public:
 
 private:
 	GameObject* parent;
-	Transform* trans;
-	Camera* cam;
-
 	GameObjectManager* gom;
+	Transform* trans;
 };
