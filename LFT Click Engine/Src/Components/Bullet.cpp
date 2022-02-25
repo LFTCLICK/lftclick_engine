@@ -23,14 +23,12 @@ void Bullet::Update()
 		direction.x * speed * FrameRateController::getInstance().DeltaTime(),
 		direction.y * speed * FrameRateController::getInstance().DeltaTime()
 	);
-	/* Currently not working as I don't know how to let the GOM know about object deletion.
-	
+
 	if (!liveForever) {
 		timer += FrameRateController::getInstance().DeltaTime();
-		if (timer > keepAliveTime) 
-			delete parent;
+		if (timer > keepAliveTime)
+			parent->isActive = false;
 	}
-	*/
 
 
 	/* Older Bullet code for reference

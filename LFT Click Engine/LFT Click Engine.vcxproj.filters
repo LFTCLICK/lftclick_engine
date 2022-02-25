@@ -128,6 +128,9 @@
     <ClCompile Include="Src\Components\Gun.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Components\FollowMouse.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
@@ -227,6 +230,7 @@
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Gun.h" />
+    <ClInclude Include="Src\Components\FollowMouse.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">

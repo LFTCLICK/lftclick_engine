@@ -67,7 +67,7 @@ void AudioManager::Term() {
 void AudioManager::LoadSound(std::string name, bool loop, bool compressed) {
 	if (engine->sounds.find(name) == engine->sounds.end()) {
 		FMOD_MODE fmod_mode = 
-			FMOD_2D | 
+			FMOD_3D | 
 			(compressed ? FMOD_CREATECOMPRESSEDSAMPLE : FMOD_CREATESAMPLE) | 
 			(loop ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF);
 		FMOD::Sound* sound = nullptr;
@@ -90,7 +90,7 @@ void AudioManager::UnloadSound(std::string name) {
 // 
 // The volume value given is divided by 100 when being sent to FMOD,
 // as FMOD's volume operates between 0 and 1.
-int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, float x, float y, bool startPaused) {
+int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, float x, float y, float pitch, bool startPaused) {
 	auto sound = engine->sounds.find(name);
 	if (sound == engine->sounds.end()) {
 		std::cout << name << " was not preloaded, loading from source instead." << std::endl;
@@ -107,7 +107,8 @@ int AudioManager::PlaySound(std::string name, std::string channelGroupName, floa
 		FMOD_VECTOR position = { x, y, 0 };
 		CheckResult(__func__, channel->set3DAttributes(&position, nullptr));
 		CheckResult(__func__, channel->setVolume(volume / VOLUME_DIV));
-		CheckResult(__func__, channel->setPaused(false));
+		if (pitch != 1.f) CheckResult(__func__, channel->setPitch(pitch));
+		CheckResult(__func__, channel->setPaused(startPaused));
 
 		int channelIndex = 0;
 		CheckResult(__func__, channel->getIndex(&channelIndex));
@@ -119,14 +120,14 @@ int AudioManager::PlaySound(std::string name, std::string channelGroupName, floa
 		return -1;
 	}
 }
-int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, DirectX::SimpleMath::Vector2 position, bool startPaused) {
-	return AudioManager::PlaySound(name, channelGroupName, position.x, position.y, volume);
+int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, DirectX::SimpleMath::Vector2 position, float pitch, bool startPaused) {
+	return AudioManager::PlaySound(name, channelGroupName, volume, position.x, position.y);
 }
-int AudioManager::PlaySound(std::string name, float volume, DirectX::SimpleMath::Vector2 position, bool startPaused) {
-	return AudioManager::PlaySound(name, "", position.x, position.y, volume);
+int AudioManager::PlaySound(std::string name, float volume, DirectX::SimpleMath::Vector2 position, float pitch, bool startPaused) {
+	return AudioManager::PlaySound(name, "", volume, position.x, position.y);
 }
-int AudioManager::PlaySound(std::string name, float volume, float x, float y, bool startPaused) {
-	return AudioManager::PlaySound(name, "", x, y, volume);
+int AudioManager::PlaySound(std::string name, float volume, float x, float y, float pitch, bool startPaused) {
+	return AudioManager::PlaySound(name, "", volume, x, y);
 }
 
 // Pauses a channel.

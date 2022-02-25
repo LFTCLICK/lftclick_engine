@@ -15,6 +15,10 @@
     {
       "prefab": "Resources\\json\\player.json",
       "tag": "player"
+    },
+    {
+      "prefab": "Resources\\json\\crosshairs.json",
+      "tag": "crosshairs"
     }
   ]
 }

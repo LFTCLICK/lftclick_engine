@@ -21,6 +21,7 @@
 #include "Components/Player.h"
 #include "Components/Bullet.h"
 #include "Components/Gun.h"
+#include "Components/FollowMouse.h"
 #include <json.hpp>
 #include <string>
 #include <fstream>
@@ -81,5 +82,7 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new Bullet(type.value(), currentObj);
 	else if (compID == Component::GUN)
 		currentComp = new Gun(type.value(), currentObj);
+	else if (compID == Component::FOLLOW_MOUSE)
+		currentComp = new FollowMouse(type.value(), currentObj);
 	return currentComp;
 }

@@ -60,10 +60,10 @@ public:
 
     void LoadSound(std::string name, bool loop = false, bool compressed = true);
     void UnloadSound(std::string name);
-    int PlaySound(std::string name, std::string channelGroupName, float volume = 100.f, float x = 0, float y = 0, bool startPaused = false);
-    int PlaySound(std::string name, std::string channelGroupName, float volume, DirectX::SimpleMath::Vector2 position, bool startPaused = false);
-    int PlaySound(std::string name, float volume = 100.f, float x = 0, float y = 0, bool startPaused = false);
-    int PlaySound(std::string name, float volume, DirectX::SimpleMath::Vector2 position, bool startPaused = false);
+    int PlaySound(std::string name, std::string channelGroupName, float volume = 100.f, float x = 0, float y = 0, float pitch = 1.f, bool startPaused = false);
+    int PlaySound(std::string name, std::string channelGroupName, float volume, DirectX::SimpleMath::Vector2 position, float pitch = 1.f, bool startPaused = false);
+    int PlaySound(std::string name, float volume = 100.f, float x = 0, float y = 0, float pitch = 1.f, bool startPaused = false);
+    int PlaySound(std::string name, float volume, DirectX::SimpleMath::Vector2 position, float pitch = 1.f, bool startPaused = false);
 
 
     // Functions for managing channels

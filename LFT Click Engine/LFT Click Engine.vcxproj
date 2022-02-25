@@ -245,6 +245,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Src\Components\FollowMouse.cpp" />
     <ClCompile Include="Src\Components\GameObject.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
@@ -354,6 +355,7 @@
     <ClInclude Include="Src\Components\Collider.h" />
     <ClInclude Include="Src\Components\Component.h" />
     <ClInclude Include="Src\Components\Drawable.h" />
+    <ClInclude Include="Src\Components\FollowMouse.h" />
     <ClInclude Include="Src\Components\GameObject.h" />
     <ClInclude Include="Src\Components\Gun.h" />
     <ClInclude Include="Src\Components\MeshCollider.h" />
