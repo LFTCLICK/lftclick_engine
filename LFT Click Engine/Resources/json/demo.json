@@ -13,6 +13,10 @@
       "tag": "bg"
     },
     {
+      "prefab": "Resources\\json\\bullet.json",
+      "tag": "bullet"
+    },
+    {
       "prefab": "Resources\\json\\player.json",
       "tag": "player"
     }
@@ -40,31 +44,6 @@
     {
       "object": "bg",
       "overrides": []
-    },
-    {
-      "object": "camera",
-      "overrides": [{
-  "5": {
-    "startX": 0,
-    "startY": 0,
-    "startZ": 0,
-    "isMainCamera": true
-  }}]
-    },
-    {
-      "object": "bullet",
-      "overrides": [
-        {
-          "1": {
-            "startX": 450.5,
-            "startY": -384.5,
-            "scaleX": 32,
-            "scaleY": 32,
-            "rot": 0,
-            "zPos": 5
-          }
-        }
-      ]
     },
     {
       "object": "player",

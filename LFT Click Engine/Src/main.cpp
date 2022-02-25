@@ -336,8 +336,8 @@ int main(int argc, char* args[])
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
-	delete gom;
-	delete gof;
+	//delete gom;
+	//delete gof;
 
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);

@@ -80,8 +80,8 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 	prefabsJSON = j["Level"];
 	for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
 	{
-		GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"]);
-
+		GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"], true);
+		std::string newObjectTag = currentObj.value()["object"];
 		json overrideList = currentObj.value()["overrides"];
 		for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
 		{
@@ -112,13 +112,15 @@ void GameObjectManager::DeleteAll()
 	prefabList.clear();
 }
 
-GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::string tag)
+GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::string tag, bool skipStart)
 {
 	for (GameObject* g : prefabList)
 	{
 		if (g->tag == tag)
 		{
 			GameObject* go = gof->CloneObject(g);
+			if(!skipStart)
+				go->Start();
 			gameObjectList.push_back(go);
 			return go;
 		}

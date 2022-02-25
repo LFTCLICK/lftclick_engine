@@ -31,8 +31,8 @@ public:
 
 	virtual Component* Clone(GameObject* newParent);
 
-	Gun() {}
-	Gun(json j, GameObject* parent);
+	Gun();
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 public:
 	~Gun();
@@ -47,6 +47,6 @@ private:
 
 	float timer;
 	int nextBulletID;
-	typedef std::pair<GameObject*, float> BulletData; // holds bullet prototype and rate of fire
+	typedef std::pair<std::string, float> BulletData; // holds bullet prototype and rate of fire
 	std::map<int, BulletData> bulletTypes;
 };
