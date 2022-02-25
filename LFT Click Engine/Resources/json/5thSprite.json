@@ -37,10 +37,13 @@
     "frameTime": 2
   },
   "4": {
-    "center": [0.0, -0.0, 0.0],
+    "center": [ 0.0, -0.0, 0.0 ],
     "width": 128,
     "height": 128,
-    "trigger": false,
+    "trigger": true,
     "deleteOnCollison": false
+  },
+  "12": {
+    "health": 1
   }
 }

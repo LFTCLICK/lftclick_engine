@@ -79,7 +79,10 @@ Audible::~Audible() {
 
 
 void Audible::PlaySound(SoundInfo sound) {
-	channels[am->PlaySound(sound.name, channelGroupName, sound.volume)] = sound.name;
+	float pitch = sound.pitchRange[0] == sound.pitchRange[1] ?
+		sound.pitchRange[0] :
+		sound.pitchRange[0] + (rand() % static_cast<int>(sound.pitchRange[1] - sound.pitchRange[0] + 1));
+	channels[am->PlaySound(sound.name, channelGroupName, sound.volume, parent->getComponent<Transform>()->CurrentPos(), pitch)] = sound.name;
 }
 
 void Audible::Unpause() {
@@ -168,6 +171,10 @@ void Audible::Deserialize(nlohmann::json j, GameObject* parent)
 			if (sound.contains("loop")) soundInfo.loop = sound["loop"];
 			if (sound.contains("compressed")) soundInfo.compressed = sound["compressed"];
 			if (sound.contains("volume")) soundInfo.volume = sound["volume"];
+			if (sound.contains("pitchRange")) { 
+				soundInfo.pitchRange[0] = sound["pitchRange"][0];
+				soundInfo.pitchRange[1] = sound["pitchRange"][1];
+			}
 
 			if (sound.contains("playEvents"))
 				soundInfo.playEvents.insert(soundInfo.playEvents.begin(), std::begin(sound["playEvents"]), std::end(sound["playEvents"]));

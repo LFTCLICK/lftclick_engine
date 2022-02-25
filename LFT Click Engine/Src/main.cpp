@@ -265,7 +265,6 @@ int main(int argc, char* args[])
 			other.close();
 			gom->Deserialize(gof, dataJson2);
 			GameObject* playerObj = gom->FindObjectOfTag("player");
-
 			GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
 			//gom->Start();
 			isRunning = true;

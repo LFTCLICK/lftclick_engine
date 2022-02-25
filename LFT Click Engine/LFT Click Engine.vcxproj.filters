@@ -125,7 +125,13 @@
     <ClCompile Include="Src\GameObjectManager.cpp">
       <Filter>Engine\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Components\FollowMouse.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Components\Gun.cpp">
+      <Filter>Engine\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Damageable.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -226,7 +232,13 @@
     <ClInclude Include="Src\GameObjectManager.h">
       <Filter>Engine\Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Components\Gun.h" />
+    <ClInclude Include="Src\Components\FollowMouse.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Gun.h">
+      <Filter>Engine\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Damageable.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
