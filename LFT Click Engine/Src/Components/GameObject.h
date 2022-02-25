@@ -34,8 +34,9 @@ public:
 	{
 		T temp;
 		auto toFind = comps.find(temp.getCompId());
-		if (toFind == comps.end())
+		if (toFind == comps.end()) {
 			return nullptr;
+		}
 		return (T*)comps[temp.getCompId()];
 	}
 	Component* getRawComponentPointer(int id);
