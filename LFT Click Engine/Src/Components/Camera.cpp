@@ -44,7 +44,6 @@ void Camera::Deserialize(nlohmann::json j, GameObject* parent)
 
 void Camera::Start()
 {
-	trans = parent->getComponent<Transform>();
 	xRot = 0;
 	yRot = 0;
 	zRot = 0;
@@ -52,8 +51,8 @@ void Camera::Start()
 
 void Camera::Update()
 {
-	if (trans != nullptr) {
-		auto pos = trans->CurrentPos();
+	if (parent->getComponent<Transform>() != nullptr) {
+		auto pos = parent->getComponent<Transform>()->CurrentPos();
 		xPos = pos.x;
 		yPos = pos.y;
 	}

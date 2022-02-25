@@ -25,6 +25,11 @@ void FollowMouse::Update()
 	trans->SetPos(targetX, targetY);
 }
 
+void FollowMouse::Deserialize(nlohmann::json j, GameObject* parent)
+{
+	this->parent = parent;
+}
+
 Component* FollowMouse::Clone(GameObject* newParent)
 {
 	FollowMouse* toReturn = new FollowMouse();
@@ -34,12 +39,11 @@ Component* FollowMouse::Clone(GameObject* newParent)
 	return toReturn;
 }
 
-FollowMouse::FollowMouse(json j, GameObject* parent) : parent(parent)
-{
-	gom = &GameObjectManager::getInstance();
-}
-
 FollowMouse::~FollowMouse()
 {
+
+}
+
+void FollowMouse::HandleMessage(Message* e) {
 
 }

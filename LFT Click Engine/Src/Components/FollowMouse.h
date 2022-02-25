@@ -25,11 +25,12 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::GUN; };
-
 	virtual Component* Clone(GameObject* newParent);
+	virtual void HandleMessage(Message* e) override;
 
-	FollowMouse() {}
-	FollowMouse(json j, GameObject* parent);
+	FollowMouse() : gom(&GameObjectManager::getInstance()) {}
+
+	void Deserialize(nlohmann::json j, GameObject* parent);
 
 public:
 	~FollowMouse();

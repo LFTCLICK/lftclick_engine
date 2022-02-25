@@ -32,8 +32,8 @@ void Player::Update()
 		cam->Move(-playerSpeed * FrameRateController::getInstance().DeltaTime(), 0.0f);
 
 	if (InputManager::getInstance().isMouseButtonTriggered(0)) { 
-		float targetX = (float)(InputManager::getInstance().mouseX() - 400) + cam->xPos;
-		float targetY = -1 * (float)(InputManager::getInstance().mouseY() - 400) + cam->yPos;
+		float targetX = (float)(InputManager::getInstance().mouseX() - 400) + GameManager::getInstance().mainCamera->xPos;
+		float targetY = -1 * (float)(InputManager::getInstance().mouseY() - 400) + GameManager::getInstance().mainCamera->yPos;
 		gun->Fire(0, targetX, targetY);
 	}
 

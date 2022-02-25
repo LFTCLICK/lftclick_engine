@@ -22,6 +22,7 @@
 #include "Components/Bullet.h"
 #include "Components/Gun.h"
 #include "Components/FollowMouse.h"
+#include "Components/Damageable.h"
 #include <json.hpp>
 #include <string>
 #include <fstream>
@@ -84,6 +85,8 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new Gun();
 	else if (compID == Component::FOLLOW_MOUSE)
 		currentComp = new FollowMouse();
+	else if (compID == Component::DAMAGEABLE)
+		currentComp = new Damageable();
 
 	currentComp->Deserialize(type.value(), currentObj);
 
