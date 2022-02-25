@@ -62,24 +62,25 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 	std::cout << compID << std::endl;
 
 	if (compID == Component::TRANSFORM)
-		currentComp = new Transform(type.value(), currentObj);
+		currentComp = new Transform();
 	else if (compID == Component::DRAWABLE)
-		currentComp = new Drawable(type.value(), currentObj);
+		currentComp = new Drawable();
 	else if (compID == Component::MESH_COLLIDER)
-		currentComp = new MeshCollider(type.value(), currentObj);
+		currentComp = new MeshCollider();
 	else if (compID == Component::SQUARE_COLLLIDER)
-		currentComp = new SquareCollider(type.value(), currentObj);
+		currentComp = new SquareCollider();
 	else if (compID == Component::CAMERA)
-		currentComp = new Camera(type.value(), currentObj);
+		currentComp = new Camera();
 	else if (compID == Component::AUDIBLE)
-		currentComp = new Audible(type.value(), currentObj);
+		currentComp = new Audible();
 	else if (compID == Component::SPRITE_ANIMATOR)
-		currentComp = new SpriteAnimator(type.value(), currentObj);
+		currentComp = new SpriteAnimator();
 	else if (compID == Component::PLAYER)
-		currentComp = new Player(type.value(), currentObj);
+		currentComp = new Player();
 	else if (compID == Component::BULLET)
-		currentComp = new Bullet(type.value(), currentObj);
+		currentComp = new Bullet();
 	else if (compID == Component::GUN)
-		currentComp = new Gun(type.value(), currentObj);
+		currentComp = new Gun();
+	currentComp->Deserialize(type.value(), currentObj);
 	return currentComp;
 }

@@ -14,7 +14,7 @@ Transform::Transform()
 {
 }
 
-Transform::Transform(json j, GameObject * parent)
+void Transform::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	this->parent = parent;
 	pos = DirectX::SimpleMath::Vector2(0.0f, 0.0f);

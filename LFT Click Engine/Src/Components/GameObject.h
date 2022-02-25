@@ -38,6 +38,7 @@ public:
 			return nullptr;
 		return (T*)comps[temp.getCompId()];
 	}
+	Component* getRawComponentPointer(int id);
 	~GameObject();
 public:
 	std::string tag;

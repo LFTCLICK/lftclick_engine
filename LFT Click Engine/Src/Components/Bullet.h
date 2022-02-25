@@ -23,10 +23,10 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::BULLET; };
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	virtual Component* Clone(GameObject* newParent);
 	Bullet() {};
-	Bullet(json j, GameObject* parent);
 
 public:
 	DirectX::SimpleMath::Vector2 direction;

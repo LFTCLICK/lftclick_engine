@@ -123,7 +123,7 @@ float * SquareCollider::getPoints()
 	return points;
 }
 
-SquareCollider::SquareCollider(json j, GameObject * parent)
+void SquareCollider::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	this->parent = parent;
 	std::vector<float> centerHelper = j["center"].get<std::vector<float>>();

@@ -25,7 +25,7 @@ public:
 
 	virtual Component* Clone(GameObject* newParent);
 	SpriteAnimator() {};
-	SpriteAnimator(json j, GameObject* parent);
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 private:
 	GameObject* parent;

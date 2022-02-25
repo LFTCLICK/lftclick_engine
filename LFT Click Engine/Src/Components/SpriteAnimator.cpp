@@ -31,9 +31,9 @@ Component* SpriteAnimator::Clone(GameObject* newParent)
 	return toReturn;
 }
 
-SpriteAnimator::SpriteAnimator(json j, GameObject* parent) : parent(parent)
+void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* parent)
 {
-
+	this->parent = parent;
 	spriteSheetWidth = j["spriteSheetWidth"];
 	spriteSheetHeight = j["spriteSheetHeight"];
 	frameTime = j["frameTime"];

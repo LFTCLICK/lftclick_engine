@@ -12,7 +12,8 @@
 #include <SDL_mouse.h>
 #include <SDL_joystick.h>
 #include <SDL_gamecontroller.h>
-#include <DirectXMath.h>
+#include <directxmath.h>
+#include <d3d11.h>
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"

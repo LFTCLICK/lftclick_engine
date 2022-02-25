@@ -4,29 +4,18 @@
 // Author			:	Vance Howald
 // Creation Date	:	2021/11/14
 // Purpose			:	implementation of Camera object
-// History			: 
+// History			:
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "Camera.h"
 #include "FrameRateController.h"
 #include "Graphics.h"
+#include "../GameManager.h"
 
 using json = nlohmann::json;
 Camera::Camera()
 {
 	viewMatrix = DirectX::XMMatrixIdentity();
-}
-
-Camera::Camera(json j, GameObject * parent)
-{
-	startingSpeed = j["speed"];
-	xPos = j["startX"];
-	yPos = j["startY"];
-	zPos = j["startZ"];
-	speedDelta = j["speedDelta"];
-	maxSpeed = j["maxSpeed"];
-	this->parent = parent;
-	speed = startingSpeed;
 }
 
 Component * Camera::Clone(GameObject * newParent)
@@ -38,11 +27,19 @@ Component * Camera::Clone(GameObject * newParent)
 	toReturn->xRot = xRot;
 	toReturn->yRot = yRot;
 	toReturn->zRot = zRot;
-	toReturn->speed = speed;
-	toReturn->speedDelta = speedDelta;
-	toReturn->startingSpeed = startingSpeed;
 	toReturn->parent = newParent;
 	return (Component*)toReturn;
+}
+
+void Camera::Deserialize(nlohmann::json j, GameObject* parent)
+{
+	xPos = j["startX"];
+	yPos = j["startY"];
+	zPos = j["startZ"];
+	this->parent = parent;
+	speed = startingSpeed;
+	if (j["isMainCamera"])
+		GameManager::getInstance().mainCamera = this;
 }
 
 void Camera::Start()
@@ -54,7 +51,7 @@ void Camera::Start()
 }
 
 void Camera::Update()
-{ 
+{
 	if (trans != nullptr) {
 		auto pos = trans->CurrentPos();
 		xPos = pos.x;
@@ -63,7 +60,7 @@ void Camera::Update()
 
 
 	/* Old Pengi Panic code I believe?
-	
+
 	yPos += speed * FrameRateController::getInstance().DeltaTime();
 	speed += speedDelta * FrameRateController::getInstance().DeltaTime();
 	if (speed >= maxSpeed)
@@ -124,5 +121,3 @@ int Camera::getCompId()
 {
 	return CAMERA;
 }
-
-
