@@ -132,7 +132,8 @@ int main(int argc, char* args[])
 	srand(time(NULL));
 	while (masterLoop)
 	{
-		if (doMenu)
+		//if (doMenu)
+		if (false)
 		{
 
 			gom->Deserialize(gof, dataJson);
@@ -254,7 +255,8 @@ int main(int argc, char* args[])
 			gom->DeleteAll();
 		}
 
-		if (playGame)
+		//if (playGame)
+		if (true)
 		{
 
 			std::fstream other("./Resources/json/demo.json");
@@ -264,7 +266,7 @@ int main(int argc, char* args[])
 			gom->Deserialize(gof, dataJson2);
 			GameObject* playerObj = gom->FindObjectOfTag("player");
 			GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
-			gom->Start();
+			//gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0;
 			FrameRateController::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
@@ -333,8 +335,8 @@ int main(int argc, char* args[])
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
-	delete gom;
-	delete gof;
+	//delete gom;
+	//delete gof;
 
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);

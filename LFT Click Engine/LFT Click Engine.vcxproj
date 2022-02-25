@@ -91,7 +91,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\Libraries;..\Libraries\SDL2-2.0.14\include;..\Libraries\imgui-1.82\backends;..\Libraries\imgui-1.82;$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\libs\SDL2-2.0.14\include</IncludePath>
+    <IncludePath>..\Libraries\LUA;..\Libraries;..\Libraries\SDL2-2.0.14\include;..\Libraries\imgui-1.82\backends;..\Libraries\imgui-1.82;$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\libs\SDL2-2.0.14\include</IncludePath>
     <SourcePath>$(VC_SourcePath);..\Libraries\imgui-1.82\backends;$(ProjectDir)Src</SourcePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);..\Libraries\SDL2-2.0.14\lib\x64</LibraryPath>
   </PropertyGroup>
@@ -401,6 +401,7 @@
       <HeaderFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\Src\Shaders\Compiled\Compiled_PS.h</HeaderFileOutput>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
     </FxCompile>
     <FxCompile Include="Src\Shaders\VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -420,6 +421,7 @@
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">g_CompiledVS</VariableName>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">g_CompiledVS</VariableName>
       <VariableName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">g_CompiledVS</VariableName>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

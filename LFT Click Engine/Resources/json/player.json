@@ -1,7 +1,7 @@
 {
   "1": {
-    "startX": -450.5,
-    "startY": 384.5,
+    "startX": 0.5,
+    "startY": 0.5,
     "scaleX": 64,
     "scaleY": 64,
     "rot": 0,
@@ -37,7 +37,8 @@
     "maxSpeed": 0,
     "startX": 0,
     "startY": 0,
-    "startZ": 0
+    "startZ": 0,
+    "isMainCamera": true
   },
   "4": {
     "center": [ 0.0, 0.0, 0.0 ],
@@ -73,10 +74,7 @@
     "bulletTypes": [
       {
         "fireRate": 1,
-        "bulletInfo": {
-          "prefab": "Resources\\json\\bullet.json",
-          "tag": "bullet"
-        }
+        "prefabTag": "bullet"
       }
     ]
   }

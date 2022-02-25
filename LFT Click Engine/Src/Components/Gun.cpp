@@ -34,7 +34,7 @@ Component* Gun::Clone(GameObject* newParent)
 
 void Gun::Fire(int bulletIndex, float targetX, float targetY)
 {
-	GameObject* bullet = gom->CloneObject(bulletTypes[bulletIndex].first);
+	GameObject* bullet = gom->ClonePrefabOfTag(gof, bulletTypes[bulletIndex].first);
 	Transform* bulletTransform = bullet->getComponent<Transform>();
 	Bullet* bulletComp = bullet->getComponent<Bullet>();
 	DirectX::SimpleMath::Vector2 parentPos = trans->CurrentPos();
@@ -45,20 +45,24 @@ void Gun::Fire(int bulletIndex, float targetX, float targetY)
 	bulletTransform->SetPos(parentPos.x + bulletComp->direction.x * 70, parentPos.y + bulletComp->direction.y * 70);
 }
 
-Gun::Gun(json j, GameObject* parent) : parent(parent), timer(0), nextBulletID(0)
+Gun::Gun()
 {
 	gom = &GameObjectManager::getInstance();
 	gof = &GameObjectFactory::getInstance();
+}
+
+void Gun::Deserialize(json j, GameObject* parent)
+{
+	this->parent = parent;
+	timer = 0;
+	nextBulletID = 0;
 
 	int i = 0;
 	for (auto bulletData : j["bulletTypes"]) {
-		GameObject* bulletPrototype = gof->CreateObject(bulletData["bulletInfo"]);
-		bulletPrototype->getComponent<Bullet>()->liveForever = true;
-		bulletTypes[i] = std::make_pair(bulletPrototype, bulletData["fireRate"]);
+		bulletTypes[i] = std::make_pair(bulletData["prefabTag"], bulletData["fireRate"]);
 	}
 }
 
 Gun::~Gun() 
 {
-
 }

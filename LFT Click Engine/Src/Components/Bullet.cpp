@@ -4,7 +4,7 @@
 // Author			:	Vance Howald
 // Creation Date	:	2021/12/10
 // Purpose			:	Animates grabables
-// History			: 
+// History			:
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "Bullet.h"
@@ -38,9 +38,18 @@ void Bullet::Update()
 		speed *= -1;
 	}
 	trans->Move(0, speed * FrameRateController::getInstance().DeltaTime());
-	
+
 	timer += FrameRateController::getInstance().DeltaTime();
 	*/
+}
+
+void Bullet::Deserialize(nlohmann::json j, GameObject* parent)
+{
+	this->parent = parent;
+	animationTime = j["animationTime"];
+	keepAliveTime = j["keepAliveTime"];
+	speed = j["speed"];
+	liveForever = false;
 }
 
 Component* Bullet::Clone(GameObject* newParent)
@@ -54,11 +63,4 @@ Component* Bullet::Clone(GameObject* newParent)
 	toReturn->keepAliveTime = keepAliveTime;
 	toReturn->trans = trans;
 	return toReturn;
-}
-
-Bullet::Bullet(json j, GameObject* parent) : parent(parent), liveForever(false)
-{
-	animationTime = j["animationTime"];
-	keepAliveTime = j["keepAliveTime"];
-	speed = j["speed"];
 }

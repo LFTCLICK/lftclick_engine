@@ -61,37 +61,14 @@ void Audible::Update() {
 
 Component* Audible::Clone(GameObject* newParent) {
 	Audible* toReturn = new Audible();
+	toReturn->parent = newParent;
+	toReturn->am = &AudioManager::getInstance();
+	toReturn->sounds = sounds;
+	toReturn->oldPosition = oldPosition;
+	toReturn->position = position;
+	toReturn->positionOffset = positionOffset;
+	toReturn->wasMoving = wasMoving;
 	return toReturn;
-}
-
-Audible::Audible(json j, GameObject* parent) : 
-	parent(parent), 
-	am(&AudioManager::getInstance()), 
-	sounds({}), 
-	wasMoving(false) 
-{
-	if (j.contains("sounds")) {
-		for (auto it = std::begin(j["sounds"]); it != std::end(j["sounds"]); it++) {
-			SoundInfo soundInfo;
-			auto sound = *it;
-
-			if (sound.contains("name")) soundInfo.name = sound["name"];
-			if (sound.contains("loop")) soundInfo.loop = sound["loop"];
-			if (sound.contains("compressed")) soundInfo.compressed = sound["compressed"];
-			if (sound.contains("volume")) soundInfo.volume = sound["volume"];
-			if (sound.contains("pitchRange")) { 
-				soundInfo.pitchRange[0] = sound["pitchRange"][0];
-				soundInfo.pitchRange[1] = sound["pitchRange"][1];
-			};
-
-			if (sound.contains("playEvents"))
-				soundInfo.playEvents.insert(soundInfo.playEvents.begin(), std::begin(sound["playEvents"]), std::end(sound["playEvents"]));
-			if (sound.contains("stopEvents"))
-				soundInfo.stopEvents.insert(soundInfo.stopEvents.begin(), std::begin(sound["stopEvents"]), std::end(sound["stopEvents"]));
-
-			sounds.push_back(soundInfo);
-		}
-	}
 }
 
 Audible::~Audible() {
@@ -174,4 +151,37 @@ void Audible::StopSound(std::string soundName) {
 
 void Audible::HandleMessage(Message* e) {
 
+}
+
+void Audible::Deserialize(nlohmann::json j, GameObject* parent)
+{
+	this->parent = parent;
+	am = &AudioManager::getInstance();
+	sounds = {};
+	oldPosition = { 0, 0 };
+	position = { 0, 0 };
+	positionOffset = { 0, 0 };
+	wasMoving = false;
+	if (j.contains("sounds")) {
+		for (auto it = std::begin(j["sounds"]); it != std::end(j["sounds"]); it++) {
+			SoundInfo soundInfo;
+			auto sound = *it;
+
+			if (sound.contains("name")) soundInfo.name = sound["name"];
+			if (sound.contains("loop")) soundInfo.loop = sound["loop"];
+			if (sound.contains("compressed")) soundInfo.compressed = sound["compressed"];
+			if (sound.contains("volume")) soundInfo.volume = sound["volume"];
+			if (sound.contains("pitchRange")) { 
+				soundInfo.pitchRange[0] = sound["pitchRange"][0];
+				soundInfo.pitchRange[1] = sound["pitchRange"][1];
+			}
+
+			if (sound.contains("playEvents"))
+				soundInfo.playEvents.insert(soundInfo.playEvents.begin(), std::begin(sound["playEvents"]), std::end(sound["playEvents"]));
+			if (sound.contains("stopEvents"))
+				soundInfo.stopEvents.insert(soundInfo.stopEvents.begin(), std::begin(sound["stopEvents"]), std::end(sound["stopEvents"]));
+
+			sounds.push_back(soundInfo);
+		}
+	}
 }

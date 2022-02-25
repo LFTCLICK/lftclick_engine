@@ -18,7 +18,7 @@ using json = nlohmann::json;
 class Transform : public Component {
 public:
 	Transform();
-	Transform(json j, GameObject* parent);
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 	void Init(DirectX::SimpleMath::Vector2 const & v);
 	void Move(float deltaX, float deltaY);
 	void SetPos(float newX, float newY);

@@ -1,5 +1,5 @@
 {
-  "Level": [
+  "Prefabs": [
     {
       "prefab": "Resources\\json\\tile.json",
       "tag": "tile"
@@ -13,12 +13,56 @@
       "tag": "bg"
     },
     {
+      "prefab": "Resources\\json\\bullet.json",
+      "tag": "bullet"
+    },
+    {
       "prefab": "Resources\\json\\player.json",
       "tag": "player"
     },
     {
       "prefab": "Resources\\json\\crosshairs.json",
       "tag": "crosshairs"
+    }
+  ],
+  "Level": [
+    {
+      "object": "tile",
+      "overrides": []
+    },
+    {
+      "object": "5thSprite",
+      "overrides": [
+        {
+          "1": {
+            "startX": -300,
+            "startY": -300,
+            "scaleX": 128,
+            "scaleY": 128,
+            "rot": 0,
+            "zPos": 10
+          }
+        }
+      ]
+    },
+    {
+      "object": "bg",
+      "overrides": []
+    },
+    {
+      "object": "player",
+      "overrides": [
+        {
+          "1": {
+            "startX": -450.5,
+            "startY": 384.5,
+            "scaleX": 64,
+            "scaleY": 64,
+            "rot": 0,
+            "zPos": 5
+          }
+        }
+      ]
     }
   ]
 }

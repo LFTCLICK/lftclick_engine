@@ -51,10 +51,11 @@ Component* Player::Clone(GameObject* newParent)
 {
 	Player* toReturn = new Player();
 	toReturn->playerSpeed = playerSpeed;
+	toReturn->parent = newParent;
 	return (Component*)toReturn;
 }
 
-Player::Player(json j, GameObject* parent)
+void Player::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	playerSpeed = j["playerSpeed"];
 	this->parent = parent;

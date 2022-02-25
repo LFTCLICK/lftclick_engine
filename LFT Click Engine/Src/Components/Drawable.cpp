@@ -40,7 +40,7 @@ Drawable::Drawable()
 	xOffset = yOffset = 0;
 }
 
-Drawable::Drawable(json j, GameObject* parent)
+void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	alphaOverride = 1;
 	xOffset = yOffset = 0;
@@ -111,7 +111,7 @@ Drawable::Drawable(json j, GameObject* parent)
 	std::wstring sprite = utf8_decode(j["image"]);
 	//force DTK to not load the texture as srgb
 	DirectX::CreateWICTextureFromFileEx(Graphics::getInstance().GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, &texture, &shaderResourceView);
-//	DirectX::CreateWICTextureFromFile(Graphics::getInstance().GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
+	//	DirectX::CreateWICTextureFromFile(Graphics::getInstance().GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
 
 	D3D11_SAMPLER_DESC sampDes = {};
 	sampDes.Filter = D3D11_FILTER_MINIMUM_MIN_MAG_MIP_POINT;
@@ -132,7 +132,6 @@ Drawable::Drawable(json j, GameObject* parent)
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	Graphics::getInstance().GetDevice()->CreateBlendState(&blendDesc, &blendState);
-
 }
 
 Component* Drawable::Clone(GameObject* newParent)

@@ -27,7 +27,7 @@ public:
 
 	virtual Component* Clone(GameObject* newParent);
 	Player() {};
-	Player(json j, GameObject* parent);
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	void HandleMessage(Message* e);
 
