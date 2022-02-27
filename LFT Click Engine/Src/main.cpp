@@ -162,6 +162,7 @@ int main(int argc, char* args[])
 				SimpleMath::Vector2(150.0f, 100.0f), SimpleMath::Vector2(100.0f, 100.0f));
 
 			gom->Draw();
+			
 			g_debugRenderer->Draw(&Graphics::getInstance());
 
 			bool open = true;

@@ -27,7 +27,6 @@ private:
 	std::unique_ptr<DirectX::CommonStates> states;
 
 	std::vector<DirectX::VertexPositionColor> lineVertices;
-	std::vector<DirectX::VertexPositionColor> quadVertices;
 
 };
 

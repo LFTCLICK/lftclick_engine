@@ -198,7 +198,7 @@ void Drawable::Draw()
 	Graphics::getInstance().GetContext()->PSSetShaderResources(0, 1, shaderResourceView.GetAddressOf());
 	Graphics::getInstance().GetContext()->PSSetSamplers(0, 1, sampState.GetAddressOf());
 	Graphics::getInstance().GetContext()->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFFu);
-	Graphics::getInstance().GetContext()->RSSetState(nullptr);
+	Graphics::getInstance().GetContext()->RSSetState(rastState.Get());
 
 	Graphics::getInstance().GetContext()->DrawIndexed(drawSize, 0, 0);
 }

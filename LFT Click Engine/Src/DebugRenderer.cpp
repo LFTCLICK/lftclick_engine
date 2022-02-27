@@ -31,10 +31,6 @@ void DebugRenderer::DrawLine(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath
 
 void DebugRenderer::DrawQuad(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath::Vector2 b, DirectX::SimpleMath::Vector2 c, DirectX::SimpleMath::Vector2 d)
 {
-	/*quadVertices.emplace_back(DirectX::VertexPositionColor(a, DirectX::Colors::Red));
-	quadVertices.emplace_back(DirectX::VertexPositionColor(b, DirectX::Colors::Red));
-	quadVertices.emplace_back(DirectX::VertexPositionColor(c, DirectX::Colors::Red));
-	quadVertices.emplace_back(DirectX::VertexPositionColor(d, DirectX::Colors::Red));*/
 	DrawLine(a, b);
 	DrawLine(b, c);
 	DrawLine(c, d);
@@ -63,11 +59,6 @@ void DebugRenderer::Draw(Graphics* graphics)
 		primitiveBatch->DrawLine(lineVertices[i], lineVertices[i + 1]);
 	}
 
-	for (UINT i = 0; i < quadVertices.size(); i += 4)
-	{
-		primitiveBatch->DrawQuad(quadVertices[i], quadVertices[i + 1], quadVertices[i + 2], quadVertices[i + 3]);
-	}
-
 	primitiveBatch->End();
 
 	graphics->GetContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
@@ -75,5 +66,4 @@ void DebugRenderer::Draw(Graphics* graphics)
 	graphics->GetContext()->RSSetState(nullptr);
 
 	lineVertices.clear();
-	quadVertices.clear();
 }
