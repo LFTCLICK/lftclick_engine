@@ -30,7 +30,7 @@
         "uv": [ 1, 1 ]
       }
     ],
-    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ], 
     "image": "Resources\\images\\player_sprite_sheet.png"
   },
   "5": {

@@ -5,8 +5,8 @@
       "tag": "tile"
     },
     {
-      "prefab": "Resources\\json\\5thSprite.json",
-      "tag": "5thSprite"
+      "prefab": "Resources\\json\\enemy.json",
+      "tag": "enemy"
     },
     {
       "prefab": "Resources\\json\\bg.json",
@@ -27,20 +27,221 @@
   ],
   "Level": [
     {
-      "object": "tile",
-      "overrides": []
-    },
-    {
-      "object": "5thSprite",
+    
+      "object": "enemy",
       "overrides": [
         {
           "1": {
-            "startX": -300,
-            "startY": -300,
-            "scaleX": 128,
-            "scaleY": 128,
+            "startX": 100,
+            "startY": 100,
+            "scaleX": 64,
+            "scaleY": 64,
             "rot": 0,
             "zPos": 10
+          }
+        }
+        ]
+    
+    },
+    {
+    
+      "object": "enemy",
+      "overrides": [
+        {
+          "1": {
+            "startX": -100,
+            "startY": 100,
+            "scaleX": 64,
+            "scaleY": 64,
+            "rot": 0,
+            "zPos": 10
+          }
+        }
+        ]
+    
+    },
+    {
+      "object": "tile",
+      "overrides": [
+        {
+          "1": {
+            "startX": 0,
+            "startY": 368,
+            "scaleX": 704,
+            "scaleY": 32,
+            "rot": 0,
+            "zPos": 10
+          }
+        },
+        {
+          "2": {
+            "onlyUVOverrides": true,
+            "xScale": 22,
+            "yScale": 1
+          }
+        },
+        {
+          "4": {
+            "center": [0.0, -0.0, 0.0],
+            "width": 704,
+            "height": 32,
+            "trigger": false,
+            "deleteOnCollison": false
+          }
+        }
+      ]
+    },
+    {
+      "object": "tile",
+      "overrides": [
+        {
+          "1": {
+            "startX": 544,
+            "startY": 368,
+            "scaleX": 96,
+            "scaleY": 32,
+            "rot": 0,
+            "zPos": 10
+          }
+        },
+        {
+          "2": {
+            "onlyUVOverrides": true,
+            "xScale": 3,
+            "yScale": 1
+          }
+        },
+        {
+          "4": {
+            "center": [0.0, -0.0, 0.0],
+            "width": 96,
+            "height": 32,
+            "trigger": false,
+            "deleteOnCollison": false
+          }
+        }
+      ]
+    },
+    {
+      "object": "tile",
+      "overrides": [
+        {
+          "1": {
+            "startX": -544,
+            "startY": 368,
+            "scaleX": 96,
+            "scaleY": 32,
+            "rot": 0,
+            "zPos": 10
+          }
+        },
+        {
+          "2": {
+            "onlyUVOverrides": true,
+            "xScale": 3,
+            "yScale": 1
+          }
+        },
+        {
+          "4": {
+            "center": [0.0, -0.0, 0.0],
+            "width": 96,
+            "height": 32,
+            "trigger": false,
+            "deleteOnCollison": false
+          }
+        }
+      ]
+    },
+    {
+      "object": "tile",
+      "overrides": [
+        {
+          "1": {
+            "startX": 608,
+            "startY": 0,
+            "scaleX": 32,
+            "scaleY": 768,
+            "rot": 0,
+            "zPos": 10
+          }
+        },
+        {
+          "2": {
+            "onlyUVOverrides": true,
+            "xScale": 1,
+            "yScale": 24
+          }
+        },
+        {
+          "4": {
+            "center": [0.0, -0.0, 0.0],
+            "width": 32,
+            "height": 768,
+            "trigger": false,
+            "deleteOnCollison": false
+          }
+        }
+      ]
+    },
+    {
+      "object": "tile",
+      "overrides": [
+        {
+          "1": {
+            "startX": -608,
+            "startY": 0,
+            "scaleX": 32,
+            "scaleY": 768,
+            "rot": 0,
+            "zPos": 10
+          }
+        },
+        {
+          "2": {
+            "onlyUVOverrides": true,
+            "xScale": 1,
+            "yScale": 24
+          }
+        },
+        {
+          "4": {
+            "center": [0.0, -0.0, 0.0],
+            "width": 32,
+            "height": 768,
+            "trigger": false,
+            "deleteOnCollison": false
+          }
+        }
+      ]
+    },
+    {
+      "object": "tile",
+      "overrides": [
+        {
+          "1": {
+            "startX": 0,
+            "startY": -368,
+            "scaleX": 1184,
+            "scaleY": 32,
+            "rot": 0,
+            "zPos": 10
+          }
+        },
+        {
+          "2": {
+            "onlyUVOverrides": true,
+            "xScale": 37,
+            "yScale": 1
+          }
+        },
+        {
+          "4": {
+            "center": [0.0, -0.0, 0.0],
+            "width": 1184,
+            "height": 32,
+            "trigger": false,
+            "deleteOnCollison": false
           }
         }
       ]
@@ -54,8 +255,8 @@
       "overrides": [
         {
           "1": {
-            "startX": -450.5,
-            "startY": 384.5,
+            "startX": 0.5,
+            "startY": 0.5,
             "scaleX": 64,
             "scaleY": 64,
             "rot": 0,

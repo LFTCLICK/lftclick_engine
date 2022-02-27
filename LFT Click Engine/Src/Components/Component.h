@@ -28,7 +28,8 @@ public:
 		GUN, 
 		FOLLOW_MOUSE, 
 		DAMAGEABLE,
-		END_OF_ENGINE_COMPS = 100
+		END_OF_ENGINE_COMPS = 100,
+		ENEMY_SPAWNER
 	};
 
 	Component();
