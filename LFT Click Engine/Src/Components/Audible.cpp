@@ -79,9 +79,8 @@ Audible::~Audible() {
 
 
 void Audible::PlaySound(SoundInfo sound) {
-	float pitch = sound.pitchRange[0] == sound.pitchRange[1] ?
-		sound.pitchRange[0] :
-		sound.pitchRange[0] + (rand() % static_cast<int>(sound.pitchRange[1] - sound.pitchRange[0] + 1));
+	float pitch = sound.pitchRange[0] + (sound.pitchRange[0] == sound.pitchRange[1] ? 
+		0 : ((float)rand() / RAND_MAX) * (sound.pitchRange[1] - sound.pitchRange[0]));
 	channels[am->PlaySound(sound.name, channelGroupName, sound.volume, parent->getComponent<Transform>()->CurrentPos(), pitch)] = sound.name;
 }
 

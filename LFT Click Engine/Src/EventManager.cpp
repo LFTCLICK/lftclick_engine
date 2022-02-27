@@ -45,8 +45,7 @@ void EventManager::Update()//handles timed messages
 			BroadcastMessageToSubscribers((*it));
 			it = messageQueue.erase(it);
 		}
-		else
-			++it;
+		else ++it;
 	}
 }
 
@@ -60,6 +59,24 @@ void EventManager::Unsubscribe(Message::MessageID id, GameObject* g)
 	subscriptions[id].remove(g);
 }
 
+void EventManager::UnsubscribeFromAllEvents(GameObject* g)
+{
+	for (auto objectListIt = subscriptions.begin(); objectListIt != subscriptions.end(); objectListIt++) 
+	{
+		std::list<GameObject*>::iterator objIt = objectListIt->second.begin();
+
+		while (objIt != objectListIt->second.end())
+		{
+			GameObject* obj = *objIt;
+
+			if (g->tag == obj->tag)
+				objIt = objectListIt->second.erase(objIt);
+			else
+				++objIt;
+		}
+	}
+}
+
 void EventManager::Reset()
 {
 	messageQueue.clear();
@@ -68,10 +85,9 @@ void EventManager::Reset()
 
 void EventManager::ProcessCollision()
 {
-	for (std::unordered_map<Message::MessageID, std::list<GameObject*>>::iterator outerLoop = subscriptions.begin(); outerLoop != subscriptions.end(); outerLoop++)
+	for (auto outerLoop = subscriptions.begin(); outerLoop != subscriptions.end(); outerLoop++)
 	{
-	
-		for (std::list<GameObject*>::iterator innerLoop = outerLoop->second.begin(); innerLoop != outerLoop->second.end(); innerLoop++)
+		for (auto innerLoop = outerLoop->second.begin(); innerLoop != outerLoop->second.end(); innerLoop++)
 		{
 			gom->DoCollision(*innerLoop);
 		}

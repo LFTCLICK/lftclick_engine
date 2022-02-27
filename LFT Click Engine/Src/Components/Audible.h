@@ -27,7 +27,7 @@ struct SoundInfo {
 	std::string name;
 	bool loop = false;
 	bool compressed = true;
-	int pitchRange[2] = { 1, 1 };
+	float pitchRange[2] = { 1.f, 1.f };
 	float volume = 100.f;
 	std::vector<int> playEvents;
 	std::vector<int> stopEvents;

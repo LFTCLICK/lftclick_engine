@@ -31,6 +31,7 @@ public:
 	void Update();
 	void Subscribe(Message::MessageID id, GameObject* g);
 	void Unsubscribe(Message::MessageID id, GameObject* g);
+	void UnsubscribeFromAllEvents(GameObject* g);
 	bool RemoveOld(const Message& m) { return SDL_GetTicks() >= m.tickTime; }
 	void Reset();
 	void ProcessCollision();

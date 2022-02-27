@@ -18,7 +18,7 @@ void Damageable::Start()
 
 void Damageable::Update()
 {
-	if (destroyOnDeath && health < 1) parent->isActive = false;
+	if (destroyOnDeath && health < 1) parent->isDeletable = true;
 }
 
 void Damageable::Deserialize(nlohmann::json j, GameObject* parent)
