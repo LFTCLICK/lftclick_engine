@@ -20,17 +20,20 @@ public:
 	}
 	FrameRateController(FrameRateController const&) = delete;
 	void operator=(FrameRateController const&) = delete;
-	void Init(Uint32 ticksPerFrame);
+	void Init(int desiredFPS);
 
 	void Tick();
 	void Reset();
+	void StartOfFrame();
+	void EndOfFrame();
 	float DeltaTime();
 private:
 	FrameRateController();
 	
 	__int64 m_CurrentTime;
 	__int64 m_PreviousTime;
-
+	__int64 countsPerFrame;
+	__int64 milisecConverter;
 	double m_DeltaTime;
 	double m_SecondsPerCount;
 };

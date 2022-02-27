@@ -16,8 +16,7 @@ class Component
 {
 public:
 	enum ComponentType{
-		TEMP_HOLDER_DELETE_LATER, 
-		TRANSFORM, 
+		TRANSFORM = 1, 
 		DRAWABLE, 
 		MESH_COLLIDER, 
 		SQUARE_COLLLIDER, 
@@ -28,7 +27,8 @@ public:
 		BULLET, 
 		GUN, 
 		FOLLOW_MOUSE, 
-		DAMAGEABLE
+		DAMAGEABLE,
+		END_OF_ENGINE_COMPS = 100
 	};
 
 	Component();
@@ -38,7 +38,7 @@ public:
 	virtual Component* Clone(GameObject* newParent) = 0;//basically a copy constructor
 	virtual int getCompId() = 0;//needs to return its ComponentType enum
 	virtual void HandleMessage(Message* e) {};//message handling
-	~Component();
+	virtual ~Component();
 
 public:
 };

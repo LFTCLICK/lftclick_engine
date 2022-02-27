@@ -42,7 +42,10 @@ Component* GameObject::getRawComponentPointer(int id)
 
 GameObject::~GameObject()
 {
-	for (auto comp : comps) delete comp.second;
+	for (std::map<int, Component*>::iterator current = comps.begin(); current != comps.end(); ++current)
+	{
+		delete current->second;
+	}
 	comps.clear();
 }
 

@@ -123,7 +123,7 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 
 
-	FrameRateController::getInstance().Init(6);
+	FrameRateController::getInstance().Init(144);
 	AudioManager::getInstance().Init();
 	bool masterLoop = true;
 	bool playGame = false;
@@ -269,7 +269,7 @@ int main(int argc, char* args[])
 			//gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0;
-			FrameRateController::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
+			FrameRateController::getInstance().Init(144);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
 			while (isRunning)
 			{
 				FrameRateController::getInstance().Tick();
@@ -330,7 +330,7 @@ int main(int argc, char* args[])
 	}
 
 	// Cleanup
-	gom->DeleteAll();
+	//gom->DeleteAll();
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();

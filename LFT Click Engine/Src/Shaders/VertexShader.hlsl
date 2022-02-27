@@ -3,6 +3,8 @@ cbuffer cbuff
 	matrix transform;
 	float xOffset;
 	float yOffset;
+	float xScale;
+	float yScale;
 	float xFlip;
 	float alphaOverride;
 };
@@ -18,7 +20,7 @@ VSOut main(float3 pos : Position, /*float3 normal : NORMAL,*/ float2 tex : TEXCO
 	VSOut vso;
 	vso.pos = mul(float4(pos, 1.0f), transform);
 	//vso.norm = normal;
-	vso.tex = float2(xFlip * (tex.x + xOffset), tex.y + yOffset);
+	vso.tex = float2(xFlip * ((xScale*tex.x) + xOffset), (yScale*tex.y) + yOffset);
 	vso.alphaOverride = alphaOverride;
 	return vso;
 }
