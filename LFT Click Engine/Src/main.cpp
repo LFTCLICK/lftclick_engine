@@ -161,9 +161,11 @@ int main(int argc, char* args[])
 			g_debugRenderer->DrawQuad(SimpleMath::Vector2(100.0f, 50.0f), SimpleMath::Vector2(150.0f, 50.0f),
 				SimpleMath::Vector2(150.0f, 100.0f), SimpleMath::Vector2(100.0f, 100.0f));
 
+
 			gom->Draw();
-			
+
 			g_debugRenderer->Draw(&Graphics::getInstance());
+
 
 			bool open = true;
 

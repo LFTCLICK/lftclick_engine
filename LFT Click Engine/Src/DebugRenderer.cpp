@@ -39,11 +39,12 @@ void DebugRenderer::DrawQuad(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath
 
 void DebugRenderer::Draw(Graphics* graphics)
 {
+	basicEffect->SetWorld(XMMatrixIdentity());
+	basicEffect->SetView(XMMatrixIdentity());
 	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0,
 		graphics->GetWidth(), graphics->GetHeight(), 0, 0, 1));
 
-	basicEffect->SetVertexColorEnabled(true);
-	basicEffect->SetDiffuseColor(DirectX::Colors::Blue);
+	basicEffect->SetColorAndAlpha(DirectX::Colors::Red);
 
 	graphics->GetContext()->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
 	graphics->GetContext()->OMSetDepthStencilState(states->DepthNone(), 0);
