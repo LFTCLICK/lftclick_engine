@@ -42,6 +42,11 @@ Drawable::Drawable()
 
 void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 {
+	xScale = j["xScale"];
+	yScale = j["yScale"];
+	if (j["onlyUVOverrides"])
+		return;
+
 	alphaOverride = 1;
 	xOffset = yOffset = 0;
 	xFlip = 1;
@@ -138,6 +143,8 @@ Component* Drawable::Clone(GameObject* newParent)
 {
 	Drawable* toReturn = new Drawable();
 
+	toReturn->xScale = xScale;
+	toReturn->yScale = yScale;
 	toReturn->drawSize = drawSize;
 	toReturn->useTextures = useTextures;
 	toReturn->hasRasterizer = hasRasterizer;
@@ -184,6 +191,8 @@ void Drawable::Draw()
 		dx::XMMATRIX transform;
 		float xOffset;
 		float yOffset;
+		float xScale;
+		float yScale;
 		float flipX;
 		float alphaOverride;
 	};
@@ -197,6 +206,8 @@ void Drawable::Draw()
 		},
 		xOffset,
 		yOffset,
+		xScale,
+		yScale,
 		xFlip,
 		alphaOverride
 	};

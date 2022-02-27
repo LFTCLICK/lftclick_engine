@@ -29,6 +29,7 @@ public:
 	virtual int getCompId();
 	~Drawable() = default;
 	float xOffset, yOffset;
+	float xScale, yScale;
 	float xFlip;
 	float alphaOverride;
 private:
