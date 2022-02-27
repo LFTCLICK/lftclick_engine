@@ -2,8 +2,8 @@
   "1": {
     "startX": 0.0,
     "startY": 0.0,
-    "scaleX": 256,
-    "scaleY": 256,
+    "scaleX": 32,
+    "scaleY": 32,
     "rot": 0,
     "zPos": 10
   },
@@ -30,13 +30,13 @@
     }
     ],
     "indicies": [0, 1, 2, 2, 3, 0],
-    "image": "Resources\\images\\wall.png"
+    "image": "Resources\\images\\block.png"
 
   },
   "4": {
     "center": [0.0, -0.0, 0.0],
-    "width": 256,
-    "height": 256,
+    "width": 32,
+    "height": 32,
     "trigger": false,
     "deleteOnCollison": false
   }
