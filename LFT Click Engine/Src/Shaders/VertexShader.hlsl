@@ -1,6 +1,6 @@
 cbuffer cbuff
 {
-	matrix transform;
+	row_major matrix transform;
 	float xOffset;
 	float yOffset;
 	float xFlip;

@@ -140,7 +140,6 @@ Component* Drawable::Clone(GameObject* newParent)
 
 	toReturn->drawSize = drawSize;
 	toReturn->useTextures = useTextures;
-	toReturn->hasRasterizer = hasRasterizer;
 	toReturn->speed = speed;
 	toReturn->parent = newParent;
 	toReturn->pTransformationMatrix = pTransformationMatrix;
@@ -163,6 +162,7 @@ Component* Drawable::Clone(GameObject* newParent)
 
 void Drawable::Start()
 {
+	cbPerObjectData.Create(Graphics::getInstance().GetDevice());
 }
 
 void Drawable::Update()
@@ -173,52 +173,32 @@ void Drawable::Draw()
 {
 	const UINT stride = sizeof(Vertex);
 	const UINT offset = 0;
-	Graphics::getInstance().GetContext()->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
-	Graphics::getInstance().GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
-	Graphics::getInstance().GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
-	Graphics::getInstance().GetContext()->VSSetShader(vertShader.Get(), nullptr, 0);
-	Graphics::getInstance().GetContext()->IASetInputLayout(inputLayout.Get());
-	Graphics::getInstance().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	struct  ConstantBuffer
-	{
-		dx::XMMATRIX transform;
-		float xOffset;
-		float yOffset;
-		float flipX;
-		float alphaOverride;
-	};
+
 	DirectX::XMFLOAT4X4 mat = parent->getComponent<Transform>()->GetXMMatrix();
-	const ConstantBuffer cb =
+
+	const cbPerObject cb =
 	{
 		{
-			dx::XMMatrixTranspose(
-				DirectX::XMLoadFloat4x4(&mat)*GameManager::getInstance().mainCamera->GetProjectionMatrix()
-			)
+			DirectX::XMLoadFloat4x4(&mat) * GameManager::getInstance().mainCamera->GetProjectionMatrix()
 		},
 		xOffset,
 		yOffset,
 		xFlip,
 		alphaOverride
 	};
-	wrl::ComPtr<ID3D11Buffer> constBuff;
-	D3D11_BUFFER_DESC constBuffDesc = {};
-	constBuffDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	constBuffDesc.Usage = D3D11_USAGE_DYNAMIC;
-	constBuffDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	constBuffDesc.MiscFlags = 0;
-	constBuffDesc.ByteWidth = sizeof(cb);
-	constBuffDesc.StructureByteStride = 0;
-	D3D11_SUBRESOURCE_DATA csd = {};
-	csd.pSysMem = &cb;
-	Graphics::getInstance().GetDevice()->CreateBuffer(&constBuffDesc, &csd, &constBuff);
+	cbPerObjectData.SetData(Graphics::getInstance().GetContext(), cb);
 
-	Graphics::getInstance().GetContext()->VSSetConstantBuffers(0, 1, constBuff.GetAddressOf());
+	Graphics::getInstance().GetContext()->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
+	Graphics::getInstance().GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
+	Graphics::getInstance().GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
+	Graphics::getInstance().GetContext()->VSSetShader(vertShader.Get(), nullptr, 0);
+	Graphics::getInstance().GetContext()->IASetInputLayout(inputLayout.Get());
+	Graphics::getInstance().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Graphics::getInstance().GetContext()->VSSetConstantBuffers(0, 1, cbPerObjectData.GetAddressOf());
 	Graphics::getInstance().GetContext()->PSSetShaderResources(0, 1, shaderResourceView.GetAddressOf());
 	Graphics::getInstance().GetContext()->PSSetSamplers(0, 1, sampState.GetAddressOf());
 	Graphics::getInstance().GetContext()->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFFu);
-
-	if (hasRasterizer)
-		Graphics::getInstance().GetContext()->RSSetState(rastState.Get());
+	Graphics::getInstance().GetContext()->RSSetState(nullptr);
 
 	Graphics::getInstance().GetContext()->DrawIndexed(drawSize, 0, 0);
 }

@@ -14,6 +14,8 @@
 #include <SDL_gamecontroller.h>
 #include <directxmath.h>
 #include <d3d11.h>
+#include <wrl/client.h>
+#include <DirectXColors.h>
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
@@ -37,3 +39,17 @@ extern "C"
 #ifdef _WIN64
 #pragma comment(lib, "liblua54.a")
 #endif
+
+namespace DX
+{
+	inline void ThrowIfFailed(HRESULT hr)
+	{
+		if (FAILED(hr))
+		{
+			throw std::exception();
+		}
+	}
+}
+
+// Error checking for LUA
+bool CheckLua(lua_State* L, int r);

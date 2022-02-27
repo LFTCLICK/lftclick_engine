@@ -13,6 +13,7 @@
 #include "../GameManager.h"
 
 using json = nlohmann::json;
+
 Camera::Camera()
 {
 	viewMatrix = DirectX::XMMatrixIdentity();
@@ -100,12 +101,12 @@ DirectX::XMVECTOR Camera::getRot()
 
 void Camera::Render()
 {
-	viewMatrix = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot) *  DirectX::XMMatrixIdentity();
+	viewMatrix = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
 }
 
 void Camera::GetViewMatrix(DirectX::XMMATRIX & toReturn)
 {
-	toReturn = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot) *  DirectX::XMMatrixIdentity();
+	toReturn = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
 	//toReturn = viewMatrix;
 }
 

@@ -13,17 +13,7 @@
 #include <DirectXMath.h>
 #include <string>
 #include <vector>
-
-namespace DX
-{
-	inline void ThrowIfFailed(HRESULT hr)
-	{
-		if (FAILED(hr))
-		{
-			throw std::exception();
-		}
-	}
-}
+#include "DebugRenderer.h"
 
 class Graphics
 {
@@ -34,13 +24,6 @@ public:
 		static Graphics instance;
 		return instance;
 	}
-	Graphics();
-	void init(HWND hWnd, int initWidth, int initHeight);
-	Graphics(const Graphics&) = delete;
-	Graphics& operator=(const Graphics&) = delete;
-	~Graphics() = default;
-	void DoTransform(DirectX::XMMATRIX t);
-	void EndFrame();
 
 	void ClearBuffer(UINT32 hexCode) noexcept
 	{
@@ -52,9 +35,18 @@ public:
 	void ClearBuffer(float red, float green, float blue) noexcept
 	{
 		const float color[] = { red,green,blue,1.0f };
-		pContext->ClearRenderTargetView(pRTV.Get(), color);
-		pContext->ClearDepthStencilView(pDSV.Get(), D3D11_CLEAR_DEPTH, 1, 0);
+		immediateContext->ClearRenderTargetView(renderTargetView.Get(), color);
+		immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH, 1, 0);
 	}
+public:
+	Graphics();
+	~Graphics() = default;
+	Graphics(const Graphics&) = delete;
+	Graphics& operator=(const Graphics&) = delete;
+
+	void Initialize(HWND hWnd, int initWidth, int initHeight);
+	void EndFrame();
+
 	void Draw();
 	int GetWidth();
 	int GetHeight();
@@ -66,20 +58,21 @@ private:
 	void UpdateClientSizeVars();
 
 private:
-	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
-	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;
-	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pRTV;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDSV;
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDSBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Device> device;
+	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
+	Microsoft::WRL::ComPtr<ID3D11DeviceContext> immediateContext;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	int width, height;
 
-	DXGI_FORMAT m_BackBufferFormat;
-	DXGI_FORMAT m_DepthStencilBufferFormat;
-	DXGI_FORMAT m_DepthStencilViewFormat;
+	DXGI_FORMAT backBufferFormat;
+	DXGI_FORMAT depthStencilBufferFormat;
+	DXGI_FORMAT depthStencilViewFormat;
 
-	D3D11_VIEWPORT m_ScreenViewport;
+	D3D11_VIEWPORT screenViewport;
 
-	UINT m_MSAAQuality;
-	UINT M_MSAASampleCount;
+	UINT msaaQuality;
+	UINT msaaSampleCount;
+
 };

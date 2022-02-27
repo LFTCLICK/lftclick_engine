@@ -23,34 +23,15 @@
 #include "Messages.h"
 #include "GameManager.h"
 #include "Components/Drawable.h"
-
-
 using json = nlohmann::json;
 
-int windowWidth = 1600;
-int windowHeight = 900;
+using namespace DirectX;
 
-GameObjectFactory* gof;
-GameObjectManager* gom;
-
-// Error checking for LUA
-bool CheckLua(lua_State* L, int r)
-{
-	if (r != LUA_OK)
-	{
-		std::string errormsg = lua_tostring(L, -1);
-		std::cout << errormsg << std::endl;
-		return false;
-	}
-	return true;
-}
+std::unique_ptr<DebugRenderer> g_debugRenderer;
 
 int main(int argc, char* args[])
 {
-	SDL_Window* pWindow;
-	int error = 0;					//temp varrible for the SDL initialization
-
-	int windowWidth, windowHeight;
+	int windowWidth = 800, windowHeight = 600;
 
 	// Create Lua State
 	lua_State* L = luaL_newstate();
@@ -74,21 +55,21 @@ int main(int argc, char* args[])
 	}
 
 	//Init SDL
-	if ((error = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK)) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
-		std::cout << "SDL_Init failled, erorr" << error << std::endl;
+		std::cout << "SDL_Init failled, erorr" << std::endl;
 		return 1;
 	}
 
 	//Create SDL window
-	pWindow = SDL_CreateWindow("LFT Click Engine Demo",
+	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
 		windowWidth,
 		windowHeight,
-		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
-	);
-	if (pWindow == NULL) //error check
+		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+
+	if (pWindow == NULL) 
 	{
 		std::cout << "Couldn't create window " << SDL_GetError();
 		return 1;
@@ -97,10 +78,9 @@ int main(int argc, char* args[])
 	SDL_Surface* icon = ResourceManager::getInstance().GetResource("Resources\\images\\icon.bmp");
 	SDL_SetWindowIcon(pWindow, icon);
 
+	Graphics::getInstance().Initialize(GetActiveWindow(), windowWidth, windowHeight);
 
-	//Get handle to SDL window for DirectX
-	HWND sdlWindow = GetActiveWindow();
-	Graphics::getInstance().init(sdlWindow, windowWidth, windowHeight);
+	g_debugRenderer = std::make_unique<DebugRenderer>(&Graphics::getInstance());
 
 	////imgui setup
 	IMGUI_CHECKVERSION();
@@ -114,13 +94,10 @@ int main(int argc, char* args[])
 	json dataJson;
 	data >> dataJson;
 	data.close();
-	gom = &GameObjectManager::getInstance();
+
+	GameObjectManager* gom = &GameObjectManager::getInstance();
 	EventManager::getInstance().init(gom);
-	gof = &GameObjectFactory::getInstance();
-
-
-	Uint32 frameTimeTicks = 16;
-	bool isRunning = true;
+	GameObjectFactory* gof = &GameObjectFactory::getInstance();
 
 
 	FrameRateController::getInstance().Init(6);
@@ -128,204 +105,85 @@ int main(int argc, char* args[])
 	bool masterLoop = true;
 	bool playGame = false;
 	bool doMenu = true;
-	int menuIndex = 0;
 	srand(time(NULL));
+
+	bool isRunning = true;
 	while (masterLoop)
 	{
-		//if (doMenu)
-		if (false)
+		std::fstream other("./Resources/json/demo.json");
+		json dataJson2;
+		other >> dataJson2;
+		other.close();
+		gom->Deserialize(gof, dataJson2);
+		GameObject* playerObj = gom->FindObjectOfTag("player");
+		GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
+		//gom->Start();
+
+		isRunning = true;
+		FrameRateController::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
+		while (isRunning)
 		{
+			FrameRateController::getInstance().Tick();
 
-			gom->Deserialize(gof, dataJson);
+			ImGui_ImplDX11_NewFrame();
+			ImGui_ImplSDL2_NewFrame();
+			ImGui::NewFrame();
 
-			GameObject* temp = gom->FindObjectOfTag("controls");
-			Drawable* controlsGaphics = temp->getComponent<Drawable>();
-
-			gom->FindObjectOfTag("controls")->isActive = false;
-			gom->FindObjectOfTag("credits")->isActive = false;
-
-
-			GameManager::getInstance().gom = gom;
-			GameManager::getInstance().mainCamera = gom->FindObjectOfTag("camera")->getComponent<Camera>();
-			GameObject* cloneTest = gom->CloneObject(gom->FindObjectOfTag("camera"));
-
-			gom->Start();
-			isRunning = true;
-			int oldMouseX = 0;
-			int oldMouseY = 0;
-			while (isRunning)
+			SDL_Event e;
+			while (SDL_PollEvent(&e) != 0)//must be called before input manager
 			{
-				FrameRateController::getInstance().Tick();
-				SDL_Event e;
-				while (SDL_PollEvent(&e) != 0)
+				if (e.type == SDL_QUIT)
 				{
-					ImGui_ImplSDL2_ProcessEvent(&e);
-					if (e.type == SDL_QUIT)
-					{
-						doMenu = false;
-						playGame = false;
-						isRunning = false;
-						masterLoop = false;
-					}
-					if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
-					{
-						windowWidth = e.window.data1;
-						windowHeight = e.window.data2;
-						SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
-						Graphics::getInstance().OnResize(windowWidth, windowHeight);
-					}
+					isRunning = false;
+					playGame = false;
+					doMenu = false;
+					masterLoop = false;
 				}
-				AudioManager::getInstance().Update();
-				InputManager::getInstance().Update();
-
-				// Start the Dear ImGui frame
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplSDL2_NewFrame();
-				ImGui::NewFrame();
-				Graphics::getInstance().ClearBuffer(0x7CA3FF);
-
-				bool open = true;
-				if (menuIndex == 0)
+				if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
 				{
-					ImGui::SetNextWindowPos({ roundf((windowWidth / 2) - 50), roundf(windowHeight * .6f) });
-					ImGui::Begin("mainMenu", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
-					if (ImGui::Button("Play", { 100,50 }))
-					{
-						isRunning = false;
-						playGame = true;
-						doMenu = false;
-					}
-					if (ImGui::Button("Controls", { 100,50 }))
-					{
-						gom->FindObjectOfTag("controls")->isActive = true;
-						gom->FindObjectOfTag("title")->isActive = false;
-						menuIndex = 1;
-					}
-					if (ImGui::Button("Credits", { 100,50 }))
-					{
-						gom->FindObjectOfTag("credits")->isActive = true;
-						gom->FindObjectOfTag("title")->isActive = false;
-						menuIndex = 1;
-					}
-					if (ImGui::Button("Quit", { 100,50 }))
-					{
-						doMenu = false;
-						isRunning = false;
-						masterLoop = false;
-					}
-
-					ImGui::End();
-
-					ImGui::SetNextWindowPos({ 0,950 });
-					ImGui::Begin("passiveAgressiveMouseInput", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
-					std::string toShow = "Could you move your mouse please?";
-					if (InputManager::getInstance().mouseX() != oldMouseX || InputManager::getInstance().mouseY() != oldMouseY)
-						toShow = "YAYYYYY I love it when you move your mouse";
-					if (InputManager::getInstance().isMouseButtonPressed(0))
-						toShow = "Left mouse is a good button";
-					if (InputManager::getInstance().isMouseButtonPressed(1))
-						toShow = "I really like right mouse";
-					if (InputManager::getInstance().isMouseButtonPressed(2))
-						toShow = "MIDDLE MOUSE!!!!";
-					oldMouseX = InputManager::getInstance().mouseX();
-					oldMouseY = InputManager::getInstance().mouseY();
-					ImGui::Text(toShow.c_str());
-					ImGui::End();
+					windowWidth = e.window.data1;
+					windowHeight = e.window.data2;
+					SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
+					Graphics::getInstance().OnResize(windowWidth, windowHeight);
 				}
-				else if (menuIndex == 1)
-				{
-					ImGui::SetNextWindowPos({ roundf((windowWidth / 2) - 50), roundf(windowHeight * .6f) });
-					ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
-
-					if (ImGui::Button("Back", { 100,50 }))
-					{
-						gom->FindObjectOfTag("controls")->isActive = false;
-						gom->FindObjectOfTag("credits")->isActive = false;
-						gom->FindObjectOfTag("title")->isActive = true;
-						menuIndex = 0;
-					}
-					ImGui::End();
-
-				}
-				gom->Draw();
-				ImGui::Render();
-				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-				Graphics::getInstance().EndFrame();
 			}
-			gom->DeleteAll();
+			AudioManager::getInstance().Update();
+			InputManager::getInstance().Update();
+			gom->Update();//update gameobjects
+			EventManager::getInstance().ProcessCollision();
+			//gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
+			EventManager::getInstance().Update();//process timed events
+			Graphics::getInstance().ClearBuffer(0x7CA3FF);
+
+			g_debugRenderer->DrawLine(SimpleMath::Vector2(0.0f, 0.0f), SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2));
+			g_debugRenderer->DrawLine(SimpleMath::Vector2(Graphics::getInstance().GetWidth(), 0.0f), SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2));
+
+			g_debugRenderer->DrawQuad(SimpleMath::Vector2(100.0f, 50.0f), SimpleMath::Vector2(150.0f, 50.0f),
+				SimpleMath::Vector2(150.0f, 100.0f), SimpleMath::Vector2(100.0f, 100.0f));
+
+			gom->Draw();
+			g_debugRenderer->Draw(&Graphics::getInstance());
+
+			bool open = true;
+
+			ImGui::SetNextWindowPos({ 0,0 });
+			ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+			ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
+			ImGui::End();
+
+
+			ImGui::Render();
+			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+			Graphics::getInstance().EndFrame();
+
 		}
 
-		//if (playGame)
-		if (true)
-		{
+		gom->DeleteAll();
 
-			std::fstream other("./Resources/json/demo.json");
-			json dataJson2;
-			other >> dataJson2;
-			other.close();
-			gom->Deserialize(gof, dataJson2);
-			GameObject* playerObj = gom->FindObjectOfTag("player");
-			GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
-			//gom->Start();
-			isRunning = true;
-			unsigned int lastTime = 0;
-			FrameRateController::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
-			while (isRunning)
-			{
-				FrameRateController::getInstance().Tick();
-
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplSDL2_NewFrame();
-				ImGui::NewFrame();
-
-				SDL_Event e;
-				while (SDL_PollEvent(&e) != 0)//must be called before input manager
-				{
-					if (e.type == SDL_QUIT)
-					{
-						isRunning = false;
-						playGame = false;
-						doMenu = false;
-						masterLoop = false;
-					}
-					if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
-					{
-						windowWidth = e.window.data1;
-						windowHeight = e.window.data2;
-						SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
-						Graphics::getInstance().OnResize(windowWidth, windowHeight);
-					}
-				}
-				AudioManager::getInstance().Update();
-				InputManager::getInstance().Update();
-				gom->Update();//update gameobjects
-				EventManager::getInstance().ProcessCollision();
-							  //gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
-				EventManager::getInstance().Update();//process timed events
- 				Graphics::getInstance().ClearBuffer(0x7CA3FF);//clear screen
-				gom->Draw();//do drawing
-				bool open = true;
-				if (true)
-				{
-					ImGui::SetNextWindowPos({ 0,0 });
-					ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-					ImGui::Text("FPS: %03f", 1.0f/FrameRateController::getInstance().DeltaTime());
-					ImGui::End();
-				}
-
-				ImGui::Render();//ImGui
-				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-				Graphics::getInstance().EndFrame();//present frame
-
-			}
-
-			gom->DeleteAll();
-
-			EventManager::getInstance().Reset();
-			GameManager::getInstance().playerDead = false;
-			GameManager::getInstance().playerRestart = false;
-			GameManager::getInstance().playerScore = 0;
-		}
+		EventManager::getInstance().Reset();
+		GameManager::getInstance().playerDead = false;
+		GameManager::getInstance().playerRestart = false;
+		GameManager::getInstance().playerScore = 0;
 
 	}
 
@@ -335,13 +193,13 @@ int main(int argc, char* args[])
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
-	//delete gom;
-	//delete gof;
+	g_debugRenderer.reset();
 
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
 
 	lua_close(L);
 	SDL_Quit();
+
 	return 0;
 }
