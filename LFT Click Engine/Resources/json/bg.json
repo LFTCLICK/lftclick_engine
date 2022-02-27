@@ -2,8 +2,8 @@
   "1": {
     "startX": 0.5,
     "startY": 0.5,
-    "scaleX": 2560,
-    "scaleY": 2560,
+    "scaleX": 5120,
+    "scaleY": 5120,
     "rot": 0,
     "zPos": 15
   },
@@ -11,7 +11,7 @@
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
-        "uv": [ 0, 10 ]
+        "uv": [ 0, 4 ]
       },
       {
         "pos": [ -0.5, 0.5, 0 ],
@@ -19,16 +19,16 @@
       },
       {
         "pos": [ 0.5, 0.5, 0 ],
-        "uv": [ 10, 0 ]
+        "uv": [ 4, 0 ]
       },
       {
         "pos": [ 0.5, -0.5, 0 ],
-        "uv": [ 10, 10 ]
+        "uv": [ 4, 4 ]
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
-    "image": "Resources\\images\\bg.png"
+    "image": "Resources\\images\\bg2.png"
 
   },
   "8": {

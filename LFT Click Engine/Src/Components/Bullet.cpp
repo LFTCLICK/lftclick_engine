@@ -26,21 +26,8 @@ void Bullet::Update()
 
 	if (!liveForever) {
 		timer += FrameRateController::getInstance().DeltaTime();
-		if (timer > keepAliveTime)
-			parent->isActive = false;
+		if (timer > keepAliveTime) parent->isDeletable = true;
 	}
-
-
-	/* Older Bullet code for reference
-	if (timer >= animationTime)
-	{
-		timer = 0;
-		speed *= -1;
-	}
-	trans->Move(0, speed * FrameRateController::getInstance().DeltaTime());
-
-	timer += FrameRateController::getInstance().DeltaTime();
-	*/
 }
 
 void Bullet::Deserialize(nlohmann::json j, GameObject* parent)

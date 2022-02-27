@@ -21,10 +21,21 @@ GameObjectManager::GameObjectManager()
 
 void GameObjectManager::Update()
 {
-	for (GameObject* g : gameObjectList)
-	{
-		if (g->isActive)
-			g->Update();
+	//std::cout << "Size: " << gameObjectList.size() << std::endl;
+	std::list<GameObject*>::iterator objIt = gameObjectList.begin();
+
+	while (objIt != gameObjectList.end()) {
+		GameObject* g = *objIt;
+
+		if (g->isDeletable) {
+			EventManager::getInstance().UnsubscribeFromAllEvents(g);
+			objIt = gameObjectList.erase(objIt);
+			delete g;
+		}
+		else {
+			if (g->isActive) g->Update();
+			++objIt;
+		}
 	}
 }
 
@@ -54,15 +65,13 @@ void GameObjectManager::DoCollision(GameObject* toCheckWith)
 {
 	for (GameObject* g : gameObjectList)
 	{
-		if (g->isActive && g!=toCheckWith)
+		if (g->isActive && !g->isDeletable && g != toCheckWith)
 		{
 			Collider* s = dynamic_cast<Collider*>(g->getComponent<MeshCollider>());
-			if (s == nullptr)
+			if (s == nullptr) 
 				s = dynamic_cast<Collider*>(g->getComponent<SquareCollider>());
-			if (s != nullptr)
-			{
+			if (s != nullptr) 
 				s->CollisionCheck(toCheckWith);
-			}
 		}
 	}
 }
@@ -110,6 +119,17 @@ void GameObjectManager::DeleteAll()
 		delete g;
 	gameObjectList.clear();
 	prefabList.clear();
+}
+
+void GameObjectManager::DeleteObjectOfTag(std::string tag) 
+{
+	std::list<GameObject*>::iterator i = gameObjectList.begin();
+	while (i != gameObjectList.end()) {
+		if ((*i)->tag == tag)
+			gameObjectList.erase(i++);  // alternatively, i = items.erase(i);
+		else
+			++i;
+	}
 }
 
 GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::string tag, bool skipStart)

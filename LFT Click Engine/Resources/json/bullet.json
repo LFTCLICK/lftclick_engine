@@ -47,5 +47,18 @@
     "spriteSheetWidth": 5,
     "spriteSheetHeight": 1,
     "frameTime": 0.05
+  },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\sounds\\clang.mp3",
+        "loop": false,
+        "volume": 12,
+        "pitchRange": [ 0.85, 1.3 ],
+        "playEvents": [
+          1000
+        ]
+      }
+    ]
   }
 }
