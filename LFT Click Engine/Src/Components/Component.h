@@ -38,7 +38,7 @@ public:
 	virtual Component* Clone(GameObject* newParent) = 0;//basically a copy constructor
 	virtual int getCompId() = 0;//needs to return its ComponentType enum
 	virtual void HandleMessage(Message* e) {};//message handling
-	~Component();
+	virtual ~Component();
 
 public:
 };

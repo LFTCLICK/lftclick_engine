@@ -330,7 +330,7 @@ int main(int argc, char* args[])
 	}
 
 	// Cleanup
-	gom->DeleteAll();
+	//gom->DeleteAll();
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
