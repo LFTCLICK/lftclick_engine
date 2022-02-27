@@ -8,6 +8,9 @@
     "zPos": 10
   },
   "2": {
+    "onlyUVOverrides": false,
+    "xScale" : 0.5,
+    "yScale" : 1,
     "vertices" : [
     {
         "pos": [-0.5,-0.5,0],
@@ -19,15 +22,14 @@
     },
     {
         "pos": [0.5,0.5,0],
-        "uv": [0.5,0]
+        "uv": [1,0]
     },
     {
         "pos": [0.5,-0.5,0],
-        "uv": [0.5,1]
+        "uv": [1,1]
     }
     ],
     "indicies": [0, 1, 2, 2, 3, 0],
-    "scale": 1,
     "image": "Resources\\images\\5th.png"
 
   },
