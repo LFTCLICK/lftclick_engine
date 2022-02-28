@@ -91,7 +91,6 @@ void AudioManager::UnloadSound(std::string name) {
 // The volume value given is divided by 100 when being sent to FMOD,
 // as FMOD's volume operates between 0 and 1.
 int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, float x, float y, float pitch, bool startPaused) {
-	std::cout << "after  pitch: " << pitch << std::endl;
 	auto sound = engine->sounds.find(name);
 	if (sound == engine->sounds.end()) {
 		std::cout << name << " was not preloaded, loading from source instead." << std::endl;

@@ -9,34 +9,41 @@
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 0.5,
-    "yScale" : 1,
-    "vertices" : [
-    {
-        "pos": [-0.5,-0.5,0],
-        "uv": [0,1]
-    },
-    {
-        "pos": [-0.5,0.5,0],
-        "uv": [0,0]
-    },
-    {
-        "pos": [0.5,0.5,0],
-        "uv": [1,0]
-    },
-    {
-        "pos": [0.5,-0.5,0],
-        "uv": [1,1]
-    }
+    "xScale": 0.5,
+    "yScale": 1,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
     ],
-    "indicies": [0, 1, 2, 2, 3, 0],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "image": "Resources\\images\\5th.png"
 
   },
   "6": {
     "spriteSheetWidth": 2,
     "spriteSheetHeight": 1,
-    "frameTime": 2
+    "animations": [
+      {
+        "name": "idle5TH",
+        "length": 2,
+        "frameDuration": 2,
+        "onIdle": true
+      }
+    ]
   },
   "4": {
     "center": [ 0.0, -0.0, 0.0 ],

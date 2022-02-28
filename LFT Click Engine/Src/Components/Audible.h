@@ -69,8 +69,7 @@ public:
 protected:
 	GameObject* parent;
 	AudioManager* am;
-	DirectX::SimpleMath::Vector2 oldPosition;
-	DirectX::SimpleMath::Vector2 position;
+	DirectX::SimpleMath::Vector2 oldPosition, position;
 	bool wasMoving;
 	std::string channelGroupName;
 
