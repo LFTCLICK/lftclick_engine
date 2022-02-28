@@ -85,7 +85,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 				}
 				else
 				{
-					//EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(toCheck->tag));
+					EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(toCheck->tag));
 
 					DirectX::SimpleMath::Vector2 delta;
 					DirectX::XMVECTOR difference = DirectX::XMVectorSubtract(myPos, toCheckPos);
