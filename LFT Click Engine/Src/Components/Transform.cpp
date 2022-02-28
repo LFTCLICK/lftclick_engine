@@ -10,7 +10,7 @@
 #include "pch.h"
 #include "Transform.h"
 
-Transform::Transform()
+Transform::Transform() : isMoving(false)
 {
 }
 
@@ -72,6 +72,17 @@ void Transform::Start()
 
 void Transform::Update()
 {
+	if (pos.x != oldPos.x || pos.y != oldPos.y) {
+		if (!isMoving) isMoving = true;
+		lastMovement.x = pos.x - oldPos.x;
+		lastMovement.y = pos.y - oldPos.y;
+		oldPos.x = pos.x;
+		oldPos.y = pos.y;
+	}
+	else if (isMoving) {
+		lastMovement.x = lastMovement.y = 0;
+		isMoving = false;
+	}
 }
 
 int Transform::getCompId()

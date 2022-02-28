@@ -19,15 +19,15 @@ namespace dx = DirectX;
 
 Graphics::Graphics() :
 	width(0), height(0),
-	m_BackBufferFormat(DXGI_FORMAT_B8G8R8A8_UNORM),
-	m_DepthStencilBufferFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
-	m_DepthStencilViewFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
-	m_MSAAQuality(0),
-	M_MSAASampleCount(4)
+	backBufferFormat(DXGI_FORMAT_B8G8R8A8_UNORM),
+	depthStencilBufferFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
+	depthStencilViewFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
+	msaaQuality(0),
+	msaaSampleCount(4)
 {
 }
 
-void Graphics::init(HWND hWnd, int initWidth, int initHeight)
+void Graphics::Initialize(HWND hWnd, int initWidth, int initHeight)
 {
 	//setup devices
 
@@ -46,9 +46,9 @@ void Graphics::init(HWND hWnd, int initWidth, int initHeight)
 		NULL,
 		NULL,
 		D3D11_SDK_VERSION,
-		pDevice.ReleaseAndGetAddressOf(),
+		device.ReleaseAndGetAddressOf(),
 		&featureLevel,
-		pContext.ReleaseAndGetAddressOf());
+		immediateContext.ReleaseAndGetAddressOf());
 
 	if (FAILED(hr))
 		assert(false);
@@ -63,15 +63,15 @@ void Graphics::init(HWND hWnd, int initWidth, int initHeight)
 	sd.BufferDesc.Height = height;
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
-	sd.BufferDesc.Format = m_BackBufferFormat;
+	sd.BufferDesc.Format = backBufferFormat;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 
-	DX::ThrowIfFailed(pDevice->CheckMultisampleQualityLevels(m_BackBufferFormat, M_MSAASampleCount, &m_MSAAQuality));
-	assert(m_MSAAQuality > 0);
+	DX::ThrowIfFailed(device->CheckMultisampleQualityLevels(backBufferFormat, msaaSampleCount, &msaaQuality));
+	assert(msaaQuality > 0);
 
-	sd.SampleDesc.Count = M_MSAASampleCount;
-	sd.SampleDesc.Quality = m_MSAAQuality - 1;
+	sd.SampleDesc.Count = msaaSampleCount;
+	sd.SampleDesc.Quality = msaaQuality - 1;
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.BufferCount = 1;
 	sd.OutputWindow = hWnd;
@@ -80,7 +80,7 @@ void Graphics::init(HWND hWnd, int initWidth, int initHeight)
 	sd.Flags = 0;
 
 	wrl::ComPtr<IDXGIDevice> dxgiDevice;
-	if FAILED(pDevice.As(&dxgiDevice))
+	if FAILED(device.As(&dxgiDevice))
 		assert(false);
 
 
@@ -93,7 +93,7 @@ void Graphics::init(HWND hWnd, int initWidth, int initHeight)
 	if FAILED(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), &dxgiFactory))
 		assert(false);
 
-	if FAILED(dxgiFactory->CreateSwapChain(pDevice.Get(), &sd, pSwap.ReleaseAndGetAddressOf()))
+	if FAILED(dxgiFactory->CreateSwapChain(device.Get(), &sd, swapChain.ReleaseAndGetAddressOf()))
 		assert(false);
 
 
@@ -101,6 +101,7 @@ void Graphics::init(HWND hWnd, int initWidth, int initHeight)
 	dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
 
 	OnResize(initWidth, initHeight);
+
 }
 
 void Graphics::UpdateClientSizeVars()
@@ -114,15 +115,15 @@ void Graphics::OnResize(int newWidth, int newHeight)
 	this->height = newHeight;
 	UpdateClientSizeVars();
 
-	pRTV.Reset();
-	pDSV.Reset();
-	pDSBuffer.Reset();
+	renderTargetView.Reset();
+	depthStencilView.Reset();
+	depthStencilBuffer.Reset();
 
-	DX::ThrowIfFailed(pSwap->ResizeBuffers(1, width, height, m_BackBufferFormat, 0));
+	DX::ThrowIfFailed(swapChain->ResizeBuffers(1, width, height, backBufferFormat, 0));
 
 	wrl::ComPtr<ID3D11Texture2D> backBuffer;
-	DX::ThrowIfFailed(pSwap->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.GetAddressOf())));
-	DX::ThrowIfFailed(pDevice->CreateRenderTargetView(backBuffer.Get(), 0, pRTV.ReleaseAndGetAddressOf()));
+	DX::ThrowIfFailed(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.GetAddressOf())));
+	DX::ThrowIfFailed(device->CreateRenderTargetView(backBuffer.Get(), 0, renderTargetView.ReleaseAndGetAddressOf()));
 
 	backBuffer.Reset();
 
@@ -132,34 +133,34 @@ void Graphics::OnResize(int newWidth, int newHeight)
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.Width = width;
 	depthStencilDesc.Height = height;
-	depthStencilDesc.Format = m_DepthStencilBufferFormat;
-	depthStencilDesc.SampleDesc.Count = M_MSAASampleCount;
-	depthStencilDesc.SampleDesc.Quality = m_MSAAQuality - 1;
+	depthStencilDesc.Format = depthStencilBufferFormat;
+	depthStencilDesc.SampleDesc.Count = msaaSampleCount;
+	depthStencilDesc.SampleDesc.Quality = msaaQuality - 1;
 	depthStencilDesc.Usage = D3D11_USAGE_DEFAULT;
 	depthStencilDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags = 0;
 
-	DX::ThrowIfFailed(pDevice->CreateTexture2D(&depthStencilDesc, 0, pDSBuffer.ReleaseAndGetAddressOf()));
+	DX::ThrowIfFailed(device->CreateTexture2D(&depthStencilDesc, 0, depthStencilBuffer.ReleaseAndGetAddressOf()));
 
 
 	CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc = CD3D11_DEPTH_STENCIL_VIEW_DESC(
-		pDSBuffer.Get(),
-		M_MSAASampleCount > 1 ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D,
-		m_DepthStencilViewFormat);
+		depthStencilBuffer.Get(),
+		msaaSampleCount > 1 ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D,
+		depthStencilViewFormat);
 
-	DX::ThrowIfFailed(pDevice->CreateDepthStencilView(pDSBuffer.Get(), &depthStencilViewDesc, pDSV.ReleaseAndGetAddressOf()));
+	DX::ThrowIfFailed(device->CreateDepthStencilView(depthStencilBuffer.Get(), &depthStencilViewDesc, depthStencilView.ReleaseAndGetAddressOf()));
 
-	pContext->OMSetRenderTargets(1, pRTV.GetAddressOf(), pDSV.Get());
+	immediateContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
 
-	m_ScreenViewport.TopLeftX = 0.0f;
-	m_ScreenViewport.TopLeftY = 0.0f;
-	m_ScreenViewport.MinDepth = 0.0f;
-	m_ScreenViewport.MaxDepth = 1.0f;
-	m_ScreenViewport.Width = static_cast<float>(width);
-	m_ScreenViewport.Height = static_cast<float>(height);
+	screenViewport.TopLeftX = 0.0f;
+	screenViewport.TopLeftY = 0.0f;
+	screenViewport.MinDepth = 0.0f;
+	screenViewport.MaxDepth = 1.0f;
+	screenViewport.Width = static_cast<float>(width);
+	screenViewport.Height = static_cast<float>(height);
 
-	pContext->RSSetViewports(1, &m_ScreenViewport);
+	immediateContext->RSSetViewports(1, &screenViewport);
 }
 
 void Graphics::Draw()
@@ -170,7 +171,7 @@ void Graphics::Draw()
 void Graphics::EndFrame()
 {
 	HRESULT hr;
-	if (FAILED(hr = pSwap->Present(0, 0)))
+	if (FAILED(hr = swapChain->Present(0, 0)))
 	{
 		//throw hr
 	}
@@ -189,10 +190,10 @@ int Graphics::GetHeight()
 
 ID3D11DeviceContext * Graphics::GetContext()
 {
-	return pContext.Get();
+	return immediateContext.Get();
 }
 
 ID3D11Device * Graphics::GetDevice()
 {
-	return pDevice.Get();
+	return device.Get();
 }

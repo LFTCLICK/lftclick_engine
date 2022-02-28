@@ -9,6 +9,9 @@
 
   },
   "2": {
+    "onlyUVOverrides": false,
+    "xScale" : 0.5,
+    "yScale" : 0.25,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -20,16 +23,15 @@
       },
       {
         "pos": [ 0.5, 0.5, 0 ],
-        "uv": [ 0.25, 0 ]
+        "uv": [ 1, 0 ]
       },
       {
         "pos": [ 0.5, -0.5, 0 ],
-        "uv": [ 0.25, 1 ]
+        "uv": [ 1, 1 ]
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "scale": 1,
-    "image": "Resources\\images\\playerTrial.png"
+    "image": "Resources\\images\\player_sprite_sheet.png"
   },
   "5": {
     "speed": 0,
@@ -48,9 +50,38 @@
     "deleteOnCollison": false
   },
   "6": {
-    "spriteSheetWidth": 4,
-    "spriteSheetHeight": 1,
-    "frameTime": 0.25
+    "spriteSheetWidth": 2,
+    "spriteSheetHeight": 4,
+    "animations": [
+      {
+        "name": "idlePlayerRight",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "right"
+      },
+      {
+        "name": "movingPlayerRight",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "right"
+      },
+      {
+        "name": "idlePlayerLeft",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "left"
+      },
+      {
+        "name": "movingPlayerLeft",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "left"
+      }
+    ]
   },
   "7": {
     "playerSpeed": 350
@@ -60,7 +91,7 @@
       {
         "name": ".\\Resources\\sounds\\walking.mp3",
         "loop": true,
-        "volume": 25,
+        "volume": 0,
         "playEvents": [
           1001
         ],

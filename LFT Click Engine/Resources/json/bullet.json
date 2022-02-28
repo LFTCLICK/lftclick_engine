@@ -9,6 +9,9 @@
 
   },
   "2": {
+    "onlyUVOverrides": false,
+    "xScale": 0.2,
+    "yScale": 1,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -20,16 +23,16 @@
       },
       {
         "pos": [ 0.5, 0.5, 0 ],
-        "uv": [ 0.2, 0 ]
+        "uv": [ 1, 0 ]
       },
       {
         "pos": [ 0.5, -0.5, 0 ],
-        "uv": [ 0.2, 1 ]
+        "uv": [ 1, 1 ]
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
-    "image": "Resources\\images\\bulletSprite.png"
+    "image": "Resources\\images\\bullet.png"
   },
   "13": {
     "center": [ 0.0, 0.0, 0.0 ],
@@ -41,5 +44,10 @@
     "animationTime": 1,
     "speed": 500,
     "keepAliveTime": 3
+  },
+  "6": {
+    "spriteSheetWidth": 5,
+    "spriteSheetHeight": 1,
+    "frameTime": 0.05
   }
 }

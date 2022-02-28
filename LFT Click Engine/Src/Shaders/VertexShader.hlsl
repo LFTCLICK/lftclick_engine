@@ -1,10 +1,11 @@
 cbuffer cbuff
 {
-	matrix transform;
-	float xOffset;
-	float yOffset;
+	row_major matrix transform;
+	float2 Offset;
+	float2 Scale;
 	float xFlip;
 	float alphaOverride;
+	float2 padding;
 };
 struct VSOut
 {
@@ -18,7 +19,7 @@ VSOut main(float3 pos : Position, /*float3 normal : NORMAL,*/ float2 tex : TEXCO
 	VSOut vso;
 	vso.pos = mul(float4(pos, 1.0f), transform);
 	//vso.norm = normal;
-	vso.tex = float2(xFlip * (tex.x + xOffset), tex.y + yOffset);
+	vso.tex = float2(xFlip * ((Scale.x * tex.x) + Offset.x), (Scale.y * tex.y) + Offset.y);
 	vso.alphaOverride = alphaOverride;
 	return vso;
 }

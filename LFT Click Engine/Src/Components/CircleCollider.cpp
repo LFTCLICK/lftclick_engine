@@ -70,9 +70,7 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 				//EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(toCheck->tag));
 				//EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, toCheckPos));
 
-
-				if (deleteOnCollison)
-					parent->isActive = false;
+				if (deleteOnCollison) parent->isDeletable = true;
 			}
 			
 		}

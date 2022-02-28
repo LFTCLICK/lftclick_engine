@@ -8,25 +8,28 @@
     "zPos": 10
   },
   "2": {
-    "vertices" : [
-    {
-        "pos": [-0.5,-0.5,0],
-        "uv": [0,1]
-    },
-    {
-        "pos": [-0.5,0.5,0],
-        "uv": [0,0]
-    },
-    {
-        "pos": [0.5,0.5,0],
-        "uv": [0.25,0]
-    },
-    {
-        "pos": [0.5,-0.5,0],
-        "uv": [0.25,1]
-    }
+    "onlyUVOverrides": false,
+    "xScale": 0.25,
+    "yScale": 1,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
     ],
-    "indicies": [0, 1, 2, 2, 3, 0],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
     "image": "Resources\\images\\title.png"
 
@@ -35,5 +38,17 @@
     "spriteSheetWidth": 4,
     "spriteSheetHeight": 1,
     "frameTime": 0.15
+  },
+  "6": {
+    "spriteSheetWidth": 4,
+    "spriteSheetHeight": 1,
+    "animations": [
+      {
+        "name": "idle",
+        "length": 4,
+        "frameDuration": 0.15,
+        "onIdle": true
+      }
+    ]
   }
 }

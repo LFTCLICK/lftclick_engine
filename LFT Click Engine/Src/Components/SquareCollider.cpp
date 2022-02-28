@@ -85,8 +85,6 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 				}
 				else
 				{
-					EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(toCheck->tag));
-
 					DirectX::SimpleMath::Vector2 delta;
 					DirectX::XMVECTOR difference = DirectX::XMVectorSubtract(myPos, toCheckPos);
 					difference.m128_f32[0] = fabs(difference.m128_f32[0]) - ((width + toCheckCollider->width) / 2);
@@ -119,11 +117,9 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 					}
 					EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, delta));
 				}
-				if (deleteOnCollison)
-					parent->isActive = false;
+				if (deleteOnCollison) parent->isDeletable = true;
 			}
 		}
-		
 	}
 }
 
