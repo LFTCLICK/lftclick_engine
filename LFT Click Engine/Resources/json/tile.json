@@ -2,8 +2,8 @@
   "1": {
     "startX": 0.0,
     "startY": 0.0,
-    "scaleX": 256,
-    "scaleY": 256,
+    "scaleX": 100,
+    "scaleY": 100,
     "rot": 0,
     "zPos": 10
   },
@@ -34,10 +34,13 @@
 
   },
   "4": {
-    "center": [0.0, -0.0, 0.0],
-    "width": 256,
-    "height": 256,
+    "center": [ 0.0, -0.0, 0.0 ],
+    "width": 100,
+    "height": 100,
     "trigger": false,
     "deleteOnCollison": false
+  },
+  "12": {
+    "health": 2
   }
 }

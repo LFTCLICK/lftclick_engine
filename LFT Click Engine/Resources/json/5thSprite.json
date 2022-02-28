@@ -55,4 +55,14 @@
   "12": {
     "health": 1
   }
-}
+} 
+
+
+
+
+//"13": {
+//    "center": [ 0.0, -0.0, 0.0 ],
+//    "radius": 70,
+//    "trigger": true,
+//    "deleteOnCollison": false
+//  },

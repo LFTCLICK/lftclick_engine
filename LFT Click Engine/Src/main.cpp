@@ -113,7 +113,6 @@ int main(int argc, char* args[])
 		//if (playGame)
 		if (true)
 		{
-
 			std::fstream other("./Resources/json/demo.json");
 			json dataJson2;
 			other >> dataJson2;
@@ -121,6 +120,7 @@ int main(int argc, char* args[])
 			gom->Deserialize(gof, dataJson2);
 			GameObject* playerObj = gom->FindObjectOfTag("player");
 			GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
+
 			//gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0;
