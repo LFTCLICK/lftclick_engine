@@ -14,6 +14,13 @@
 #include "Drawable.h"
 
 using json = nlohmann::json;
+
+struct AnimationInfo {
+	std::string name;
+	int length, row;
+	float frameDuration = 1.f;
+};
+
 class SpriteAnimator : public Component
 {
 public:
@@ -24,12 +31,30 @@ public:
 	virtual int getCompId() override { return ComponentType::SPRITE_ANIMATOR; };
 
 	virtual Component* Clone(GameObject* newParent);
-	SpriteAnimator() {};
+	SpriteAnimator() : wasMoving(false), currentFrame(0), currentAnimationIndex(0), idleAnimationIndex(-1), moveAnimationIndex(-1), direction("right") {}
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+
+public:
+	void UpdateDirection();
+	void UpdateState();
+	void UpdateFrame();
+	void SwitchAnimation(int index);
+	void SwitchAnimation(std::string name);
 
 private:
 	GameObject* parent;
 	Drawable* draw;
-	float frameTime, offset, timer;
-	int spriteSheetWidth, spriteSheetHeight;
+	Transform* trans;
+
+	DirectX::SimpleMath::Vector2 oldPosition, position;
+
+	std::map<int, AnimationInfo> animations;
+	std::map<std::string, int> moveAnimationIndices;
+	std::map<std::string, int> idleAnimationIndices;
+
+	std::string oldDirection, direction;
+
+	float xOffset, yOffset, timer;
+	int spriteSheetWidth, spriteSheetHeight, currentFrame, currentAnimationIndex, idleAnimationIndex, moveAnimationIndex;
+	bool wasMoving;
 };

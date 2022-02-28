@@ -39,7 +39,7 @@
       {
         "name": ".\\Resources\\music\\background.mp3",
         "loop": true,
-        "volume": 12,
+        "volume": 0,
         "playEvents": [
           1000
         ]
