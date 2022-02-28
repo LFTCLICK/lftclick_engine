@@ -55,65 +55,75 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 {
 	if (toCheck != parent)
 	{
-		SquareCollider* toCheckCollider = toCheck->getComponent<SquareCollider>();
-		DirectX::XMVECTOR myPos = DirectX::XMVectorAdd(parent->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&center));
-		DirectX::XMVECTOR toCheckPos = DirectX::XMVectorAdd(toCheck->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&toCheckCollider->center));
-		
-		DirectX::XMFLOAT2 myPosf;
-		DirectX::XMStoreFloat2(&myPosf, myPos);
-
-		DirectX::XMFLOAT2 toCheckPosf;
-		DirectX::XMStoreFloat2(&toCheckPosf, toCheckPos);
-
-		DirectX::SimpleMath::Rectangle a = DirectX::SimpleMath::Rectangle(myPosf.x-(width/2), myPosf.y-(height/2), width, height);
-		DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(toCheckPosf.x-(toCheckCollider->width/2), toCheckPosf.y-(toCheckCollider->height/2),
-			toCheckCollider->width, toCheckCollider->height);
-
-		bool intersects = a.Intersects(b);
-
-		if (intersects)
+		if (toCheck->getRawComponentPointer(13))
 		{
-			if (isTrigger)
-			{	
-				EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(parent->tag));
-			}
-			else
+			return;
+		}
+		else
+		{
+			SquareCollider* toCheckCollider = toCheck->getComponent<SquareCollider>();
+			DirectX::XMVECTOR myPos = DirectX::XMVectorAdd(parent->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&center));
+			DirectX::XMVECTOR toCheckPos = DirectX::XMVectorAdd(toCheck->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&toCheckCollider->center));
+
+			DirectX::XMFLOAT2 myPosf;
+			DirectX::XMStoreFloat2(&myPosf, myPos);
+
+			DirectX::XMFLOAT2 toCheckPosf;
+			DirectX::XMStoreFloat2(&toCheckPosf, toCheckPos);
+
+			DirectX::SimpleMath::Rectangle a = DirectX::SimpleMath::Rectangle(myPosf.x - (width / 2), myPosf.y - (height / 2), width, height);
+			DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(toCheckPosf.x - (toCheckCollider->width / 2), toCheckPosf.y - (toCheckCollider->height / 2),
+				toCheckCollider->width, toCheckCollider->height);
+
+			bool intersects = a.Intersects(b);
+
+			if (intersects)
 			{
-				DirectX::SimpleMath::Vector2 delta;
-				DirectX::XMVECTOR difference = DirectX::XMVectorSubtract(myPos, toCheckPos);
-				difference.m128_f32[0] = fabs(difference.m128_f32[0]) - ((width + toCheckCollider->width) / 2);
-				difference.m128_f32[1] = fabs(difference.m128_f32[1]) - ((height + toCheckCollider->height) / 2);
-				if (difference.m128_f32[1] > difference.m128_f32[0])
+				if (isTrigger)
 				{
-					if (myPos.m128_f32[1] < toCheckPos.m128_f32[1])
-					{
-						delta = DirectX::SimpleMath::Vector2(0.0f, -difference.m128_f32[1]);
-					}
-					else
-					{
-						delta = DirectX::SimpleMath::Vector2(0.0f, difference.m128_f32[1]);
-					}
+					EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(parent->tag));
 				}
 				else
 				{
-					if (myPos.m128_f32[0] < toCheckPos.m128_f32[0])
+					//EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(toCheck->tag));
+
+					DirectX::SimpleMath::Vector2 delta;
+					DirectX::XMVECTOR difference = DirectX::XMVectorSubtract(myPos, toCheckPos);
+					difference.m128_f32[0] = fabs(difference.m128_f32[0]) - ((width + toCheckCollider->width) / 2);
+					difference.m128_f32[1] = fabs(difference.m128_f32[1]) - ((height + toCheckCollider->height) / 2);
+					if (difference.m128_f32[1] > difference.m128_f32[0])
 					{
-						delta = DirectX::SimpleMath::Vector2(-difference.m128_f32[0], 0);
+						if (myPos.m128_f32[1] < toCheckPos.m128_f32[1])
+						{
+							delta = DirectX::SimpleMath::Vector2(0.0f, -difference.m128_f32[1]);
+						}
+						else
+						{
+							delta = DirectX::SimpleMath::Vector2(0.0f, difference.m128_f32[1]);
+						}
 					}
 					else
 					{
-						delta = DirectX::SimpleMath::Vector2(difference.m128_f32[0], 0);
+						if (myPos.m128_f32[0] < toCheckPos.m128_f32[0])
+						{
+							delta = DirectX::SimpleMath::Vector2(-difference.m128_f32[0], 0);
+						}
+						else
+						{
+							delta = DirectX::SimpleMath::Vector2(difference.m128_f32[0], 0);
+						}
 					}
+					if (difference.m128_f32[1] > 0.1 || difference.m128_f32[1] < 0.1)
+					{
+						int a = 0;
+					}
+					EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, delta));
 				}
-				if (difference.m128_f32[1] > 0.1 || difference.m128_f32[1] < 0.1)
-				{
-					int a = 0;
-				}
-				EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, delta));
+				if (deleteOnCollison)
+					parent->isActive = false;
 			}
-			if (deleteOnCollison)
-				parent->isActive = false;
 		}
+		
 	}
 }
 

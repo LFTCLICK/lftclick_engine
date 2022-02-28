@@ -2,8 +2,8 @@
   "1": {
     "startX": 0.5,
     "startY": 0.5,
-    "scaleX": 32,
-    "scaleY": 32,
+    "scaleX": 15,
+    "scaleY": 15,
     "rot": 0,
     "zPos": 5
 
@@ -29,12 +29,11 @@
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
-    "image": "Resources\\images\\bullet.png"
+    "image": "Resources\\images\\bulletSprite.png"
   },
-  "4": {
+  "13": {
     "center": [ 0.0, 0.0, 0.0 ],
-    "width": 32,
-    "height": 32,
+    "radius": 5,
     "trigger": true,
     "deleteOnCollison": true
   },
@@ -42,10 +41,5 @@
     "animationTime": 1,
     "speed": 500,
     "keepAliveTime": 3
-  },
-  "6": {
-    "spriteSheetWidth": 5,
-    "spriteSheetHeight": 1,
-    "frameTime": 0.05
   }
 }

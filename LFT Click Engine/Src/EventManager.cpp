@@ -74,6 +74,11 @@ void EventManager::ProcessCollision()
 		for (std::list<GameObject*>::iterator innerLoop = outerLoop->second.begin(); innerLoop != outerLoop->second.end(); innerLoop++)
 		{
 			gom->DoCollision(*innerLoop);
+
+
+			// Last option fix
+			/*if ((*innerLoop)->isActive)
+				gom->DoCollision(*innerLoop);*/
 		}
 	}
 }

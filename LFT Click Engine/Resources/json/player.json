@@ -2,8 +2,8 @@
   "1": {
     "startX": 0.5,
     "startY": 0.5,
-    "scaleX": 64,
-    "scaleY": 64,
+    "scaleX": 80,
+    "scaleY": 80,
     "rot": 0,
     "zPos": 5
 
@@ -29,7 +29,7 @@
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
-    "image": "Resources\\images\\player_sprite_sheet.png"
+    "image": "Resources\\images\\playerTrial.png"
   },
   "5": {
     "speed": 0,
@@ -42,8 +42,8 @@
   },
   "4": {
     "center": [ 0.0, 0.0, 0.0 ],
-    "width": 64,
-    "height": 64,
+    "width": 40,
+    "height": 50,
     "trigger": false,
     "deleteOnCollison": false
   },

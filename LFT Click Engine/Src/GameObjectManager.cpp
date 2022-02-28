@@ -13,6 +13,7 @@
 #include "Components\Collider.h"
 #include "Components\MeshCollider.h"
 #include "Components\SquareCollider.h"
+#include "Components\CircleCollider.h"
 
 GameObjectManager::GameObjectManager()
 {
@@ -57,6 +58,8 @@ void GameObjectManager::DoCollision(GameObject* toCheckWith)
 		if (g->isActive && g!=toCheckWith)
 		{
 			Collider* s = dynamic_cast<Collider*>(g->getComponent<MeshCollider>());
+			if (s == nullptr)
+				s = dynamic_cast<Collider*>(g->getComponent<CircleCollider>());
 			if (s == nullptr)
 				s = dynamic_cast<Collider*>(g->getComponent<SquareCollider>());
 			if (s != nullptr)

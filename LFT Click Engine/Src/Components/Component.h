@@ -28,7 +28,8 @@ public:
 		BULLET, 
 		GUN, 
 		FOLLOW_MOUSE, 
-		DAMAGEABLE
+		DAMAGEABLE,
+		CIRCLE_COLLIDER
 	};
 
 	Component();

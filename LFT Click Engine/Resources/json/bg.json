@@ -1,7 +1,7 @@
 {
   "1": {
-    "startX": 0.5,
-    "startY": 0.5,
+    "startX": 0,
+    "startY": 0,
     "scaleX": 2560,
     "scaleY": 2560,
     "rot": 0,
@@ -28,7 +28,7 @@
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
-    "image": "Resources\\images\\bg.png"
+    "image": "Resources\\images\\bg4.png"
 
   },
   "8": {
