@@ -124,7 +124,7 @@ int main(int argc, char* args[])
 			//gom->Start();
 			isRunning = true;
 			unsigned int lastTime = 0;
-			FrameRateController::getInstance().Init(6);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
+			FrameRateController::getInstance().Init(144);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
 			while (isRunning)
 			{
 				FrameRateController::getInstance().Tick();
