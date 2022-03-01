@@ -81,7 +81,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 			{
 				if (isTrigger)
 				{
-					EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(parent->tag));
+					toCheck->HandleMessage(new DamageCollisionMessage(parent->tag, parent));
 				}
 				else
 				{
@@ -115,7 +115,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 					{
 						int a = 0;
 					}
-					EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, delta));
+					toCheck->HandleMessage(new CollisionMessage(parent->tag, parent, delta));
 				}
 				if (deleteOnCollison) parent->isDeletable = true;
 			}

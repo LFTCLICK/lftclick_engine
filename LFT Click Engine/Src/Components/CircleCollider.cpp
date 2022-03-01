@@ -66,7 +66,7 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 			if (circleDistance.x <= toCheck->getComponent<SquareCollider>()->width / 2
 				|| circleDistance.y <= toCheck->getComponent<SquareCollider>()->height / 2)
 			{
-				EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(parent->tag));
+				toCheck->HandleMessage(new DamageCollisionMessage(parent->tag, parent));
 				//EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(toCheck->tag));
 				//EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, toCheckPos));
 
@@ -86,8 +86,7 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 
 			if (distance <= 0)
 			{
-				EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(parent->tag));
-
+				toCheck->HandleMessage(new DamageCollisionMessage(parent->tag, parent));
 				if (deleteOnCollison)
 					parent->isActive = false;
 			}
