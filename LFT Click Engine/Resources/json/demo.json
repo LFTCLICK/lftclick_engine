@@ -31,6 +31,21 @@
       "overrides": []
     },
     {
+      "object": "tile",
+      "overrides": [
+        {
+          "1": {
+            "startX": 100,
+            "startY": 200,
+            "scaleX": 128,
+            "scaleY": 128,
+            "rot": 0,
+            "zPos": 10
+          }
+        }
+      ]
+    },
+    {
       "object": "5thSprite",
       "overrides": [
         {
