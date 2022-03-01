@@ -54,3 +54,8 @@ namespace DX
 // Error checking for LUA
 bool CheckLua(lua_State* L, int r);
 
+
+inline DirectX::SimpleMath::Vector2 ToVanceCoords(DirectX::SimpleMath::Vector2 mycoords, float w, float h)
+{
+	return DirectX::SimpleMath::Vector2(mycoords.x + w / 2.0f, -(mycoords.y - h / 2.0f));
+}

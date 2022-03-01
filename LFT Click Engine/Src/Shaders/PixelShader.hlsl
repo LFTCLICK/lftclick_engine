@@ -1,19 +1,21 @@
-Texture2D tex;
-SamplerState splr;
-
+Texture2D diffuse;
+SamplerState samState;
 
 struct VSOut
 {
-	float2 tc : TEXCOORD;
+	float2 tex : TEXCOORD;
 	float4 pos : SV_Position;
-	//float3 norm : NORMAL;
+	float alphaOverride : FOG;
 };
-float4 main(float2 tc : TEXCOORD, float alphaOverride : FOG) : SV_Target
+
+float4 main(VSOut pin) : SV_Target
 {
-	float4 textureColor = tex.Sample(splr,tc);
+	float4 textureColor = diffuse.Sample(samState, pin.tex);
+
 	clip(textureColor.a < 0.1f ? -1 : 1);
-	if (textureColor.a > 0 && alphaOverride < .99)
-		textureColor.a *= alphaOverride;
+
+	if (textureColor.a > 0 && pin.alphaOverride < .99)
+		textureColor.a *= pin.alphaOverride;
+
 	return textureColor;
-//return float4(vs.norm,1.0);
 }

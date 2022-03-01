@@ -387,6 +387,28 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\json\5thSprite.json" />
+    <None Include="Resources\json\background_music.json" />
+    <None Include="Resources\json\bg.json" />
+    <None Include="Resources\json\bullet.json" />
+    <None Include="Resources\json\camera.json" />
+    <None Include="Resources\json\camera2.json" />
+    <None Include="Resources\json\camera_background.json" />
+    <None Include="Resources\json\controls.json" />
+    <None Include="Resources\json\credits.json" />
+    <None Include="Resources\json\crosshairs.json" />
+    <None Include="Resources\json\demo.json" />
+    <None Include="Resources\json\floor.json" />
+    <None Include="Resources\json\invin.json" />
+    <None Include="Resources\json\menu.json" />
+    <None Include="Resources\json\player.json" />
+    <None Include="Resources\json\prefabs.json" />
+    <None Include="Resources\json\sign.json" />
+    <None Include="Resources\json\slow.json" />
+    <None Include="Resources\json\spike.json" />
+    <None Include="Resources\json\tile.json" />
+    <None Include="Resources\json\title.json" />
+    <None Include="Resources\json\turret.json" />
     <None Include="Resources\LuaScripts\ConfigurationScript.lua" />
   </ItemGroup>
   <ItemGroup>

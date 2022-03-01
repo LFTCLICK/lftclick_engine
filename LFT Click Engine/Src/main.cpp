@@ -90,10 +90,6 @@ int main(int argc, char* args[])
 	ImGui_ImplSDL2_InitForD3D(pWindow);
 	ImGui_ImplDX11_Init(Graphics::getInstance().GetDevice(), Graphics::getInstance().GetContext());
 
-	std::fstream data("Resources/json/menu.json");
-	json dataJson;
-	data >> dataJson;
-	data.close();
 
 	GameObjectManager* gom = &GameObjectManager::getInstance();
 	EventManager::getInstance().init(gom);
@@ -110,93 +106,87 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 	while (masterLoop)
 	{
-		//if (playGame)
-		if (true)
+
+		std::fstream other("./Resources/json/demo.json");
+		json dataJson2;
+		other >> dataJson2;
+		other.close();
+
+		gom->Deserialize(gof, dataJson2);
+
+		GameObject* playerObj = gom->FindObjectOfTag("player");
+		GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
+
+		//gom->Start();
+		isRunning = true;
+		unsigned int lastTime = 0;
+		FrameRateController::getInstance().Init(144);
+		while (isRunning)
 		{
-			std::fstream other("./Resources/json/demo.json");
-			json dataJson2;
-			other >> dataJson2;
-			other.close();
-			gom->Deserialize(gof, dataJson2);
-			GameObject* playerObj = gom->FindObjectOfTag("player");
-			GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
+			FrameRateController::getInstance().Tick();
 
-			//gom->Start();
-			isRunning = true;
-			unsigned int lastTime = 0;
-			FrameRateController::getInstance().Init(144);//if there has been a considerable gap between EndOfFrame and StartOfFrame call this first so that the first delta time isn't absurdly long
-			while (isRunning)
+			ImGui_ImplDX11_NewFrame();
+			ImGui_ImplSDL2_NewFrame();
+			ImGui::NewFrame();
+
+			SDL_Event e;
+			while (SDL_PollEvent(&e) != 0)
 			{
-				FrameRateController::getInstance().Tick();
-
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplSDL2_NewFrame();
-				ImGui::NewFrame();
-
-				SDL_Event e;
-				while (SDL_PollEvent(&e) != 0)//must be called before input manager
+				if (e.type == SDL_QUIT)
 				{
-					if (e.type == SDL_QUIT)
-					{
-						isRunning = false;
-						playGame = false;
-						doMenu = false;
-						masterLoop = false;
-					}
-					if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
-					{
-						windowWidth = e.window.data1;
-						windowHeight = e.window.data2;
-						SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
-						Graphics::getInstance().OnResize(windowWidth, windowHeight);
-					}
+					isRunning = false;
+					playGame = false;
+					doMenu = false;
+					masterLoop = false;
 				}
-				AudioManager::getInstance().Update();
-				InputManager::getInstance().Update();
-				gom->Update();//update gameobjects
-				EventManager::getInstance().ProcessCollision();
-				//gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
-				EventManager::getInstance().Update();//process timed events
-				Graphics::getInstance().ClearBuffer(0x7CA3FF);
-
-				g_debugRenderer->DrawLine(SimpleMath::Vector2(0.0f, 0.0f), SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2));
-				g_debugRenderer->DrawLine(SimpleMath::Vector2(Graphics::getInstance().GetWidth(), 0.0f), SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2));
-
-				g_debugRenderer->DrawQuad(SimpleMath::Vector2(100.0f, 50.0f), SimpleMath::Vector2(150.0f, 50.0f),
-					SimpleMath::Vector2(150.0f, 100.0f), SimpleMath::Vector2(100.0f, 100.0f));
-
-				g_debugRenderer->DrawCircle(SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2), 100.0f, 50);
-
-				gom->Draw();
-
-				g_debugRenderer->Draw(&Graphics::getInstance());
-
-
-				bool open = true;
-
-				ImGui::SetNextWindowPos({ 0,0 });
-				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-				ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
-				ImGui::End();
-
-
-				ImGui::Render();
-				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-				Graphics::getInstance().EndFrame();
-
+				if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
+				{
+					windowWidth = e.window.data1;
+					windowHeight = e.window.data2;
+					SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
+					Graphics::getInstance().OnResize(windowWidth, windowHeight);
+				}
 			}
+			AudioManager::getInstance().Update();
+			InputManager::getInstance().Update();
+			gom->Update();
+			EventManager::getInstance().ProcessCollision();
+			//gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
+			EventManager::getInstance().Update();
 
-			gom->DeleteAll();
+			Graphics::getInstance().PrepareForRendering();
 
-			EventManager::getInstance().Reset();
-			GameManager::getInstance().playerDead = false;
-			GameManager::getInstance().playerRestart = false;
-			GameManager::getInstance().playerScore = 0;
+			gom->Draw();
+
+			g_debugRenderer->DrawCircle(ToVanceCoords(playerObj->getComponent<Transform>()->position,
+				windowWidth, windowHeight),
+				30.0f, 50.0f);
+
+			g_debugRenderer->Draw(&Graphics::getInstance());
+
+
+			bool open = true;
+
+			ImGui::SetNextWindowPos({ 0,0 });
+			ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+			ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
+			ImGui::End();
+
+
+			ImGui::Render();
+			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+			Graphics::getInstance().PresentFrame();
 
 		}
 
-		// Cleanup
-		//gom->DeleteAll();
+		gom->DeleteAll();
+
+		EventManager::getInstance().Reset();
+		GameManager::getInstance().playerDead = false;
+		GameManager::getInstance().playerRestart = false;
+		GameManager::getInstance().playerScore = 0;
+
+
 		ImGui_ImplDX11_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();

@@ -1,3 +1,12 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	ConstantBuffer.h
+// Author			:	Abhijit Zala
+// Creation Date	:	2022/02/26
+// Purpose			:	Wrapper around creating/binding/updating constant buffers
+// History			:
+// ---------------------------------------------------------------------------
+
 #pragma once
 
 #include <wrl\client.h>

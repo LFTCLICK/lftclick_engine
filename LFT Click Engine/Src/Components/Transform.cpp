@@ -17,9 +17,9 @@ Transform::Transform() : isMoving(false)
 void Transform::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	this->parent = parent;
-	pos = DirectX::SimpleMath::Vector2(0.0f, 0.0f);
-	pos.x = j["startX"];
-	pos.y = j["startY"];
+	position = DirectX::SimpleMath::Vector2(0.0f, 0.0f);
+	position.x = j["startX"];
+	position.y = j["startY"];
 	scale.x = j["scaleX"];
 	scale.y = j["scaleY"];
 	rotation = j["rot"];
@@ -30,7 +30,7 @@ Component * Transform::Clone(GameObject* newParent)
 {
 	Transform* toReturn = new Transform();
 	toReturn->parent = newParent;
-	toReturn->pos = pos;
+	toReturn->position = position;
 	toReturn->scale = scale;
 	toReturn->rotation = rotation;
 	toReturn->m = m;
@@ -40,24 +40,24 @@ Component * Transform::Clone(GameObject* newParent)
 
 void Transform::Init(DirectX::SimpleMath::Vector2 const & v)
 {
-	pos = DirectX::SimpleMath::Vector2(v);
+	position = DirectX::SimpleMath::Vector2(v);
 }
 
 void Transform::Move(float deltaX, float deltaY)
 {
-	pos.x += deltaX;
-	pos.y += deltaY;
+	position.x += deltaX;
+	position.y += deltaY;
 }
 
 void Transform::SetPos(float newX, float newY)
 {
-	pos.x = newX;
-	pos.y = newY;
+	position.x = newX;
+	position.y = newY;
 }
 void Transform::SetPos(float newX, float newY, float newZ)
 {
-	pos.x = newX;
-	pos.y = newY;
+	position.x = newX;
+	position.y = newY;
 	zPos = newZ;
 }
 
@@ -72,12 +72,12 @@ void Transform::Start()
 
 void Transform::Update()
 {
-	if (pos.x != oldPos.x || pos.y != oldPos.y) {
+	if (position.x != oldPos.x || position.y != oldPos.y) {
 		if (!isMoving) isMoving = true;
-		lastMovement.x = pos.x - oldPos.x;
-		lastMovement.y = pos.y - oldPos.y;
-		oldPos.x = pos.x;
-		oldPos.y = pos.y;
+		lastMovement.x = position.x - oldPos.x;
+		lastMovement.y = position.y - oldPos.y;
+		oldPos.x = position.x;
+		oldPos.y = position.y;
 	}
 	else if (isMoving) {
 		lastMovement.x = lastMovement.y = 0;
@@ -96,22 +96,22 @@ void Transform::HandleMessage(Message * e)
 
 DirectX::SimpleMath::Vector2 Transform::CurrentPos()
 {
-	return pos;
+	return position;
 }
 
 DirectX::XMFLOAT4X4 Transform::GetXMMatrix()
 {
-	DirectX::XMMATRIX temp = DirectX::XMMatrixScaling(scale.x, scale.y, 1) * DirectX::XMMatrixRotationRollPitchYaw(0, 0, rotation) * DirectX::XMMatrixTranslation(pos.x, pos.y, zPos) * DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX temp = DirectX::XMMatrixScaling(scale.x, scale.y, 1) *
+		DirectX::XMMatrixRotationRollPitchYaw(0, 0, rotation) *
+		DirectX::XMMatrixTranslation(position.x, position.y, zPos);
+
 	XMStoreFloat4x4(&m, temp);
-	//m = DirectX::XMMatrixTranslation(pos.x, pos.y, 0)*  DirectX::XMMatrixIdentity();
 	return m;
 }
 
 DirectX::XMVECTOR Transform::GetPosXMVector()
 {
-	
-	v = DirectX::XMVectorSet(pos.x, pos.y, 0.0, 1.0);
-	return v;
+	return DirectX::XMVectorSet(position.x, position.y, 0.0, 1.0);
 }
 
 Transform::~Transform()

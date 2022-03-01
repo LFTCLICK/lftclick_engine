@@ -1,3 +1,12 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	DebugRenderer.h
+// Author			:	Abhijit Zala
+// Creation Date	:	2022/02/26
+// Purpose			:	Debug drawing using DirectXTK
+// History			:
+// ---------------------------------------------------------------------------
+
 #pragma once
 
 #include <PrimitiveBatch.h>
@@ -18,7 +27,7 @@ public:
 	void DrawQuad(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath::Vector2 b,
 			      DirectX::SimpleMath::Vector2 c, DirectX::SimpleMath::Vector2 d);
 
-	void DrawCircle(DirectX::SimpleMath::Vector2 Center, float Radius, short numlines);
+	void DrawCircle(DirectX::SimpleMath::Vector2 center, float radius, short numlines);
 	
 	void Draw(Graphics* graphics);
 

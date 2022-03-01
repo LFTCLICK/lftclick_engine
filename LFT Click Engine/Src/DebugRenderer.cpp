@@ -1,3 +1,13 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	DebugRenderer.cpp
+// Author			:	Abhijit Zala
+// Creation Date	:	2022/02/26
+// Purpose			:	Debug drawing using DirectXTK
+// History			:
+// ---------------------------------------------------------------------------
+
+
 #include "pch.h"
 #include "DebugRenderer.h"
 #include "GameManager.h"
@@ -60,8 +70,7 @@ void DebugRenderer::Draw(Graphics* graphics)
 {
 	basicEffect->SetWorld(XMMatrixIdentity());
 	basicEffect->SetView(XMMatrixIdentity());
-	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0,
-		graphics->GetWidth(), graphics->GetHeight(), 0, 0, 1));
+	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0, graphics->GetWidth(), graphics->GetHeight(), 0, 0, 1));
 
 	basicEffect->SetColorAndAlpha(DirectX::Colors::Red);
 

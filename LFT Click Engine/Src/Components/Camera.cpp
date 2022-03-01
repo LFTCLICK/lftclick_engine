@@ -101,12 +101,12 @@ DirectX::XMVECTOR Camera::getRot()
 
 void Camera::Render()
 {
-	viewMatrix = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
+	viewMatrix = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos); // *DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
 }
 
 void Camera::GetViewMatrix(DirectX::XMMATRIX & toReturn)
 {
-	toReturn = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
+	toReturn = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos); // *DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
 	//toReturn = viewMatrix;
 }
 
@@ -114,7 +114,10 @@ DirectX::XMMATRIX Camera::GetProjectionMatrix()
 {
 	DirectX::XMMATRIX translation;
 	GetViewMatrix(translation);
-	return translation * DirectX::XMMatrixOrthographicLH(Graphics::getInstance().GetWidth(), Graphics::getInstance().GetHeight(), 0.00001f, 1000);
+	
+	return /* translation * */
+		DirectX::XMMatrixOrthographicLH(Graphics::getInstance().GetWidth(), Graphics::getInstance().GetHeight(), 
+			0.01f, 1000);
 }
 
 int Camera::getCompId()
