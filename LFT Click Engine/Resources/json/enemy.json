@@ -5,7 +5,7 @@
     "scaleX": 64,
     "scaleY": 64,
     "rot": 0,
-    "zPos": 10
+    "zPos": 20
   },
   "2": {
     "onlyUVOverrides": false,
@@ -37,20 +37,16 @@
     "center": [ 0.0, -0.0, 0.0 ],
     "width": 64,
     "height": 64,
-    "trigger": true,
+    "trigger": false,
+    "static": false,
     "deleteOnCollison": false
   },
   "12": {
     "health": 3
+  },
+  "103": {
+    "attackTimer": 3.0,
+    "damage": 15.0,
+    "speed": 75.0
   }
-} 
-
-
-
-
-//"13": {
-//    "center": [ 0.0, -0.0, 0.0 ],
-//    "radius": 70,
-//    "trigger": true,
-//    "deleteOnCollison": false
-//  },
+}

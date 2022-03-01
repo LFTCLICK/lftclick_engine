@@ -47,6 +47,7 @@
     "width": 40,
     "height": 50,
     "trigger": false,
+    "static": false,
     "deleteOnCollison": false
   },
   "6": {

@@ -24,6 +24,8 @@
 #include "Components/Gun.h"
 #include "Components/FollowMouse.h"
 #include "Components/Damageable.h"
+#include "Components/Enemy.h"
+#include "Components/Door.h"
 #include <json.hpp>
 #include <string>
 #include <fstream>
@@ -90,6 +92,10 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new Damageable();
 	else if (compID == Component::CIRCLE_COLLIDER)
 		currentComp = new CircleCollider();
+	else if (compID == Component::ENEMY)
+		currentComp = new Enemy();
+	else if (compID == Component::DOOR_OBJ)
+		currentComp = new Door();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

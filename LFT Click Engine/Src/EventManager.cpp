@@ -69,7 +69,7 @@ void EventManager::UnsubscribeFromAllEvents(GameObject* g)
 		{
 			GameObject* obj = *objIt;
 
-			if (g->tag == obj->tag)
+			if (g == obj)
 				objIt = objectListIt->second.erase(objIt);
 			else
 				++objIt;
