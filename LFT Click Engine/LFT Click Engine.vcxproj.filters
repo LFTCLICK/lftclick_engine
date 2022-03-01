@@ -133,7 +133,7 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\CircleCollider.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -250,7 +250,7 @@
     </ClInclude>
     <ClInclude Include="Src\Components\Damageable.h" />
     <ClInclude Include="Src\Components\CircleCollider.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

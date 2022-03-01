@@ -165,6 +165,7 @@ int main(int argc, char* args[])
 				g_debugRenderer->DrawQuad(SimpleMath::Vector2(100.0f, 50.0f), SimpleMath::Vector2(150.0f, 50.0f),
 					SimpleMath::Vector2(150.0f, 100.0f), SimpleMath::Vector2(100.0f, 100.0f));
 
+				g_debugRenderer->DrawCircle(SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2), 100.0f, 50);
 
 				gom->Draw();
 

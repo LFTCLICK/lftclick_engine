@@ -53,3 +53,4 @@ namespace DX
 
 // Error checking for LUA
 bool CheckLua(lua_State* L, int r);
+

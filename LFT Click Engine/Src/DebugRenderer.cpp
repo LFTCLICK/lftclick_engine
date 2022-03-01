@@ -37,6 +37,25 @@ void DebugRenderer::DrawQuad(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath
 	DrawLine(d, a);
 }
 
+void DebugRenderer::DrawCircle(DirectX::SimpleMath::Vector2 Center, float Radius, short numlines)
+{
+	float angle = XMConvertToRadians(360.0f / numlines);
+
+	float cosAngle = cos(angle);
+	float sinAngle = sin(angle);
+
+	SimpleMath::Vector2 vec(Radius, 0);
+
+	for (short i = 0; i < numlines; ++i)
+	{
+		SimpleMath::Vector2 rot(cosAngle*vec.x - sinAngle*vec.y, sinAngle*vec.x + cosAngle*vec.y);
+		rot += Center;
+		vec += Center;
+		DrawLine(vec, rot);
+		vec = rot - Center;
+	}
+}
+
 void DebugRenderer::Draw(Graphics* graphics)
 {
 	basicEffect->SetWorld(XMMatrixIdentity());

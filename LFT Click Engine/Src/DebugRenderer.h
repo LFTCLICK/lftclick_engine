@@ -17,6 +17,8 @@ public:
 
 	void DrawQuad(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath::Vector2 b,
 			      DirectX::SimpleMath::Vector2 c, DirectX::SimpleMath::Vector2 d);
+
+	void DrawCircle(DirectX::SimpleMath::Vector2 Center, float Radius, short numlines);
 	
 	void Draw(Graphics* graphics);
 
