@@ -20,6 +20,8 @@ public:
 
 	virtual Component* Clone(GameObject* newParent) = 0;
 	virtual void CollisionCheck(GameObject* toCheck) = 0;
+
+	//static DirectX::SimpleMath::Vector2 ProcessCollision(Collider* a, Collider* b);
 protected:
 	bool isTrigger;
 
