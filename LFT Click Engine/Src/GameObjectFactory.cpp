@@ -15,6 +15,7 @@
 #include "Components/Drawable.h"
 #include "Components/MeshCollider.h"
 #include "Components/SquareCollider.h"
+#include "Components/CircleCollider.h"
 #include "Components/Camera.h"
 #include "Components/Audible.h"
 #include "Components/SpriteAnimator.h"
@@ -87,6 +88,8 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new FollowMouse();
 	else if (compID == Component::DAMAGEABLE)
 		currentComp = new Damageable();
+	else if (compID == Component::CIRCLE_COLLIDER)
+		currentComp = new CircleCollider();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

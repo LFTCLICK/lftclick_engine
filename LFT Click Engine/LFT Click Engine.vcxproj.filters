@@ -8,20 +8,8 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Engine\Header Files">
-      <UniqueIdentifier>{63cec647-fdda-417f-9945-60c9a41af70c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Source Files">
-      <UniqueIdentifier>{1ae46593-3800-4e9c-b314-703854efaef0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Components">
       <UniqueIdentifier>{1856f23c-347c-4eee-bf7c-4b0c92ea47fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Components\Header Files">
-      <UniqueIdentifier>{1eb8766e-bbad-498d-b462-b3c29e972668}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\Components\Source Files">
-      <UniqueIdentifier>{c36543c3-feb7-43a5-a10e-464d89098358}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
@@ -32,6 +20,12 @@
     </Filter>
     <Filter Include="Dependencies\ImGUI">
       <UniqueIdentifier>{802cb82c-e8f3-4524-b4e6-8bc865683697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{3f3ce752-ce39-43d1-aef6-1a8bed5373fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering">
+      <UniqueIdentifier>{75f7d160-9f48-4228-9f86-4ffaebfc512e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,78 +54,88 @@
       <Filter>Dependencies\ImGUI</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Audible.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Bullet.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Camera.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Component.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\Drawable.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\GameObject.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\MeshCollider.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\Player.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\SpriteAnimator.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\SquareCollider.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\Transform.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\AudioManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\EventManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\FrameRateController.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GameManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GameObjectFactory.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Graphics.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\InputManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\main.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\ResourceManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\pch.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\GameObjectManager.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\FollowMouse.cpp">
-      <Filter>Engine\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\Gun.cpp">
-      <Filter>Engine\Source Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Damageable.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Drawable.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\GameObject.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\MeshCollider.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Player.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\SpriteAnimator.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\SquareCollider.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Transform.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AudioManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\EventManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\FollowMouse.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\FrameRateController.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObjectFactory.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObjectManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Gun.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\InputManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\pch.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ResourceManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="Src\Graphics.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DebugRenderer.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Damageable.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\CircleCollider.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Collider.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -161,84 +165,94 @@
       <Filter>Dependencies\ImGUI</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Audible.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Bullet.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Camera.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Collider.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Component.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Damageable.h">
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Drawable.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\GameObject.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\MeshCollider.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Player.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\SpriteAnimator.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\SquareCollider.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Transform.h">
-      <Filter>Engine\Components\Header Files</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\AudioManager.h">
-      <Filter>Engine\Header Files</Filter>
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\EventManager.h">
-      <Filter>Engine\Header Files</Filter>
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\FMODResultStrings.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\FrameRateController.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GameManager.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GameObjectFactory.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Graphics.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\InputManager.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Messages.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\ResourceManager.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\pch.h">
-      <Filter>Engine\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\GameObjectManager.h">
-      <Filter>Engine\Header Files</Filter>
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\FollowMouse.h">
-      <Filter>Engine\Header Files</Filter>
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\FrameRateController.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObjectFactory.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObjectManager.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Gun.h">
-      <Filter>Engine\Header Files</Filter>
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\InputManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Messages.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\pch.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ResourceManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Graphics.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ConstantBuffer.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\DebugRenderer.h">
+      <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Damageable.h" />
+    <ClInclude Include="Src\Components\CircleCollider.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
@@ -258,10 +272,5 @@
     <FxCompile Include="Src\Shaders\VertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\Users\GBX\Downloads\bullet2.png">
-      <Filter>Shaders</Filter>
-    </Image>
   </ItemGroup>
 </Project>

@@ -32,6 +32,7 @@ public:
 	void Deserialize(GameObjectFactory * gof, json j, bool isPrefab = false);
 	void AddGameObject(GameObject* go);
 	void DeleteAll();
+	void DeleteObjectOfTag(std::string tag);
 	GameObject* ClonePrefabOfTag(GameObjectFactory * gof, std::string tag, bool skipStart = false);
 	GameObject* CloneObject(GameObject* go);
 	GameObject* FindObjectOfTag(std::string tag);

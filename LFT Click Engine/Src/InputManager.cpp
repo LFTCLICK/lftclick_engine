@@ -123,7 +123,6 @@ bool InputManager::isJoyStickMovedUp(unsigned int joystickValue)
 	if (mCurrentAxesState[joystickValue] > -8000)
 		return false;
 	return true;
-	//return mCurrentAxesState[0];
 }
 
 bool InputManager::isJoyStickMovedDown(unsigned int joystickValue)
@@ -131,7 +130,6 @@ bool InputManager::isJoyStickMovedDown(unsigned int joystickValue)
 	if (mCurrentAxesState[joystickValue] < 8000)
 		return false;
 	return true;
-	//return mCurrentAxesState[0];
 }
 
 bool InputManager::isJoyStickMovedLeft(unsigned int joystickValue)
@@ -139,7 +137,6 @@ bool InputManager::isJoyStickMovedLeft(unsigned int joystickValue)
 	if (mCurrentAxesState[joystickValue] > -8000)
 		return false;
 	return true;
-	//return mCurrentAxesState[1];
 }
 
 bool InputManager::isJoyStickMovedRight(unsigned int joystickValue)
@@ -147,7 +144,6 @@ bool InputManager::isJoyStickMovedRight(unsigned int joystickValue)
 	if (mCurrentAxesState[joystickValue] < 8000)
 		return false;
 	return true;
-	//return mCurrentAxesState[1];
 }
 
 

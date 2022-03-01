@@ -121,13 +121,13 @@ int AudioManager::PlaySound(std::string name, std::string channelGroupName, floa
 	}
 }
 int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, DirectX::SimpleMath::Vector2 position, float pitch, bool startPaused) {
-	return AudioManager::PlaySound(name, channelGroupName, volume, position.x, position.y);
+	return AudioManager::PlaySound(name, channelGroupName, volume, position.x, position.y, pitch);
 }
 int AudioManager::PlaySound(std::string name, float volume, DirectX::SimpleMath::Vector2 position, float pitch, bool startPaused) {
-	return AudioManager::PlaySound(name, "", volume, position.x, position.y);
+	return AudioManager::PlaySound(name, "", volume, position.x, position.y, pitch);
 }
 int AudioManager::PlaySound(std::string name, float volume, float x, float y, float pitch, bool startPaused) {
-	return AudioManager::PlaySound(name, "", volume, x, y);
+	return AudioManager::PlaySound(name, "", volume, x, y, pitch);
 }
 
 // Pauses a channel.

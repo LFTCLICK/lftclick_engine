@@ -39,5 +39,8 @@
     "height": 32,
     "trigger": false,
     "deleteOnCollison": false
+  },
+  "12": {
+    "health": 2
   }
 }
