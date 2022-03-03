@@ -1,4 +1,4 @@
-cbuffer cbuff
+cbuffer cbPerObject
 {
 	row_major matrix transform;
 	float2 Offset;
@@ -12,14 +12,22 @@ struct VSOut
 	float2 tex : TEXCOORD;
 	float4 pos : SV_Position;
 	float alphaOverride : FOG;
-	//float3 norm : NORMAL;
 };
-VSOut main(float3 pos : Position, /*float3 normal : NORMAL,*/ float2 tex : TEXCOORD)
+
+struct VSIn
 {
-	VSOut vso;
-	vso.pos = mul(float4(pos, 1.0f), transform);
-	//vso.norm = normal;
-	vso.tex = float2(xFlip * ((Scale.x * tex.x) + Offset.x), (Scale.y * tex.y) + Offset.y);
-	vso.alphaOverride = alphaOverride;
-	return vso;
+	float3 PosWorld : Position;
+	float2 TexCoord : TEXCOORD0;
+};
+
+VSOut main(VSIn vin)
+{
+	VSOut vout;
+	vout.pos = mul(float4(vin.PosWorld, 1.0f), transform);
+	
+	vout.tex = float2(xFlip * (Scale.x * vin.TexCoord.x + Offset.x), (Scale.y * vin.TexCoord.y) + Offset.y);
+	
+	vout.alphaOverride = alphaOverride;
+
+	return vout;
 }
