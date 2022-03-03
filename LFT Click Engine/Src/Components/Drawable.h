@@ -8,6 +8,7 @@
 // 2021/12/01		-	Added messaging
 // ---------------------------------------------------------------------------
 #pragma once
+
 #include "pch.h"
 #include "GameObject.h"
 #include "Transform.h"
@@ -29,6 +30,7 @@ class Drawable : public Component
 		DirectX::XMFLOAT2 padding;
 	};
 	static_assert(sizeof(cbPerObject) % 16 == 0, "Not 16-bytes aligned");
+
 	struct Vertex
 	{
 		float cordX;

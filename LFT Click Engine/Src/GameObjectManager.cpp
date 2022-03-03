@@ -195,5 +195,7 @@ void GameObjectManager::BroadcastMessage(Message * m)
 
 GameObjectManager::~GameObjectManager()
 {
+	DeleteAll();
+
 	gameObjectList.clear();
 }

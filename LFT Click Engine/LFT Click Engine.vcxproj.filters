@@ -27,6 +27,9 @@
     <Filter Include="Engine\Rendering">
       <UniqueIdentifier>{75f7d160-9f48-4228-9f86-4ffaebfc512e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JSON">
+      <UniqueIdentifier>{0f8d8bba-31f6-4fc9-a5d3-2a6887308b48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Libraries\imgui-1.82\imgui_demo.cpp">
@@ -296,6 +299,72 @@
       <Filter>Lua Scripts</Filter>
     </None>
     <None Include="packages.config" />
+    <None Include="Resources\json\5thSprite.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\background_music.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\bg.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\bullet.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\camera.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\camera_background.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\camera2.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\controls.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\credits.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\crosshairs.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\demo.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\floor.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\invin.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\menu.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\player.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\prefabs.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\sign.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\slow.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\spike.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\tile.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\title.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\turret.json">
+      <Filter>JSON</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

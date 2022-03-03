@@ -37,9 +37,10 @@ public:
 	DirectX::SimpleMath::Vector2 scale;
 	bool isMoving;
 	DirectX::SimpleMath::Vector2 lastMovement;
+	DirectX::SimpleMath::Vector2 position;
 private:
 	GameObject * parent;
-	DirectX::SimpleMath::Vector2 pos, oldPos;
+	DirectX::SimpleMath::Vector2 oldPos;
 	float rotation;
 	DirectX::XMFLOAT4X4 m;
 	DirectX::XMVECTOR v;

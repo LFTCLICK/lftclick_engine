@@ -37,7 +37,7 @@ public:
 		if (toFind == comps.end()) {
 			return nullptr;
 		}
-		return (T*)comps[temp.getCompId()];
+		return dynamic_cast<T*>(comps[temp.getCompId()]);
 	}
 	Component* getRawComponentPointer(int id);
 	~GameObject();
