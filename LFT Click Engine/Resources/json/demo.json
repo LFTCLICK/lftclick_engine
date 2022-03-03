@@ -80,6 +80,21 @@
         ]
     },
     {
+      "object": "door",
+      "overrides": [
+        {
+          "1": {
+            "startX": -424,
+            "startY": 368,
+            "scaleX": 144,
+            "scaleY": 32,
+            "rot": 0,
+            "zPos": 10
+          }
+        }
+        ]
+    },
+    {
       "object": "tile",
       "overrides": [
         {

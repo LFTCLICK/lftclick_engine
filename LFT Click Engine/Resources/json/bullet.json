@@ -34,11 +34,12 @@
     "scale": 1,
     "image": "Resources\\images\\bullet.png"
   },
-  "13": {
-    "center": [ 0.0, 0.0, 0.0 ],
-    "radius": 10,
+  "4": {
+    "center": [ 0.0, -0.0, 0.0 ],
+    "width": 15,
+    "height": 15,
     "trigger": true,
-    "static": true,
+    "static": false,
     "deleteOnCollison": true
   },
   "9": {
