@@ -26,7 +26,7 @@ public:
 	virtual int getCompId() override { return ComponentType::PLAYER; };
 
 	virtual Component* Clone(GameObject* newParent);
-	Player() : isDashing(false), autopilot(false) {};
+	Player() : isDashing(false), autopilot(false), playerSpeed(350.f), dashSpeedMultiplier(3.f), dashTime(0.2), maxHp(100.f), damageCooldownTimer(2.f) {};
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	void HandleMessage(Message* e);
@@ -47,12 +47,6 @@ private:
 	Gun* gun;
 
 	DirectX::SimpleMath::Vector2 dashVelocity;
-	float playerSpeed, dashSpeedMultiplier, dashTime, dashTimer, deadZone = 8000;
-	bool isDashing, autopilot;
-
-	float maxHp;
-	bool badTouch;
-	float deadZone = 8000;
-	float timer;
-	float damageCooldownTimer;
+	float playerSpeed, maxHp, timer, damageCooldownTimer, dashSpeedMultiplier, dashTime, dashTimer, deadZone = 8000;
+	bool isDashing, autopilot, badTouch;
 };

@@ -89,12 +89,12 @@ Component* Player::Clone(GameObject* newParent)
 
 void Player::Deserialize(nlohmann::json j, GameObject* parent)
 {
-	playerSpeed = j["playerSpeed"];
-	dashSpeedMultiplier = j["dashSpeedMultiplier"];
-	dashTime = j["dashTime"];
-	autopilot = j["autopilot"];
-	maxHp = j["maxHp"];
-	damageCooldownTimer = j["damageCooldownTimer"];
+	if (j.contains("playerSpeed")) playerSpeed = j["playerSpeed"];
+	if (j.contains("dashSpeedMultiplier")) dashSpeedMultiplier = j["dashSpeedMultiplier"];
+	if (j.contains("dashTime")) dashTime = j["dashTime"];
+	if (j.contains("autopilot")) autopilot = j["autopilot"];
+	if (j.contains("maxHp")) maxHp = j["maxHp"];
+	if (j.contains("damageCooldownTimer")) damageCooldownTimer = j["damageCooldownTimer"];
 	this->parent = parent;
 }
 

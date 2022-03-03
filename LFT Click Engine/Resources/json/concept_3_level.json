@@ -9,10 +9,6 @@
       "tag": "wall"
     },
     {
-      "prefab": "Resources\\json\\5thSprite.json",
-      "tag": "5thSprite"
-    },
-    {
       "prefab": "Resources\\json\\bg.json",
       "tag": "bg"
     },
@@ -184,10 +180,3 @@
     }
   ]
 }
-
-
-
-//-450.5,
-
-
-//384.5,

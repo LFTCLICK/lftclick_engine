@@ -93,7 +93,7 @@ int main(int argc, char* args[])
 		//if (playGame)
 		if (true)
 		{
-			std::fstream other("./Resources/json/concept_3_level.json");
+			std::fstream other("./Resources/json/demo.json");
 			json dataJson2;
 			other >> dataJson2;
 			other.close();

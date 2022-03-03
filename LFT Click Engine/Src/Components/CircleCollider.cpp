@@ -107,7 +107,16 @@ void CircleCollider::Deserialize(nlohmann::json j, GameObject* parent)
 	std::vector<float> centerHelper = j["center"].get<std::vector<float>>();
 	center = { centerHelper[0], centerHelper[1], centerHelper[2], 0 };
 	radius = j["radius"];
-	isTrigger = j["trigger"];
-	isStatic = j["static"];
-	deleteOnCollison = j["deleteOnCollison"];
+
+	isTrigger = false;
+	if (j.contains("trigger"))
+		isTrigger = j["trigger"];
+
+	isStatic = false;
+	if (j.contains("static"))
+		isStatic = j["static"];
+
+	deleteOnCollison = false;
+	if (j.contains("deleteOnCollision"))
+		deleteOnCollison = j["deleteOnCollison"];
 }
