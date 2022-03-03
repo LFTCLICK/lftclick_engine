@@ -90,21 +90,6 @@
     "dashRecoveryTime": 1,
     "autopilot": false
   },
-  "8": {
-    "sounds": [
-      {
-        "name": ".\\Resources\\sounds\\walking.mp3",
-        "loop": true,
-        "volume": 0,
-        "playEvents": [
-          1001
-        ],
-        "stopEvents": [
-          1002
-        ]
-      }
-    ]
-  },
   "10": {
     "bulletTypes": [
       {

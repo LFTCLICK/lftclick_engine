@@ -62,6 +62,19 @@
     "static": false,
     "deleteOnCollison": true
   },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\sounds\\clang.mp3",
+        "loop": false,
+        "volume": 5,
+        "pitchRange": [ 0.85, 1.15 ],
+        "playEvents": [
+          1000
+        ]
+      }
+    ]
+  },
   "9": {
     "animationTime": 1,
     "speed": 500,
