@@ -73,7 +73,6 @@ void Door::UpdateImage()
 
 void Door::HandleMessage(Message* e)
 {
-	std::cout << e->sourceObjectTag << std::endl;
 	if (e->sourceObjectTag == "player")
 	{
 		playerInRange = true;
@@ -86,10 +85,8 @@ void Door::HandleMessage(Message* e)
 		{
 			currentEnemy->timer = 0;
 			hp -= currentEnemy->damage;
-			std::cout << "dealing damage" << std::endl;
 			while(hp < maxHp * ((float)(currentPhase - 1) / zeroIndexDoorPhases))
 			{
-				std::cout << "in" << std::endl;
 				currentPhase--;
 				UpdateImage();
 				if (currentPhase < 1)

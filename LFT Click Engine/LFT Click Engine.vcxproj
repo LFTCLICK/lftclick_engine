@@ -250,6 +250,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Src\Components\Enemy.cpp" />
+    <ClCompile Include="Src\Components\EnemySpawner.cpp" />
     <ClCompile Include="Src\Components\FollowMouse.cpp" />
     <ClCompile Include="Src\Components\GameObject.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -366,6 +367,7 @@
     <ClInclude Include="Src\Components\Door.h" />
     <ClInclude Include="Src\Components\Drawable.h" />
     <ClInclude Include="Src\Components\Enemy.h" />
+    <ClInclude Include="Src\Components\EnemySpawner.h" />
     <ClInclude Include="Src\Components\FollowMouse.h" />
     <ClInclude Include="Src\Components\GameObject.h" />
     <ClInclude Include="Src\Components\Gun.h" />

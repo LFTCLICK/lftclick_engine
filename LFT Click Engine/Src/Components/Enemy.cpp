@@ -7,13 +7,32 @@ void Enemy::Start()
 {
 	trans = parent->getComponent<Transform>();
 	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	switchToPlayer = false;
 }
 
 void Enemy::Update()
 {
-	DirectX::SimpleMath::Vector2 targetVector = GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos()-trans->CurrentPos();
+	DirectX::SimpleMath::Vector2 targetVector = -trans->CurrentPos();
+	if (!switchToPlayer)
+	{
+		if(DirectX::SimpleMath::Vector2::DistanceSquared(trans->CurrentPos(), targetBeforePlayer)<=120)
+		{
+			switchToPlayer = true;
+		}
+		else
+		{
+			targetVector += targetBeforePlayer;
+		}
+	}
+	if (switchToPlayer)
+	{
+		targetVector += GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
+	}
 	targetVector = (speed * FrameRateController::getInstance().DeltaTime())/(DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector)) * targetVector;
+	//if (hanginWithTheHomies)
+	//	targetVector *= .1f;
 	trans->Move(targetVector.x, targetVector.y);
+	hanginWithTheHomies = false;
 }
 
 void Enemy::Deserialize(nlohmann::json j, GameObject* parent)
@@ -41,6 +60,10 @@ void Enemy::HandleMessage(Message* e)
 	if (e->id == Message::COLLISION)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
+		if (e->sourceObjectTag == "enemy")
+		{
+			cm->deltaPos *= .5f;
+		}
 		trans->Move(cm->deltaPos.x, cm->deltaPos.y);
 		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
 		{

@@ -9,10 +9,15 @@ void Player::Start()
 	gun = parent->getComponent<Gun>();
 	cam = GameManager::getInstance().mainCamera;
 	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	wood = 0;
+	hp = maxHp;
+	timer = damageCooldownTimer;
 }
 
 void Player::Update()
 {
+	ImGui::Text("Wood: %i", wood);
+	ImGui::Text("hp: %.0f", hp);
 	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_W))
 		myTransform->Move(0, playerSpeed * FrameRateController::getInstance().DeltaTime());
 	if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_S))
@@ -45,12 +50,24 @@ void Player::Update()
 		myTransform->Move(playerSpeed * FrameRateController::getInstance().DeltaTime(), 0);
 	if (InputManager::getInstance().isJoyStickMovedLeft(SDL_CONTROLLER_AXIS_LEFTX))
 		myTransform->Move(-playerSpeed * FrameRateController::getInstance().DeltaTime(), 0);
+	if (badTouch && timer <= 0)
+	{
+		hp -= 15;
+		timer = damageCooldownTimer;
+	}
+	else if (timer > 0)
+	{
+		timer -= FrameRateController::getInstance().DeltaTime();
+	}
+	badTouch = false;
 }
 
 Component* Player::Clone(GameObject* newParent)
 {
 	Player* toReturn = new Player();
 	toReturn->playerSpeed = playerSpeed;
+	toReturn->maxHp = maxHp;
+	toReturn->damageCooldownTimer = damageCooldownTimer;
 	toReturn->parent = newParent;
 	return (Component*)toReturn;
 }
@@ -58,6 +75,8 @@ Component* Player::Clone(GameObject* newParent)
 void Player::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	playerSpeed = j["playerSpeed"];
+	maxHp = j["maxHp"];
+	damageCooldownTimer = j["damageCooldownTimer"];
 	this->parent = parent;
 }
 
@@ -67,6 +86,10 @@ void Player::HandleMessage(Message* e)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
 		myTransform->Move(cm->deltaPos.x, cm->deltaPos.y);
+		if (e->sourceObjectTag == "enemy")
+		{
+			badTouch = true;
+		}
 		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
 		{
 			isGrounded = true;

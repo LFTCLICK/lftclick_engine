@@ -9,6 +9,10 @@
       "tag": "enemy"
     },
     {
+      "prefab": "Resources\\json\\enemySpawner.json",
+      "tag": "enemySpawner"
+    },
+    {
       "prefab": "Resources\\json\\bg.json",
       "tag": "bg"
     },
@@ -31,38 +35,53 @@
   ],
   "Level": [
     {
-    
-      "object": "enemy",
-      "overrides": [
-        {
-          "1": {
-            "startX": 100,
-            "startY": 100,
-            "scaleX": 64,
-            "scaleY": 64,
-            "rot": 0,
-            "zPos": 20
-          }
-        }
-        ]
-    
+      "object": "bg",
+      "overrides": []
     },
     {
-    
-      "object": "enemy",
+      "object": "player",
       "overrides": [
         {
           "1": {
-            "startX": -100,
-            "startY": 100,
+            "startX": 0.5,
+            "startY": 0.5,
             "scaleX": 64,
             "scaleY": 64,
             "rot": 0,
-            "zPos": 20
+            "zPos": 5
           }
         }
-        ]
-    
+      ]
+    },
+    {
+      "object": "enemySpawner",
+      "overrides": [
+        {
+          "1": {
+            "startX": 424.0,
+            "startY": 700.0,
+            "scaleX": 64,
+            "scaleY": 64,
+            "rot": 0,
+            "zPos": 5
+          }
+        }
+      ]
+    },
+    {
+      "object": "enemySpawner",
+      "overrides": [
+        {
+          "1": {
+            "startX": -424.0,
+            "startY": 700.0,
+            "scaleX": 64,
+            "scaleY": 64,
+            "rot": 0,
+            "zPos": 5
+          }
+        }
+      ]
     },
     {
       "object": "door",
@@ -282,25 +301,6 @@
             "trigger": false,
             "static": true,
             "deleteOnCollison": false
-          }
-        }
-      ]
-    },
-    {
-      "object": "bg",
-      "overrides": []
-    },
-    {
-      "object": "player",
-      "overrides": [
-        {
-          "1": {
-            "startX": 0.5,
-            "startY": 0.5,
-            "scaleX": 64,
-            "scaleY": 64,
-            "rot": 0,
-            "zPos": 5
           }
         }
       ]

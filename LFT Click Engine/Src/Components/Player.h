@@ -30,13 +30,17 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	void HandleMessage(Message* e);
-
+	int wood;
+	float hp;
 private:
 	GameObject* parent;
 	Transform* myTransform;
 	Camera* cam;
 	Gun* gun;
 	float playerSpeed;
-
+	float maxHp;
+	bool badTouch;
 	float deadZone = 8000;
+	float timer;
+	float damageCooldownTimer;
 };

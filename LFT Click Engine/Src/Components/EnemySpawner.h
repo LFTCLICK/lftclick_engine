@@ -1,10 +1,10 @@
 #pragma once
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	AnimationHelper.h
+// File Name		:	EnemySpawner.h
 // Author			:	Vance Howald
 // Creation Date	:	2021/12/10
-// Purpose			:	Animates grabables
+// Purpose			:	Spawns enemies in waves
 // History			: 
 // ---------------------------------------------------------------------------
 
@@ -15,31 +15,25 @@
 #include <json.hpp>
 
 using json = nlohmann::json;
-class Enemy : public Component
+class EnemySpawner : public Component
 {
 public:
 
 	// Inherited via Component
 	virtual void Start() override;
-	void HandleMessage(Message* e);
 	virtual void Update() override;
-	virtual int getCompId() override { return ComponentType::ENEMY; };
+	virtual int getCompId() override { return ComponentType::BULLET; };
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	Enemy() {};
+	EnemySpawner() {};
 
 public:
-	float attackTimer, timer;
-	float damage;
-	float speed;
-	float aiSwitchDistance;
-	bool hanginWithTheHomies;
-	bool switchToPlayer;
-	DirectX::SimpleMath::Vector2 goal;
-	DirectX::SimpleMath::Vector2 targetBeforePlayer;
+	DirectX::SimpleMath::Vector2 bounds;
+	DirectX::SimpleMath::Vector2 targetPosOffset;
+	float slope, timeBetweenPhases, timer, c, x;
 
 private:
 	GameObject* parent;
-	Transform* trans;
+	DirectX::SimpleMath::Vector2 myPos;
 };

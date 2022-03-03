@@ -85,7 +85,9 @@
     ]
   },
   "7": {
-    "playerSpeed": 350
+    "playerSpeed": 350,
+    "maxHp": 100,
+    "damageCooldownTimer": 2
   },
   "8": {
     "sounds": [
