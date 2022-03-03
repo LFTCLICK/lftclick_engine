@@ -187,11 +187,11 @@ void MeshCollider::CollisionCheck(GameObject* toCheck)
 			if (returnVal == 1)
 			{
 				if (isTrigger)
-					EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(parent->tag));
+					toCheck->HandleMessage(new DamageCollisionMessage(parent->tag, parent));
 				else
 				{
 					DirectX::SimpleMath::Vector2 delta(0.0f, 0.0f);
-					EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, delta));
+					toCheck->HandleMessage(new CollisionMessage(parent->tag, parent, delta));
 				}
 			}
 			delete actualPointArray;
