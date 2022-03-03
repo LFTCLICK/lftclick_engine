@@ -45,7 +45,3 @@ FollowMouse::~FollowMouse()
 {
 
 }
-
-void FollowMouse::HandleMessage(Message* e) {
-
-}

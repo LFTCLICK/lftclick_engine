@@ -26,7 +26,6 @@ public:
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::FOLLOW_MOUSE; };
 	virtual Component* Clone(GameObject* newParent);
-	virtual void HandleMessage(Message* e) override;
 
 	FollowMouse() : gom(&GameObjectManager::getInstance()) {}
 

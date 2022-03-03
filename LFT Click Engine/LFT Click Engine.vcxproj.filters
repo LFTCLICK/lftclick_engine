@@ -138,6 +138,9 @@
     <ClCompile Include="Src\Components\LevelGenerator.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Components\Collider.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
