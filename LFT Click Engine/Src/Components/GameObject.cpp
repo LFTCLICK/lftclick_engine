@@ -29,6 +29,7 @@ void GameObject::HandleMessage(Message * e)
 {
 	for (const auto& c : comps)
 		c.second->HandleMessage(e);
+	delete e;
 }
 
 

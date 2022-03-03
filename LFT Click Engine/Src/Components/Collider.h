@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 #pragma once
 #include "Component.h"
+#include "Transform.h"
 #include "GameObject.h"
 
 class Collider : public Component {
@@ -21,8 +22,9 @@ public:
 	virtual Component* Clone(GameObject* newParent) = 0;
 	virtual void CollisionCheck(GameObject* toCheck) = 0;
 
-	//static DirectX::SimpleMath::Vector2 ProcessCollision(Collider* a, Collider* b);
-protected:
+	//static DirectX::SimpleMath::Vector2 ProcessCollision(Collider* a, Transform* aTrans, Collider* b, Transform* bTrans);
+public:
 	bool isTrigger;
+	bool isStatic;
 
 };

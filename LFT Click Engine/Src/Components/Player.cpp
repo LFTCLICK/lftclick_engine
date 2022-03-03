@@ -11,10 +11,16 @@ void Player::Start()
 	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
 
 	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	wood = 0;
+	hp = maxHp;
+	timer = damageCooldownTimer;
 }
 
 void Player::Update()
 {
+	ImGui::Text("Wood: %i", wood);
+	ImGui::Text("hp: %.0f", hp);
+
 	InputManager& im = InputManager::getInstance();
 	float deltaTime = FrameRateController::getInstance().DeltaTime();
 
@@ -51,6 +57,17 @@ void Player::Update()
 	}
 
 	if (autopilot) Sidescroll(deltaTime);
+
+	if (badTouch && timer <= 0)
+	{
+		hp -= 15;
+		timer = damageCooldownTimer;
+	}
+	else if (timer > 0)
+	{
+		timer -= FrameRateController::getInstance().DeltaTime();
+	}
+	badTouch = false;
 }
 
 Component* Player::Clone(GameObject* newParent)
@@ -64,6 +81,8 @@ Component* Player::Clone(GameObject* newParent)
 	toReturn->playerSpeed = playerSpeed;
 	toReturn->isDashing = isDashing;
 	toReturn->autopilot = autopilot;
+	toReturn->maxHp = maxHp;
+	toReturn->damageCooldownTimer = damageCooldownTimer;
 	toReturn->parent = newParent;
 	return (Component*)toReturn;
 }
@@ -74,6 +93,8 @@ void Player::Deserialize(nlohmann::json j, GameObject* parent)
 	dashSpeedMultiplier = j["dashSpeedMultiplier"];
 	dashTime = j["dashTime"];
 	autopilot = j["autopilot"];
+	maxHp = j["maxHp"];
+	damageCooldownTimer = j["damageCooldownTimer"];
 	this->parent = parent;
 }
 
@@ -82,7 +103,14 @@ void Player::HandleMessage(Message* e)
 	if (e->id == Message::COLLISION)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
-		trans->Move(cm->deltaPos.x, cm->deltaPos.y);
+
+		Move(cm->deltaPos.x, cm->deltaPos.y);
+
+		if (e->sourceObjectTag == "enemy")
+		{
+			badTouch = true;
+		}
+
 		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
 		{
 			isGrounded = true;

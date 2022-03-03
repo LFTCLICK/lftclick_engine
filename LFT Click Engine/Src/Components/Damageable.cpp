@@ -42,7 +42,7 @@ Component* Damageable::Clone(GameObject* newParent)
 }
 
 void Damageable::HandleMessage(Message* e) {
-	if (e->id == Message::DAMAGE_COLLISION) {
+	if (e->sourceObjectTag=="bullet" && e->id == Message::DAMAGE_COLLISION && health<10000000) {
 		--health;
 	}
 }

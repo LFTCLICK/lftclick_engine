@@ -54,6 +54,14 @@
       }
     ]
   },
+  "4": {
+    "center": [ 0.0, -0.0, 0.0 ],
+    "width": 15,
+    "height": 15,
+    "trigger": true,
+    "static": false,
+    "deleteOnCollison": true
+  },
   "9": {
     "animationTime": 1,
     "speed": 500,

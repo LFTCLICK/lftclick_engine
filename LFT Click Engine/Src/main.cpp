@@ -31,29 +31,9 @@ std::unique_ptr<DebugRenderer> g_debugRenderer;
 
 int main(int argc, char* args[])
 {
-	int windowWidth = 800, windowHeight = 600;
+	int windowWidth = 800, windowHeight = 800;
 
-	// Create Lua State
-	lua_State* L = luaL_newstate();
-
-	// Adding standard libraries to Lua Virtual Machine
-	luaL_openlibs(L);
-
-	if (CheckLua(L, luaL_dofile(L, "Resources\\LuaScripts\\ConfigurationScript.lua")))
-	{
-		lua_getglobal(L, "windowWidth");
-		if (lua_isnumber(L, -1))
-		{
-			windowWidth = (float)lua_tonumber(L, -1);
-		}
-
-		lua_getglobal(L, "windowHeight");
-		if (lua_isnumber(L, -1))
-		{
-			windowHeight = (float)lua_tonumber(L, -1);
-		}
-	}
-
+	
 	//Init SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
@@ -131,7 +111,11 @@ int main(int argc, char* args[])
 
 				ImGui_ImplDX11_NewFrame();
 				ImGui_ImplSDL2_NewFrame();
-				ImGui::NewFrame();
+				ImGui::NewFrame(); bool open = true;
+				ImGui::SetNextWindowPos({ 0,0 });
+				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+
+				ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
 
 				SDL_Event e;
 				while (SDL_PollEvent(&e) != 0)//must be called before input manager
@@ -171,11 +155,6 @@ int main(int argc, char* args[])
 				g_debugRenderer->Draw(&Graphics::getInstance());
 
 
-				bool open = true;
-
-				ImGui::SetNextWindowPos({ 0,0 });
-				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-				ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
 				ImGui::End();
 
 
@@ -204,8 +183,6 @@ int main(int argc, char* args[])
 
 		AudioManager::getInstance().Term();
 		SDL_DestroyWindow(pWindow);
-
-		lua_close(L);
 		SDL_Quit();
 
 		return 0;

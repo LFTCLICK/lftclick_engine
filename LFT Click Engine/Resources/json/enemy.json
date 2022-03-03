@@ -2,10 +2,10 @@
   "1": {
     "startX": 0.0,
     "startY": 0.0,
-    "scaleX": 32,
-    "scaleY": 32,
+    "scaleX": 64,
+    "scaleY": 64,
     "rot": 0,
-    "zPos": 10
+    "zPos": 20
   },
   "2": {
     "onlyUVOverrides": false,
@@ -30,18 +30,23 @@
     }
     ],
     "indicies": [0, 1, 2, 2, 3, 0],
-    "image": "Resources\\images\\block.png"
+    "image": "Resources\\images\\enemy.png"
 
   },
   "4": {
-    "center": [0.0, -0.0, 0.0],
-    "width": 32,
-    "height": 32,
+    "center": [ 0.0, -0.0, 0.0 ],
+    "width": 64,
+    "height": 64,
     "trigger": false,
-    "static": true,
+    "static": false,
     "deleteOnCollison": false
   },
   "12": {
-    "health": 100000000
+    "health": 3
+  },
+  "103": {
+    "attackTimer": 3.0,
+    "damage": 15.0,
+    "speed": 75.0
   }
 }

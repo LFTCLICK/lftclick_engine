@@ -14,6 +14,7 @@
 #include "Components\MeshCollider.h"
 #include "Components\SquareCollider.h"
 #include "Components\CircleCollider.h"
+#include "CollisionResolution.h"
 
 GameObjectManager::GameObjectManager()
 {
@@ -64,15 +65,26 @@ void GameObjectManager::Draw()
 
 void GameObjectManager::DoCollision(GameObject* toCheckWith)
 {
+	/*for (std::list<GameObject*>::iterator it = gameObjectList.begin(); it != gameObjectList.end();)
+	{
+		GameObject* toCheck = *it;
+		++it;
+		for (std::list<GameObject*>::iterator innerIt = it; innerIt != gameObjectList.end(); ++innerIt)
+		{
+			CollisionResolution
+		}
+	}*/
 	for (GameObject* g : gameObjectList)
 	{
 		if (g->isActive && !g->isDeletable && g != toCheckWith)
 		{
 			Collider* s = dynamic_cast<Collider*>(g->getComponent<MeshCollider>());
-			if (s == nullptr) 
-				s = dynamic_cast<Collider*>(g->getComponent<SquareCollider>());
-			if (s == nullptr)
-				s = dynamic_cast<Collider*>(g->getComponent<CircleCollider>());
+			if (s != nullptr) 
+				s->CollisionCheck(toCheckWith);
+			s = dynamic_cast<Collider*>(g->getComponent<SquareCollider>());
+			if (s != nullptr)
+				s->CollisionCheck(toCheckWith);
+			s = dynamic_cast<Collider*>(g->getComponent<CircleCollider>());
 			if (s != nullptr) 
 				s->CollisionCheck(toCheckWith);
 		}

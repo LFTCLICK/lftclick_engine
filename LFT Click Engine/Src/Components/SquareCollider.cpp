@@ -47,6 +47,7 @@ Component * SquareCollider::Clone(GameObject * newParent)
 	toReturn->width = width;
 	toReturn->height = height;
 	toReturn->isTrigger = isTrigger;
+	toReturn->isStatic = isStatic;
 	toReturn->deleteOnCollison = deleteOnCollison;
 	return (Component*) toReturn;
 }
@@ -136,5 +137,6 @@ void SquareCollider::Deserialize(nlohmann::json j, GameObject* parent)
 	width = j["width"];
 	height = j["height"];
 	isTrigger = j["trigger"];
+	//isStatic = j["static"];
 	deleteOnCollison = j["deleteOnCollison"];
 }

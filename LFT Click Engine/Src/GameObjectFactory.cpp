@@ -25,10 +25,15 @@
 #include "Components/FollowMouse.h"
 #include "Components/Damageable.h"
 #include "Components/LevelGenerator.h"
+#include "Components/Enemy.h"
+#include "Components/Door.h"
+#include "Components/EnemySpawner.h"
+
 #include <json.hpp>
 #include <string>
 #include <fstream>
 #include <iostream>
+
 using json = nlohmann::json;
 
 GameObjectFactory::GameObjectFactory()
@@ -92,6 +97,12 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new CircleCollider();
 	else if (compID == Component::LEVEL_GENERATOR)
 		currentComp = new LevelGenerator();
+	else if (compID == Component::ENEMY)
+		currentComp = new Enemy();
+	else if (compID == Component::DOOR_OBJ)
+		currentComp = new Door();
+	else if (compID == Component::ENEMY_SPAWNER)
+		currentComp = new EnemySpawner();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

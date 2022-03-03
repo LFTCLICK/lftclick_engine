@@ -36,6 +36,7 @@ public:
 		otherObject = other;
 
 	};
+	~CollisionMessage() = default;
 	DirectX::SimpleMath::Vector2 deltaPos;
 };
 
@@ -49,5 +50,6 @@ public:
 		Message::sourceObjectTag = sourceObjectTag;
 		otherObject = other;
 	};
+	~DamageCollisionMessage() = default;
 
 };

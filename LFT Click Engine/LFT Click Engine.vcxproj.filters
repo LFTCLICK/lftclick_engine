@@ -132,13 +132,22 @@
     <ClCompile Include="Src\Components\Damageable.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Components\Enemy.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Components\CircleCollider.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\LevelGenerator.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Collider.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Door.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\EnemySpawner.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
@@ -257,6 +266,21 @@
     <ClInclude Include="Src\Components\Damageable.h" />
     <ClInclude Include="Src\Components\CircleCollider.h" />
     <ClInclude Include="Src\Components\LevelGenerator.h" />
+    <ClInclude Include="Src\Components\Door.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Enemy.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionResolution.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\CircleCollider.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\EnemySpawner.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">

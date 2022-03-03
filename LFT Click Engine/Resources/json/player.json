@@ -30,7 +30,7 @@
         "uv": [ 1, 1 ]
       }
     ],
-    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ], 
     "image": "Resources\\images\\player_sprite_sheet.png"
   },
   "5": {
@@ -47,6 +47,7 @@
     "width": 40,
     "height": 50,
     "trigger": false,
+    "static": false,
     "deleteOnCollison": false
   },
   "6": {
@@ -100,7 +101,9 @@
     "dashSpeedMultiplier": 4,
     "dashTime": 0.2,
     "dashRecoveryTime": 1,
-    "autopilot": false
+    "autopilot": false,
+    "maxHp": 100,
+    "damageCooldownTimer": 2
   },
   "8": {
     "sounds": [

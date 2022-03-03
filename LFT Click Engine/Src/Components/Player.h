@@ -36,12 +36,23 @@ public:
 	void Dash();
 	void Sidescroll(float deltaTime);
 	bool IsAutopilot() { return autopilot; }
+
+	int wood;
+	float hp;
+
 private:
 	GameObject* parent;
 	Transform* trans;
 	Camera* cam;
 	Gun* gun;
+
 	DirectX::SimpleMath::Vector2 dashVelocity;
 	float playerSpeed, dashSpeedMultiplier, dashTime, dashTimer, deadZone = 8000;
 	bool isDashing, autopilot;
+
+	float maxHp;
+	bool badTouch;
+	float deadZone = 8000;
+	float timer;
+	float damageCooldownTimer;
 };
