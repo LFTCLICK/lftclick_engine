@@ -14,6 +14,7 @@
 #include "GameObjectManager.h"
 #include "SquareCollider.h"
 #include "Drawable.h"
+#include "Player.h"
 #include <json.hpp>
 
 using json = nlohmann::json;
@@ -42,6 +43,7 @@ private:
 	Transform* trans;
 	SquareCollider* sqCollider;
 	Drawable* draw;
+	Player* p;
 	bool playerInRange;
 	bool playerExited;
 	float internalTimer;

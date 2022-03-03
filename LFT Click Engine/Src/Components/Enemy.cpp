@@ -15,7 +15,7 @@ void Enemy::Update()
 	DirectX::SimpleMath::Vector2 targetVector = -trans->CurrentPos();
 	if (!switchToPlayer)
 	{
-		if(DirectX::SimpleMath::Vector2::DistanceSquared(trans->CurrentPos(), targetBeforePlayer)<=120)
+		if(fabsf(trans->CurrentPos().y-targetBeforePlayer.y)<=20)
 		{
 			switchToPlayer = true;
 		}

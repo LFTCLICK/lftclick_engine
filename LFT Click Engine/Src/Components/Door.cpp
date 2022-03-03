@@ -8,6 +8,7 @@ void Door::Start()
 	trans = parent->getComponent<Transform>();
 	sqCollider = parent->getComponent<SquareCollider>();
 	draw = parent->getComponent<Drawable>();
+	p = GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Player>();
 	zeroIndexDoorPhases = doorPhases-1;
 	currentPhase = zeroIndexDoorPhases;
 	hp = maxHp;
@@ -22,7 +23,7 @@ void Door::Update()
 	if (playerInRange && currentPhase<zeroIndexDoorPhases)
 	{
 		//imgui stuff
-		if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_E))
+		if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_E) && p->wood> woodRequiredPerPhase)
 		{
 			//imgui building
 			internalTimer += FrameRateController::getInstance().DeltaTime();
@@ -33,6 +34,7 @@ void Door::Update()
 		}
 		if (internalTimer >= repairTime)
 		{
+			p->wood -= woodRequiredPerPhase;
 			internalTimer = 0;
 			currentPhase++;
 			hp += hpPerPhase;
