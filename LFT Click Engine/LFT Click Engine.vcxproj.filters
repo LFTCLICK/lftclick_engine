@@ -133,7 +133,10 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\CircleCollider.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\LevelGenerator.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -249,9 +252,8 @@
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Damageable.h" />
-    <ClInclude Include="Src\Components\CircleCollider.h">
-      <Filter>Engine\Components\Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="Src\Components\CircleCollider.h" />
+    <ClInclude Include="Src\Components\LevelGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">

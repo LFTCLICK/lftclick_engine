@@ -34,19 +34,30 @@ void SpriteAnimator::UpdateDirection()
 }
 void SpriteAnimator::UpdateState() 
 {
-	if (trans->isMoving != wasMoving || direction != oldDirection) {
-		if (moveAnimationIndices["right"] > -1 && trans->isMoving)
-			SwitchAnimation(moveAnimationIndices[moveAnimationIndices[direction] > -1 ? direction : "right"]);
-		if (idleAnimationIndices["right"] > -1 && !trans->isMoving)
-			SwitchAnimation(idleAnimationIndices[idleAnimationIndices[direction] > -1 ? direction : "right"]);
+	if (trans->isMoving != wasMoving || direction != oldDirection || isDamaged != wasDamaged || isDead != wasDead) {
+		if (isDead) {
+			SwitchAnimation(deathAnimationIndex);
+		}
+		else if (isDamaged) {
+			SwitchAnimation(damageAnimationIndex);
+		}
+		else {
+			if (moveAnimationIndices["right"] > -1 && trans->isMoving)
+				SwitchAnimation(moveAnimationIndices[moveAnimationIndices[direction] > -1 ? direction : "right"]);
+			if (idleAnimationIndices["right"] > -1 && !trans->isMoving)
+				SwitchAnimation(idleAnimationIndices[idleAnimationIndices[direction] > -1 ? direction : "right"]);
+		}
 		wasMoving = trans->isMoving;
+		wasDamaged = isDamaged;
 	}
 }
 void SpriteAnimator::UpdateFrame() 
 {
 	if (timer >= animations[currentAnimationIndex].frameDuration) {
 		timer = 0;
-		++currentFrame;
+		if (!(isDead && (currentFrame == animations[currentAnimationIndex].length-1))) // don't continue cycling if at end of death animation
+			++currentFrame;
+
 		if (currentFrame < animations[currentAnimationIndex].length) {
 			draw->xOffset += xOffset;
 		}
@@ -54,6 +65,10 @@ void SpriteAnimator::UpdateFrame()
 			draw->xOffset = 0;
 			currentFrame = 0;
 		}
+	}
+
+	if (damageTimer >= damageTimeout) {
+		isDamaged = false;
 	}
 }
 void SpriteAnimator::Update()
@@ -65,7 +80,9 @@ void SpriteAnimator::Update()
 
 	UpdateFrame();
 
-	timer += FrameRateController::getInstance().DeltaTime();
+	float deltaTime = FrameRateController::getInstance().DeltaTime();
+	timer += deltaTime;
+	if (isDamaged) damageTimer += deltaTime;
 }
 
 Component* SpriteAnimator::Clone(GameObject* newParent)
@@ -77,6 +94,8 @@ Component* SpriteAnimator::Clone(GameObject* newParent)
 	toReturn->currentAnimationIndex = currentAnimationIndex;
 	toReturn->idleAnimationIndices = idleAnimationIndices;
 	toReturn->moveAnimationIndices = moveAnimationIndices;
+	toReturn->damageAnimationIndex = damageAnimationIndex;
+	toReturn->deathAnimationIndex = deathAnimationIndex;
 	toReturn->xOffset = xOffset;
 	toReturn->yOffset = yOffset;
 	toReturn->timer = timer;
@@ -84,6 +103,9 @@ Component* SpriteAnimator::Clone(GameObject* newParent)
 	toReturn->animations = animations;
 	toReturn->direction = direction;
 	toReturn->oldDirection = oldDirection;
+	toReturn->isDamaged = isDamaged;
+	toReturn->damageTimer = damageTimer;
+	toReturn->damageTimeout = damageTimeout;
 	return toReturn;
 }
 
@@ -96,6 +118,8 @@ void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* parent)
 		idleAnimationIndices[d] = -1;
 		moveAnimationIndices[d] = -1;
 	}
+	damageAnimationIndex = -1;
+	deathAnimationIndex = -1;
 
 	spriteSheetWidth = j["spriteSheetWidth"];
 	spriteSheetHeight = j["spriteSheetHeight"];
@@ -121,6 +145,10 @@ void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* parent)
 				idleAnimationIndices[animation.contains("direction") ? animation["direction"] : "right"] = index;
 			else if (animation.contains("onMove") && animation["onMove"])
 				moveAnimationIndices[animation.contains("direction") ? animation["direction"] : "right"] = index;
+			else if (animation.contains("onDamage") && animation["onDamage"])
+				damageAnimationIndex = index;
+			else if (animation.contains("onDeath") && animation["onDeath"])
+				deathAnimationIndex = index;
 		}
 
 		if (idleAnimationIndices["right"] > -1) currentAnimationIndex = idleAnimationIndices["right"];
@@ -139,4 +167,18 @@ void SpriteAnimator::SwitchAnimation(std::string name) {
 			SwitchAnimation(i);
 		}
 	}
+}
+
+void SpriteAnimator::Damage(float time) {
+	isDamaged = true;
+	damageTimeout = time;
+	damageTimer = 0;
+}
+
+void SpriteAnimator::Die() {
+	isDead = true;
+}
+
+void SpriteAnimator::Revive() {
+	isDead = false;
 }

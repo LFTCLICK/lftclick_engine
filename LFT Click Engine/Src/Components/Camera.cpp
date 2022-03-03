@@ -28,6 +28,9 @@ Component * Camera::Clone(GameObject * newParent)
 	toReturn->xRot = xRot;
 	toReturn->yRot = yRot;
 	toReturn->zRot = zRot;
+	toReturn->isAutopilot = isAutopilot;
+	toReturn->autopilotDirection = autopilotDirection;
+	toReturn->autopilotSpeed = autopilotSpeed;
 	toReturn->parent = newParent;
 	return (Component*)toReturn;
 }
@@ -52,12 +55,19 @@ void Camera::Start()
 
 void Camera::Update()
 {
-	if (parent->getComponent<Transform>() != nullptr) {
+	if (isAutopilot) {
+		float movement = autopilotSpeed * FrameRateController::getInstance().DeltaTime();
+
+		if (autopilotDirection == "right") xPos += movement;
+		else if (autopilotDirection == "left") xPos -= movement;
+		else if (autopilotDirection == "up") yPos += movement;
+		else if (autopilotDirection == "down") yPos -= movement;
+	}
+	else if (parent->getComponent<Transform>() != nullptr) {
 		auto pos = parent->getComponent<Transform>()->CurrentPos();
 		xPos = pos.x;
 		yPos = pos.y;
 	}
-
 
 	/* Old Pengi Panic code I believe?
 
@@ -87,6 +97,29 @@ void Camera::Move(float x, float y, float z)
 	xPos += x;
 	yPos += y;
 	zPos += z;
+}
+
+
+
+void Camera::SetAutopilotVelocity(std::string direction, float speed) {
+
+	auto pos = parent->getComponent<Transform>()->CurrentPos();
+	xPos = pos.x, yPos = pos.y;
+	autopilotSpeed = speed;
+	autopilotDirection = direction;
+
+	if (direction != "" && direction != "none") {
+		if (direction == "right") xPos += AUTOPILOT_START_DISTANCE;
+		else if (direction == "left") xPos -= AUTOPILOT_START_DISTANCE;
+		else if (direction == "up") yPos += AUTOPILOT_START_DISTANCE;
+		else if (direction == "down") yPos -= AUTOPILOT_START_DISTANCE;
+
+		isAutopilot = true;
+	}
+	else {
+		isAutopilot = false;
+	}
+
 }
 
 DirectX::XMVECTOR Camera::getPos()

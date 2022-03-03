@@ -1,0 +1,112 @@
+{
+  "1": {
+    "startX": 0.5,
+    "startY": 0.5,
+    "scaleX": 80,
+    "scaleY": 80,
+    "rot": 0,
+    "zPos": 5
+
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale": 0.5,
+    "yScale": 0.125,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
+    ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "image": "Resources\\images\\enemy_sprite_sheet.png"
+  },
+  "4": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "width": 40,
+    "height": 50,
+    "trigger": true,
+    "deleteOnCollison": false
+  },
+  "6": {
+    "spriteSheetWidth": 2,
+    "spriteSheetHeight": 8,
+    "animations": [
+      {
+        "name": "idleEnemyRight",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "right"
+      },
+      {
+        "name": "movingEnemyRight",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "right"
+      },
+      {
+        "name": "idleEnemyLeft",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "left"
+      },
+      {
+        "name": "movingEnemyLeft",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "left"
+      },
+      {
+        "name": "damagedEnemy",
+        "length": 2,
+        "frameDuration": 0.125,
+        "onDamage": true
+      },
+      {
+        "name": "deadEnemy",
+        "length": 2,
+        "frameDuration": 1,
+        "onDeath": true
+      }
+    ]
+  },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\sounds\\walking.mp3",
+        "loop": true,
+        "volume": 0,
+        "playEvents": [
+          1001
+        ],
+        "stopEvents": [
+          1002
+        ]
+      }
+    ]
+  },
+  "10": {
+    "bulletTypes": [
+      {
+        "fireRate": 1,
+        "prefabTag": "enemyBullet"
+      }
+    ]
+  }
+}

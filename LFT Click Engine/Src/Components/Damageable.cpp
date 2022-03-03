@@ -13,6 +13,7 @@
 void Damageable::Start()
 {
 	trans = parent->getComponent<Transform>();
+	anim = parent->getComponent<SpriteAnimator>();
 	EventManager::getInstance().Subscribe(Message::DAMAGE_COLLISION, parent);
 }
 
@@ -44,4 +45,9 @@ void Damageable::HandleMessage(Message* e) {
 	if (e->id == Message::DAMAGE_COLLISION) {
 		--health;
 	}
+}
+
+void Damageable::TakeDamage(int damage) {
+	health -= damage;
+	if (anim != nullptr) anim->Damage(damageTime);
 }

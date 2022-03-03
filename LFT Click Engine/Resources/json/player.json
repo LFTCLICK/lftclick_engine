@@ -11,7 +11,7 @@
   "2": {
     "onlyUVOverrides": false,
     "xScale" : 0.5,
-    "yScale" : 0.25,
+    "yScale" : 0.125,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -51,7 +51,7 @@
   },
   "6": {
     "spriteSheetWidth": 2,
-    "spriteSheetHeight": 4,
+    "spriteSheetHeight": 8,
     "animations": [
       {
         "name": "idlePlayerRight",
@@ -80,11 +80,27 @@
         "frameDuration": 0.25,
         "onMove": true,
         "direction": "left"
+      },
+      {
+        "name": "damagedPlayer",
+        "length": 2,
+        "frameDuration": 0.125,
+        "onDamage": true
+      },
+      {
+        "name": "deadPlayer",
+        "length": 2,
+        "frameDuration": 1,
+        "onDeath": true
       }
     ]
   },
   "7": {
-    "playerSpeed": 350
+    "playerSpeed": 350,
+    "dashSpeedMultiplier": 4,
+    "dashTime": 0.2,
+    "dashRecoveryTime": 1,
+    "autopilot": false
   },
   "8": {
     "sounds": [

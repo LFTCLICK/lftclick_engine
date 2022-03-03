@@ -10,6 +10,7 @@
 
 #include "GameObject.h"
 #include "Transform.h"
+#include "SpriteAnimator.h"
 #include "Component.h"
 #include "GameObjectManager.h"
 #include "EventManager.h"
@@ -28,9 +29,11 @@ public:
 	virtual void HandleMessage(Message* e) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	Damageable() : destroyOnDeath(true), health(1) {};
+	Damageable() : destroyOnDeath(true), health(1), damageTime(1.f) {};
 
 public:
+	void TakeDamage(int damage);
+
 	int health;
 
 	// For knockback
@@ -41,4 +44,6 @@ public:
 private:
 	GameObject* parent;
 	Transform* trans;
+	SpriteAnimator* anim;
+	float damageTime;
 };

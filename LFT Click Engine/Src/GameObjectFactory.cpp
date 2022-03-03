@@ -24,6 +24,7 @@
 #include "Components/Gun.h"
 #include "Components/FollowMouse.h"
 #include "Components/Damageable.h"
+#include "Components/LevelGenerator.h"
 #include <json.hpp>
 #include <string>
 #include <fstream>
@@ -62,7 +63,6 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 	//Not sure if there's a nicer way to do this, perhaps a parallel array/map?
 	Component * currentComp = nullptr;
 	int compID = std::stoi(type.key());
-	std::cout << compID << std::endl;
 
 	if (compID == Component::TRANSFORM)
 		currentComp = new Transform();
@@ -90,6 +90,8 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new Damageable();
 	else if (compID == Component::CIRCLE_COLLIDER)
 		currentComp = new CircleCollider();
+	else if (compID == Component::LEVEL_GENERATOR)
+		currentComp = new LevelGenerator();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

@@ -14,6 +14,8 @@
 #include <json.hpp>
 #include <DirectXMath.h>
 
+#define AUTOPILOT_START_DISTANCE 240
+
 using json = nlohmann::json;
 class Camera : public Component
 {
@@ -34,6 +36,8 @@ public:
 	void SetRot(float x, float y, float z);
 
 	void Move(float x, float y, float z = 0.0f);
+
+	void SetAutopilotVelocity(std::string direction = "none", float speed = 0);
 	
 	DirectX::XMVECTOR getPos();
 	DirectX::XMVECTOR getRot();
@@ -45,7 +49,9 @@ public:
 	float xPos, yPos, zPos, xRot, yRot, zRot;
 	float maxSpeed;
 private:
-	float speed, speedDelta, startingSpeed;
+	float speed, speedDelta, startingSpeed, autopilotSpeed;
 	GameObject* parent;
 	DirectX::XMMATRIX viewMatrix;
+	std::string autopilotDirection;
+	bool isAutopilot;
 };

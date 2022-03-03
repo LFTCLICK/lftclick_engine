@@ -29,7 +29,10 @@ public:
 		FOLLOW_MOUSE,
 		DAMAGEABLE,
 		CIRCLE_COLLIDER,
-		END_OF_ENGINE_COMPS = 100
+		END_OF_ENGINE_COMPS = 100,
+
+		SIDESCROLL_COMPS = 300,
+		LEVEL_GENERATOR
 	};
 
 	Component();
@@ -42,4 +45,5 @@ public:
 	virtual ~Component();
 
 public:
+	bool isFinishedDeleting;
 };

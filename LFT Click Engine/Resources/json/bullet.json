@@ -2,15 +2,15 @@
   "1": {
     "startX": 0.5,
     "startY": 0.5,
-    "scaleX": 15,
-    "scaleY": 15,
+    "scaleX": 30,
+    "scaleY": 30,
     "rot": 0,
     "zPos": 5
 
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale": 0.2,
+    "xScale": 0.25,
     "yScale": 1,
     "vertices": [
       {
@@ -32,22 +32,37 @@
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
-    "image": "Resources\\images\\bullet.png"
+    "image": "Resources\\images\\bullet_sprite_sheet.png"
   },
-  "13": {
-    "center": [ 0.0, 0.0, 0.0 ],
-    "radius": 10,
-    "trigger": true,
-    "deleteOnCollison": true
+  "6": {
+    "spriteSheetWidth": 4,
+    "spriteSheetHeight": 1,
+    "animations": [
+      {
+        "name": "bulletIdleRight",
+        "length": 4,
+        "frameDuration": 0.05,
+        "onMove": true,
+        "row": 0
+      },
+      {
+        "name": "bulletMoveRight",
+        "length": 4,
+        "frameDuration": 0.05,
+        "onMove": true,
+        "row": 0
+      }
+    ]
   },
   "9": {
     "animationTime": 1,
     "speed": 500,
     "keepAliveTime": 3
   },
-  "6": {
-    "spriteSheetWidth": 5,
-    "spriteSheetHeight": 1,
-    "frameTime": 0.05
+  "13": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "radius": 10,
+    "trigger": true,
+    "deleteOnCollison": true
   }
 }

@@ -26,17 +26,22 @@ public:
 	virtual int getCompId() override { return ComponentType::PLAYER; };
 
 	virtual Component* Clone(GameObject* newParent);
-	Player() {};
+	Player() : isDashing(false), autopilot(false) {};
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	void HandleMessage(Message* e);
 
+public:
+	void Move(float deltaX, float deltaY);
+	void Dash();
+	void Sidescroll(float deltaTime);
+	bool IsAutopilot() { return autopilot; }
 private:
 	GameObject* parent;
-	Transform* myTransform;
+	Transform* trans;
 	Camera* cam;
 	Gun* gun;
-	float playerSpeed;
-
-	float deadZone = 8000;
+	DirectX::SimpleMath::Vector2 dashVelocity;
+	float playerSpeed, dashSpeedMultiplier, dashTime, dashTimer, deadZone = 8000;
+	bool isDashing, autopilot;
 };

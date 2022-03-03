@@ -19,10 +19,6 @@
 #include <vector>
 #include <algorithm>
 
-#define ON_START 1000
-#define ON_MOVE 1001
-#define ON_HALT 1002
-
 struct SoundInfo {
 	std::string name;
 	bool loop = false;
@@ -36,6 +32,13 @@ struct SoundInfo {
 class Audible : public Component
 {
 public:
+	enum SoundEvent {
+		ON_START = 1000,
+		ON_MOVE,
+		ON_HALT,
+		ON_DAMAGE,
+		ON_DEATH
+	};
 	// Inherited via Component
 	virtual void Start() override;
 	virtual void Update() override;
