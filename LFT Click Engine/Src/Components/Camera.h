@@ -29,9 +29,8 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 	inline DirectX::SimpleMath::Vector2 WorldToScreenPos(DirectX::SimpleMath::Vector2 mycoords, float w, float h)
 	{
-		return DirectX::SimpleMath::Vector2((w / 2.0f) + (mycoords.x - xPos), (h / 2.0f) - (mycoords.y - yPos));
+		return DirectX::SimpleMath::Vector2((w / 2.0f) + (mycoords.x - xPos), (h / 2.0f)-(mycoords.y- yPos));
 	}
-
 	Camera();
 
 	

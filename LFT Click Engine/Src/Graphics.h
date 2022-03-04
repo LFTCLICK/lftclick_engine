@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
 // File Name		:	Graphics.h
-// Author			:	Vance Howald
+// Author			:	Vance Howald, Abhijit Zala
 // Creation Date	:	2021/11/14
 // Purpose			:	DX11 Rendering stuff
 // History			:
@@ -25,19 +25,6 @@ public:
 		return instance;
 	}
 
-	void ClearBuffer(UINT32 hexCode) noexcept
-	{
-		int red = (hexCode & 0xFF0000) >> 16;
-		int green = (hexCode & 0x00FF00) >> 8;
-		int blue = hexCode & 0x0000FF;
-		ClearBuffer((float)red / 255, (float)green / 255, (float)blue / 255);
-	}
-	void ClearBuffer(float red, float green, float blue) noexcept
-	{
-		const float color[] = { red,green,blue,1.0f };
-		immediateContext->ClearRenderTargetView(renderTargetView.Get(), color);
-		immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH, 1, 0);
-	}
 public:
 	Graphics();
 	~Graphics() = default;
@@ -45,7 +32,8 @@ public:
 	Graphics& operator=(const Graphics&) = delete;
 
 	void Initialize(HWND hWnd, int initWidth, int initHeight);
-	void EndFrame();
+	void PrepareForRendering();
+	void PresentFrame();
 
 	void Draw();
 	int GetWidth();

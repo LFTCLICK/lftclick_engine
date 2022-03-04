@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
 // File Name		:	Graphics.cpp
-// Author			:	Vance Howald
+// Author			:	Vance Howald, Abhijit Zala
 // Creation Date	:	2021/11/14
 // Purpose			:	DX11 Rendering stuff
 // History			:
@@ -104,6 +104,12 @@ void Graphics::Initialize(HWND hWnd, int initWidth, int initHeight)
 
 }
 
+void Graphics::PrepareForRendering()
+{
+	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
+	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+}
+
 void Graphics::UpdateClientSizeVars()
 {
 	//TODO -> Get current width/height from resized window
@@ -168,14 +174,9 @@ void Graphics::Draw()
 
 }
 
-void Graphics::EndFrame()
+void Graphics::PresentFrame()
 {
-	HRESULT hr;
-	if (FAILED(hr = swapChain->Present(0, 0)))
-	{
-		//throw hr
-	}
-
+	DX::ThrowIfFailed(swapChain->Present(0, 0));
 }
 
 int Graphics::GetWidth()
