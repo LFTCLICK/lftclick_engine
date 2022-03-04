@@ -18,8 +18,12 @@ void Player::Start()
 
 void Player::Update()
 {
+	ImGui::SetNextWindowPos({ 0,0 });
+	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 	ImGui::Text("Wood: %i", wood);
 	ImGui::Text("hp: %.0f", hp);
+	ImGui::End();
+	
 
 	InputManager& im = InputManager::getInstance();
 	float deltaTime = FrameRateController::getInstance().DeltaTime();

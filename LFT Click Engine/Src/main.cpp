@@ -23,6 +23,7 @@
 #include "Messages.h"
 #include "GameManager.h"
 #include "Components/Drawable.h"
+
 using json = nlohmann::json;
 
 using namespace DirectX;
@@ -158,12 +159,7 @@ int main(int argc, char* args[])
 
 			gom->Draw();
 
-			g_debugRenderer->DrawCircle(GameManager::getInstance().mainCamera->WorldToScreenPos(playerObj->getComponent<Transform>()->position,
-				windowWidth, windowHeight),
-				30.0f, 50.0f);
-			g_debugRenderer->DrawCircle(GameManager::getInstance().mainCamera->WorldToScreenPos(DirectX::SimpleMath::Vector2(100,100),
-				windowWidth, windowHeight),
-				30.0f, 50.0f);
+	
 			g_debugRenderer->Draw(&Graphics::getInstance());
 
 

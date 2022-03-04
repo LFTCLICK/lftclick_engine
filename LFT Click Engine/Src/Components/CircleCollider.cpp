@@ -11,6 +11,11 @@
 #include "CircleCollider.h"
 #include "Squarecollider.h"
 #include"Transform.h"
+#include "DebugRenderer.h"
+#include "GameManager.h"
+#include "Graphics.h"
+
+extern std::unique_ptr<DebugRenderer> g_debugRenderer;
 
 CircleCollider::CircleCollider()
 {
@@ -119,4 +124,14 @@ void CircleCollider::Deserialize(nlohmann::json j, GameObject* parent)
 	deleteOnCollison = false;
 	if (j.contains("deleteOnCollision"))
 		deleteOnCollison = j["deleteOnCollison"];
+}
+
+void CircleCollider::DebugDraw()
+{
+	Transform* t = parent->getComponent<Transform>();
+	assert(t != nullptr);
+	DirectX::SimpleMath::Vector2 debugCirclePos = GameManager::getInstance().mainCamera->WorldToScreenPos(t->CurrentPos(),
+		Graphics::getInstance().GetWidth(), Graphics::getInstance().GetHeight());
+
+	g_debugRenderer->DrawCircle(debugCirclePos, radius, 50.0f);
 }

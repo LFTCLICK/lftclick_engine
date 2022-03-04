@@ -72,7 +72,7 @@ void DebugRenderer::Draw(Graphics* graphics)
 	basicEffect->SetView(XMMatrixIdentity());
 	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0, graphics->GetWidth(), graphics->GetHeight(), 0, 0, 1));
 
-	basicEffect->SetColorAndAlpha(DirectX::Colors::Red);
+	basicEffect->SetColorAndAlpha(DirectX::Colors::Blue);
 
 	graphics->GetContext()->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
 	graphics->GetContext()->OMSetDepthStencilState(states->DepthNone(), 0);

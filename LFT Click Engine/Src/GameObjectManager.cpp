@@ -50,6 +50,10 @@ void GameObjectManager::Start()
 
 void GameObjectManager::Draw()
 {
+
+	static bool debugDraw = false;
+	ImGui::Checkbox("Draw Colliders", &debugDraw);
+
 	for (GameObject* g : gameObjectList)
 	{
 		if (g->isActive)
@@ -58,6 +62,23 @@ void GameObjectManager::Draw()
 			if (s != nullptr)
 			{
 				s->Draw();
+			}
+
+			if (!debugDraw)
+				continue;
+
+			CircleCollider* c = g->getComponent<CircleCollider>();
+			
+			if (c != nullptr)
+			{
+				c->DebugDraw();
+			}
+
+			SquareCollider* sq = g->getComponent<SquareCollider>();
+
+			if (sq != nullptr)
+			{
+				sq->DebugDraw();
 			}
 		}
 	}
