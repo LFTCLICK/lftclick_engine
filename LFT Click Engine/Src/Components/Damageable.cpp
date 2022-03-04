@@ -9,17 +9,30 @@
 #include "pch.h"
 #include "Damageable.h"
 
+const Audible::SoundEvent AUDIO_ON_DAMAGE = Audible::SoundEvent::AUDIO_ON_DAMAGE;
+const Audible::SoundEvent AUDIO_ON_DEATH = Audible::SoundEvent::AUDIO_ON_DEATH;
 
 void Damageable::Start()
 {
 	trans = parent->getComponent<Transform>();
 	anim = parent->getComponent<SpriteAnimator>();
+	audio = parent->getComponent<Audible>();
 	EventManager::getInstance().Subscribe(Message::DAMAGE_COLLISION, parent);
 }
 
 void Damageable::Update()
 {
-	if (destroyOnDeath && health < 1) parent->isDeletable = true;
+	if (destroyOnDeath && health < 1 && !parent->isDeletable) { 
+		anim->Die(deathTime);
+		audio->PlaySoundsOnEvent(AUDIO_ON_DEATH);
+		parent->isDeletable = true;
+	}
+	if (knockbackMod != 0 && (velocity.x != 0 || velocity.x != 0)) {
+		trans->Move(velocity.x * knockbackMod, velocity.y * knockbackMod);
+		velocity.x *= inertiaMod;
+		velocity.y *= inertiaMod;
+	}
+
 }
 
 void Damageable::Deserialize(nlohmann::json j, GameObject* parent)
@@ -27,6 +40,7 @@ void Damageable::Deserialize(nlohmann::json j, GameObject* parent)
 	this->parent = parent;
 	health = j["health"];
 	if (j.contains("destroyOnDeath")) destroyOnDeath = j["destroyOnDeath"];
+	if (j.contains("knockbackMod")) knockbackMod = j["knockbackMod"];
 }
 
 Component* Damageable::Clone(GameObject* newParent)
@@ -34,20 +48,26 @@ Component* Damageable::Clone(GameObject* newParent)
 	Damageable* toReturn = new Damageable();
 	toReturn->parent = newParent;
 	toReturn->health = health;
-	toReturn->acceleration = acceleration;
-	toReturn->speed = speed;
-	toReturn->direction = direction;
-	toReturn->trans = trans;
+	toReturn->inertiaMod = inertiaMod;
+	toReturn->velocity = velocity;
+	//toReturn->trans = trans;
+	toReturn->knockbackMod = knockbackMod;
+	toReturn->destroyOnDeath = destroyOnDeath;
 	return toReturn;
 }
 
 void Damageable::HandleMessage(Message* e) {
-	if (e->sourceObjectTag=="bullet" && e->id == Message::DAMAGE_COLLISION && health<10000000) {
-		--health;
+	if (e->sourceObjectTag == "bullet" && e->id == Message::DAMAGE_COLLISION && health < 10000000) {
+		Transform* bulletTrans = e->otherObject != nullptr ? e->otherObject->getComponent<Transform>() : nullptr;
+		if (bulletTrans != nullptr) velocity = bulletTrans->lastMovement;
+
+		TakeDamage(1);
 	}
 }
 
 void Damageable::TakeDamage(int damage) {
+	std::cout << health << std::endl;
 	health -= damage;
 	if (anim != nullptr) anim->Damage(damageTime);
+	if (audio != nullptr) audio->PlaySoundsOnEvent(AUDIO_ON_DAMAGE);
 }

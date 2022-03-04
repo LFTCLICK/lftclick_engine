@@ -36,6 +36,7 @@ void SpriteAnimator::UpdateState()
 {
 	if (trans->isMoving != wasMoving || direction != oldDirection || isDamaged != wasDamaged || isDead != wasDead) {
 		if (isDead) {
+			std::cout << "DED" << std::endl;
 			SwitchAnimation(deathAnimationIndex);
 		}
 		else if (isDamaged) {
@@ -49,14 +50,15 @@ void SpriteAnimator::UpdateState()
 		}
 		wasMoving = trans->isMoving;
 		wasDamaged = isDamaged;
+		wasDead = isDead;
 	}
 }
 void SpriteAnimator::UpdateFrame() 
 {
-	if (timer >= animations[currentAnimationIndex].frameDuration) {
+	if (timer >= animations[currentAnimationIndex].frameDuration && !(isDead && (currentFrame == animations[currentAnimationIndex].length - 1))) {
 		timer = 0;
-		if (!(isDead && (currentFrame == animations[currentAnimationIndex].length-1))) // don't continue cycling if at end of death animation
-			++currentFrame;
+		// don't continue cycling if at end of death animation
+		++currentFrame;
 
 		if (currentFrame < animations[currentAnimationIndex].length) {
 			draw->xOffset += xOffset;
@@ -67,9 +69,14 @@ void SpriteAnimator::UpdateFrame()
 		}
 	}
 
-	if (damageTimer >= damageTimeout) {
+	if (isDamaged && (damageTimer >= damageTimeout)) {
 		isDamaged = false;
 	}
+
+	if (isDead && (deathTimer >= deathTimeout)) {
+		isFinishedDeleting = true;
+	}
+
 }
 void SpriteAnimator::Update()
 {
@@ -83,6 +90,7 @@ void SpriteAnimator::Update()
 	float deltaTime = FrameRateController::getInstance().DeltaTime();
 	timer += deltaTime;
 	if (isDamaged) damageTimer += deltaTime;
+	if (isDead) deathTimer += deltaTime;
 }
 
 Component* SpriteAnimator::Clone(GameObject* newParent)
@@ -170,15 +178,24 @@ void SpriteAnimator::SwitchAnimation(std::string name) {
 }
 
 void SpriteAnimator::Damage(float time) {
-	isDamaged = true;
-	damageTimeout = time;
-	damageTimer = 0;
+	if (damageAnimationIndex > -1) {
+		isDamaged = true;
+		damageTimeout = time;
+		damageTimer = 0;
+	}
 }
 
-void SpriteAnimator::Die() {
-	isDead = true;
+void SpriteAnimator::Die(float time) {
+	std::cout << "DEAD" << std::endl;
+	if (deathAnimationIndex > -1) {
+		isFinishedDeleting = false;
+		isDead = true;
+		deathTimeout = time;
+		deathTimer = 0;
+	}
 }
 
 void SpriteAnimator::Revive() {
 	isDead = false;
+	isFinishedDeleting = true;
 }

@@ -10,8 +10,8 @@
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 0.5,
-    "yScale" : 0.125,
+    "xScale": 0.5,
+    "yScale": 0.125,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -30,8 +30,16 @@
         "uv": [ 1, 1 ]
       }
     ],
-    "indicies": [ 0, 1, 2, 2, 3, 0 ], 
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "image": "Resources\\images\\player_sprite_sheet.png"
+  },
+  "4": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "width": 40,
+    "height": 50,
+    "trigger": false,
+    "static": false,
+    "deleteOnCollison": false
   },
   "5": {
     "speed": 0,
@@ -41,14 +49,6 @@
     "startY": 0,
     "startZ": 0,
     "isMainCamera": true
-  },
-  "4": {
-    "center": [ 0.0, 0.0, 0.0 ],
-    "width": 40,
-    "height": 50,
-    "trigger": false,
-    "static": false,
-    "deleteOnCollison": false
   },
   "6": {
     "spriteSheetWidth": 2,
@@ -97,13 +97,35 @@
     ]
   },
   "7": {
-    "playerSpeed": 350,
+    "playerSpeed": 250,
     "dashSpeedMultiplier": 4,
     "dashTime": 0.2,
     "dashRecoveryTime": 1,
     "autopilot": false,
     "maxHp": 100,
     "damageCooldownTimer": 2
+  },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\sounds\\damage.mp3",
+        "loop": false,
+        "volume": 5,
+        "pitchRange": [ 0.5, 0.85 ],
+        "playEvents": [
+          1003
+        ]
+      },
+      {
+        "name": ".\\Resources\\sounds\\deathrattle.mp3",
+        "loop": false,
+        "volume": 5,
+        "pitchRange": [ 0.5, 0.85 ],
+        "playEvents": [
+          1004
+        ]
+      }
+    ]
   },
   "10": {
     "bulletTypes": [

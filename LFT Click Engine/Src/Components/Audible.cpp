@@ -13,50 +13,42 @@
 using json = nlohmann::json;
 
 void Audible::Start() {
-	channelGroupName = parent->tag;
+	channelGroupName = parent->tag + am->GenerateUniqueChannelGroupID();
 	am->LoadChannelGroup(channelGroupName);
 
-	if (sounds.empty())
+	if (sounds.empty()) {
 		std::cout << "Audible component is empty." << std::endl;
-	else
-		for (auto sound : sounds) {
-			am->LoadSound(sound.name, sound.loop, sound.compressed);
-			if (std::find(sound.playEvents.begin(), sound.playEvents.end(), ON_START) != sound.playEvents.end())
-				PlaySound(sound);
-		}
+	}
+	else {
+		LoadSounds(sounds);
+		PlaySoundsOnEvent(AUDIO_ON_START);
+	}
+}
+
+void Audible::LoadSounds(std::vector<SoundInfo> newSounds) {
+	for (auto sound : newSounds) 
+		am->LoadSound(sound.name, sound.loop, sound.compressed);
 }
 
 void Audible::Update() {
 	for (auto channel = channels.begin(); channel != channels.end();)
-		if (!am->IsPaused(channel->first) && !am->IsPlaying(channel->first))
+		if (!am->IsPaused(channel->first) && !am->IsPlaying(channel->first)) {
 			channel = channels.erase(channel);
+		}
 		else
 			++channel;
 
-	Transform* transformComp = parent->getComponent<Transform>();
+	Transform* trans = parent->getComponent<Transform>();
 
-	if (transformComp != nullptr) {
-		position = transformComp->CurrentPos();
+	if (trans != nullptr) {
+		position = trans->CurrentPos();
 		bool isMoving = DirectX::SimpleMath::Vector2::DistanceSquared(oldPosition, position) > 0;
 		if (isMoving != wasMoving) {
-			wasMoving = isMoving;
-			for (auto sound : sounds) {
-				if (std::find(sound.playEvents.begin(), sound.playEvents.end(), isMoving ? ON_MOVE : ON_HALT) != sound.playEvents.end())
-					PlaySound(sound);
-				if (std::find(sound.stopEvents.begin(), sound.stopEvents.end(), isMoving ? ON_MOVE : ON_HALT) != sound.stopEvents.end())
-					StopSound(sound.name);
-			}
+			HandleSoundsOnEvent((wasMoving = isMoving) ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
 		}
 	}
 
 	oldPosition = position;
-
-	/*
-	Vector2D finalPos = { position.x, position.y };
-	if (positionOffset.x == 0 && positionOffset.y == 0)
-		Vector2DAdd(&finalPos, &finalPos, &positionOffset);
-	SetPosition(finalPos);
-	*/
 }
 
 Component* Audible::Clone(GameObject* newParent) {
@@ -81,7 +73,7 @@ Audible::~Audible() {
 void Audible::PlaySound(SoundInfo sound) {
 	float pitch = sound.pitchRange[0] + (sound.pitchRange[0] == sound.pitchRange[1] ? 
 		0 : ((float)rand() / RAND_MAX) * (sound.pitchRange[1] - sound.pitchRange[0]));
-	channels[am->PlaySound(sound.name, channelGroupName, sound.volume, parent->getComponent<Transform>()->CurrentPos(), pitch)] = sound.name;
+	channels[am->PlaySound(sound.name, channelGroupName, sound.volume, { 0, 0 }, pitch)] = sound.name;
 }
 
 void Audible::Unpause() {
@@ -144,6 +136,27 @@ void Audible::StopSound(std::string soundName) {
 			break;
 		}
 	}
+}
+
+
+void Audible::PlaySoundsOnEvent(SoundEvent se) {
+	for (auto sound : sounds) {
+		if (std::find(sound.playEvents.begin(), sound.playEvents.end(), (int)se) != sound.playEvents.end()) {
+			PlaySound(sound);
+		}
+	}
+}
+
+void Audible::StopSoundsOnEvent(SoundEvent se) {
+	for (auto sound : sounds) {
+		if (std::find(sound.stopEvents.begin(), sound.stopEvents.end(), (int)se) != sound.stopEvents.end())
+			StopSound(sound.name);
+	}
+}
+
+void Audible::HandleSoundsOnEvent(SoundEvent se) {
+	StopSoundsOnEvent(se);
+	PlaySoundsOnEvent(se);
 }
 
 

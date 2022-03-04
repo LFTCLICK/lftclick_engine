@@ -58,3 +58,11 @@ GameObject * GameObject::Clone()
 		toReturn->comps[c.first] = c.second->Clone(toReturn);
 	return toReturn;
 }
+
+bool GameObject::AllComponentsFinished()
+{
+	for (const auto& c : comps)
+		if (!c.second->isFinishedDeleting)
+			return false;
+	return true;
+}

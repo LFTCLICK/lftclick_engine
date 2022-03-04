@@ -9,7 +9,7 @@
 #include "pch.h"
 #include "Component.h"
 
-Component::Component() : isFinishedDeleting(true)
+Component::Component()
 {
 }
 

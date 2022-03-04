@@ -41,11 +41,13 @@ bool FMODEngine::ChannelIsPlaying(FMOD::Channel* channel) {
 	return isPlaying;
 }
 
+int FMODEngine::GenerateChannelID() {
+	return nextID++;
+}
+
 
 // Audio Manager constructor.
-AudioManager::AudioManager() : engine(nullptr) {
-
-}
+AudioManager::AudioManager() : engine(nullptr), nextChannelGroupID(0) {}
 
 
 // Initializes the manager and FMOD engine. Should run only on game initialization.
@@ -110,8 +112,7 @@ int AudioManager::PlaySound(std::string name, std::string channelGroupName, floa
 		if (pitch != 1.f) CheckResult(__func__, channel->setPitch(pitch));
 		CheckResult(__func__, channel->setPaused(startPaused));
 
-		int channelIndex = 0;
-		CheckResult(__func__, channel->getIndex(&channelIndex));
+		int channelIndex = engine->GenerateChannelID();
 		engine->channels[channelIndex] = channel;
 		return channelIndex;
 	}
@@ -419,9 +420,14 @@ void AudioManager::AddToSoundGroup(FMOD::SoundGroup* soundGroup, std::string sou
 }
 
 
+std::string AudioManager::GenerateUniqueChannelGroupID() {
+	return std::to_string(nextChannelGroupID++);
+}
+
+
 // Prints the result of an FMOD function if it's anything but FMOD_OK
 void AudioManager::CheckResult(std::string functionName, FMOD_RESULT e) {
-	if (e != FMOD_OK) {
+	if (e != FMOD_OK && !(e == FMOD_ERR_INVALID_HANDLE && (functionName == "IsPlaying" || functionName == "IsPaused"))) {
 		auto FMODResultString = FMOD_RESULT_STRINGS.find(e);
 		if (FMODResultString == FMOD_RESULT_STRINGS.end())
 			std::cout << functionName << " failed with FMOD_RESULT enum " << e << std::endl;

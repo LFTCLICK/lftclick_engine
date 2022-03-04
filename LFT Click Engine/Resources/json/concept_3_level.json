@@ -9,8 +9,12 @@
       "tag": "wall"
     },
     {
-      "prefab": "Resources\\json\\bg.json",
+      "prefab": "Resources\\json\\bg_no_sound.json",
       "tag": "bg"
+    },
+    {
+      "prefab": "Resources\\json\\bg.json",
+      "tag": "bg_sound"
     },
     {
       "prefab": "Resources\\json\\bullet_fast.json",
@@ -39,7 +43,7 @@
   ],
   "Level": [
     {
-      "object": "bg",
+      "object": "bg_sound",
       "overrides": [
         {
           "1": {
@@ -158,7 +162,7 @@
         },
         {
           "7": {
-            "playerSpeed": 350,
+            "playerSpeed": 250,
             "dashSpeedMultiplier": 1,
             "dashTime": 0.2,
             "autopilot": true
@@ -168,10 +172,6 @@
     },
     {
       "object": "generator",
-      "overrides": []
-    },
-    {
-      "object": "enemy",
       "overrides": []
     },
     {

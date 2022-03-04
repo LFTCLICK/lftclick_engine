@@ -30,7 +30,7 @@ class CollisionMessage : public Message
 public:
 	CollisionMessage(std::string sourceObjectTag, GameObject* other, DirectX::SimpleMath::Vector2 deltaPos = { 0,0 }, uint32_t runAtTick = 0) : deltaPos(deltaPos)
 	{
-		id = MessageID::COLLISION;
+		id = Message::MessageID::COLLISION;
 		tickTime = runAtTick;
 		Message::sourceObjectTag = sourceObjectTag;
 		otherObject = other;
@@ -51,5 +51,4 @@ public:
 		otherObject = other;
 	};
 	~DamageCollisionMessage() = default;
-
 };

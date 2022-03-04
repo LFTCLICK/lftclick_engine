@@ -33,11 +33,11 @@ class Audible : public Component
 {
 public:
 	enum SoundEvent {
-		ON_START = 1000,
-		ON_MOVE,
-		ON_HALT,
-		ON_DAMAGE,
-		ON_DEATH
+		AUDIO_ON_START = 1000,
+		AUDIO_ON_MOVE,
+		AUDIO_ON_HALT,
+		AUDIO_ON_DAMAGE,
+		AUDIO_ON_DEATH
 	};
 	// Inherited via Component
 	virtual void Start() override;
@@ -50,6 +50,7 @@ public:
 	Audible() : parent(nullptr), am(&AudioManager::getInstance()), sounds({}), position({ 0.0f }), positionOffset({ 0.0f }) {}
 	~Audible();
 
+	void LoadSounds(std::vector<SoundInfo> newSounds);
 	void PlaySound(SoundInfo sound);
 	void Unpause();
 	void Pause();
@@ -66,6 +67,9 @@ public:
 	void Stop();
 	void StopSound(std::string soundName);
 
+	void PlaySoundsOnEvent(SoundEvent se);
+	void StopSoundsOnEvent(SoundEvent se);
+	void HandleSoundsOnEvent(SoundEvent se);
 
 	DirectX::SimpleMath::Vector2 positionOffset;
 

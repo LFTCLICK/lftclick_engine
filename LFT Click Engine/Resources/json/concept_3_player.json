@@ -84,7 +84,7 @@
     ]
   },
   "7": {
-    "playerSpeed": 350,
+    "playerSpeed": 200,
     "dashSpeedMultiplier": 4,
     "dashTime": 0.2,
     "dashRecoveryTime": 1,

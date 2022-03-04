@@ -29,7 +29,7 @@ void GameObjectManager::Update()
 	while (objIt != gameObjectList.end()) {
 		GameObject* g = *objIt;
 
-		if (g->isDeletable) {
+		if (g->isDeletable && g->AllComponentsFinished()) {
 			EventManager::getInstance().UnsubscribeFromAllEvents(g);
 			objIt = gameObjectList.erase(objIt);
 			delete g;
@@ -74,19 +74,26 @@ void GameObjectManager::DoCollision(GameObject* toCheckWith)
 			CollisionResolution
 		}
 	}*/
-	for (GameObject* g : gameObjectList)
+	Transform* t1 = toCheckWith->getComponent<Transform>();
+
+	if (t1 != nullptr) for (GameObject* g : gameObjectList)
 	{
-		if (g->isActive && !g->isDeletable && g != toCheckWith)
-		{
-			Collider* s = dynamic_cast<Collider*>(g->getComponent<MeshCollider>());
-			if (s != nullptr) 
-				s->CollisionCheck(toCheckWith);
-			s = dynamic_cast<Collider*>(g->getComponent<SquareCollider>());
-			if (s != nullptr)
-				s->CollisionCheck(toCheckWith);
-			s = dynamic_cast<Collider*>(g->getComponent<CircleCollider>());
-			if (s != nullptr) 
-				s->CollisionCheck(toCheckWith);
+		Transform* t2 = g->getComponent<Transform>();
+		if (t2 != nullptr) {
+			auto pos1 = t1->CurrentPos(), pos2 = t2->CurrentPos();
+
+			if (std::abs(pos1.x - pos2.x) < 1500 && g->isActive && !g->isDeletable && g != toCheckWith)
+			{
+				Collider* s = dynamic_cast<Collider*>(g->getComponent<MeshCollider>());
+				if (s != nullptr) 
+					s->CollisionCheck(toCheckWith);
+				s = dynamic_cast<Collider*>(g->getComponent<SquareCollider>());
+				if (s != nullptr)
+					s->CollisionCheck(toCheckWith);
+				s = dynamic_cast<Collider*>(g->getComponent<CircleCollider>());
+				if (s != nullptr) 
+					s->CollisionCheck(toCheckWith);
+			}
 		}
 	}
 }

@@ -30,8 +30,11 @@ struct FMODEngine {
     ~FMODEngine();
     void Update();
     bool ChannelIsPlaying(FMOD::Channel* channel);
+    int GenerateChannelID();
+    int nextID = 0;
 
     FMOD::System* system;
+
 
     std::map<int, FMOD::Channel*> channels;
     std::map<std::string, FMOD::ChannelGroup*> channelGroups;
@@ -123,8 +126,11 @@ public:
     void AddToSoundGroup(std::string soundGroupName, FMOD::Sound* sound);
     void AddToSoundGroup(FMOD::SoundGroup* soundGroup, std::string soundName);
 
+    std::string GenerateUniqueChannelGroupID();
+
 private:
     AudioManager();
     FMODEngine* engine;
+    long int nextChannelGroupID;
     void CheckResult(std::string functionName, FMOD_RESULT e);
 };

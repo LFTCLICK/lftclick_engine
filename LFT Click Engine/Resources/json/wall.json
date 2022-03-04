@@ -31,7 +31,6 @@
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "image": "Resources\\images\\wall_sprite_sheet.png"
-
   },
   "4": {
     "center": [ 0.0, -0.0, 0.0 ],

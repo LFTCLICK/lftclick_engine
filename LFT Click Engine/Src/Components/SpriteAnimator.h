@@ -51,7 +51,7 @@ public:
 	void SwitchAnimation(std::string name);
 
 	void Damage(float time);
-	void Die();
+	void Die(float time);
 	void Revive();
 
 private:
@@ -68,7 +68,7 @@ private:
 
 	std::string oldDirection, direction;
 
-	float xOffset, yOffset, timer, damageTimer, damageTimeout;
+	float xOffset, yOffset, timer, damageTimer, damageTimeout, deathTimer, deathTimeout;
 	int spriteSheetWidth, spriteSheetHeight, currentFrame, currentAnimationIndex;
 	bool wasMoving, isDamaged, wasDamaged, isDead, wasDead;
 };

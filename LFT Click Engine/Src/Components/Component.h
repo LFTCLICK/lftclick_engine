@@ -29,10 +29,12 @@ public:
 		FOLLOW_MOUSE,
 		DAMAGEABLE,
 		CIRCLE_COLLIDER,
+
 		END_OF_ENGINE_COMPS = 100,
 		ENEMY_SPAWNER,
 		DOOR_OBJ,
 		ENEMY,
+
 		SIDESCROLL_COMPS = 300,
 		LEVEL_GENERATOR
 	};
@@ -47,5 +49,5 @@ public:
 	virtual ~Component();
 
 public:
-	bool isFinishedDeleting;
+	bool isFinishedDeleting = true;
 };

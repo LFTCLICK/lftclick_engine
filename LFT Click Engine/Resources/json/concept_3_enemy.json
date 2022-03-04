@@ -6,7 +6,6 @@
     "scaleY": 80,
     "rot": 0,
     "zPos": 5
-
   },
   "2": {
     "onlyUVOverrides": false,
@@ -86,6 +85,28 @@
       }
     ]
   },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\sounds\\damage.mp3",
+        "loop": false,
+        "volume": 50,
+        "pitchRange": [ 0.75, 0.85 ],
+        "playEvents": [
+          1003
+        ]
+      },
+      {
+        "name": ".\\Resources\\sounds\\deathrattle.mp3",
+        "loop": false,
+        "volume": 50,
+        "pitchRange": [ 0.75, 0.85 ],
+        "playEvents": [
+          1004
+        ]
+      }
+    ]
+  },
   "10": {
     "bulletTypes": [
       {
@@ -93,5 +114,8 @@
         "prefabTag": "enemyBullet"
       }
     ]
+  },
+  "12": {
+    "health": 3
   }
 }

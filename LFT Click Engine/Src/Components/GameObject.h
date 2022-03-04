@@ -45,6 +45,7 @@ public:
 	std::string tag;
 	bool isActive;
 	bool isDeletable;
+	bool AllComponentsFinished();
 private:
 	std::map<int, Component*> comps;
 	GameObject* Clone();//ONLY FACTORY SHOULD TOUCH THIS
