@@ -33,27 +33,6 @@ std::unique_ptr<DebugRenderer> g_debugRenderer;
 int main(int argc, char* args[])
 {
 	int windowWidth = 800, windowHeight = 800;
-	// Create Lua State
-	lua_State* L = luaL_newstate();
-
-	// Adding standard libraries to Lua Virtual Machine
-	luaL_openlibs(L);
-
-	if (CheckLua(L, luaL_dofile(L, "Resources\\LuaScripts\\ConfigurationScript.lua")))
-	{
-		lua_getglobal(L, "windowWidth");
-		if (lua_isnumber(L, -1))
-		{
-			windowWidth = (float)lua_tonumber(L, -1);
-		}
-
-		lua_getglobal(L, "windowHeight");
-		if (lua_isnumber(L, -1))
-		{
-			windowHeight = (float)lua_tonumber(L, -1);
-		}
-	}
-
 	
 	//Init SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
