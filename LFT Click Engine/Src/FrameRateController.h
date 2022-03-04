@@ -29,7 +29,7 @@ public:
 	float DeltaTime();
 private:
 	FrameRateController();
-	
+	bool* isPlayerDead;
 	__int64 m_CurrentTime;
 	__int64 m_PreviousTime;
 	__int64 countsPerFrame;

@@ -28,6 +28,7 @@
 #include "Components/Enemy.h"
 #include "Components/Door.h"
 #include "Components/EnemySpawner.h"
+#include "Components/WoodPile.h"
 
 #include <json.hpp>
 #include <string>
@@ -103,6 +104,8 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new Door();
 	else if (compID == Component::ENEMY_SPAWNER)
 		currentComp = new EnemySpawner();
+	else if (compID == Component::WOOD_PILE)
+		currentComp = new WoodPile();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

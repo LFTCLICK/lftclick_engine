@@ -29,6 +29,10 @@
       "tag": "door"
     },
     {
+      "prefab": "Resources\\json\\woodpile.json",
+      "tag": "wood"
+    },
+    {
       "prefab": "Resources\\json\\crosshairs.json",
       "tag": "crosshairs"
     }
@@ -37,6 +41,21 @@
     {
       "object": "bg",
       "overrides": []
+    },
+    {
+      "object": "wood",
+      "overrides": [
+        {
+          "1": {
+            "startX": 0.0,
+            "startY": 100.0,
+            "scaleX": 144,
+            "scaleY": 32,
+            "rot": 0,
+            "zPos": 3
+          }
+        }
+      ]
     },
     {
       "object": "player",

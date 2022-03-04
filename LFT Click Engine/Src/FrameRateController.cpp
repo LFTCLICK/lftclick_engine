@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "FrameRateController.h"
+#include "GameManager.h"
 #include <iostream>
 #include <Windows.h>
 #include <synchapi.h>
@@ -20,6 +21,7 @@ void FrameRateController::Init(int desiredFPS)
 	QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSecond);
 	countsPerFrame = countsPerSecond / desiredFPS;
 	milisecConverter = countsPerSecond / 1000;
+	isPlayerDead = &GameManager::getInstance().playerDead;
 	Reset();
 }
 
@@ -64,6 +66,8 @@ void FrameRateController::Tick()
 	}
 	m_CurrentTime = endTime;
 	m_DeltaTime = (m_CurrentTime - m_PreviousTime) * m_SecondsPerCount;
+	if (*isPlayerDead)
+		m_DeltaTime = 0;
 	m_PreviousTime = m_CurrentTime;
 
 	if (m_DeltaTime < 0.0)

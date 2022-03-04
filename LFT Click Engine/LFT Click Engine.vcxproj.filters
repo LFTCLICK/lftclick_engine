@@ -150,6 +150,9 @@
     <ClCompile Include="Src\Components\EnemySpawner.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Components\WoodPile.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
@@ -283,6 +286,9 @@
       <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\CircleCollider.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\WoodPile.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>

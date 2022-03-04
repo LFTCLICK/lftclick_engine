@@ -290,6 +290,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Src\Components\LevelGenerator.cpp" />
+    <ClCompile Include="Src\Components\WoodPile.cpp" />
     <ClCompile Include="Src\DebugRenderer.cpp" />
     <ClCompile Include="Src\EventManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -378,6 +379,7 @@
     <ClInclude Include="Src\Components\SquareCollider.h" />
     <ClInclude Include="Src\Components\Transform.h" />
     <ClInclude Include="Src\Components\LevelGenerator.h" />
+    <ClInclude Include="Src\Components\WoodPile.h" />
     <ClInclude Include="Src\ConstantBuffer.h" />
     <ClInclude Include="Src\DebugRenderer.h" />
     <ClInclude Include="Src\EventManager.h" />

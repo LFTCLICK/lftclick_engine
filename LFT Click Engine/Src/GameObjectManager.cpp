@@ -15,6 +15,7 @@
 #include "Components\SquareCollider.h"
 #include "Components\CircleCollider.h"
 #include "CollisionResolution.h"
+#include "GameManager.h"
 
 GameObjectManager::GameObjectManager()
 {
@@ -116,9 +117,10 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 				newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
 			}
 		}
-		newOne->Start();
-
+		//newOne->Start();
 	}
+	for (GameObject* g : gameObjectList)
+		g->Start();
 }
 
 void GameObjectManager::AddGameObject(GameObject * go)

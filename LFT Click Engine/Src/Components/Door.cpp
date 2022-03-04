@@ -25,7 +25,7 @@ void Door::Update()
 		//imgui stuff
 		if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_E) && p->wood> woodRequiredPerPhase)
 		{
-			//imgui building
+			ImGui::Text("Repairing door...");
 			internalTimer += FrameRateController::getInstance().DeltaTime();
 		}
 		else if (InputManager::getInstance().isKeyReleased(SDL_SCANCODE_E))
@@ -46,6 +46,11 @@ void Door::Update()
 	else
 		internalTimer = 0;
 	playerInRange = false;
+	if (hp <= 0 && !sqCollider->isTrigger)
+	{
+		UpdateImage();
+		sqCollider->isTrigger = true;
+	}
 }
 
 void Door::Deserialize(nlohmann::json j, GameObject* parent)
@@ -70,7 +75,7 @@ Component* Door::Clone(GameObject* newParent)
 
 void Door::UpdateImage()
 {
-	draw->xOffset = ((float)currentPhase / doorPhases);
+	draw->xOffset = std::max(0.0f, ((float)currentPhase / doorPhases));
 }
 
 void Door::HandleMessage(Message* e)

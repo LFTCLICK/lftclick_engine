@@ -68,6 +68,10 @@ void Player::Update()
 		timer -= FrameRateController::getInstance().DeltaTime();
 	}
 	badTouch = false;
+	if (hp <= 0)
+	{
+		GameManager::getInstance().playerDead = true;
+	}
 }
 
 Component* Player::Clone(GameObject* newParent)
