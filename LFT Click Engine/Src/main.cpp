@@ -169,7 +169,34 @@ int main(int argc, char* args[])
 				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 				ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
 				ImGui::End();
+			if (GameManager::getInstance().playerDead)
+			{
+				ImGui::SetNextWindowPos({ (float)((windowWidth/2)-50),(float)((windowHeight/2)+100)});
+				ImGui::Begin("mainMenu", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
+				if (ImGui::Button("Restart", { 100,50 }) || GameManager::getInstance().playerRestart)
+				{
+					isRunning = false;
+					playGame = true;
+					doMenu = false;
+					masterLoop = true;
+				}
+				//if (ImGui::Button("Main Menu", { 100,50 }))
+				//{
+				//	isRunning = false;
+				//	playGame = false;
+				//	doMenu = true;
+				//	masterLoop = true;
+				//}
+				if (ImGui::Button("Quit", { 100,50 }))
+				{
+					isRunning = false;
+					playGame = false;
+					doMenu = false;
+					masterLoop = false;
+				}
 
+				ImGui::End();
+			}
 
 			ImGui::Render();
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -184,17 +211,16 @@ int main(int argc, char* args[])
 		GameManager::getInstance().playerRestart = false;
 		GameManager::getInstance().playerScore = 0;
 
-
-		ImGui_ImplDX11_Shutdown();
-		ImGui_ImplSDL2_Shutdown();
-		ImGui::DestroyContext();
-
-		g_debugRenderer.reset();
-
-		AudioManager::getInstance().Term();
-		SDL_DestroyWindow(pWindow);
-		SDL_Quit();
-
-		return 0;
 	}
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
+	g_debugRenderer.reset();
+
+	AudioManager::getInstance().Term();
+	SDL_DestroyWindow(pWindow);
+	SDL_Quit();
+
+	return 0;
 }

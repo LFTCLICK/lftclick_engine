@@ -9,8 +9,8 @@
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 1,
-    "yScale" : 1,
+    "xScale" : 0.5,
+    "yScale" : 0.125,
     "vertices" : [
     {
         "pos": [-0.5,-0.5,0],
@@ -30,7 +30,7 @@
     }
     ],
     "indicies": [0, 1, 2, 2, 3, 0],
-    "image": "Resources\\images\\enemy.png"
+    "image": "Resources\\images\\enemy_sprite_sheet.png"
 
   },
   "4": {
@@ -40,6 +40,52 @@
     "trigger": false,
     "static": false,
     "deleteOnCollison": false
+  },
+  "6": {
+    "spriteSheetWidth": 2,
+    "spriteSheetHeight": 8,
+    "animations": [
+      {
+        "name": "idlePlayerRight",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "right"
+      },
+      {
+        "name": "movingPlayerRight",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "right"
+      },
+      {
+        "name": "idlePlayerLeft",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "left"
+      },
+      {
+        "name": "movingPlayerLeft",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "left"
+      },
+      {
+        "name": "damagedPlayer",
+        "length": 2,
+        "frameDuration": 0.125,
+        "onDamage": true
+      },
+      {
+        "name": "deadPlayer",
+        "length": 2,
+        "frameDuration": 1,
+        "onDeath": true
+      }
+    ]
   },
   "12": {
     "health": 3
