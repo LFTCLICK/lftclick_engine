@@ -32,6 +32,7 @@ public:
 	float* getPoints();
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
+	void DebugDraw() override;
 private:
 	GameObject* parent;
 	float* points;

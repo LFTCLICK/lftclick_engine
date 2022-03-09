@@ -15,7 +15,7 @@ class GameObject;
 class Component
 {
 public:
-	enum ComponentType{
+	enum ComponentType {
 		TRANSFORM = 1,
 		DRAWABLE,
 		MESH_COLLIDER,
@@ -29,7 +29,13 @@ public:
 		FOLLOW_MOUSE,
 		DAMAGEABLE,
 		CIRCLE_COLLIDER,
-		END_OF_ENGINE_COMPS = 100
+		END_OF_ENGINE_COMPS = 100,
+		ENEMY_SPAWNER,
+		DOOR_OBJ,
+		ENEMY,
+		WOOD_PILE,
+		SIDESCROLL_COMPS = 300,
+		LEVEL_GENERATOR
 	};
 
 	Component();

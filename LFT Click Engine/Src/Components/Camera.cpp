@@ -19,7 +19,7 @@ Camera::Camera()
 	viewMatrix = DirectX::XMMatrixIdentity();
 }
 
-Component * Camera::Clone(GameObject * newParent)
+Component* Camera::Clone(GameObject* newParent)
 {
 	Camera* toReturn = new Camera();
 	toReturn->xPos = xPos;
@@ -28,6 +28,9 @@ Component * Camera::Clone(GameObject * newParent)
 	toReturn->xRot = xRot;
 	toReturn->yRot = yRot;
 	toReturn->zRot = zRot;
+	toReturn->isAutopilot = isAutopilot;
+	toReturn->autopilotDirection = autopilotDirection;
+	toReturn->autopilotSpeed = autopilotSpeed;
 	toReturn->parent = newParent;
 	return (Component*)toReturn;
 }
@@ -52,12 +55,19 @@ void Camera::Start()
 
 void Camera::Update()
 {
-	if (parent->getComponent<Transform>() != nullptr) {
+	if (isAutopilot) {
+		float movement = autopilotSpeed * FrameRateController::getInstance().DeltaTime();
+
+		if (autopilotDirection == "right") xPos += movement;
+		else if (autopilotDirection == "left") xPos -= movement;
+		else if (autopilotDirection == "up") yPos += movement;
+		else if (autopilotDirection == "down") yPos -= movement;
+	}
+	else if (parent->getComponent<Transform>() != nullptr) {
 		auto pos = parent->getComponent<Transform>()->CurrentPos();
 		xPos = pos.x;
 		yPos = pos.y;
 	}
-
 
 	/* Old Pengi Panic code I believe?
 
@@ -89,6 +99,29 @@ void Camera::Move(float x, float y, float z)
 	zPos += z;
 }
 
+
+
+void Camera::SetAutopilotVelocity(std::string direction, float speed) {
+
+	auto pos = parent->getComponent<Transform>()->CurrentPos();
+	xPos = pos.x, yPos = pos.y;
+	autopilotSpeed = speed;
+	autopilotDirection = direction;
+
+	if (direction != "" && direction != "none") {
+		if (direction == "right") xPos += AUTOPILOT_START_DISTANCE;
+		else if (direction == "left") xPos -= AUTOPILOT_START_DISTANCE;
+		else if (direction == "up") yPos += AUTOPILOT_START_DISTANCE;
+		else if (direction == "down") yPos -= AUTOPILOT_START_DISTANCE;
+
+		isAutopilot = true;
+	}
+	else {
+		isAutopilot = false;
+	}
+
+}
+
 DirectX::XMVECTOR Camera::getPos()
 {
 	return DirectX::XMVECTOR{ xPos, yPos, zPos, 1 };
@@ -101,12 +134,12 @@ DirectX::XMVECTOR Camera::getRot()
 
 void Camera::Render()
 {
-	viewMatrix = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos)*DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
+	viewMatrix = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
 }
 
-void Camera::GetViewMatrix(DirectX::XMMATRIX & toReturn)
+void Camera::GetViewMatrix(DirectX::XMMATRIX& toReturn)
 {
-	toReturn = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos)*DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
+	toReturn = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
 	//toReturn = viewMatrix;
 }
 
@@ -114,9 +147,9 @@ DirectX::XMMATRIX Camera::GetProjectionMatrix()
 {
 	DirectX::XMMATRIX translation;
 	GetViewMatrix(translation);
-	
-	return translation * DirectX::XMMatrixOrthographicLH(Graphics::getInstance().GetWidth(), Graphics::getInstance().GetHeight(), 
-			0.01f, 1000);
+
+	return translation * DirectX::XMMatrixOrthographicLH(Graphics::getInstance().GetWidth(), Graphics::getInstance().GetHeight(),
+		0.01f, 1000);
 }
 
 int Camera::getCompId()

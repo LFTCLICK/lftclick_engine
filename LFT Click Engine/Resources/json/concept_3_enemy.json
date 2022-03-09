@@ -10,8 +10,8 @@
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 0.5,
-    "yScale" : 0.125,
+    "xScale": 0.5,
+    "yScale": 0.125,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -30,24 +30,14 @@
         "uv": [ 1, 1 ]
       }
     ],
-    "indicies": [ 0, 1, 2, 2, 3, 0 ], 
-    "image": "Resources\\images\\player_sprite_sheet.png"
-  },
-  "5": {
-    "speed": 0,
-    "speedDelta": 5000000,
-    "maxSpeed": 0,
-    "startX": 0,
-    "startY": 0,
-    "startZ": 0,
-    "isMainCamera": true
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "image": "Resources\\images\\enemy_sprite_sheet.png"
   },
   "4": {
     "center": [ 0.0, 0.0, 0.0 ],
     "width": 40,
     "height": 50,
-    "trigger": false,
-    "static": false,
+    "trigger": true,
     "deleteOnCollison": false
   },
   "6": {
@@ -55,61 +45,52 @@
     "spriteSheetHeight": 8,
     "animations": [
       {
-        "name": "idlePlayerRight",
+        "name": "idleEnemyRight",
         "length": 2,
         "frameDuration": 1,
         "onIdle": true,
         "direction": "right"
       },
       {
-        "name": "movingPlayerRight",
+        "name": "movingEnemyRight",
         "length": 2,
         "frameDuration": 0.25,
         "onMove": true,
         "direction": "right"
       },
       {
-        "name": "idlePlayerLeft",
+        "name": "idleEnemyLeft",
         "length": 2,
         "frameDuration": 1,
         "onIdle": true,
         "direction": "left"
       },
       {
-        "name": "movingPlayerLeft",
+        "name": "movingEnemyLeft",
         "length": 2,
         "frameDuration": 0.25,
         "onMove": true,
         "direction": "left"
       },
       {
-        "name": "damagedPlayer",
+        "name": "damagedEnemy",
         "length": 2,
         "frameDuration": 0.125,
         "onDamage": true
       },
       {
-        "name": "deadPlayer",
+        "name": "deadEnemy",
         "length": 2,
         "frameDuration": 1,
         "onDeath": true
       }
     ]
   },
-  "7": {
-    "playerSpeed": 350,
-    "dashSpeedMultiplier": 4,
-    "dashTime": 0.2,
-    "dashRecoveryTime": 1,
-    "autopilot": false,
-    "maxHp": 100,
-    "damageCooldownTimer": 2
-  },
   "10": {
     "bulletTypes": [
       {
         "fireRate": 1,
-        "prefabTag": "bullet"
+        "prefabTag": "enemyBullet"
       }
     ]
   }

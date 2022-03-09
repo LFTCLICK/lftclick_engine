@@ -32,7 +32,7 @@
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
-    "image": "Resources\\images\\bullet_sprite_sheet.png"
+    "image": "Resources\\images\\enemy_bullet_sprite_sheet.png"
   },
   "6": {
     "spriteSheetWidth": 4,
@@ -51,27 +51,6 @@
         "frameDuration": 0.05,
         "onMove": true,
         "row": 0
-      }
-    ]
-  },
-  "4": {
-    "center": [ 0.0, -0.0, 0.0 ],
-    "width": 15,
-    "height": 15,
-    "trigger": true,
-    "static": false,
-    "deleteOnCollison": true
-  },
-  "8": {
-    "sounds": [
-      {
-        "name": ".\\Resources\\sounds\\clang.mp3",
-        "loop": false,
-        "volume": 5,
-        "pitchRange": [ 0.85, 1.15 ],
-        "playEvents": [
-          1000
-        ]
       }
     ]
   },

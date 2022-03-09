@@ -9,6 +9,14 @@
 #include "pch.h"
 #include "SquareCollider.h"
 #include"Transform.h"
+#include "DebugRenderer.h"
+#include "GameManager.h"
+#include "Graphics.h"
+#include "GameManager.h"
+
+using namespace DirectX::SimpleMath;
+
+extern std::unique_ptr<DebugRenderer> g_debugRenderer;
 
 SquareCollider::SquareCollider()
 {
@@ -20,14 +28,14 @@ void SquareCollider::Start()
 	center.x *= trans->scale.x;
 	center.y *= trans->scale.y;
 	points = new float[8];
-	points[0] = (.5f*width) + center.x;
-	points[1] = (.5f*height) + center.y;
-	points[2] = (.5f*width) + center.x;
-	points[3] = (-.5f*height) + center.y;
-	points[4] = (-.5f*width) + center.x;
-	points[5] = (-.5f*height) + center.y;
-	points[6] = (-.5f*width) + center.x;
-	points[7] = (.5f*height) + center.y;
+	points[0] = (.5f * width) + center.x;
+	points[1] = (.5f * height) + center.y;
+	points[2] = (.5f * width) + center.x;
+	points[3] = (-.5f * height) + center.y;
+	points[4] = (-.5f * width) + center.x;
+	points[5] = (-.5f * height) + center.y;
+	points[6] = (-.5f * width) + center.x;
+	points[7] = (.5f * height) + center.y;
 }
 
 void SquareCollider::Update()
@@ -39,7 +47,7 @@ int SquareCollider::getCompId()
 	return ComponentType::SQUARE_COLLLIDER;
 }
 
-Component * SquareCollider::Clone(GameObject * newParent)
+Component* SquareCollider::Clone(GameObject* newParent)
 {
 	SquareCollider* toReturn = new SquareCollider();
 	toReturn->parent = newParent;
@@ -47,8 +55,9 @@ Component * SquareCollider::Clone(GameObject * newParent)
 	toReturn->width = width;
 	toReturn->height = height;
 	toReturn->isTrigger = isTrigger;
+	toReturn->isStatic = isStatic;
 	toReturn->deleteOnCollison = deleteOnCollison;
-	return (Component*) toReturn;
+	return (Component*)toReturn;
 }
 
 void SquareCollider::CollisionCheck(GameObject* toCheck)
@@ -123,7 +132,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 	}
 }
 
-float * SquareCollider::getPoints()
+float* SquareCollider::getPoints()
 {
 	return points;
 }
@@ -136,5 +145,28 @@ void SquareCollider::Deserialize(nlohmann::json j, GameObject* parent)
 	width = j["width"];
 	height = j["height"];
 	isTrigger = j["trigger"];
+	//isStatic = j["static"];
 	deleteOnCollison = j["deleteOnCollison"];
+}
+
+void SquareCollider::DebugDraw()
+{
+	Transform* t = parent->getComponent<Transform>();
+	assert(t != nullptr);
+
+	auto cam = GameManager::getInstance().mainCamera;
+	float screenWidth = Graphics::getInstance().GetWidth();
+	float screenHeight = Graphics::getInstance().GetHeight();
+
+	Vector2 a = t->CurrentPos() - Vector2(width / 2.0f, -height / 2.0f);
+	Vector2 b = t->CurrentPos() + Vector2(width / 2.0f, height / 2.0f);
+	Vector2 c = t->CurrentPos() + Vector2(width / 2.0f, -height / 2.0f);
+	Vector2 d = t->CurrentPos() - Vector2(width / 2.0f, height / 2.0f);
+
+	a = cam->WorldToScreenPos(a, screenWidth, screenHeight);
+	b = cam->WorldToScreenPos(b, screenWidth, screenHeight);
+	c = cam->WorldToScreenPos(c, screenWidth, screenHeight);
+	d = cam->WorldToScreenPos(d, screenWidth, screenHeight);
+
+	g_debugRenderer->DrawQuad(a, b, c, d);
 }

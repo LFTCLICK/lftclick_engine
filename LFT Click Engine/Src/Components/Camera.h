@@ -14,6 +14,8 @@
 #include <json.hpp>
 #include <DirectXMath.h>
 
+#define AUTOPILOT_START_DISTANCE 240
+
 using json = nlohmann::json;
 class Camera : public Component
 {
@@ -27,28 +29,32 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 	inline DirectX::SimpleMath::Vector2 WorldToScreenPos(DirectX::SimpleMath::Vector2 mycoords, float w, float h)
 	{
-		return DirectX::SimpleMath::Vector2((w / 2.0f) + (mycoords.x - xPos), (h / 2.0f)-(mycoords.y- yPos));
+		return DirectX::SimpleMath::Vector2((w / 2.0f) + (mycoords.x - xPos), (h / 2.0f) - (mycoords.y - yPos));
 	}
 	Camera();
 
-	
+
 
 	void SetPos(float x, float y, float z);
 	void SetRot(float x, float y, float z);
 
 	void Move(float x, float y, float z = 0.0f);
-	
+
+	void SetAutopilotVelocity(std::string direction = "none", float speed = 0);
+
 	DirectX::XMVECTOR getPos();
 	DirectX::XMVECTOR getRot();
 
 	void Render();
-	void GetViewMatrix(DirectX::XMMATRIX &toReturn);
+	void GetViewMatrix(DirectX::XMMATRIX& toReturn);
 	DirectX::XMMATRIX GetProjectionMatrix();
 
 	float xPos, yPos, zPos, xRot, yRot, zRot;
 	float maxSpeed;
 private:
-	float speed, speedDelta, startingSpeed;
+	float speed, speedDelta, startingSpeed, autopilotSpeed;
 	GameObject* parent;
 	DirectX::XMMATRIX viewMatrix;
+	std::string autopilotDirection;
+	bool isAutopilot;
 };

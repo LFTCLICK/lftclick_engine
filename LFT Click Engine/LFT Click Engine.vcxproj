@@ -242,12 +242,15 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Src\Components\Damageable.cpp" />
+    <ClCompile Include="Src\Components\Door.cpp" />
     <ClCompile Include="Src\Components\Drawable.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Src\Components\Enemy.cpp" />
+    <ClCompile Include="Src\Components\EnemySpawner.cpp" />
     <ClCompile Include="Src\Components\FollowMouse.cpp" />
     <ClCompile Include="Src\Components\GameObject.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -256,12 +259,6 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Src\Components\Gun.cpp" />
-    <ClCompile Include="Src\Components\MeshCollider.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="Src\Components\Player.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
@@ -286,6 +283,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Src\Components\WoodPile.cpp" />
     <ClCompile Include="Src\DebugRenderer.cpp" />
     <ClCompile Include="Src\EventManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -360,15 +358,18 @@
     <ClInclude Include="Src\Components\Collider.h" />
     <ClInclude Include="Src\Components\Component.h" />
     <ClInclude Include="Src\Components\Damageable.h" />
+    <ClInclude Include="Src\Components\Door.h" />
     <ClInclude Include="Src\Components\Drawable.h" />
+    <ClInclude Include="Src\Components\Enemy.h" />
+    <ClInclude Include="Src\Components\EnemySpawner.h" />
     <ClInclude Include="Src\Components\FollowMouse.h" />
     <ClInclude Include="Src\Components\GameObject.h" />
     <ClInclude Include="Src\Components\Gun.h" />
-    <ClInclude Include="Src\Components\MeshCollider.h" />
     <ClInclude Include="Src\Components\Player.h" />
     <ClInclude Include="Src\Components\SpriteAnimator.h" />
     <ClInclude Include="Src\Components\SquareCollider.h" />
     <ClInclude Include="Src\Components\Transform.h" />
+    <ClInclude Include="Src\Components\WoodPile.h" />
     <ClInclude Include="Src\ConstantBuffer.h" />
     <ClInclude Include="Src\DebugRenderer.h" />
     <ClInclude Include="Src\EventManager.h" />

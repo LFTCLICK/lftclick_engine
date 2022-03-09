@@ -23,7 +23,7 @@ void Player::Update()
 	ImGui::Text("Wood: %i", wood);
 	ImGui::Text("hp: %.0f", hp);
 	ImGui::End();
-
+	
 
 	InputManager& im = InputManager::getInstance();
 	float deltaTime = FrameRateController::getInstance().DeltaTime();
@@ -40,7 +40,7 @@ void Player::Update()
 
 	if (im.isKeyTriggered(SDL_SCANCODE_SPACE)) Dash();
 
-	if (im.isMouseButtonTriggered(0)) {
+	if (im.isMouseButtonTriggered(0)) { 
 		float targetX = (float)(im.mouseX() - 400) + GameManager::getInstance().mainCamera->xPos;
 		float targetY = -1 * (float)(im.mouseY() - 400) + GameManager::getInstance().mainCamera->yPos;
 		gun->Fire(0, targetX, targetY);

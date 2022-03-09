@@ -10,8 +10,8 @@
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 0.5,
-    "yScale" : 0.125,
+    "xScale": 0.5,
+    "yScale": 0.25,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -30,7 +30,7 @@
         "uv": [ 1, 1 ]
       }
     ],
-    "indicies": [ 0, 1, 2, 2, 3, 0 ], 
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "image": "Resources\\images\\player_sprite_sheet.png"
   },
   "5": {
@@ -47,12 +47,11 @@
     "width": 40,
     "height": 50,
     "trigger": false,
-    "static": false,
     "deleteOnCollison": false
   },
   "6": {
     "spriteSheetWidth": 2,
-    "spriteSheetHeight": 8,
+    "spriteSheetHeight": 4,
     "animations": [
       {
         "name": "idlePlayerRight",
@@ -81,18 +80,6 @@
         "frameDuration": 0.25,
         "onMove": true,
         "direction": "left"
-      },
-      {
-        "name": "damagedPlayer",
-        "length": 2,
-        "frameDuration": 0.125,
-        "onDamage": true
-      },
-      {
-        "name": "deadPlayer",
-        "length": 2,
-        "frameDuration": 1,
-        "onDeath": true
       }
     ]
   },
@@ -101,9 +88,7 @@
     "dashSpeedMultiplier": 4,
     "dashTime": 0.2,
     "dashRecoveryTime": 1,
-    "autopilot": false,
-    "maxHp": 100,
-    "damageCooldownTimer": 2
+    "autopilot": false
   },
   "10": {
     "bulletTypes": [

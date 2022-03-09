@@ -23,6 +23,7 @@
 #include "Messages.h"
 #include "GameManager.h"
 #include "Components/Drawable.h"
+
 using json = nlohmann::json;
 
 using namespace DirectX;
@@ -53,7 +54,6 @@ int main(int argc, char* args[])
 			windowHeight = (float)lua_tonumber(L, -1);
 		}
 	}
-
 	//Init SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
@@ -125,9 +125,9 @@ int main(int argc, char* args[])
 		{
 			FrameRateController::getInstance().Tick();
 
-			ImGui_ImplDX11_NewFrame();
-			ImGui_ImplSDL2_NewFrame();
-			ImGui::NewFrame();
+				ImGui_ImplDX11_NewFrame();
+				ImGui_ImplSDL2_NewFrame();
+				ImGui::NewFrame();
 
 			SDL_Event e;
 			while (SDL_PollEvent(&e) != 0)
@@ -158,22 +158,44 @@ int main(int argc, char* args[])
 
 			gom->Draw();
 
-			g_debugRenderer->DrawCircle(GameManager::getInstance().mainCamera->WorldToScreenPos(playerObj->getComponent<Transform>()->position,
-				windowWidth, windowHeight),
-				30.0f, 50.0f);
-			g_debugRenderer->DrawCircle(GameManager::getInstance().mainCamera->WorldToScreenPos(DirectX::SimpleMath::Vector2(100,100),
-				windowWidth, windowHeight),
-				30.0f, 50.0f);
+	
 			g_debugRenderer->Draw(&Graphics::getInstance());
 
 
-			bool open = true;
+				bool open = true;
 
-			ImGui::SetNextWindowPos({ 0,0 });
-			ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-			ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
-			ImGui::End();
+				ImGui::SetNextWindowPos({ 0,0 });
+				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+				ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
+				ImGui::End();
+			if (GameManager::getInstance().playerDead)
+			{
+				ImGui::SetNextWindowPos({ (float)((windowWidth/2)-50),(float)((windowHeight/2)+100)});
+				ImGui::Begin("mainMenu", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
+				if (ImGui::Button("Restart", { 100,50 }) || GameManager::getInstance().playerRestart)
+				{
+					isRunning = false;
+					playGame = true;
+					doMenu = false;
+					masterLoop = true;
+				}
+				//if (ImGui::Button("Main Menu", { 100,50 }))
+				//{
+				//	isRunning = false;
+				//	playGame = false;
+				//	doMenu = true;
+				//	masterLoop = true;
+				//}
+				if (ImGui::Button("Quit", { 100,50 }))
+				{
+					isRunning = false;
+					playGame = false;
+					doMenu = false;
+					masterLoop = false;
+				}
 
+				ImGui::End();
+			}
 
 			ImGui::Render();
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -188,19 +210,18 @@ int main(int argc, char* args[])
 		GameManager::getInstance().playerRestart = false;
 		GameManager::getInstance().playerScore = 0;
 
-
-		ImGui_ImplDX11_Shutdown();
-		ImGui_ImplSDL2_Shutdown();
-		ImGui::DestroyContext();
-
-		g_debugRenderer.reset();
-
-		AudioManager::getInstance().Term();
-		SDL_DestroyWindow(pWindow);
-
-		lua_close(L);
-		SDL_Quit();
-
-		return 0;
 	}
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+
+	g_debugRenderer.reset();
+
+	AudioManager::getInstance().Term();
+	SDL_DestroyWindow(pWindow);
+	
+	lua_close(L); 
+	SDL_Quit();
+
+	return 0;
 }

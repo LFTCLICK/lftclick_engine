@@ -22,6 +22,7 @@ public:
 	void CollisionCheck(GameObject* toCheck);
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
+	void DebugDraw() override;
 private:
 	GameObject* parent;
 	bool deleteOnCollison;

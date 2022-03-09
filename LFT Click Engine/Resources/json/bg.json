@@ -5,7 +5,7 @@
     "scaleX": 5120,
     "scaleY": 5120,
     "rot": 0,
-    "zPos": 15
+    "zPos": 100
   },
   "2": {
     "onlyUVOverrides": false,
@@ -39,7 +39,7 @@
       {
         "name": ".\\Resources\\music\\background.mp3",
         "loop": true,
-        "volume": 0,
+        "volume": 10,
         "playEvents": [
           1000
         ]

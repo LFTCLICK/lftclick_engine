@@ -34,6 +34,13 @@
     "scale": 1,
     "image": "Resources\\images\\bullet_sprite_sheet.png"
   },
+  "4": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "width": 32,
+    "height": 32,
+    "trigger": true,
+    "deleteOnCollison": true
+  },
   "6": {
     "spriteSheetWidth": 4,
     "spriteSheetHeight": 1,
@@ -54,14 +61,6 @@
       }
     ]
   },
-  "4": {
-    "center": [ 0.0, -0.0, 0.0 ],
-    "width": 15,
-    "height": 15,
-    "trigger": true,
-    "static": false,
-    "deleteOnCollison": true
-  },
   "8": {
     "sounds": [
       {
@@ -77,13 +76,7 @@
   },
   "9": {
     "animationTime": 1,
-    "speed": 500,
+    "speed": 1000,
     "keepAliveTime": 3
-  },
-  "13": {
-    "center": [ 0.0, 0.0, 0.0 ],
-    "radius": 10,
-    "trigger": true,
-    "deleteOnCollison": true
   }
 }

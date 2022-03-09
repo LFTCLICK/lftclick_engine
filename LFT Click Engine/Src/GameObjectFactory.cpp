@@ -13,7 +13,6 @@
 #include "Components/Component.h"
 #include "Components/Transform.h"
 #include "Components/Drawable.h"
-#include "Components/MeshCollider.h"
 #include "Components/SquareCollider.h"
 #include "Components/CircleCollider.h"
 #include "Components/Camera.h"
@@ -24,10 +23,16 @@
 #include "Components/Gun.h"
 #include "Components/FollowMouse.h"
 #include "Components/Damageable.h"
+#include "Components/Enemy.h"
+#include "Components/Door.h"
+#include "Components/EnemySpawner.h"
+#include "Components/WoodPile.h"
+
 #include <json.hpp>
 #include <string>
 #include <fstream>
 #include <iostream>
+
 using json = nlohmann::json;
 
 GameObjectFactory::GameObjectFactory()
@@ -62,14 +67,13 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 	//Not sure if there's a nicer way to do this, perhaps a parallel array/map?
 	Component * currentComp = nullptr;
 	int compID = std::stoi(type.key());
-	std::cout << compID << std::endl;
 
 	if (compID == Component::TRANSFORM)
 		currentComp = new Transform();
 	else if (compID == Component::DRAWABLE)
 		currentComp = new Drawable();
-	else if (compID == Component::MESH_COLLIDER)
-		currentComp = new MeshCollider();
+	//else if (compID == Component::MESH_COLLIDER)
+	//	currentComp = new MeshCollider();
 	else if (compID == Component::SQUARE_COLLLIDER)
 		currentComp = new SquareCollider();
 	else if (compID == Component::CAMERA)
@@ -90,6 +94,14 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new Damageable();
 	else if (compID == Component::CIRCLE_COLLIDER)
 		currentComp = new CircleCollider();
+	else if (compID == Component::ENEMY)
+		currentComp = new Enemy();
+	else if (compID == Component::DOOR_OBJ)
+		currentComp = new Door();
+	else if (compID == Component::ENEMY_SPAWNER)
+		currentComp = new EnemySpawner();
+	else if (compID == Component::WOOD_PILE)
+		currentComp = new WoodPile();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

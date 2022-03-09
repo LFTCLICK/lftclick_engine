@@ -1,10 +1,10 @@
 #pragma once
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	Player.h
+// File Name		:	SpriteAnimator.h
 // Author			:	Vance Howald
 // Creation Date	:	2021/2/13
-// Purpose			:	Main player
+// Purpose			:	Animator
 // History			:
 // ---------------------------------------------------------------------------
 

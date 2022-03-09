@@ -2,10 +2,10 @@
   "1": {
     "startX": 0.0,
     "startY": 0.0,
-    "scaleX": 32,
+    "scaleX": 144,
     "scaleY": 32,
     "rot": 0,
-    "zPos": 10
+    "zPos": 3
   },
   "2": {
     "onlyUVOverrides": false,
@@ -30,18 +30,26 @@
     }
     ],
     "indicies": [0, 1, 2, 2, 3, 0],
-    "image": "Resources\\images\\block.png"
+    "image": "Resources\\images\\woood.png"
 
   },
   "4": {
     "center": [0.0, -0.0, 0.0],
-    "width": 32,
+    "width": 144,
     "height": 32,
     "trigger": false,
     "static": true,
     "deleteOnCollison": false
   },
-  "12": {
-    "health": 100000000
+  "13": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "radius": 60,
+    "trigger": true,
+    "static": true,
+    "deleteOnCollison": false
+  },
+  "104":{
+    "timeToCollect": 2.0,
+    "woodPerCollect": 7
   }
 }

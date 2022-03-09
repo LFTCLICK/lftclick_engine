@@ -77,9 +77,6 @@
     <ClCompile Include="Src\Components\GameObject.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Components\MeshCollider.cpp">
-      <Filter>Engine\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Components\Player.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
@@ -136,7 +133,22 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\CircleCollider.cpp">
-      <Filter>Engine\Components\Source Files</Filter>
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Collider.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Door.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\EnemySpawner.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\WoodPile.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Enemy.cpp">
+      <Filter>Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -186,9 +198,6 @@
       <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\GameObject.h">
-      <Filter>Engine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Components\MeshCollider.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Player.h">
@@ -252,8 +261,18 @@
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Damageable.h" />
-    <ClInclude Include="Src\Components\CircleCollider.h">
-      <Filter>Engine\Components\Header Files</Filter>
+    <ClInclude Include="Src\Components\CircleCollider.h" />
+    <ClInclude Include="Src\Components\Door.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\EnemySpawner.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\WoodPile.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Enemy.h">
+      <Filter>Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

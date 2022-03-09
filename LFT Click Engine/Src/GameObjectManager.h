@@ -28,12 +28,12 @@ public:
 	void Update();
 	void Start();
 	void Draw();
-	void DoCollision(GameObject * toCheckWith);
-	void Deserialize(GameObjectFactory * gof, json j, bool isPrefab = false);
+	void DoCollision(GameObject* toCheckWith);
+	void Deserialize(GameObjectFactory* gof, json j, bool isPrefab = false);
 	void AddGameObject(GameObject* go);
 	void DeleteAll();
 	void DeleteObjectOfTag(std::string tag);
-	GameObject* ClonePrefabOfTag(GameObjectFactory * gof, std::string tag, bool skipStart = false);
+	GameObject* ClonePrefabOfTag(GameObjectFactory* gof, std::string tag, bool skipStart = false);
 	GameObject* CloneObject(GameObject* go);
 	GameObject* FindObjectOfTag(std::string tag);
 	void BroadcastMessage(Message* m);
@@ -41,7 +41,7 @@ public:
 
 private:
 	GameObjectManager();
-	GameObjectFactory * gof;
+	GameObjectFactory* gof;
 	std::list<GameObject*> gameObjectList;
 	std::list<GameObject*> prefabList;
 };

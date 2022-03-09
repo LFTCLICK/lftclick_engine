@@ -14,6 +14,7 @@
 #include "Components\MeshCollider.h"
 #include "Components\SquareCollider.h"
 #include "Components\CircleCollider.h"
+#include "GameManager.h"
 
 GameObjectManager::GameObjectManager()
 {
@@ -49,6 +50,10 @@ void GameObjectManager::Start()
 
 void GameObjectManager::Draw()
 {
+
+	static bool debugDraw = false;
+	ImGui::Checkbox("Draw Colliders", &debugDraw);
+
 	for (GameObject* g : gameObjectList)
 	{
 		if (g->isActive)
@@ -58,28 +63,53 @@ void GameObjectManager::Draw()
 			{
 				s->Draw();
 			}
+
+			if (!debugDraw)
+				continue;
+
+			CircleCollider* c = g->getComponent<CircleCollider>();
+
+			if (c != nullptr)
+			{
+				c->DebugDraw();
+			}
+
+			SquareCollider* sq = g->getComponent<SquareCollider>();
+
+			if (sq != nullptr)
+			{
+				sq->DebugDraw();
+			}
 		}
 	}
 }
 
 void GameObjectManager::DoCollision(GameObject* toCheckWith)
 {
+	/*for (std::list<GameObject*>::iterator it = gameObjectList.begin(); it != gameObjectList.end();)
+	{
+		GameObject* toCheck = *it;
+		++it;
+		for (std::list<GameObject*>::iterator innerIt = it; innerIt != gameObjectList.end(); ++innerIt)
+		{
+			CollisionResolution
+		}
+	}*/
 	for (GameObject* g : gameObjectList)
 	{
 		if (g->isActive && !g->isDeletable && g != toCheckWith)
 		{
-			Collider* s = dynamic_cast<Collider*>(g->getComponent<MeshCollider>());
-			if (s == nullptr) 
-				s = dynamic_cast<Collider*>(g->getComponent<SquareCollider>());
-			if (s == nullptr)
-				s = dynamic_cast<Collider*>(g->getComponent<CircleCollider>());
-			if (s != nullptr) 
+			Collider* s = dynamic_cast<Collider*>(g->getComponent<SquareCollider>());
+			if (s != nullptr)
+				s->CollisionCheck(toCheckWith);
+			s = dynamic_cast<Collider*>(g->getComponent<CircleCollider>());
+			if (s != nullptr)
 				s->CollisionCheck(toCheckWith);
 		}
 	}
 }
 
-void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPrefab)
+void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefab)
 {
 	this->gof = gof;
 	json prefabsJSON = j["Prefabs"];
@@ -104,12 +134,13 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 				newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
 			}
 		}
-		newOne->Start();
-
+		//newOne->Start();
 	}
+	for (GameObject* g : gameObjectList)
+		g->Start();
 }
 
-void GameObjectManager::AddGameObject(GameObject * go)
+void GameObjectManager::AddGameObject(GameObject* go)
 {
 	gameObjectList.push_back(go);
 }
@@ -124,7 +155,7 @@ void GameObjectManager::DeleteAll()
 	prefabList.clear();
 }
 
-void GameObjectManager::DeleteObjectOfTag(std::string tag) 
+void GameObjectManager::DeleteObjectOfTag(std::string tag)
 {
 	std::list<GameObject*>::iterator i = gameObjectList.begin();
 	while (i != gameObjectList.end()) {
@@ -135,14 +166,14 @@ void GameObjectManager::DeleteObjectOfTag(std::string tag)
 	}
 }
 
-GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::string tag, bool skipStart)
+GameObject* GameObjectManager::ClonePrefabOfTag(GameObjectFactory* gof, std::string tag, bool skipStart)
 {
 	for (GameObject* g : prefabList)
 	{
 		if (g->tag == tag)
 		{
 			GameObject* go = gof->CloneObject(g);
-			if(!skipStart)
+			if (!skipStart)
 				go->Start();
 			gameObjectList.push_back(go);
 			return go;
@@ -151,7 +182,7 @@ GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::s
 	return nullptr;
 }
 
-GameObject * GameObjectManager::CloneObject(GameObject * go)
+GameObject* GameObjectManager::CloneObject(GameObject* go)
 {
 	GameObject* toReturn = gof->CloneObject(go);
 	toReturn->tag = go->tag;
@@ -161,7 +192,7 @@ GameObject * GameObjectManager::CloneObject(GameObject * go)
 
 }
 
-GameObject * GameObjectManager::FindObjectOfTag(std::string tag)
+GameObject* GameObjectManager::FindObjectOfTag(std::string tag)
 {
 	for (GameObject* g : gameObjectList)
 	{
@@ -173,7 +204,7 @@ GameObject * GameObjectManager::FindObjectOfTag(std::string tag)
 	return nullptr;
 }
 
-void GameObjectManager::BroadcastMessage(Message * m)
+void GameObjectManager::BroadcastMessage(Message* m)
 {
 	for (GameObject* g : gameObjectList)
 	{
