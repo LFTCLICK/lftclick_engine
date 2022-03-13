@@ -13,7 +13,7 @@
 void Damageable::Start()
 {
 	trans = parent->getComponent<Transform>();
-	EventManager::getInstance().Subscribe(Message::DAMAGE_COLLISION, parent);
+	EventManager::getInstance().Subscribe(Message::TRIGGER_COLLISION, parent);
 }
 
 void Damageable::Update()
@@ -41,7 +41,7 @@ Component* Damageable::Clone(GameObject* newParent)
 }
 
 void Damageable::HandleMessage(Message* e) {
-	if (e->id == Message::DAMAGE_COLLISION) {
+	if (e->sourceObjectTag=="bullet") {
 		--health;
 	}
 }

@@ -33,7 +33,7 @@ std::unique_ptr<DebugRenderer> g_debugRenderer;
 int main(int argc, char* args[])
 {
 	int windowWidth = 800, windowHeight = 600;
-
+#ifdef _DEBUG
 	// Create Lua State
 	lua_State* L = luaL_newstate();
 
@@ -54,6 +54,7 @@ int main(int argc, char* args[])
 			windowHeight = (float)lua_tonumber(L, -1);
 		}
 	}
+#endif
 	//Init SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
@@ -108,6 +109,7 @@ int main(int argc, char* args[])
 	{
 
 		std::fstream other("./Resources/json/demo.json");
+		//std::fstream other("./Resources/json/concept_3_level.json");
 		json dataJson2;
 		other >> dataJson2;
 		other.close();
@@ -219,8 +221,9 @@ int main(int argc, char* args[])
 
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
-	
+#ifdef _DEBUG
 	lua_close(L); 
+#endif
 	SDL_Quit();
 
 	return 0;

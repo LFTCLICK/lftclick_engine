@@ -15,7 +15,7 @@ public:
 	virtual void Start();
 	virtual void Update();
 	int getCompId();
-	DirectX::SimpleMath::Vector3 center;
+	DirectX::SimpleMath::Vector2 center;
 	float radius;
 
 	virtual Component* Clone(GameObject* newParent);
@@ -24,6 +24,5 @@ public:
 
 	void DebugDraw() override;
 private:
-	GameObject* parent;
 	bool deleteOnCollison;
 };

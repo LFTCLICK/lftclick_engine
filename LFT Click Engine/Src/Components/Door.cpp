@@ -13,8 +13,9 @@ void Door::Start()
 	currentPhase = zeroIndexDoorPhases;
 	hp = maxHp;
 	hpPerPhase = maxHp / zeroIndexDoorPhases;
-	EventManager::getInstance().Subscribe(Message::DAMAGE_COLLISION, parent);
+	EventManager::getInstance().Subscribe(Message::TRIGGER_COLLISION, parent);
 	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	sqCollider->isTrigger = true;
 	UpdateImage();
 }
 
@@ -86,22 +87,22 @@ void Door::HandleMessage(Message* e)
 	}
 	else if (e->sourceObjectTag == "enemy" && hp>0)
 	{
-		Enemy* currentEnemy = e->otherObject->getComponent<Enemy>();
-		currentEnemy->timer+= FrameRateController::getInstance().DeltaTime();
-		if (currentEnemy->timer > currentEnemy->attackTimer)
-		{
-			currentEnemy->timer = 0;
-			hp -= currentEnemy->damage;
-			while(hp < maxHp * ((float)(currentPhase - 1) / zeroIndexDoorPhases))
-			{
-				currentPhase--;
-				UpdateImage();
-				if (currentPhase < 1)
-				{
-					sqCollider->isTrigger = true;
-				}
-			}
-			
-		}
+		//Enemy* currentEnemy = e->otherObject->parent->getComponent<Enemy>();
+		//currentEnemy->timer+= FrameRateController::getInstance().DeltaTime();
+		//if (currentEnemy->timer > currentEnemy->attackTimer)
+		//{
+		//	currentEnemy->timer = 0;
+		//	hp -= currentEnemy->damage;
+		//	while(hp < maxHp * ((float)(currentPhase - 1) / zeroIndexDoorPhases))
+		//	{
+		//		currentPhase--;
+		//		UpdateImage();
+		//		if (currentPhase < 1)
+		//		{
+		//			sqCollider->isTrigger = true;
+		//		}
+		//	}
+		//	
+		//}
 	}
 }

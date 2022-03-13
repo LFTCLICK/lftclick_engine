@@ -1,10 +1,10 @@
 #pragma once
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	AnimationHelper.h
-// Author			:	Vance Howald
-// Creation Date	:	2021/12/10
-// Purpose			:	Animates grabables
+// File Name		:	LevelGenerator.h
+// Author			:	Chris Fitch
+// Creation Date	:	2022/03/02
+// Purpose			:	Generates the level
 // History			: 
 // ---------------------------------------------------------------------------
 
@@ -14,8 +14,10 @@
 #include "GameObjectManager.h"
 #include <json.hpp>
 
+#define OBJ_DISTANCE 80
+
 using json = nlohmann::json;
-class Bullet : public Component
+class LevelGenerator : public Component
 {
 public:
 
@@ -24,16 +26,21 @@ public:
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::BULLET; };
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
-	virtual void HandleMessage(Message* e) override;
+
 	virtual Component* Clone(GameObject* newParent);
-	Bullet() {};
+	LevelGenerator() {
+		gom = &GameObjectManager::getInstance();
+		gof = &GameObjectFactory::getInstance();
+	};
 
 public:
-	DirectX::SimpleMath::Vector2 direction;
-	bool liveForever;
-	float animationTime, speed, timer, keepAliveTime;
+	void Create(std::string tag, int row, int column);
 
 private:
 	GameObject* parent;
-	Transform* trans;
-};
+	GameObjectManager* gom;
+	GameObjectFactory* gof;
+
+	std::vector<std::vector<int>> layout;
+	std::map<int, std::string> key;
+}; 

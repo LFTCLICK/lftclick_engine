@@ -24,6 +24,7 @@ CircleCollider::CircleCollider()
 void CircleCollider::Start()
 {
 	Transform* trans = parent->getComponent<Transform>();
+	maxBounds = radius;
 	//center.x *= trans->scale.x;
 	//center.y *= trans->scale.y;
 }
@@ -45,6 +46,8 @@ Component* CircleCollider::Clone(GameObject* newParent)
 	toReturn->radius = radius;
 	toReturn->isTrigger = isTrigger;
 	toReturn->isStatic = isStatic;
+	if (!isStatic)
+		newParent->hasNonStaticCollider = true;
 	toReturn->deleteOnCollison = deleteOnCollison;
 	return (Component*)toReturn;
 }
@@ -75,14 +78,14 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 			if (circleDistance.x <= toCheck->getComponent<SquareCollider>()->width / 2
 				|| circleDistance.y <= toCheck->getComponent<SquareCollider>()->height / 2)
 			{
-				parent->HandleMessage(new DamageCollisionMessage(toCheck->tag, toCheck));
-				toCheck->HandleMessage(new DamageCollisionMessage(parent->tag, parent));
-				//EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(toCheck->tag));
+				parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck));
+				toCheck->HandleMessage(new TriggerCollisionMessage(parent->tag, parent));
+				//EventManager::getInstance().BroadcastMessageToSubscribers(new TriggerCollisionMessage(toCheck->tag));
 				//EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, toCheckPos));
 
 				if (deleteOnCollison) parent->isDeletable = true;
 			}*/
-
+			
 		}
 		else
 		{
@@ -97,9 +100,9 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 
 		if (distance <= 0)
 		{
-			parent->HandleMessage(new DamageCollisionMessage(toCheck->tag, toCheck));
-			toCheck->HandleMessage(new DamageCollisionMessage(parent->tag, parent));
-			//parent->HandleMessage(new DamageCollisionMessage(toCheck->tag, toCheck));
+			parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck->getComponent<CircleCollider>()));
+			toCheck->HandleMessage(new TriggerCollisionMessage(parent->tag, parent->getComponent<CircleCollider>()));
+			//parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck));
 			if (deleteOnCollison)
 				parent->isActive = false;
 		}
@@ -110,7 +113,7 @@ void CircleCollider::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	this->parent = parent;
 	std::vector<float> centerHelper = j["center"].get<std::vector<float>>();
-	center = { centerHelper[0], centerHelper[1], centerHelper[2], 0 };
+	center = { centerHelper[0], centerHelper[1] };
 	radius = j["radius"];
 
 	isTrigger = false;
@@ -119,7 +122,11 @@ void CircleCollider::Deserialize(nlohmann::json j, GameObject* parent)
 
 	isStatic = false;
 	if (j.contains("static"))
+	{
 		isStatic = j["static"];
+		if(!isStatic)
+			parent->hasNonStaticCollider = true;
+	}
 
 	deleteOnCollison = false;
 	if (j.contains("deleteOnCollision"))
