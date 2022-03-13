@@ -18,14 +18,6 @@
 class Graphics
 {
 public:
-
-	static Graphics& getInstance()
-	{
-		static Graphics instance;
-		return instance;
-	}
-
-public:
 	Graphics();
 	~Graphics() = default;
 	Graphics(const Graphics&) = delete;
@@ -64,3 +56,5 @@ private:
 	UINT msaaSampleCount;
 
 };
+
+extern std::unique_ptr<Graphics> g_Renderer;

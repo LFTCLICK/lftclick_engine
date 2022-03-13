@@ -16,17 +16,16 @@
 
 using namespace DirectX;
 
-DebugRenderer::DebugRenderer(Graphics* graphics)
+DebugRenderer::DebugRenderer(ID3D11Device* device, ID3D11DeviceContext* context)
 {
-	primitiveBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(graphics->GetContext());
-	basicEffect = std::make_unique<BasicEffect>(graphics->GetDevice());
+	primitiveBatch = std::make_unique<PrimitiveBatch<VertexPositionColor>>(context);
+	basicEffect = std::make_unique<BasicEffect>(device);
 
 	DX::ThrowIfFailed(
-		CreateInputLayoutFromEffect<VertexPositionColor>(graphics->GetDevice(),
-			basicEffect.get(),
-			inputLayout.ReleaseAndGetAddressOf()));
+		CreateInputLayoutFromEffect<VertexPositionColor>( device, basicEffect.get(), 
+			inputLayout.ReleaseAndGetAddressOf() ) );
 
-	states = std::make_unique<DirectX::CommonStates>(graphics->GetDevice());
+	states = std::make_unique<DirectX::CommonStates>(device);
 }
 
 DebugRenderer::~DebugRenderer()
@@ -66,20 +65,18 @@ void DebugRenderer::DrawCircle(DirectX::SimpleMath::Vector2 Center, float Radius
 	}
 }
 
-void DebugRenderer::Draw(Graphics* graphics)
+void DebugRenderer::Draw(ID3D11DeviceContext* context, int width, int height)
 {
-	basicEffect->SetWorld(XMMatrixIdentity());
-	basicEffect->SetView(XMMatrixIdentity());
-	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0, graphics->GetWidth(), graphics->GetHeight(), 0, 0, 1));
+	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0, width, height, 0, 0, 1));
 
 	basicEffect->SetColorAndAlpha(DirectX::Colors::Red);
 
-	graphics->GetContext()->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
-	graphics->GetContext()->OMSetDepthStencilState(states->DepthNone(), 0);
-	graphics->GetContext()->RSSetState(states->CullNone());
+	context->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
+	context->OMSetDepthStencilState(states->DepthNone(), 0);
+	context->RSSetState(states->CullNone());
 
-	basicEffect->Apply(graphics->GetContext());
-	graphics->GetContext()->IASetInputLayout(inputLayout.Get());
+	basicEffect->Apply(context);
+	context->IASetInputLayout(inputLayout.Get());
 
 	primitiveBatch->Begin();
 
@@ -90,9 +87,9 @@ void DebugRenderer::Draw(Graphics* graphics)
 
 	primitiveBatch->End();
 
-	graphics->GetContext()->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
-	graphics->GetContext()->OMSetDepthStencilState(nullptr, 0);
-	graphics->GetContext()->RSSetState(nullptr);
+	context->OMSetBlendState(nullptr, nullptr, 0xFFFFFFFF);
+	context->OMSetDepthStencilState(nullptr, 0);
+	context->RSSetState(nullptr);
 
 	lineVertices.clear();
 }

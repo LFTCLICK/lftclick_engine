@@ -15,8 +15,6 @@
 #include "GameManager.h"
 #include "Graphics.h"
 
-extern std::unique_ptr<DebugRenderer> g_debugRenderer;
-
 CircleCollider::CircleCollider()
 {
 }
@@ -138,7 +136,7 @@ void CircleCollider::DebugDraw()
 	Transform* t = parent->getComponent<Transform>();
 	assert(t != nullptr);
 	DirectX::SimpleMath::Vector2 debugCirclePos = GameManager::getInstance().mainCamera->WorldToScreenPos(t->CurrentPos(),
-		Graphics::getInstance().GetWidth(), Graphics::getInstance().GetHeight());
+		g_Renderer->GetWidth(), g_Renderer->GetHeight());
 
-	g_debugRenderer->DrawCircle(debugCirclePos, radius, 50.0f);
+	g_DebugRenderer->DrawCircle(debugCirclePos, radius, 50.0f);
 }

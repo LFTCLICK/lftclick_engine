@@ -167,6 +167,7 @@ void Graphics::OnResize(int newWidth, int newHeight)
 	screenViewport.Height = static_cast<float>(height);
 
 	immediateContext->RSSetViewports(1, &screenViewport);
+
 }
 
 void Graphics::Draw()

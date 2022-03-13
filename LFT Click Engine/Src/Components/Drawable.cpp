@@ -84,7 +84,7 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	vertBufDes.StructureByteStride = sizeof(Vertex);
 	D3D11_SUBRESOURCE_DATA sd = {};
 	sd.pSysMem = &(vertexVector[0]);
-	Graphics::getInstance().GetDevice()->CreateBuffer(&vertBufDes, &sd, &vertBuf);
+	g_Renderer->GetDevice()->CreateBuffer(&vertBufDes, &sd, &vertBuf);
 
 	D3D11_BUFFER_DESC indexBufDes = {};
 	indexBufDes.BindFlags = D3D11_BIND_INDEX_BUFFER;
@@ -95,18 +95,19 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	indexBufDes.StructureByteStride = sizeof(unsigned short);
 	D3D11_SUBRESOURCE_DATA sdIndex = {};
 	sdIndex.pSysMem = &(indices[0]);
-	Graphics::getInstance().GetDevice()->CreateBuffer(&indexBufDes, &sdIndex, &indexBuf);
+	g_Renderer->GetDevice()->CreateBuffer(&indexBufDes, &sdIndex, &indexBuf);
 
 
-	Graphics::getInstance().GetDevice()->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
-	Graphics::getInstance().GetDevice()->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
+	g_Renderer->GetDevice()->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
+	g_Renderer->GetDevice()->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
 
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
-	Graphics::getInstance().GetDevice()->CreateInputLayout(
+
+	g_Renderer->GetDevice()->CreateInputLayout(
 		ied, (UINT)std::size(ied),
 		g_CompiledVS,
 		sizeof(g_CompiledVS),
@@ -115,8 +116,8 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 
 	std::wstring sprite = utf8_decode(j["image"]);
 	//force DTK to not load the texture as srgb
-	DirectX::CreateWICTextureFromFileEx(Graphics::getInstance().GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, &texture, &shaderResourceView);
-	//	DirectX::CreateWICTextureFromFile(Graphics::getInstance().GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
+	DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, &texture, &shaderResourceView);
+	//	DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
 
 	D3D11_SAMPLER_DESC sampDes = {};
 	sampDes.Filter = D3D11_FILTER_MINIMUM_MIN_MAG_MIP_POINT;
@@ -124,7 +125,7 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	sampDes.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	sampDes.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
-	Graphics::getInstance().GetDevice()->CreateSamplerState(&sampDes, &sampState);
+	g_Renderer->GetDevice()->CreateSamplerState(&sampDes, &sampState);
 
 	D3D11_BLEND_DESC blendDesc = {};
 	blendDesc.RenderTarget[0].BlendEnable = TRUE;
@@ -136,7 +137,7 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-	Graphics::getInstance().GetDevice()->CreateBlendState(&blendDesc, &blendState);
+	g_Renderer->GetDevice()->CreateBlendState(&blendDesc, &blendState);
 }
 
 Component* Drawable::Clone(GameObject* newParent)
@@ -169,7 +170,7 @@ Component* Drawable::Clone(GameObject* newParent)
 
 void Drawable::Start()
 {
-	cbPerObjectData.Create(Graphics::getInstance().GetDevice());
+	cbPerObjectData.Create(g_Renderer->GetDevice());
 }
 
 void Drawable::Update()
@@ -180,12 +181,12 @@ void Drawable::Draw()
 {
 	const UINT stride = sizeof(Vertex);
 	const UINT offset = 0;
-	Graphics::getInstance().GetContext()->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
-	Graphics::getInstance().GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
-	Graphics::getInstance().GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
-	Graphics::getInstance().GetContext()->VSSetShader(vertShader.Get(), nullptr, 0);
-	Graphics::getInstance().GetContext()->IASetInputLayout(inputLayout.Get());
-	Graphics::getInstance().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	g_Renderer->GetContext()->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
+	g_Renderer->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
+	g_Renderer->GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
+	g_Renderer->GetContext()->VSSetShader(vertShader.Get(), nullptr, 0);
+	g_Renderer->GetContext()->IASetInputLayout(inputLayout.Get());
+	g_Renderer->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	DirectX::XMFLOAT4X4 mat = parent->getComponent<Transform>()->GetXMMatrix();
 
@@ -199,21 +200,21 @@ void Drawable::Draw()
 		xFlip,
 		alphaOverride
 	};
-	cbPerObjectData.SetData(Graphics::getInstance().GetContext(), cb);
+	cbPerObjectData.SetData(g_Renderer->GetContext(), cb);
 
-	Graphics::getInstance().GetContext()->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
-	Graphics::getInstance().GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
-	Graphics::getInstance().GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
-	Graphics::getInstance().GetContext()->VSSetShader(vertShader.Get(), nullptr, 0);
-	Graphics::getInstance().GetContext()->IASetInputLayout(inputLayout.Get());
-	Graphics::getInstance().GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	Graphics::getInstance().GetContext()->VSSetConstantBuffers(0, 1, cbPerObjectData.GetAddressOf());
-	Graphics::getInstance().GetContext()->PSSetShaderResources(0, 1, shaderResourceView.GetAddressOf());
-	Graphics::getInstance().GetContext()->PSSetSamplers(0, 1, sampState.GetAddressOf());
-	Graphics::getInstance().GetContext()->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFFu);
-	Graphics::getInstance().GetContext()->RSSetState(rastState.Get());
+	g_Renderer->GetContext()->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
+	g_Renderer->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
+	g_Renderer->GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
+	g_Renderer->GetContext()->VSSetShader(vertShader.Get(), nullptr, 0);
+	g_Renderer->GetContext()->IASetInputLayout(inputLayout.Get());
+	g_Renderer->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	g_Renderer->GetContext()->VSSetConstantBuffers(0, 1, cbPerObjectData.GetAddressOf());
+	g_Renderer->GetContext()->PSSetShaderResources(0, 1, shaderResourceView.GetAddressOf());
+	g_Renderer->GetContext()->PSSetSamplers(0, 1, sampState.GetAddressOf());
+	g_Renderer->GetContext()->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFFu);
+	g_Renderer->GetContext()->RSSetState(rastState.Get());
 
-	Graphics::getInstance().GetContext()->DrawIndexed(drawSize, 0, 0);
+	g_Renderer->GetContext()->DrawIndexed(drawSize, 0, 0);
 }
 
 int Drawable::getCompId()

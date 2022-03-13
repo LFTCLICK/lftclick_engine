@@ -16,7 +16,7 @@
 
 using namespace DirectX::SimpleMath;
 
-extern std::unique_ptr<DebugRenderer> g_debugRenderer;
+extern std::unique_ptr<DebugRenderer> g_DebugRenderer;
 
 SquareCollider::SquareCollider()
 {
@@ -170,8 +170,8 @@ void SquareCollider::DebugDraw()
 	assert(t != nullptr);
 
 	auto cam = GameManager::getInstance().mainCamera;
-	float screenWidth = Graphics::getInstance().GetWidth();
-	float screenHeight = Graphics::getInstance().GetHeight();
+	float screenWidth = g_Renderer->GetWidth();
+	float screenHeight = g_Renderer->GetHeight();
 
 	Vector2 a = t->CurrentPos() - Vector2(width / 2.0f, -height / 2.0f);
 	Vector2 b = t->CurrentPos() + Vector2(width / 2.0f, height / 2.0f);
@@ -183,5 +183,5 @@ void SquareCollider::DebugDraw()
 	c = cam->WorldToScreenPos(c, screenWidth, screenHeight);
 	d = cam->WorldToScreenPos(d, screenWidth, screenHeight);
 
-	g_debugRenderer->DrawQuad(a, b, c, d);
+	g_DebugRenderer->DrawQuad(a, b, c, d);
 }
