@@ -132,12 +132,6 @@
     <ClCompile Include="Src\Components\Damageable.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Components\CircleCollider.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\Collider.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Components\Door.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
@@ -148,6 +142,12 @@
       <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Enemy.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\CircleCollider.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Collider.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -261,7 +261,6 @@
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Damageable.h" />
-    <ClInclude Include="Src\Components\CircleCollider.h" />
     <ClInclude Include="Src\Components\Door.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
@@ -272,6 +271,9 @@
       <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Enemy.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\CircleCollider.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -351,6 +353,9 @@
     <None Include="Resources\json\turret.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\survival.json" />
+    <None Include="Resources\json\zombie.json" />
+    <None Include="Resources\json\grass.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

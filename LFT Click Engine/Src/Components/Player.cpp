@@ -76,6 +76,10 @@ void Player::Update()
 	{
 		GameManager::getInstance().playerDead = true;
 	}
+
+	if (trans->isMoving) {
+		AudioManager::getInstance().SetPlayerSpatialPosition(trans->CurrentPos() / 100/*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
+	}
 }
 
 Component* Player::Clone(GameObject* newParent)

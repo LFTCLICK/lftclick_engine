@@ -9,7 +9,7 @@
 #include "pch.h"
 #include "GameManager.h"
 
-//probably should be removed
+//probably should be removed 
 GameManager::GameManager()
 {
 	playerDead = false;

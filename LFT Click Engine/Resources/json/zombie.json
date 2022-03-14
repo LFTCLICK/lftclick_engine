@@ -1,0 +1,114 @@
+{
+  "1": {
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 80,
+    "scaleY": 80,
+    "rot": 0,
+    "zPos": 20
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale" : 0.5,
+    "yScale" : 0.125,
+    "vertices" : [
+    {
+        "pos": [-0.5,-0.5,0],
+        "uv": [0,1]
+    },
+    {
+        "pos": [-0.5,0.5,0],
+        "uv": [0,0]
+    },
+    {
+        "pos": [0.5,0.5,0],
+        "uv": [1,0]
+    },
+    {
+        "pos": [0.5,-0.5,0],
+        "uv": [1,1]
+    }
+    ],
+    "indicies": [0, 1, 2, 2, 3, 0],
+    "image": "Resources\\images\\zombie_sprite_sheet.png"
+
+  },
+  "4": {
+    "center": [ 0.0, -0.0, 0.0 ],
+    "width": 64,
+    "height": 64,
+    "trigger": false,
+    "static": false,
+    "deleteOnCollison": false
+  },
+  "6": {
+    "spriteSheetWidth": 4,
+    "spriteSheetHeight": 8,
+    "animations": [
+      {
+        "name": "idleZombieDown",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "down"
+      },
+      {
+        "name": "movingZombieDown",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "down"
+      },
+      {
+        "name": "idleZombieUp",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "up"
+      },
+      {
+        "name": "movingZombieUp",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "up"
+      },
+      {
+        "name": "idleZombieLeft",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "left"
+      },
+      {
+        "name": "movingZombieLeft",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "left"
+      },
+      {
+        "name": "idleZombieRight",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "right"
+      },
+      {
+        "name": "movingZombieRight",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "right"
+      }
+    ]
+  },
+  "12": {
+    "health": 3
+  },
+  "103": {
+    "attackTimer": 3.0,
+    "damage": 15.0,
+    "speed": 75.0
+  }
+}

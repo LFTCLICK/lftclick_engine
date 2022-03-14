@@ -48,4 +48,5 @@ public:
 	virtual ~Component();
 
 public:
+	bool isFinishedDeleting = true;
 };

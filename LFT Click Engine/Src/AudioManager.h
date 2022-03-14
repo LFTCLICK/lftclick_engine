@@ -22,16 +22,20 @@
 #include "SimpleMath.h"
 
 #define VOLUME_DIV 100.f
+#define POSITION_DIV 50.f
 
 #endif
 
 struct FMODEngine {
     FMODEngine();
     ~FMODEngine();
-    void Update();
+    FMOD_RESULT Update();
     bool ChannelIsPlaying(FMOD::Channel* channel);
+    int GenerateChannelID();
+    int nextID = 0;
 
     FMOD::System* system;
+
 
     std::map<int, FMOD::Channel*> channels;
     std::map<std::string, FMOD::ChannelGroup*> channelGroups;
@@ -60,10 +64,9 @@ public:
 
     void LoadSound(std::string name, bool loop = false, bool compressed = true);
     void UnloadSound(std::string name);
-    int PlaySound(std::string name, std::string channelGroupName, float volume = 100.f, float x = 0, float y = 0, float pitch = 1.f, bool startPaused = false);
-    int PlaySound(std::string name, std::string channelGroupName, float volume, DirectX::SimpleMath::Vector2 position, float pitch = 1.f, bool startPaused = false);
-    int PlaySound(std::string name, float volume = 100.f, float x = 0, float y = 0, float pitch = 1.f, bool startPaused = false);
-    int PlaySound(std::string name, float volume, DirectX::SimpleMath::Vector2 position, float pitch = 1.f, bool startPaused = false);
+    int PlaySound(std::string name, std::string channelGroupName, float volume = 100.f, float pitch = 1.f, bool startPaused = false);
+    int PlaySound(std::string name, float volume = 100.f, float pitch = 1.f, bool startPaused = false);
+    void SetPlayerSpatialPosition(DirectX::SimpleMath::Vector2 _position, DirectX::SimpleMath::Vector2 _velocity = { 0, 0 });
 
 
     // Functions for managing channels
@@ -75,9 +78,9 @@ public:
     float GetVolume(int channelID);
     void SetVolume(int channelID, float volume);
     void Mute(int channelID) { SetVolume(channelID, 0); }
-    DirectX::SimpleMath::Vector2 GetPosition(int channelID);
-    void SetPosition(int channelID, float x, float y);
-    void SetPosition(int channelID, DirectX::SimpleMath::Vector2 position);
+    DirectX::SimpleMath::Vector2 GetSpatialPosition(int channelID);
+    void SetSpatialPosition(int channelID, float posX, float posY, float velX = 0, float velY = 0);
+    void SetSpatialPosition(int channelID, DirectX::SimpleMath::Vector2 position, DirectX::SimpleMath::Vector2 velocity = { 0, 0 });
     float GetPitch(int channelID);
     void SetPitch(int channelID, float pitch);
     float GetFrequency(int channelID);
@@ -105,9 +108,9 @@ public:
     float GetGroupVolume(std::string channelGroupName);
     void SetGroupVolume(std::string channelGroupName, float volume);
     void MuteGroup(std::string channelGroupName) { SetGroupVolume(channelGroupName, 0); }
-    DirectX::SimpleMath::Vector2 GetGroupPosition(std::string channelGroupName);
-    void SetGroupPosition(std::string channelGroupName, float x, float y);
-    void SetGroupPosition(std::string channelGroupName, DirectX::SimpleMath::Vector2 position);
+    DirectX::SimpleMath::Vector2 GetGroupSpatialPosition(std::string channelGroupName);
+    void SetGroupSpatialPosition(std::string channelGroupName, float posX, float posY, float velX = 0, float velY = 0);
+    void SetGroupSpatialPosition(std::string channelGroupName, DirectX::SimpleMath::Vector2 position, DirectX::SimpleMath::Vector2 velocity = { 0, 0 });
     float GetGroupPitch(std::string channelGroupName);
     void SetGroupPitch(std::string channelGroupName, float pitch);
     bool IsGroupPlaying(std::string channelGroupName);
@@ -123,8 +126,11 @@ public:
     void AddToSoundGroup(std::string soundGroupName, FMOD::Sound* sound);
     void AddToSoundGroup(FMOD::SoundGroup* soundGroup, std::string soundName);
 
+    std::string GenerateUniqueChannelGroupID();
+
 private:
     AudioManager();
     FMODEngine* engine;
+    long int nextChannelGroupID;
     void CheckResult(std::string functionName, FMOD_RESULT e);
 };

@@ -10,7 +10,7 @@
 #include "pch.h"
 #include "Transform.h"
 
-Transform::Transform() : isMoving(false)
+Transform::Transform() : isMoving(false), wasMoving(false)
 {
 }
 
@@ -29,12 +29,18 @@ void Transform::Deserialize(nlohmann::json j, GameObject* parent)
 Component * Transform::Clone(GameObject* newParent)
 {
 	Transform* toReturn = new Transform();
+
 	toReturn->parent = newParent;
 	toReturn->position = position;
+	toReturn->oldPos = oldPos;
+	toReturn->lastMovement = lastMovement;
 	toReturn->scale = scale;
 	toReturn->rotation = rotation;
 	toReturn->m = m;
 	toReturn->zPos = zPos;
+	toReturn->isMoving = isMoving;
+	toReturn->wasMoving = wasMoving;
+
 	return (Component*)toReturn;
 }
 
@@ -72,6 +78,8 @@ void Transform::Start()
 
 void Transform::Update()
 {
+	if (wasMoving != isMoving) wasMoving = isMoving;
+
 	if (position.x != oldPos.x || position.y != oldPos.y) {
 		if (!isMoving) isMoving = true;
 		lastMovement.x = position.x - oldPos.x;

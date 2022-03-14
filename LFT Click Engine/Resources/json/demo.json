@@ -4,6 +4,8 @@
       "prefab": "Resources\\json\\tile.json",
       "tag": "tile"
     },
+    {"prefab": "Resources\\json\\wall.json", "tag": "wall"},
+    {"prefab": "Resources\\json\\floor.json", "tag": "floor"},
     {
       "prefab": "Resources\\json\\enemy.json",
       "tag": "enemy"
@@ -37,6 +39,14 @@
       "tag": "crosshairs"
     }
   ],
+  "Map": {
+    "path": "Resources\\images\\map.png",
+    "key": {
+      "5b3d2e": "wall",
+      "7d5440": "floor"
+    },
+    "objectSize": 40
+  },
   "Level": [
     {
       "object": "bg",

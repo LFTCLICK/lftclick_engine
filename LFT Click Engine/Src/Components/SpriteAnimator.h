@@ -31,7 +31,16 @@ public:
 	virtual int getCompId() override { return ComponentType::SPRITE_ANIMATOR; };
 
 	virtual Component* Clone(GameObject* newParent);
-	SpriteAnimator() : wasMoving(false), currentFrame(0), currentAnimationIndex(0), idleAnimationIndex(-1), moveAnimationIndex(-1), direction("right") {}
+	SpriteAnimator() :
+		wasMoving(false),
+		isDamaged(false),
+		wasDamaged(false),
+		isDead(false),
+		wasDead(false),
+		currentFrame(0),
+		currentAnimationIndex(0),
+		direction("right")
+	{}
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 public:
@@ -40,6 +49,10 @@ public:
 	void UpdateFrame();
 	void SwitchAnimation(int index);
 	void SwitchAnimation(std::string name);
+
+	void Damage(float time);
+	void Die(float time);
+	void Revive();
 
 private:
 	GameObject* parent;
@@ -51,10 +64,11 @@ private:
 	std::map<int, AnimationInfo> animations;
 	std::map<std::string, int> moveAnimationIndices;
 	std::map<std::string, int> idleAnimationIndices;
+	int damageAnimationIndex, deathAnimationIndex;
 
 	std::string oldDirection, direction;
 
-	float xOffset, yOffset, timer;
-	int spriteSheetWidth, spriteSheetHeight, currentFrame, currentAnimationIndex, idleAnimationIndex, moveAnimationIndex;
-	bool wasMoving;
+	float xOffset, yOffset, timer, damageTimer, damageTimeout, deathTimer, deathTimeout;
+	int spriteSheetWidth, spriteSheetHeight, currentFrame, currentAnimationIndex;
+	bool wasMoving, isDamaged, wasDamaged, isDead, wasDead;
 };

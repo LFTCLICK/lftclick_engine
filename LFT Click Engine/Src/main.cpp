@@ -107,7 +107,7 @@ int main(int argc, char* args[])
 	while (masterLoop)
 	{
 
-		std::fstream other("./Resources/json/demo.json");
+		std::fstream other("./Resources/json/survival.json");
 		json dataJson2;
 		other >> dataJson2;
 		other.close();
@@ -125,9 +125,9 @@ int main(int argc, char* args[])
 		{
 			FrameRateController::getInstance().Tick();
 
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplSDL2_NewFrame();
-				ImGui::NewFrame();
+			ImGui_ImplDX11_NewFrame();
+			ImGui_ImplSDL2_NewFrame();
+			ImGui::NewFrame();
 
 			SDL_Event e;
 			while (SDL_PollEvent(&e) != 0)
