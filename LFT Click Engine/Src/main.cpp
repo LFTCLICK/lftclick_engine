@@ -23,6 +23,7 @@
 #include "Messages.h"
 #include "GameManager.h"
 #include "Components/Drawable.h"
+#include "DebugRenderer.h"
 
 using json = nlohmann::json;
 

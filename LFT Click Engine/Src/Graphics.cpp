@@ -13,9 +13,8 @@
 #include <DirectXMath.h>
 #include <WICTextureLoader.h>
 
-namespace wrl = Microsoft::WRL;
-namespace dx = DirectX;
-
+using namespace Microsoft::WRL;
+using namespace DirectX;
 
 Graphics::Graphics() :
 	width(0), height(0),
@@ -79,17 +78,17 @@ void Graphics::Initialize(HWND hWnd, int initWidth, int initHeight)
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = 0;
 
-	wrl::ComPtr<IDXGIDevice> dxgiDevice;
+	ComPtr<IDXGIDevice> dxgiDevice;
 	if FAILED(device.As(&dxgiDevice))
 		assert(false);
 
 
-	wrl::ComPtr<IDXGIAdapter> dxgiAdapter;
+	ComPtr<IDXGIAdapter> dxgiAdapter;
 	if FAILED(dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf()))
 		assert(false);
 
 
-	wrl::ComPtr<IDXGIFactory1> dxgiFactory;
+	ComPtr<IDXGIFactory1> dxgiFactory;
 	if FAILED(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), &dxgiFactory))
 		assert(false);
 
@@ -102,13 +101,22 @@ void Graphics::Initialize(HWND hWnd, int initWidth, int initHeight)
 
 	OnResize(initWidth, initHeight);
 
+	spriteBatch = std::make_unique<SpriteBatch>(immediateContext.Get());
 }
 
 void Graphics::PrepareForRendering()
 {
 	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
 	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	//spriteBatch->Begin();
 }
+
+void Graphics::PresentFrame()
+{
+	//spriteBatch->End();
+	DX::ThrowIfFailed(swapChain->Present(0, 0));
+}
+
 
 void Graphics::UpdateClientSizeVars()
 {
@@ -127,7 +135,7 @@ void Graphics::OnResize(int newWidth, int newHeight)
 
 	DX::ThrowIfFailed(swapChain->ResizeBuffers(1, width, height, backBufferFormat, 0));
 
-	wrl::ComPtr<ID3D11Texture2D> backBuffer;
+	ComPtr<ID3D11Texture2D> backBuffer;
 	DX::ThrowIfFailed(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.GetAddressOf())));
 	DX::ThrowIfFailed(device->CreateRenderTargetView(backBuffer.Get(), 0, renderTargetView.ReleaseAndGetAddressOf()));
 
@@ -170,32 +178,4 @@ void Graphics::OnResize(int newWidth, int newHeight)
 
 }
 
-void Graphics::Draw()
-{
 
-}
-
-void Graphics::PresentFrame()
-{
-	DX::ThrowIfFailed(swapChain->Present(0, 0));
-}
-
-int Graphics::GetWidth()
-{
-	return this->width;
-}
-
-int Graphics::GetHeight()
-{
-	return this->height;
-}
-
-ID3D11DeviceContext * Graphics::GetContext()
-{
-	return immediateContext.Get();
-}
-
-ID3D11Device * Graphics::GetDevice()
-{
-	return device.Get();
-}
