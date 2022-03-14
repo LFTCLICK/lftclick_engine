@@ -15,7 +15,6 @@ void Door::Start()
 	hpPerPhase = maxHp / zeroIndexDoorPhases;
 	EventManager::getInstance().Subscribe(Message::TRIGGER_COLLISION, parent);
 	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
-	sqCollider->isTrigger = true;
 	UpdateImage();
 }
 
