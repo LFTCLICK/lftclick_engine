@@ -13,38 +13,17 @@
 #include <DirectXMath.h>
 #include <string>
 #include <vector>
-#include "DebugRenderer.h"
+#include <SpriteBatch.h>
+
 
 class Graphics
 {
-public:
-	Graphics();
-	~Graphics() = default;
-	Graphics(const Graphics&) = delete;
-	Graphics& operator=(const Graphics&) = delete;
-
-	void Initialize(HWND hWnd, int initWidth, int initHeight);
-	void PrepareForRendering();
-	void PresentFrame();
-
-	void Draw();
-	int GetWidth();
-	int GetHeight();
-	ID3D11DeviceContext* GetContext();
-	ID3D11Device* GetDevice();
-	void OnResize(int newWidth, int newHeight);
-
-private:
-	void UpdateClientSizeVars();
-
-private:
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> immediateContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
-	int width, height;
 
 	DXGI_FORMAT backBufferFormat;
 	DXGI_FORMAT depthStencilBufferFormat;
@@ -55,6 +34,27 @@ private:
 	UINT msaaQuality;
 	UINT msaaSampleCount;
 
+	int width, height;
+
+	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
+public:
+	Graphics();
+	~Graphics() = default;
+	Graphics(const Graphics&) = delete;
+	Graphics& operator=(const Graphics&) = delete;
+
+	void Initialize(HWND hWnd, int initWidth, int initHeight);
+	void PrepareForRendering();
+	void PresentFrame();
+	void OnResize(int newWidth, int newHeight);
+
+	ID3D11DeviceContext* GetContext() const { return immediateContext.Get(); }
+	ID3D11Device* GetDevice() const { return device.Get(); }
+	DirectX::SpriteBatch* GetSpriteBatch() const { return spriteBatch.get(); }
+	int GetWidth() const { return width; }
+	int GetHeight() const { return height; }
+private:
+	void UpdateClientSizeVars();
 };
 
 extern std::unique_ptr<Graphics> g_Renderer;

@@ -64,11 +64,11 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
 	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertShader;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
-	Microsoft::WRL::ComPtr<ID3D11Resource> texture;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
 	Microsoft::WRL::ComPtr<ID3D11SamplerState> sampState;
 	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;
 	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
+
 	DirectX::XMMATRIX pTransformationMatrix;
 
 	float speed;
