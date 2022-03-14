@@ -80,28 +80,28 @@ void Door::UpdateImage()
 
 void Door::HandleMessage(Message* e)
 {
-	if (e->sourceObjectTag == "player")
+	if (e->otherObject->parent->tag == "player")
 	{
 		playerInRange = true;
 	}
-	else if (e->sourceObjectTag == "enemy" && hp>0)
+	else if (e->otherObject->parent->tag == "enemy" && hp > 0)
 	{
-		//Enemy* currentEnemy = e->otherObject->parent->getComponent<Enemy>();
-		//currentEnemy->timer+= FrameRateController::getInstance().DeltaTime();
-		//if (currentEnemy->timer > currentEnemy->attackTimer)
-		//{
-		//	currentEnemy->timer = 0;
-		//	hp -= currentEnemy->damage;
-		//	while(hp < maxHp * ((float)(currentPhase - 1) / zeroIndexDoorPhases))
-		//	{
-		//		currentPhase--;
-		//		UpdateImage();
-		//		if (currentPhase < 1)
-		//		{
-		//			sqCollider->isTrigger = true;
-		//		}
-		//	}
-		//	
-		//}
+		Enemy* currentEnemy = e->otherObject->parent->getComponent<Enemy>();
+		currentEnemy->timer+= FrameRateController::getInstance().DeltaTime();
+		if (currentEnemy->timer > currentEnemy->attackTimer)
+		{
+			currentEnemy->timer = 0;
+			hp -= currentEnemy->damage;
+			while(hp < maxHp * ((float)(currentPhase - 1) / zeroIndexDoorPhases))
+			{
+				currentPhase--;
+				UpdateImage();
+				if (currentPhase < 1)
+				{
+					sqCollider->isTrigger = true;
+				}
+			}
+			
+		}
 	}
 }

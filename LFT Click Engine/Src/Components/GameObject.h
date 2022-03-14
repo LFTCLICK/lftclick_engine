@@ -12,6 +12,9 @@
 #include "../Messages.h"
 #include <map>
 
+class Transform;
+class Collider;
+
 class GameObject
 {
 public:
@@ -46,6 +49,8 @@ public:
 	bool isActive;
 	bool hasNonStaticCollider;
 	bool isDeletable;
+	std::list<Collider*> colliders;
+	Transform* trans;
 private:
 	std::map<int, Component*> comps;
 	GameObject* Clone();//ONLY FACTORY SHOULD TOUCH THIS

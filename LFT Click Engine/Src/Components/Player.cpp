@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "GameManager.h"
 #include "FrameRateController.h"
+#include "Collider.h"
 
 void Player::Start()
 {
@@ -114,7 +115,7 @@ void Player::HandleMessage(Message* e)
 
 		Move(cm->deltaPos.x, cm->deltaPos.y);
 
-		if (e->sourceObjectTag == "enemy")
+		if (e->otherObject->parent->tag == "enemy")
 		{
 			badTouch = true;
 		}

@@ -20,7 +20,6 @@ public:
 	enum MessageID{COLLISION, TRIGGER_COLLISION};
 	MessageID id;
 	uint32_t tickTime;
-	std::string sourceObjectTag;
 	virtual ~Message() {};
 	Collider* otherObject;
 };
@@ -28,11 +27,11 @@ public:
 class CollisionMessage : public Message
 {
 public:
-	CollisionMessage(std::string sourceObjectTag, Collider* other, DirectX::SimpleMath::Vector2 deltaPos = { 0,0 }, uint32_t runAtTick = 0) : deltaPos(deltaPos)
+	CollisionMessage() {};
+	CollisionMessage(Collider* other, DirectX::SimpleMath::Vector2 deltaPos = { 0,0 }, uint32_t runAtTick = 0) : deltaPos(deltaPos)
 	{
 		id = MessageID::COLLISION;
 		tickTime = runAtTick;
-		Message::sourceObjectTag = sourceObjectTag;
 		otherObject = other;
 
 	};
@@ -42,11 +41,11 @@ public:
 class TriggerCollisionMessage : public Message
 {
 public:
-	TriggerCollisionMessage(std::string sourceObjectTag, Collider* other, uint32_t runAtTick = 0)
+	TriggerCollisionMessage() {};
+	TriggerCollisionMessage(Collider* other, uint32_t runAtTick = 0)
 	{
 		id = Message::MessageID::TRIGGER_COLLISION;
 		tickTime = runAtTick;
-		Message::sourceObjectTag = sourceObjectTag;
 		otherObject = other;
 	};
 

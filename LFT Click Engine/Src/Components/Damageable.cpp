@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "Damageable.h"
+#include "Collider.h"
 
 
 void Damageable::Start()
@@ -41,7 +42,7 @@ Component* Damageable::Clone(GameObject* newParent)
 }
 
 void Damageable::HandleMessage(Message* e) {
-	if (e->sourceObjectTag=="bullet") {
+	if (e->otherObject->parent->tag =="bullet") {
 		--health;
 	}
 }
