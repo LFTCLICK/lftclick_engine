@@ -60,10 +60,6 @@ void Enemy::HandleMessage(Message* e)
 	if (e->id == Message::COLLISION)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
-		if (e->sourceObjectTag == "enemy")
-		{
-			cm->deltaPos *= .5f;
-		}
 		trans->Move(cm->deltaPos.x, cm->deltaPos.y);
 		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
 		{

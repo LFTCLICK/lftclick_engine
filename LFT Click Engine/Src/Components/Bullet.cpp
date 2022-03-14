@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "Bullet.h"
+#include "Collider.h"
 #include "FrameRateController.h"
 
 
@@ -37,6 +38,12 @@ void Bullet::Deserialize(nlohmann::json j, GameObject* parent)
 	keepAliveTime = j["keepAliveTime"];
 	speed = j["speed"];
 	liveForever = false;
+}
+
+void Bullet::HandleMessage(Message* e)
+{
+	if(!e->otherObject->isTrigger && e->otherObject->parent->tag!="door")
+		parent->isDeletable = true;
 }
 
 Component* Bullet::Clone(GameObject* newParent)

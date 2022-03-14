@@ -16,6 +16,7 @@
 #include "GameObjectManager.h"
 #include "EventManager.h"
 #include "FrameRateController.h"
+#include "Collider.h"
 #include <json.hpp>
 
 using json = nlohmann::json;
@@ -38,7 +39,7 @@ public:
 
 	int health;
 
-	// For knockback
+	// For knockback (not working yet)
 	DirectX::SimpleMath::Vector2 velocity;
 	float inertiaMod;
 	bool destroyOnDeath;

@@ -39,14 +39,6 @@
       "tag": "crosshairs"
     }
   ],
-  "Map": {
-    "path": "Resources\\images\\map.png",
-    "key": {
-      "5b3d2e": "wall",
-      "7d5440": "floor"
-    },
-    "objectSize": 40
-  },
   "Level": [
     {
       "object": "bg",

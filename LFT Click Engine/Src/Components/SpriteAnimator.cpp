@@ -16,11 +16,13 @@ void SpriteAnimator::UpdateDirection()
 	oldDirection = direction;
 	auto directionVec = trans->lastMovement;
 	if (directionVec.x != 0 || directionVec.y != 0) {
-		if (directionVec.x > 0 && moveAnimationIndices["right"] > -1) {
-			if (direction != "right") direction = "right";
-		}
-		else if (directionVec.x < 0 && moveAnimationIndices["left"] > -1) {
-			if (direction != "left") direction = "left";
+		if (abs(directionVec.x) > abs(directionVec.y) && moveAnimationIndices["right"] > -1) {
+			if (directionVec.x > 0 && moveAnimationIndices["right"] > -1) {
+				if (direction != "right") direction = "right";
+			}
+			else if (directionVec.x < 0 && moveAnimationIndices["left"] > -1) {
+				if (direction != "left") direction = "left";
+			}
 		}
 		else {
 			if (directionVec.y > 0 && moveAnimationIndices["up"] > -1) {
@@ -36,7 +38,6 @@ void SpriteAnimator::UpdateState()
 {
 	if (trans->isMoving != wasMoving || direction != oldDirection || isDamaged != wasDamaged || isDead != wasDead) {
 		if (isDead) {
-			std::cout << "DED" << std::endl;
 			SwitchAnimation(deathAnimationIndex);
 		}
 		else if (isDamaged) {

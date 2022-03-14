@@ -10,7 +10,7 @@
 #include "pch.h"
 #include "GameObject.h"
 
-GameObject::GameObject() : comps(std::map<int, Component*>()), isActive(true), isDeletable(false) {}
+GameObject::GameObject() : comps(std::map<int, Component*>()), isActive(true), isDeletable(false), hasNonStaticCollider(false) {}
 
 //will not be called if isActive is set to false
 void GameObject::Update()
@@ -42,7 +42,7 @@ Component* GameObject::getRawComponentPointer(int id)
 
 GameObject::~GameObject()
 {
-	for (std::map<int, Component*>::iterator current = comps.begin(); current != comps.end(); ++current)
+	for (auto current = comps.begin(); current != comps.end(); ++current)
 	{
 		delete current->second;
 	}

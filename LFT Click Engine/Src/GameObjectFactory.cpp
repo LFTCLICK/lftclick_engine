@@ -27,6 +27,7 @@
 #include "Components/Door.h"
 #include "Components/EnemySpawner.h"
 #include "Components/WoodPile.h"
+#include "Components/LevelGenerator.h"
 
 #include <json.hpp>
 #include <string>
@@ -102,6 +103,8 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new EnemySpawner();
 	else if (compID == Component::WOOD_PILE)
 		currentComp = new WoodPile();
+	else if (compID == Component::LEVEL_GENERATOR)
+		currentComp = new LevelGenerator();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

@@ -28,12 +28,13 @@ using json = nlohmann::json;
 
 using namespace DirectX;
 
-std::unique_ptr<DebugRenderer> g_debugRenderer;
+std::unique_ptr<DebugRenderer> g_DebugRenderer;
+std::unique_ptr<Graphics> g_Renderer;
 
 int main(int argc, char* args[])
 {
 	int windowWidth = 800, windowHeight = 600;
-
+#ifdef _DEBUG
 	// Create Lua State
 	lua_State* L = luaL_newstate();
 
@@ -54,14 +55,14 @@ int main(int argc, char* args[])
 			windowHeight = (float)lua_tonumber(L, -1);
 		}
 	}
-	//Init SDL
+#endif
+
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
 		std::cout << "SDL_Init failled, erorr" << std::endl;
 		return 1;
 	}
 
-	//Create SDL window
 	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
@@ -74,13 +75,14 @@ int main(int argc, char* args[])
 		std::cout << "Couldn't create window " << SDL_GetError();
 		return 1;
 	}
-	//load in and set icon
 	SDL_Surface* icon = ResourceManager::getInstance().GetResource("Resources\\images\\icon.bmp");
 	SDL_SetWindowIcon(pWindow, icon);
 
-	Graphics::getInstance().Initialize(GetActiveWindow(), windowWidth, windowHeight);
 
-	g_debugRenderer = std::make_unique<DebugRenderer>(&Graphics::getInstance());
+	g_Renderer = std::make_unique<Graphics>();
+	g_Renderer->Initialize(GetActiveWindow(), windowWidth, windowHeight);
+
+	g_DebugRenderer = std::make_unique<DebugRenderer>(g_Renderer->GetDevice(), g_Renderer->GetContext());
 
 	////imgui setup
 	IMGUI_CHECKVERSION();
@@ -88,7 +90,7 @@ int main(int argc, char* args[])
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	ImGui::StyleColorsDark();
 	ImGui_ImplSDL2_InitForD3D(pWindow);
-	ImGui_ImplDX11_Init(Graphics::getInstance().GetDevice(), Graphics::getInstance().GetContext());
+	ImGui_ImplDX11_Init(g_Renderer->GetDevice(), g_Renderer->GetContext());
 
 
 	GameObjectManager* gom = &GameObjectManager::getInstance();
@@ -107,7 +109,11 @@ int main(int argc, char* args[])
 	while (masterLoop)
 	{
 
-		std::fstream other("./Resources/json/survival.json");
+
+		//std::fstream other("./Resources/json/survival.json");
+		std::fstream other("./Resources/json/demo.json");
+		//std::fstream other("./Resources/json/concept_3_level.json");
+
 		json dataJson2;
 		other >> dataJson2;
 		other.close();
@@ -121,6 +127,7 @@ int main(int argc, char* args[])
 		isRunning = true;
 		unsigned int lastTime = 0;
 		FrameRateController::getInstance().Init(144);
+
 		while (isRunning)
 		{
 			FrameRateController::getInstance().Tick();
@@ -144,7 +151,7 @@ int main(int argc, char* args[])
 					windowWidth = e.window.data1;
 					windowHeight = e.window.data2;
 					SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
-					Graphics::getInstance().OnResize(windowWidth, windowHeight);
+					g_Renderer->OnResize(windowWidth, windowHeight);
 				}
 			}
 			AudioManager::getInstance().Update();
@@ -154,23 +161,22 @@ int main(int argc, char* args[])
 			//gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
 			EventManager::getInstance().Update();
 
-			Graphics::getInstance().PrepareForRendering();
+			g_Renderer->PrepareForRendering();
 
 			gom->Draw();
 
-	
-			g_debugRenderer->Draw(&Graphics::getInstance());
+			g_DebugRenderer->Draw(g_Renderer->GetContext(), g_Renderer->GetWidth(), g_Renderer->GetHeight());
 
 
-				bool open = true;
+			bool open = true;
 
-				ImGui::SetNextWindowPos({ 0,0 });
-				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-				ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
-				ImGui::End();
+			ImGui::SetNextWindowPos({ 0,0 });
+			ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+			ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
+			ImGui::End();
 			if (GameManager::getInstance().playerDead)
 			{
-				ImGui::SetNextWindowPos({ (float)((windowWidth/2)-50),(float)((windowHeight/2)+100)});
+				ImGui::SetNextWindowPos({ (float)((windowWidth / 2) - 50),(float)((windowHeight / 2) + 100) });
 				ImGui::Begin("mainMenu", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
 				if (ImGui::Button("Restart", { 100,50 }) || GameManager::getInstance().playerRestart)
 				{
@@ -199,7 +205,7 @@ int main(int argc, char* args[])
 
 			ImGui::Render();
 			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-			Graphics::getInstance().PresentFrame();
+			g_Renderer->PresentFrame();
 
 		}
 
@@ -215,12 +221,13 @@ int main(int argc, char* args[])
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
-	g_debugRenderer.reset();
+	g_DebugRenderer.reset();
 
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
-	
-	lua_close(L); 
+#ifdef _DEBUG
+	lua_close(L);
+#endif
 	SDL_Quit();
 
 	return 0;

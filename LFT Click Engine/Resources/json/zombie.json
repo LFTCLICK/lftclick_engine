@@ -9,7 +9,7 @@
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 0.5,
+    "xScale" : 0.25,
     "yScale" : 0.125,
     "vertices" : [
     {

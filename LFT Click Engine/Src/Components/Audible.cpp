@@ -45,11 +45,11 @@ void Audible::Update() {
 		if (trans->isMoving != trans->wasMoving) {
 			HandleSoundsOnEvent(trans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
 			if (!trans->isMoving)
-				am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos(), { 0, 0 });
+				am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100, { 0, 0 });
 		}
 
 		if (trans->isMoving)
-			am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
+			am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 	}
 }
 

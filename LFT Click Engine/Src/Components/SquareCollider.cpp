@@ -16,7 +16,7 @@
 
 using namespace DirectX::SimpleMath;
 
-extern std::unique_ptr<DebugRenderer> g_debugRenderer;
+extern std::unique_ptr<DebugRenderer> g_DebugRenderer;
 
 SquareCollider::SquareCollider()
 {
@@ -28,14 +28,15 @@ void SquareCollider::Start()
 	center.x *= trans->scale.x;
 	center.y *= trans->scale.y;
 	points = new float[8];
-	points[0] = (.5f * width) + center.x;
-	points[1] = (.5f * height) + center.y;
-	points[2] = (.5f * width) + center.x;
-	points[3] = (-.5f * height) + center.y;
-	points[4] = (-.5f * width) + center.x;
-	points[5] = (-.5f * height) + center.y;
-	points[6] = (-.5f * width) + center.x;
-	points[7] = (.5f * height) + center.y;
+	points[0] = (.5f*width) + center.x;
+	points[1] = (.5f*height) + center.y;
+	points[2] = (.5f*width) + center.x;
+	points[3] = (-.5f*height) + center.y;
+	points[4] = (-.5f*width) + center.x;
+	points[5] = (-.5f*height) + center.y;
+	points[6] = (-.5f*width) + center.x;
+	points[7] = (.5f*height) + center.y;
+	maxBounds = sqrt(((width / 2)* (width / 2)) + ((height / 2)* (height / 2)));
 }
 
 void SquareCollider::Update()
@@ -47,7 +48,7 @@ int SquareCollider::getCompId()
 	return ComponentType::SQUARE_COLLLIDER;
 }
 
-Component* SquareCollider::Clone(GameObject* newParent)
+Component * SquareCollider::Clone(GameObject * newParent)
 {
 	SquareCollider* toReturn = new SquareCollider();
 	toReturn->parent = newParent;
@@ -56,8 +57,10 @@ Component* SquareCollider::Clone(GameObject* newParent)
 	toReturn->height = height;
 	toReturn->isTrigger = isTrigger;
 	toReturn->isStatic = isStatic;
+	if (!isStatic)
+		newParent->hasNonStaticCollider = true;
 	toReturn->deleteOnCollison = deleteOnCollison;
-	return (Component*)toReturn;
+	return (Component*) toReturn;
 }
 
 void SquareCollider::CollisionCheck(GameObject* toCheck)
@@ -71,8 +74,12 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 		else
 		{
 			SquareCollider* toCheckCollider = toCheck->getComponent<SquareCollider>();
-			DirectX::XMVECTOR myPos = DirectX::XMVectorAdd(parent->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&center));
-			DirectX::XMVECTOR toCheckPos = DirectX::XMVectorAdd(toCheck->getComponent<Transform>()->GetPosXMVector(), DirectX::XMLoadFloat4(&toCheckCollider->center));
+			DirectX::XMVECTOR myPos = parent->getComponent<Transform>()->GetPosXMVector();
+			myPos.m128_f32[0] += center.x;
+			myPos.m128_f32[1] += center.y;
+			DirectX::XMVECTOR toCheckPos = toCheck->getComponent<Transform>()->GetPosXMVector();
+			toCheckPos.m128_f32[0] += toCheckCollider->center.x;
+			toCheckPos.m128_f32[1] += toCheckCollider->center.y;
 
 			DirectX::XMFLOAT2 myPosf;
 			DirectX::XMStoreFloat2(&myPosf, myPos);
@@ -90,7 +97,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 			{
 				if (isTrigger)
 				{
-					toCheck->HandleMessage(new DamageCollisionMessage(parent->tag, parent));
+					toCheck->HandleMessage(new TriggerCollisionMessage(parent->tag, toCheckCollider));
 				}
 				else
 				{
@@ -124,7 +131,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 					{
 						int a = 0;
 					}
-					toCheck->HandleMessage(new CollisionMessage(parent->tag, parent, delta));
+					toCheck->HandleMessage(new CollisionMessage(parent->tag, toCheckCollider, delta));
 				}
 				if (deleteOnCollison) parent->isDeletable = true;
 			}
@@ -132,7 +139,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 	}
 }
 
-float* SquareCollider::getPoints()
+float * SquareCollider::getPoints()
 {
 	return points;
 }
@@ -141,11 +148,19 @@ void SquareCollider::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	this->parent = parent;
 	std::vector<float> centerHelper = j["center"].get<std::vector<float>>();
-	center = { centerHelper[0], centerHelper[1], centerHelper[2], 0 };
+	center = { centerHelper[0], centerHelper[1] };
 	width = j["width"];
 	height = j["height"];
 	isTrigger = j["trigger"];
-	//isStatic = j["static"];
+
+	isStatic = false;
+	if (j.contains("static"))
+	{
+		isStatic = j["static"];
+		if (!isStatic)
+			parent->hasNonStaticCollider = true;
+	}
+
 	deleteOnCollison = j["deleteOnCollison"];
 }
 
@@ -155,8 +170,8 @@ void SquareCollider::DebugDraw()
 	assert(t != nullptr);
 
 	auto cam = GameManager::getInstance().mainCamera;
-	float screenWidth = Graphics::getInstance().GetWidth();
-	float screenHeight = Graphics::getInstance().GetHeight();
+	float screenWidth = g_Renderer->GetWidth();
+	float screenHeight = g_Renderer->GetHeight();
 
 	Vector2 a = t->CurrentPos() - Vector2(width / 2.0f, -height / 2.0f);
 	Vector2 b = t->CurrentPos() + Vector2(width / 2.0f, height / 2.0f);
@@ -168,5 +183,5 @@ void SquareCollider::DebugDraw()
 	c = cam->WorldToScreenPos(c, screenWidth, screenHeight);
 	d = cam->WorldToScreenPos(d, screenWidth, screenHeight);
 
-	g_debugRenderer->DrawQuad(a, b, c, d);
+	g_DebugRenderer->DrawQuad(a, b, c, d);
 }

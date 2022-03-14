@@ -1,10 +1,10 @@
 #pragma once
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	EnemySpawner.h
-// Author			:	Vance Howald
-// Creation Date	:	2021/12/10
-// Purpose			:	Creates a region where enemies can spawn and then spawns them in waves using a linear equation
+// File Name		:	LevelGenerator.h
+// Author			:	Chris Fitch
+// Creation Date	:	2022/03/02
+// Purpose			:	Generates the level
 // History			: 
 // ---------------------------------------------------------------------------
 
@@ -14,8 +14,10 @@
 #include "GameObjectManager.h"
 #include <json.hpp>
 
+#define OBJ_DISTANCE 80
+
 using json = nlohmann::json;
-class EnemySpawner : public Component
+class LevelGenerator : public Component
 {
 public:
 
@@ -26,15 +28,19 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	EnemySpawner() : objectSpawnName("enemy") {};
+	LevelGenerator() {
+		gom = &GameObjectManager::getInstance();
+		gof = &GameObjectFactory::getInstance();
+	};
 
 public:
-	DirectX::SimpleMath::Vector2 bounds;
-	DirectX::SimpleMath::Vector2 targetPosOffset;
-	float slope, timeBetweenPhases, timer, c, x;
+	void Create(std::string tag, int row, int column);
 
 private:
 	GameObject* parent;
-	DirectX::SimpleMath::Vector2 myPos;
-	std::string objectSpawnName;
-};
+	GameObjectManager* gom;
+	GameObjectFactory* gof;
+
+	std::vector<std::vector<int>> layout;
+	std::map<int, std::string> key;
+}; 

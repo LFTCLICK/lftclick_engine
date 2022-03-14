@@ -23,7 +23,7 @@ public:
 	virtual void Start();
 	virtual void Update();
 	int getCompId();
-	DirectX::XMFLOAT4 center;
+	DirectX::SimpleMath::Vector2 center;
 	float width;
 	float height;
 
@@ -34,7 +34,6 @@ public:
 
 	void DebugDraw() override;
 private:
-	GameObject* parent;
 	float* points;
 	bool deleteOnCollison;
 };

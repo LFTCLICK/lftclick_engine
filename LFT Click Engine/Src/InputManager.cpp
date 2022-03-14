@@ -26,7 +26,7 @@ InputManager::~InputManager()
 {
 	//Close game controller
 	SDL_JoystickClose(gGameController);
-	gGameController = NULL;
+ 	gGameController = NULL;
 }
 
 void InputManager::Update()

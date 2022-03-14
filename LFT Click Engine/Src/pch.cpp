@@ -1,5 +1,6 @@
 #include "pch.h"
 
+#ifdef _DEBUG
 bool CheckLua(lua_State* L, int r)
 {
 	{
@@ -12,3 +13,4 @@ bool CheckLua(lua_State* L, int r)
 		return true;
 	}
 }
+#endif

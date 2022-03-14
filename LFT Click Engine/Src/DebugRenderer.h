@@ -14,12 +14,11 @@
 #include <Effects.h>
 #include "CommonStates.h"
 
-class Graphics;
 
 class DebugRenderer
 {
 public:
-	DebugRenderer(Graphics* graphics);
+	DebugRenderer(ID3D11Device* device, ID3D11DeviceContext* context);
 	~DebugRenderer();
 
 	void DrawLine(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath::Vector2 b);
@@ -29,7 +28,7 @@ public:
 
 	void DrawCircle(DirectX::SimpleMath::Vector2 center, float radius, short numlines);
 	
-	void Draw(Graphics* graphics);
+	void Draw(ID3D11DeviceContext* context, int width, int height);
 
 private:
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> primitiveBatch;
@@ -41,3 +40,4 @@ private:
 
 };
 
+extern std::unique_ptr<DebugRenderer> g_DebugRenderer;

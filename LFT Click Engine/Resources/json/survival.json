@@ -17,10 +17,6 @@
       "tag": "enemy"
     },
     {
-      "prefab": "Resources\\json\\enemySpawner.json",
-      "tag": "enemySpawner"
-    },
-    {
       "prefab": "Resources\\json\\bg.json",
       "tag": "bg"
     },
@@ -47,6 +43,14 @@
     {
       "prefab": "Resources\\json\\crosshairs.json",
       "tag": "crosshairs"
+    },
+    {
+      "prefab": "Resources\\json\\zombie.json",
+      "tag": "zombie"
+    },
+    {
+      "prefab": "Resources\\json\\zombieSpawner.json",
+      "tag": "zombieSpawner"
     }
   ],
   "Map": {
@@ -56,7 +60,7 @@
       "7d5440": "floor",
       "3a5742": "grass"
     },
-    "objectSize": 40
+    "objectSize": 60
   },
   "Level": [
     {
@@ -66,6 +70,21 @@
           "1": {
             "startX": 0.5,
             "startY": 0.5,
+            "scaleX": 60,
+            "scaleY": 60,
+            "rot": 0,
+            "zPos": 5
+          }
+        }
+      ]
+    },
+    {
+      "object": "zombieSpawner",
+      "overrides": [
+        {
+          "1": {
+            "startX": 0.5,
+            "startY": 1200.5,
             "scaleX": 40,
             "scaleY": 40,
             "rot": 0,

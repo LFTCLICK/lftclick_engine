@@ -17,7 +17,7 @@ void Damageable::Start()
 	trans = parent->getComponent<Transform>();
 	anim = parent->getComponent<SpriteAnimator>();
 	audio = parent->getComponent<Audible>();
-	EventManager::getInstance().Subscribe(Message::DAMAGE_COLLISION, parent);
+	EventManager::getInstance().Subscribe(Message::TRIGGER_COLLISION, parent);
 }
 
 void Damageable::Update()
@@ -57,10 +57,9 @@ Component* Damageable::Clone(GameObject* newParent)
 }
 
 void Damageable::HandleMessage(Message* e) {
-	if (e->sourceObjectTag == "bullet" && e->id == Message::DAMAGE_COLLISION && health < 10000000) {
-		Transform* bulletTrans = e->otherObject != nullptr ? e->otherObject->getComponent<Transform>() : nullptr;
-		if (bulletTrans != nullptr) velocity = bulletTrans->lastMovement;
-
+	if (e->sourceObjectTag == "bullet") {
+		//Transform* bulletTrans = e->otherObject != nullptr ? e->otherObject->getComponent<Transform>() : nullptr;
+		//if (bulletTrans != nullptr) velocity = bulletTrans->lastMovement;
 		TakeDamage(1);
 	}
 }

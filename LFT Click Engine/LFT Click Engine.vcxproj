@@ -267,6 +267,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Src\Components\Gun.cpp" />
+    <ClCompile Include="Src\Components\LevelGenerator.cpp" />
     <ClCompile Include="Src\Components\Player.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
@@ -359,6 +360,7 @@
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h" />
     <ClInclude Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="Src\AudioManager.h" />
+    <ClInclude Include="Src\CollisionResolution.h" />
     <ClInclude Include="Src\Components\Audible.h" />
     <ClInclude Include="Src\Components\Bullet.h" />
     <ClInclude Include="Src\Components\Camera.h" />
@@ -373,6 +375,7 @@
     <ClInclude Include="Src\Components\FollowMouse.h" />
     <ClInclude Include="Src\Components\GameObject.h" />
     <ClInclude Include="Src\Components\Gun.h" />
+    <ClInclude Include="Src\Components\LevelGenerator.h" />
     <ClInclude Include="Src\Components\Player.h" />
     <ClInclude Include="Src\Components\SpriteAnimator.h" />
     <ClInclude Include="Src\Components\SquareCollider.h" />
@@ -422,6 +425,7 @@
     <None Include="Resources\json\title.json" />
     <None Include="Resources\json\turret.json" />
     <None Include="Resources\json\zombie.json" />
+    <None Include="Resources\json\zombieSpawner.json" />
     <None Include="Resources\LuaScripts\ConfigurationScript.lua" />
   </ItemGroup>
   <ItemGroup>
