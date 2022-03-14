@@ -1,127 +1,390 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="Src\Shaders\PixelShader.hlsl" />
-    <FxCompile Include="Src\Shaders\VertexShader.hlsl" />
+    <Filter Include="Lua Scripts">
+      <UniqueIdentifier>{a09a766b-8563-4e14-9b11-2e8763827523}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Engine\Components">
+      <UniqueIdentifier>{1856f23c-347c-4eee-bf7c-4b0c92ea47fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{83574552-3c02-493e-ad05-068508ce3464}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\ImGUI">
+      <UniqueIdentifier>{802cb82c-e8f3-4524-b4e6-8bc865683697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{3f3ce752-ce39-43d1-aef6-1a8bed5373fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering">
+      <UniqueIdentifier>{75f7d160-9f48-4228-9f86-4ffaebfc512e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JSON">
+      <UniqueIdentifier>{0f8d8bba-31f6-4fc9-a5d3-2a6887308b48}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Libraries\imgui-1.82\backends\imgui_impl_dx11.cpp" />
-    <ClCompile Include="..\Libraries\imgui-1.82\backends\imgui_impl_sdl.cpp" />
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui.cpp" />
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui_demo.cpp" />
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui_draw.cpp" />
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui_tables.cpp" />
-    <ClCompile Include="..\Libraries\imgui-1.82\imgui_widgets.cpp" />
-    <ClCompile Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.cpp" />
-    <ClCompile Include="Src\AudioManager.cpp" />
-    <ClCompile Include="Src\Components\Audible.cpp" />
-    <ClCompile Include="Src\Components\Bullet.cpp" />
-    <ClCompile Include="Src\Components\Camera.cpp" />
-    <ClCompile Include="Src\Components\CircleCollider.cpp" />
-    <ClCompile Include="Src\Components\Collider.cpp" />
-    <ClCompile Include="Src\Components\Component.cpp" />
-    <ClCompile Include="Src\Components\Damageable.cpp" />
-    <ClCompile Include="Src\Components\Door.cpp" />
-    <ClCompile Include="Src\Components\Drawable.cpp" />
-    <ClCompile Include="Src\Components\Enemy.cpp" />
-    <ClCompile Include="Src\Components\EnemySpawner.cpp" />
-    <ClCompile Include="Src\Components\FollowMouse.cpp" />
-    <ClCompile Include="Src\Components\GameObject.cpp" />
-    <ClCompile Include="Src\Components\Gun.cpp" />
-    <ClCompile Include="Src\Components\LevelGenerator.cpp" />
-    <ClCompile Include="Src\Components\Player.cpp" />
-    <ClCompile Include="Src\Components\SpriteAnimator.cpp" />
-    <ClCompile Include="Src\Components\SquareCollider.cpp" />
-    <ClCompile Include="Src\Components\Transform.cpp" />
-    <ClCompile Include="Src\Components\WoodPile.cpp" />
-    <ClCompile Include="Src\DebugRenderer.cpp" />
-    <ClCompile Include="Src\EventManager.cpp" />
-    <ClCompile Include="Src\FrameRateController.cpp" />
-    <ClCompile Include="Src\GameManager.cpp" />
-    <ClCompile Include="Src\GameObjectFactory.cpp" />
-    <ClCompile Include="Src\GameObjectManager.cpp" />
-    <ClCompile Include="Src\Graphics.cpp" />
-    <ClCompile Include="Src\InputManager.cpp" />
-    <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui_demo.cpp">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui_draw.cpp">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\backends\imgui_impl_dx11.cpp">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\backends\imgui_impl_sdl.cpp">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.cpp">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui_tables.cpp">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui_widgets.cpp">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Libraries\imgui-1.82\imgui.cpp">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Audible.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Bullet.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Camera.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Component.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Damageable.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Drawable.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\GameObject.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Player.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\SpriteAnimator.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\SquareCollider.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Transform.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AudioManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\EventManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\FollowMouse.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\FrameRateController.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObjectFactory.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\GameObjectManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Gun.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\InputManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\pch.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\ResourceManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Graphics.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\DebugRenderer.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Damageable.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Door.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\EnemySpawner.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\WoodPile.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Enemy.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\CircleCollider.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Collider.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
     <ClCompile Include="Src\pch.cpp" />
     <ClCompile Include="Src\ResourceManager.cpp" />
+    <ClCompile Include="Src\main.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\LevelGenerator.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Libraries\imgui-1.82\backends\imgui_impl_dx11.h" />
-    <ClInclude Include="..\Libraries\imgui-1.82\backends\imgui_impl_sdl.h" />
-    <ClInclude Include="..\Libraries\imgui-1.82\imgui.h" />
-    <ClInclude Include="..\Libraries\imgui-1.82\imgui_internal.h" />
-    <ClInclude Include="..\Libraries\imgui-1.82\imstb_rectpack.h" />
-    <ClInclude Include="..\Libraries\imgui-1.82\imstb_textedit.h" />
-    <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h" />
-    <ClInclude Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.h" />
-    <ClInclude Include="Src\AudioManager.h" />
-    <ClInclude Include="Src\CollisionResolution.h" />
-    <ClInclude Include="Src\Components\Audible.h" />
-    <ClInclude Include="Src\Components\Bullet.h" />
-    <ClInclude Include="Src\Components\Camera.h" />
-    <ClInclude Include="Src\Components\CircleCollider.h" />
-    <ClInclude Include="Src\Components\Collider.h" />
-    <ClInclude Include="Src\Components\Component.h" />
-    <ClInclude Include="Src\Components\Damageable.h" />
-    <ClInclude Include="Src\Components\Door.h" />
-    <ClInclude Include="Src\Components\Drawable.h" />
-    <ClInclude Include="Src\Components\Enemy.h" />
-    <ClInclude Include="Src\Components\EnemySpawner.h" />
-    <ClInclude Include="Src\Components\FollowMouse.h" />
-    <ClInclude Include="Src\Components\GameObject.h" />
-    <ClInclude Include="Src\Components\Gun.h" />
-    <ClInclude Include="Src\Components\LevelGenerator.h" />
-    <ClInclude Include="Src\Components\Player.h" />
-    <ClInclude Include="Src\Components\SpriteAnimator.h" />
-    <ClInclude Include="Src\Components\SquareCollider.h" />
-    <ClInclude Include="Src\Components\Transform.h" />
-    <ClInclude Include="Src\Components\WoodPile.h" />
-    <ClInclude Include="Src\ConstantBuffer.h" />
-    <ClInclude Include="Src\DebugRenderer.h" />
-    <ClInclude Include="Src\EventManager.h" />
-    <ClInclude Include="Src\FMODResultStrings.h" />
-    <ClInclude Include="Src\FrameRateController.h" />
-    <ClInclude Include="Src\GameManager.h" />
-    <ClInclude Include="Src\GameObjectFactory.h" />
-    <ClInclude Include="Src\GameObjectManager.h" />
-    <ClInclude Include="Src\Graphics.h" />
-    <ClInclude Include="Src\InputManager.h" />
-    <ClInclude Include="Src\Messages.h" />
-    <ClInclude Include="Src\pch.h" />
-    <ClInclude Include="Src\ResourceManager.h" />
+    <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\backends\imgui_impl_dx11.h">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\backends\imgui_impl_sdl.h">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\imgui_internal.h">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.h">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\imstb_rectpack.h">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\imstb_textedit.h">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h">
+      <Filter>Dependencies\ImGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Audible.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Bullet.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Camera.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Collider.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Component.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Damageable.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Drawable.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\GameObject.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Player.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\SpriteAnimator.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\SquareCollider.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Transform.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AudioManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\EventManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\FMODResultStrings.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\FollowMouse.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\FrameRateController.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObjectFactory.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\GameObjectManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Gun.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\InputManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Messages.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\pch.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ResourceManager.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Graphics.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\ConstantBuffer.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\DebugRenderer.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Door.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\EnemySpawner.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\WoodPile.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Enemy.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\CircleCollider.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\LevelGenerator.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionResolution.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
+      <Filter>Dependencies\ImGUI</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LuaScripts\ConfigurationScript.lua">
+      <Filter>Lua Scripts</Filter>
+    </None>
     <None Include="packages.config" />
-    <None Include="Resources\json\5thSprite.json" />
-    <None Include="Resources\json\background_music.json" />
-    <None Include="Resources\json\bg.json" />
-    <None Include="Resources\json\bullet.json" />
-    <None Include="Resources\json\camera.json" />
-    <None Include="Resources\json\camera2.json" />
-    <None Include="Resources\json\camera_background.json" />
-    <None Include="Resources\json\controls.json" />
-    <None Include="Resources\json\credits.json" />
-    <None Include="Resources\json\crosshairs.json" />
-    <None Include="Resources\json\demo.json" />
-    <None Include="Resources\json\floor.json" />
-    <None Include="Resources\json\grass.json" />
-    <None Include="Resources\json\invin.json" />
-    <None Include="Resources\json\menu.json" />
-    <None Include="Resources\json\player.json" />
-    <None Include="Resources\json\prefabs.json" />
-    <None Include="Resources\json\sign.json" />
-    <None Include="Resources\json\slow.json" />
-    <None Include="Resources\json\spike.json" />
-    <None Include="Resources\json\survival.json" />
-    <None Include="Resources\json\tile.json" />
-    <None Include="Resources\json\title.json" />
-    <None Include="Resources\json\turret.json" />
-    <None Include="Resources\json\zombie.json" />
-    <None Include="Resources\LuaScripts\ConfigurationScript.lua" />
-    <None Include="Resources\json\zombieSpawner.json" />
+    <None Include="Resources\json\5thSprite.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\background_music.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\bg.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\bullet.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\camera.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\camera_background.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\camera2.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\controls.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\credits.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\crosshairs.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\demo.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\floor.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\invin.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\menu.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\player.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\prefabs.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\sign.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\slow.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\spike.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\tile.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\title.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\turret.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\grass.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\survival.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\zombie.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\zombieSpawner.json">
+      <Filter>JSON</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Src\Shaders\PixelShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Src\Shaders\VertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
   </ItemGroup>
 </Project>

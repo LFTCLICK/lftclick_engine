@@ -109,8 +109,6 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 	while (masterLoop)
 	{
-
-
 		//std::fstream other("./Resources/json/survival.json");
 		std::fstream other("./Resources/json/demo.json");
 		//std::fstream other("./Resources/json/concept_3_level.json");

@@ -213,7 +213,7 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 
 					if (map["key"].contains(colorHexString)) {
 						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString]);
-						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize;
+						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1;
 						obj->getComponent<Transform>()->SetPos(mapX, mapY);
 					}
 				}
