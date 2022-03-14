@@ -10,8 +10,6 @@
 
 #include "pch.h"
 #include "DebugRenderer.h"
-#include "GameManager.h"
-#include "Graphics.h"
 #include <DirectXHelpers.h>
 
 using namespace DirectX;
@@ -25,20 +23,21 @@ DebugRenderer::DebugRenderer(ID3D11Device* device, ID3D11DeviceContext* context)
 		CreateInputLayoutFromEffect<VertexPositionColor>( device, basicEffect.get(), 
 			inputLayout.ReleaseAndGetAddressOf() ) );
 
-	states = std::make_unique<DirectX::CommonStates>(device);
+	states = std::make_unique<CommonStates>(device);
 }
 
 DebugRenderer::~DebugRenderer()
 {
 }
 
-void DebugRenderer::DrawLine(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath::Vector2 b)
+void DebugRenderer::DrawLine(SimpleMath::Vector2 a, SimpleMath::Vector2 b)
 {
-	lineVertices.emplace_back(DirectX::VertexPositionColor(a, DirectX::Colors::Red));
-	lineVertices.emplace_back(DirectX::VertexPositionColor(b, DirectX::Colors::Red));
+	lineVertices.emplace_back(VertexPositionColor(a, Colors::Red));
+	lineVertices.emplace_back(VertexPositionColor(b, Colors::Red));
 }
 
-void DebugRenderer::DrawQuad(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath::Vector2 b, DirectX::SimpleMath::Vector2 c, DirectX::SimpleMath::Vector2 d)
+
+void DebugRenderer::DrawQuad(SimpleMath::Vector2 a, SimpleMath::Vector2 b, SimpleMath::Vector2 c, SimpleMath::Vector2 d)
 {
 	DrawLine(a, b);
 	DrawLine(b, c);
@@ -46,7 +45,7 @@ void DebugRenderer::DrawQuad(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath
 	DrawLine(d, a);
 }
 
-void DebugRenderer::DrawCircle(DirectX::SimpleMath::Vector2 Center, float Radius, short numlines)
+void DebugRenderer::DrawCircle(SimpleMath::Vector2 Center, float Radius, short numlines)
 {
 	float angle = XMConvertToRadians(360.0f / numlines);
 

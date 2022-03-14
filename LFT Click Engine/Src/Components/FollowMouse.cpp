@@ -20,8 +20,10 @@ void FollowMouse::Start()
 
 void FollowMouse::Update()
 {
+	while (ShowCursor(false) >= 0); // Hides cursor
+
 	float targetX = (float)(InputManager::getInstance().mouseX() - 400) + GameManager::getInstance().mainCamera->xPos;
-	float targetY = -1 * (float)(InputManager::getInstance().mouseY() - 400) + GameManager::getInstance().mainCamera->yPos;
+	float targetY = -1 * (float)(InputManager::getInstance().mouseY() - 300) + GameManager::getInstance().mainCamera->yPos;
 	trans->SetPos(targetX, targetY);
 }
 

@@ -23,6 +23,7 @@
 #include "Messages.h"
 #include "GameManager.h"
 #include "Components/Drawable.h"
+#include "DebugRenderer.h"
 
 using json = nlohmann::json;
 
@@ -109,8 +110,11 @@ int main(int argc, char* args[])
 	while (masterLoop)
 	{
 
+
+		//std::fstream other("./Resources/json/survival.json");
 		std::fstream other("./Resources/json/demo.json");
 		//std::fstream other("./Resources/json/concept_3_level.json");
+
 		json dataJson2;
 		other >> dataJson2;
 		other.close();

@@ -22,6 +22,7 @@ const int NUMBER_OF_COLLIDERS = 2;
 GameObjectManager::GameObjectManager()
 {
 	gameObjectList = std::list<GameObject*>();
+	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 }
 
 void GameObjectManager::Update()
@@ -172,6 +173,7 @@ void GameObjectManager::DoCollision(GameObject* toCheckWith)
 void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPrefab)
 {
 	this->gof = gof;
+
 	json prefabsJSON = j["Prefabs"];
 	for (json::iterator prefabs = prefabsJSON.begin(); prefabs != prefabsJSON.end(); ++prefabs)
 	{
@@ -179,6 +181,7 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 		returned->isActive = false;
 		prefabList.push_back(returned);
 	}
+
 	prefabsJSON = j["Level"];
 	for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
 	{
@@ -194,8 +197,38 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 				newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
 			}
 		}
-		//newOne->Start();
 	}
+
+	if (j.contains("Map")) 
+	{
+		json map = j["Map"];
+		int objectSize = map["objectSize"];
+
+		std::wstring mapFilePath = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(map["path"]);
+		Gdiplus::Bitmap img(mapFilePath.c_str());
+
+		Gdiplus::Color currentColor;
+		int width = img.GetWidth(), height = img.GetHeight();
+		
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				img.GetPixel(x, y, &currentColor);
+				if (currentColor.GetValue() != Gdiplus::Color::Black) {
+					
+					std::stringstream stream;
+					stream << std::hex << (int)currentColor.GetValue();
+					std::string colorHexString = stream.str().substr(2, 6);
+
+					if (map["key"].contains(colorHexString)) {
+						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString]);
+						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize;
+						obj->getComponent<Transform>()->SetPos(mapX, mapY);
+					}
+				}
+			}
+		}
+	}
+
 	for (GameObject* g : gameObjectList)
 		g->Start();
 }

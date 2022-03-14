@@ -21,8 +21,8 @@ namespace
 #include "Shaders/Compiled/Compiled_VS.h"
 }
 
-namespace wrl = Microsoft::WRL;
-namespace dx = DirectX;
+using namespace Microsoft::WRL;
+using namespace DirectX;
 
 // Convert an UTF8 string to a wide Unicode String
 std::wstring utf8_decode(const std::string& str)
@@ -57,7 +57,7 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	std::vector<unsigned short> indices;
 	json vertexData = j["vertices"];
 
-	for (json::iterator vertex = vertexData.begin(); vertex != vertexData.end(); ++vertex)//process data or overrides
+	for (json::iterator vertex = vertexData.begin(); vertex != vertexData.end(); ++vertex) //process data or overrides
 	{
 		Vertex temp = {};
 		temp.cordY = vertex.value()["pos"][1];
@@ -70,7 +70,7 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	}
 	json indicies = j["indicies"];
 	drawSize = 0;
-	for (json::iterator index = indicies.begin(); index != indicies.end(); ++index)//process data or overrides
+	for (json::iterator index = indicies.begin(); index != indicies.end(); ++index) //process data or overrides
 	{
 		indices.push_back(index.value());
 		++drawSize;
@@ -116,7 +116,7 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 
 	std::wstring sprite = utf8_decode(j["image"]);
 	//force DTK to not load the texture as srgb
-	DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, &texture, &shaderResourceView);
+	DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, &shaderResourceView);
 	//	DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
 
 	D3D11_SAMPLER_DESC sampDes = {};
@@ -157,9 +157,8 @@ Component* Drawable::Clone(GameObject* newParent)
 	indexBuf.CopyTo(toReturn->indexBuf.GetAddressOf());
 	pixelShader.CopyTo(toReturn->pixelShader.GetAddressOf());
 	inputLayout.CopyTo(toReturn->inputLayout.GetAddressOf());
-
+	
 	vertShader.CopyTo(toReturn->vertShader.GetAddressOf());
-	texture.CopyTo(toReturn->texture.GetAddressOf());
 	shaderResourceView.CopyTo(toReturn->shaderResourceView.GetAddressOf());
 	sampState.CopyTo(toReturn->sampState.GetAddressOf());
 	rastState.CopyTo(toReturn->rastState.GetAddressOf());
@@ -195,8 +194,8 @@ void Drawable::Draw()
 		{
 			DirectX::XMLoadFloat4x4(&mat) * GameManager::getInstance().mainCamera->GetProjectionMatrix()
 		},
-		dx::XMFLOAT2(xOffset, yOffset),
-		dx::XMFLOAT2(xScale, yScale),
+		XMFLOAT2(xOffset, yOffset),
+		XMFLOAT2(xScale, yScale),
 		xFlip,
 		alphaOverride
 	};

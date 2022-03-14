@@ -4,6 +4,8 @@
       "prefab": "Resources\\json\\tile.json",
       "tag": "tile"
     },
+    {"prefab": "Resources\\json\\wall.json", "tag": "wall"},
+    {"prefab": "Resources\\json\\floor.json", "tag": "floor"},
     {
       "prefab": "Resources\\json\\enemy.json",
       "tag": "enemy"

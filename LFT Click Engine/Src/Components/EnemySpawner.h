@@ -26,7 +26,7 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	EnemySpawner() {};
+	EnemySpawner() : objectSpawnName("enemy") {};
 
 public:
 	DirectX::SimpleMath::Vector2 bounds;
@@ -36,4 +36,5 @@ public:
 private:
 	GameObject* parent;
 	DirectX::SimpleMath::Vector2 myPos;
+	std::string objectSpawnName;
 };

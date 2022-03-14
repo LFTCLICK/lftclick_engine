@@ -14,6 +14,21 @@
 #include "Components\GameObject.h"
 #include "GameObjectFactory.h"
 #include <SDL.h>
+#include <codecvt>
+#include <iomanip>
+#include <sstream>
+
+// Need GDIPlus for map loading, and GDIPlus needs min/max functions, which <windows.h> hates.
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif
+#pragma comment(lib,"Gdiplus.lib")
+#include <gdiplus.h>
+#undef max
+#undef min
 
 using json = nlohmann::json;
 
@@ -42,7 +57,12 @@ public:
 
 private:
 	GameObjectManager();
-	GameObjectFactory * gof;
+	GameObjectFactory* gof;
+
 	std::list<GameObject*> gameObjectList;
 	std::list<GameObject*> prefabList;
+
+	// Gdiplus startup nonsense
+	ULONG_PTR gdiplusToken;
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 };
