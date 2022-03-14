@@ -37,6 +37,7 @@ void SquareCollider::Start()
 	points[6] = (-.5f*width) + center.x;
 	points[7] = (.5f*height) + center.y;
 	maxBounds = sqrt(((width / 2)* (width / 2)) + ((height / 2)* (height / 2)));
+	parent->colliders.push_back(this);
 }
 
 void SquareCollider::Update()
@@ -97,7 +98,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 			{
 				if (isTrigger)
 				{
-					toCheck->HandleMessage(new TriggerCollisionMessage(parent->tag, toCheckCollider));
+					toCheck->HandleMessage(new TriggerCollisionMessage(toCheckCollider));
 				}
 				else
 				{
@@ -131,7 +132,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 					{
 						int a = 0;
 					}
-					toCheck->HandleMessage(new CollisionMessage(parent->tag, toCheckCollider, delta));
+					toCheck->HandleMessage(new CollisionMessage(toCheckCollider, delta));
 				}
 				if (deleteOnCollison) parent->isDeletable = true;
 			}

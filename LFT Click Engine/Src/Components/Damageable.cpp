@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "Damageable.h"
+#include "Collider.h"
 
 const Audible::SoundEvent AUDIO_ON_DAMAGE = Audible::SoundEvent::AUDIO_ON_DAMAGE;
 const Audible::SoundEvent AUDIO_ON_DEATH = Audible::SoundEvent::AUDIO_ON_DEATH;
@@ -57,7 +58,7 @@ Component* Damageable::Clone(GameObject* newParent)
 }
 
 void Damageable::HandleMessage(Message* e) {
-	if (e->sourceObjectTag == "bullet") {
+	if (e->otherObject->parent->tag == "bullet") {
 		//Transform* bulletTrans = e->otherObject != nullptr ? e->otherObject->getComponent<Transform>() : nullptr;
 		//if (bulletTrans != nullptr) velocity = bulletTrans->lastMovement;
 		TakeDamage(1);

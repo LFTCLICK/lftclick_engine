@@ -24,6 +24,7 @@ void Transform::Deserialize(nlohmann::json j, GameObject* parent)
 	scale.y = j["scaleY"];
 	rotation = j["rot"];
 	zPos = j["zPos"];
+	parent->trans = this;
 }
 
 Component * Transform::Clone(GameObject* newParent)
@@ -40,7 +41,7 @@ Component * Transform::Clone(GameObject* newParent)
 	toReturn->zPos = zPos;
 	toReturn->isMoving = isMoving;
 	toReturn->wasMoving = wasMoving;
-
+	newParent->trans = toReturn;
 	return (Component*)toReturn;
 }
 
@@ -98,7 +99,7 @@ int Transform::getCompId()
 	return Component::TRANSFORM;
 }
 
-void Transform::HandleMessage(Message * e)
+void Transform::HandleMessage(Message* e)
 {
 }
 

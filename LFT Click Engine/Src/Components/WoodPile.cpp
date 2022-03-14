@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "WoodPile.h"
 #include "FrameRateController.h"
+#include "Collider.h"
 
 void WoodPile::Start()
 {
@@ -53,7 +54,7 @@ void WoodPile::Deserialize(nlohmann::json j, GameObject* parent)
 
 void WoodPile::HandleMessage(Message* e)
 {
-	if (e->sourceObjectTag == "player")
+	if (e->otherObject->parent->tag == "player")
 	{
 		playerInRange = true;
 	}

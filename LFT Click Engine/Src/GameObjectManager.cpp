@@ -90,13 +90,15 @@ void GameObjectManager::Draw()
 
 void GameObjectManager::ProcessCollision()
 {
+	TriggerCollisionMessage* toPassTrigger = new TriggerCollisionMessage();
+	CollisionMessage* toPassCollider = new CollisionMessage();
 	for (auto mainListItt = gameObjectList.begin(); mainListItt != gameObjectList.end(); ++mainListItt)
 	{
 		if (!(*mainListItt)->isActive || (*mainListItt)->isDeletable)
 			continue;
 		if (!(*mainListItt)->hasNonStaticCollider)
 			break;
-		Transform* mainTrans = (*mainListItt)->getComponent<Transform>();
+		Transform* mainTrans = (*mainListItt)->trans;
 		for (int mainColliderIndex=0; mainColliderIndex<NUMBER_OF_COLLIDERS; ++mainColliderIndex)
 		{
 			Collider* s = (Collider* )(*mainListItt)->getRawComponentPointer(COLLIDER_IDS[mainColliderIndex]);
@@ -106,12 +108,12 @@ void GameObjectManager::ProcessCollision()
 			{
 				if (!(*innerLoop)->isActive || (*innerLoop)->isDeletable)
 					continue;
-				Transform* toCheckTrans = (*innerLoop)->getComponent<Transform>();
-				for (int innerColliderIndex = 0; innerColliderIndex < NUMBER_OF_COLLIDERS; ++innerColliderIndex)
+				Transform* toCheckTrans = (*innerLoop)->trans;
+				for (Collider* toCheckWith : (*innerLoop)->colliders)
 				{
-					Collider* toCheckWith = (Collider*)(*innerLoop)->getRawComponentPointer(COLLIDER_IDS[innerColliderIndex]);
-					if (toCheckWith == nullptr)
-						continue;
+					//Collider* toCheckWith = (Collider*)(*innerLoop)->getRawComponentPointer(COLLIDER_IDS[innerColliderIndex]);
+					//if (toCheckWith == nullptr)
+					//	continue;
 					//if (toCheckWith->isStatic && s->isStatic) //this should never happen now
 					//	continue;
 					bool didCollide = false;
@@ -120,21 +122,27 @@ void GameObjectManager::ProcessCollision()
 					{
 						if (s->isTrigger || toCheckWith->isTrigger)
 						{
-							(*mainListItt)->HandleMessage(new TriggerCollisionMessage((*innerLoop)->tag, toCheckWith));
-							(*innerLoop)->HandleMessage(new TriggerCollisionMessage((*mainListItt)->tag, s));
+							*toPassTrigger = TriggerCollisionMessage(toCheckWith);
+							(*mainListItt)->HandleMessage(toPassTrigger);
+							*toPassTrigger = TriggerCollisionMessage(s);
+							(*innerLoop)->HandleMessage(toPassTrigger);
 						}
 						else
 						{
 							if (!s->isStatic && !toCheckWith->isStatic)
 								deltaPos *= .5f;
-							(*mainListItt)->HandleMessage(new CollisionMessage((*innerLoop)->tag, toCheckWith, -deltaPos));
-							(*innerLoop)->HandleMessage(new CollisionMessage((*mainListItt)->tag, s, deltaPos));
+							*toPassCollider = CollisionMessage(toCheckWith, -deltaPos);
+							(*mainListItt)->HandleMessage(toPassCollider);
+							*toPassCollider = CollisionMessage(s, deltaPos);
+							(*innerLoop)->HandleMessage(toPassCollider);
 						}
 					}
 				}
 			}
 		}
 	}
+	delete toPassCollider;
+	delete toPassTrigger;
 }
 
 void GameObjectManager::DoCollision(GameObject* toCheckWith)

@@ -23,6 +23,7 @@ void CircleCollider::Start()
 {
 	Transform* trans = parent->getComponent<Transform>();
 	maxBounds = radius;
+	parent->colliders.push_back(this);
 	//center.x *= trans->scale.x;
 	//center.y *= trans->scale.y;
 }
@@ -98,8 +99,8 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 
 		if (distance <= 0)
 		{
-			parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck->getComponent<CircleCollider>()));
-			toCheck->HandleMessage(new TriggerCollisionMessage(parent->tag, parent->getComponent<CircleCollider>()));
+			parent->HandleMessage(new TriggerCollisionMessage(toCheck->getComponent<CircleCollider>()));
+			toCheck->HandleMessage(new TriggerCollisionMessage(parent->getComponent<CircleCollider>()));
 			//parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck));
 			if (deleteOnCollison)
 				parent->isActive = false;
