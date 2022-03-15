@@ -8,13 +8,13 @@ void Door::Start()
 	trans = parent->getComponent<Transform>();
 	sqCollider = parent->getComponent<SquareCollider>();
 	draw = parent->getComponent<Drawable>();
-	p = GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Player>();
+	p = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
 	zeroIndexDoorPhases = doorPhases-1;
 	currentPhase = zeroIndexDoorPhases;
 	hp = maxHp;
 	hpPerPhase = maxHp / zeroIndexDoorPhases;
-	EventManager::getInstance().Subscribe(Message::TRIGGER_COLLISION, parent);
-	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, parent);
+	g_EventManager->Subscribe(Message::COLLISION, parent);
 	UpdateImage();
 }
 
@@ -23,12 +23,12 @@ void Door::Update()
 	if (playerInRange && currentPhase<zeroIndexDoorPhases)
 	{
 		//imgui stuff
-		if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_E) && p->wood> woodRequiredPerPhase)
+		if (g_InputManager->isKeyPressed(SDL_SCANCODE_E) && p->wood> woodRequiredPerPhase)
 		{
 			ImGui::Text("Repairing door...");
-			internalTimer += FrameRateController::getInstance().DeltaTime();
+			internalTimer += g_FrameRateController->DeltaTime();
 		}
-		else if (InputManager::getInstance().isKeyReleased(SDL_SCANCODE_E))
+		else if (g_InputManager->isKeyReleased(SDL_SCANCODE_E))
 		{
 			internalTimer = 0;
 		}
@@ -87,7 +87,7 @@ void Door::HandleMessage(Message* e)
 	else if (e->otherObject->parent->tag == "enemy" && hp > 0)
 	{
 		Enemy* currentEnemy = e->otherObject->parent->getComponent<Enemy>();
-		currentEnemy->timer+= FrameRateController::getInstance().DeltaTime();
+		currentEnemy->timer+= g_FrameRateController->DeltaTime();
 		if (currentEnemy->timer > currentEnemy->attackTimer)
 		{
 			currentEnemy->timer = 0;

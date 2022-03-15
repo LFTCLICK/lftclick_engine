@@ -11,7 +11,7 @@
 #include"Transform.h"
 #include "DebugRenderer.h"
 #include "GameManager.h"
-#include "Graphics.h"
+#include "Renderer.h"
 #include "GameManager.h"
 
 using namespace DirectX::SimpleMath;
@@ -170,7 +170,7 @@ void SquareCollider::DebugDraw()
 	Transform* t = parent->getComponent<Transform>();
 	assert(t != nullptr);
 
-	auto cam = GameManager::getInstance().mainCamera;
+	auto cam = g_GameManager->mainCamera;
 	float screenWidth = g_Renderer->GetWidth();
 	float screenHeight = g_Renderer->GetHeight();
 

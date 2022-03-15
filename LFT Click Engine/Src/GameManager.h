@@ -14,13 +14,6 @@ class GameManager
 {
 public:
 	GameManager();
-
-
-	static GameManager& getInstance()
-	{
-		static GameManager instance;
-		return instance;
-	}
 	~GameManager();
 
 public:
@@ -31,3 +24,5 @@ public:
 	Camera* mainCamera;
 	GameObjectManager* gom;
 };
+
+extern std::unique_ptr<GameManager> g_GameManager;

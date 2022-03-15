@@ -10,14 +10,14 @@ void EnemySpawner::Start()
 
 void EnemySpawner::Update()
 {
-	timer += FrameRateController::getInstance().DeltaTime();
+	timer += g_FrameRateController->DeltaTime();
 	if (timer >= timeBetweenPhases)
 	{
 		timer = 0;
 		int toSpawn = slope * x + c;
 		for (int i = 0; i < toSpawn; i++)
 		{
-			GameObject* newObj = GameObjectManager::getInstance().ClonePrefabOfTag(&GameObjectFactory::getInstance(), objectSpawnName);
+			GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
 			newObj->getComponent<Transform>()->SetPos(myPos.x+(rand()%(int)bounds.x)-(bounds.x/2), myPos.y+ (rand() % (int)bounds.y) - (bounds.y / 2));
 			DirectX::SimpleMath::Vector2 temp = myPos + targetPosOffset + DirectX::SimpleMath::Vector2(rand() % 80 - 40, 0);
 			newObj->getComponent<Enemy>()->targetBeforePlayer = temp;

@@ -9,7 +9,7 @@ void Player::Start()
 	trans = parent->getComponent<Transform>();
 	gun = parent->getComponent<Gun>();
 	cam = parent->getComponent<Camera>();
-	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	g_EventManager->Subscribe(Message::COLLISION, parent);
 
 	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
 	wood = 0;
@@ -26,8 +26,8 @@ void Player::Update()
 	ImGui::End();
 
 
-	InputManager& im = InputManager::getInstance();
-	float deltaTime = FrameRateController::getInstance().DeltaTime();
+	InputManager& im = *g_InputManager.get();
+	float deltaTime = g_FrameRateController->DeltaTime();
 
 	if (im.isKeyPressed(SDL_SCANCODE_W)) Move(0, playerSpeed * deltaTime);
 	if (im.isKeyPressed(SDL_SCANCODE_S)) Move(0, -playerSpeed * deltaTime);
@@ -42,8 +42,8 @@ void Player::Update()
 	if (im.isKeyTriggered(SDL_SCANCODE_SPACE)) Dash();
 
 	if (im.isMouseButtonTriggered(0)) {
-		float targetX = (float)(im.mouseX() - 400) + GameManager::getInstance().mainCamera->xPos;
-		float targetY = -1 * (float)(im.mouseY() - 400) + GameManager::getInstance().mainCamera->yPos;
+		float targetX = (float)(im.mouseX() - 400) + g_GameManager->mainCamera->xPos;
+		float targetY = -1 * (float)(im.mouseY() - 400) + g_GameManager->mainCamera->yPos;
 		gun->Fire(0, targetX, targetY);
 	}
 
@@ -70,16 +70,16 @@ void Player::Update()
 	}
 	else if (timer > 0)
 	{
-		timer -= FrameRateController::getInstance().DeltaTime();
+		timer -= g_FrameRateController->DeltaTime();
 	}
 	badTouch = false;
 	if (hp <= 0)
 	{
-		GameManager::getInstance().playerDead = true;
+		g_GameManager->playerDead = true;
 	}
 
 	if (trans->isMoving) {
-		AudioManager::getInstance().SetPlayerSpatialPosition(trans->CurrentPos() / 100/*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
+		g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100/*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 	}
 }
 

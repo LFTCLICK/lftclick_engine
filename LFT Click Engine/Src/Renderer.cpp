@@ -8,7 +8,7 @@
 // 2021/12/01		-	Fixed color space issue
 // ---------------------------------------------------------------------------
 #include "pch.h"
-#include "Graphics.h"
+#include "Renderer.h"
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <WICTextureLoader.h>
@@ -16,7 +16,7 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
-Graphics::Graphics() :
+Renderer::Renderer() :
 	width(0), height(0),
 	backBufferFormat(DXGI_FORMAT_B8G8R8A8_UNORM),
 	depthStencilBufferFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
@@ -26,7 +26,13 @@ Graphics::Graphics() :
 {
 }
 
-void Graphics::Initialize(HWND hWnd, int initWidth, int initHeight)
+Renderer::~Renderer()
+{
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
+	ImGui::DestroyContext();
+}
+void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 {
 	//setup devices
 
@@ -104,26 +110,46 @@ void Graphics::Initialize(HWND hWnd, int initWidth, int initHeight)
 	spriteBatch = std::make_unique<SpriteBatch>(immediateContext.Get());
 }
 
-void Graphics::PrepareForRendering()
+void Renderer::PrepareForRendering()
 {
+
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
+
+
 	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
 	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	//spriteBatch->Begin();
 }
 
-void Graphics::PresentFrame()
+void Renderer::PresentFrame()
 {
 	//spriteBatch->End();
+
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
 	DX::ThrowIfFailed(swapChain->Present(0, 0));
 }
 
 
-void Graphics::UpdateClientSizeVars()
+void Renderer::UpdateClientSizeVars()
 {
 	//TODO -> Get current width/height from resized window
 }
 
-void Graphics::OnResize(int newWidth, int newHeight)
+void Renderer::InitImGui(SDL_Window* pWindow)
+{
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+	ImGui_ImplSDL2_InitForD3D(pWindow);
+	ImGui_ImplDX11_Init(device.Get(), immediateContext.Get());
+}
+
+void Renderer::OnResize(int newWidth, int newHeight)
 {
 	this->width = newWidth;
 	this->height = newHeight;

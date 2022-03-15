@@ -319,7 +319,7 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Src\GameObjectManager.cpp" />
-    <ClCompile Include="Src\Graphics.cpp">
+    <ClCompile Include="Src\Renderer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
@@ -389,7 +389,7 @@
     <ClInclude Include="Src\GameManager.h" />
     <ClInclude Include="Src\GameObjectFactory.h" />
     <ClInclude Include="Src\GameObjectManager.h" />
-    <ClInclude Include="Src\Graphics.h" />
+    <ClInclude Include="Src\Renderer.h" />
     <ClInclude Include="Src\InputManager.h" />
     <ClInclude Include="Src\Messages.h" />
     <ClInclude Include="Src\pch.h" />

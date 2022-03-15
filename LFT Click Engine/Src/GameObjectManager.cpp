@@ -34,7 +34,7 @@ void GameObjectManager::Update()
 		GameObject* g = *objIt;
 
 		if (g->isDeletable) {
-			EventManager::getInstance().UnsubscribeFromAllEvents(g);
+			g_EventManager->UnsubscribeFromAllEvents(g);
 			objIt = gameObjectList.erase(objIt);
 			delete g;
 		}

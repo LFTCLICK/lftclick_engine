@@ -47,11 +47,7 @@ struct FMODEngine {
 class AudioManager
 {
 public:
-    static AudioManager& getInstance()
-    {
-        static AudioManager instance;
-        return instance;
-    }
+    AudioManager();
     AudioManager(AudioManager const&) = delete;
     void operator=(AudioManager const&) = delete;
     void Init();
@@ -129,8 +125,9 @@ public:
     std::string GenerateUniqueChannelGroupID();
 
 private:
-    AudioManager();
     FMODEngine* engine;
     long int nextChannelGroupID;
     void CheckResult(std::string functionName, FMOD_RESULT e);
 };
+
+extern std::unique_ptr<AudioManager> g_AudioManager;

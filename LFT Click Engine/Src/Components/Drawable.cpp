@@ -192,7 +192,7 @@ void Drawable::Draw()
 	const cbPerObject cb =
 	{
 		{
-			DirectX::XMLoadFloat4x4(&mat) * GameManager::getInstance().mainCamera->GetProjectionMatrix()
+			DirectX::XMLoadFloat4x4(&mat) * g_GameManager->mainCamera->GetProjectionMatrix()
 		},
 		XMFLOAT2(xOffset, yOffset),
 		XMFLOAT2(xScale, yScale),

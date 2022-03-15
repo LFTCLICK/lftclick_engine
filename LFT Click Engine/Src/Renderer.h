@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	Graphics.h
+// File Name		:	Renderer.h
 // Author			:	Vance Howald, Abhijit Zala
 // Creation Date	:	2021/11/14
 // Purpose			:	DX11 Rendering stuff
@@ -16,7 +16,7 @@
 #include <SpriteBatch.h>
 
 
-class Graphics
+class Renderer
 {
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
@@ -38,12 +38,14 @@ class Graphics
 
 	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
 public:
-	Graphics();
-	~Graphics() = default;
-	Graphics(const Graphics&) = delete;
-	Graphics& operator=(const Graphics&) = delete;
+	Renderer();
+	~Renderer();
+	Renderer(const Renderer&) = delete;
+	Renderer& operator=(const Renderer&) = delete;
 
 	void Initialize(HWND hWnd, int initWidth, int initHeight);
+	void InitImGui(SDL_Window* pWindow);
+
 	void PrepareForRendering();
 	void PresentFrame();
 	void OnResize(int newWidth, int newHeight);
@@ -57,4 +59,4 @@ private:
 	void UpdateClientSizeVars();
 };
 
-extern std::unique_ptr<Graphics> g_Renderer;
+extern std::unique_ptr<Renderer> g_Renderer;

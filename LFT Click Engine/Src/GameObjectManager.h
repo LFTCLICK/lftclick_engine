@@ -35,11 +35,8 @@ using json = nlohmann::json;
 class GameObjectManager
 {
 public:
-	static GameObjectManager& getInstance()
-	{
-		static GameObjectManager instance;
-		return instance;
-	}
+	GameObjectManager();
+
 	void Update();
 	void Start();
 	void Draw();
@@ -56,7 +53,6 @@ public:
 	~GameObjectManager();
 
 private:
-	GameObjectManager();
 	GameObjectFactory* gof;
 
 	std::list<GameObject*> gameObjectList;
@@ -66,3 +62,5 @@ private:
 	ULONG_PTR gdiplusToken;
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 };
+
+extern std::unique_ptr<GameObjectManager> g_GameObjManager;

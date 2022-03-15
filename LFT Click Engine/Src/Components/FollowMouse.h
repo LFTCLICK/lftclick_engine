@@ -27,7 +27,7 @@ public:
 	virtual int getCompId() override { return ComponentType::FOLLOW_MOUSE; };
 	virtual Component* Clone(GameObject* newParent);
 
-	FollowMouse() : gom(&GameObjectManager::getInstance()) {}
+	FollowMouse() : gom(g_GameObjManager.get()) {}
 
 	void Deserialize(nlohmann::json j, GameObject* parent);
 
