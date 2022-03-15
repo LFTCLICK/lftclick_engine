@@ -48,7 +48,7 @@ public:
 	virtual void HandleMessage(Message* e) override;
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
-	Audible() : parent(nullptr), am(&AudioManager::getInstance()), sounds({}), frc(g_FrameRateController.get()) {}
+	Audible() : parent(nullptr), am(g_AudioManager.get()), sounds({}), frc(g_FrameRateController.get()) {}
 	~Audible();
 
 	void LoadSounds(std::vector<SoundInfo> newSounds);

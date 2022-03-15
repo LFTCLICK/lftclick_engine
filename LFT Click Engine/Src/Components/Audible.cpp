@@ -56,7 +56,7 @@ void Audible::Update() {
 Component* Audible::Clone(GameObject* newParent) {
 	Audible* toReturn = new Audible();
 	toReturn->parent = newParent;
-	toReturn->am = &AudioManager::getInstance();
+	toReturn->am = g_AudioManager.get();
 	toReturn->sounds = sounds;
 	return toReturn;
 }
@@ -166,7 +166,7 @@ void Audible::HandleMessage(Message* e) {
 void Audible::Deserialize(nlohmann::json j, GameObject* parent)
 {
 	this->parent = parent;
-	am = &AudioManager::getInstance();
+	am = g_AudioManager.get();
 	sounds = {};
 	if (j.contains("sounds")) {
 		for (auto it = std::begin(j["sounds"]); it != std::end(j["sounds"]); it++) {
