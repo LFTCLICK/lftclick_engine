@@ -5,7 +5,7 @@
 
 void WoodPile::Start()
 {
-	p = GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Player>();
+	p = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
 	trans = parent->getComponent<Transform>();
 }
 
@@ -14,12 +14,12 @@ void WoodPile::Update()
 	if (playerInRange)
 	{
 		//imgui stuff
-		if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_E))
+		if (g_InputManager->isKeyPressed(SDL_SCANCODE_E))
 		{
 			ImGui::Text("Collecting wood...");
-			internalTimer += FrameRateController::getInstance().DeltaTime();
+			internalTimer += g_FrameRateController->DeltaTime();
 		}
-		else if (InputManager::getInstance().isKeyReleased(SDL_SCANCODE_E))
+		else if (g_InputManager->isKeyReleased(SDL_SCANCODE_E))
 		{
 			internalTimer = 0;
 		}

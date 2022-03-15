@@ -13,7 +13,7 @@
 #include"Transform.h"
 #include "DebugRenderer.h"
 #include "GameManager.h"
-#include "Graphics.h"
+#include "Renderer.h"
 
 CircleCollider::CircleCollider()
 {
@@ -79,8 +79,8 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 			{
 				parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck));
 				toCheck->HandleMessage(new TriggerCollisionMessage(parent->tag, parent));
-				//EventManager::getInstance().BroadcastMessageToSubscribers(new TriggerCollisionMessage(toCheck->tag));
-				//EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, toCheckPos));
+				//g_EventManager->BroadcastMessageToSubscribers(new TriggerCollisionMessage(toCheck->tag));
+				//g_EventManager->BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, toCheckPos));
 
 				if (deleteOnCollison) parent->isDeletable = true;
 			}*/
@@ -136,7 +136,7 @@ void CircleCollider::DebugDraw()
 {
 	Transform* t = parent->getComponent<Transform>();
 	assert(t != nullptr);
-	DirectX::SimpleMath::Vector2 debugCirclePos = GameManager::getInstance().mainCamera->WorldToScreenPos(t->CurrentPos(),
+	DirectX::SimpleMath::Vector2 debugCirclePos = g_GameManager->mainCamera->WorldToScreenPos(t->CurrentPos(),
 		g_Renderer->GetWidth(), g_Renderer->GetHeight());
 
 	g_DebugRenderer->DrawCircle(debugCirclePos, radius, 50.0f);

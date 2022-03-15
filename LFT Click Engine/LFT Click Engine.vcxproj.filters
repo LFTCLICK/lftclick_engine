@@ -122,7 +122,7 @@
     <ClCompile Include="Src\ResourceManager.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Graphics.cpp">
+    <ClCompile Include="Src\Renderer.cpp">
       <Filter>Engine\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Src\DebugRenderer.cpp">
@@ -258,7 +258,7 @@
     <ClInclude Include="Src\ResourceManager.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Graphics.h">
+    <ClInclude Include="Src\Renderer.h">
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\ConstantBuffer.h">

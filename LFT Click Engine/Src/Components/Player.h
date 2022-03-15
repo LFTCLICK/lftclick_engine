@@ -36,7 +36,7 @@ public:
 		dashTime(0.2), 
 		maxHp(100.f), 
 		damageCooldownTimer(2.f), 
-		frc(&FrameRateController::getInstance()) 
+		frc(g_FrameRateController.get()) 
 	{};
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 

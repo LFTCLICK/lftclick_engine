@@ -9,7 +9,7 @@
 #include "pch.h"
 #include "Camera.h"
 #include "FrameRateController.h"
-#include "Graphics.h"
+#include "Renderer.h"
 #include "../GameManager.h"
 
 using json = nlohmann::json;
@@ -43,7 +43,7 @@ void Camera::Deserialize(nlohmann::json j, GameObject* parent)
 	this->parent = parent;
 	speed = startingSpeed;
 	if (j["isMainCamera"])
-		GameManager::getInstance().mainCamera = this;
+		g_GameManager->mainCamera = this;
 }
 
 void Camera::Start()
@@ -56,7 +56,7 @@ void Camera::Start()
 void Camera::Update()
 {
 	if (isAutopilot) {
-		float movement = autopilotSpeed * FrameRateController::getInstance().DeltaTime();
+		float movement = autopilotSpeed * g_FrameRateController->DeltaTime();
 
 		if (autopilotDirection == "right") xPos += movement;
 		else if (autopilotDirection == "left") xPos -= movement;
@@ -71,8 +71,8 @@ void Camera::Update()
 
 	/* Old Pengi Panic code I believe?
 
-	yPos += speed * FrameRateController::getInstance().DeltaTime();
-	speed += speedDelta * FrameRateController::getInstance().DeltaTime();
+	yPos += speed * g_FrameRateController->DeltaTime();
+	speed += speedDelta * g_FrameRateController->DeltaTime();
 	if (speed >= maxSpeed)
 		speed = maxSpeed;
 	*/

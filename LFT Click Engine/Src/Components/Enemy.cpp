@@ -6,7 +6,7 @@
 void Enemy::Start()
 {
 	trans = parent->getComponent<Transform>();
-	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	g_EventManager->Subscribe(Message::COLLISION, parent);
 	switchToPlayer = false;
 }
 
@@ -26,9 +26,9 @@ void Enemy::Update()
 	}
 	if (switchToPlayer)
 	{
-		targetVector += GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
+		targetVector += g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
 	}
-	targetVector = (speed * FrameRateController::getInstance().DeltaTime())/(DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector)) * targetVector;
+	targetVector = (speed * g_FrameRateController->DeltaTime())/(DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector)) * targetVector;
 	//if (hanginWithTheHomies)
 	//	targetVector *= .1f;
 	trans->Move(targetVector.x, targetVector.y);

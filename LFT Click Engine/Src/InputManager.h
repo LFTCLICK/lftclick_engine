@@ -13,14 +13,11 @@
 class InputManager
 {
 public:
-	static InputManager& getInstance()
-	{
-		static InputManager instance;
-		return instance;
-	}
 	InputManager(InputManager const&) = delete;
 	void operator=(InputManager const&) = delete;
+	InputManager();
 	~InputManager();
+
 	void Update();
 	bool isKeyPressed(unsigned int KeyScanValue);
 	bool isKeyReleased(unsigned int keyScanValue);
@@ -37,10 +34,7 @@ public:
 	bool isJoyStickMovedLeft(unsigned int joystickValue);
 	bool isJoyStickMovedRight(unsigned int joystickValue);
 
-	
-
 private:
-	InputManager();
 	Uint8 mCurrentState[512];
 	Uint8 mPreviousState[512];
 	int currentMousePos[2];
@@ -51,3 +45,5 @@ private:
 	Sint16 mCurrentAxesState[6];
 	Sint16 mPreviousAxesState[6];
 };
+
+extern std::unique_ptr<InputManager> g_InputManager;

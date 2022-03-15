@@ -88,7 +88,7 @@ void SpriteAnimator::Update()
 
 	UpdateFrame();
 
-	float deltaTime = FrameRateController::getInstance().DeltaTime();
+	float deltaTime = g_FrameRateController->DeltaTime();
 	timer += deltaTime;
 	if (isDamaged) damageTimer += deltaTime;
 	if (isDead) deathTimer += deltaTime;

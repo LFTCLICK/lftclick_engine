@@ -18,12 +18,6 @@
 class EventManager
 {
 public:
-
-	static EventManager& getInstance()
-	{
-		static EventManager instance;
-		return instance;
-	}
 	void init(GameObjectManager* gom);
 	void BroadcastMessage(Message* m);
 	void BroadcastMessageToSubscribers(Message* m);
@@ -41,3 +35,5 @@ private:
 	std::list<Message*> messageQueue;
 	std::unordered_map<Message::MessageID, std::list<GameObject*>> subscriptions;
 };
+
+extern std::unique_ptr<EventManager> g_EventManager;

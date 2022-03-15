@@ -29,8 +29,8 @@ public:
 
 	virtual Component* Clone(GameObject* newParent);
 	LevelGenerator() {
-		gom = &GameObjectManager::getInstance();
-		gof = &GameObjectFactory::getInstance();
+		gom = g_GameObjManager.get();
+		gof = g_GameObjFactory.get();
 	};
 
 public:

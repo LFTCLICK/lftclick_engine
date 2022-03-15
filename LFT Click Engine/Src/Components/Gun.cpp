@@ -20,7 +20,7 @@ void Gun::Start()
 
 void Gun::Update()
 {
-	timer += FrameRateController::getInstance().DeltaTime();
+	timer += g_FrameRateController->DeltaTime();
 }
 
 Component* Gun::Clone(GameObject* newParent)
@@ -47,8 +47,8 @@ void Gun::Fire(int bulletIndex, float targetX, float targetY)
 
 Gun::Gun()
 {
-	gom = &GameObjectManager::getInstance();
-	gof = &GameObjectFactory::getInstance();
+	gom = g_GameObjManager.get();
+	gof = g_GameObjFactory.get();
 }
 
 void Gun::Deserialize(json j, GameObject* parent)

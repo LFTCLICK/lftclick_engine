@@ -21,12 +21,12 @@ void Bullet::Start()
 void Bullet::Update()
 {
 	trans->Move(
-		direction.x * speed * FrameRateController::getInstance().DeltaTime(),
-		direction.y * speed * FrameRateController::getInstance().DeltaTime()
+		direction.x * speed * g_FrameRateController->DeltaTime(),
+		direction.y * speed * g_FrameRateController->DeltaTime()
 	);
 
 	if (!liveForever) {
-		timer += FrameRateController::getInstance().DeltaTime();
+		timer += g_FrameRateController->DeltaTime();
 		if (timer > keepAliveTime) parent->isDeletable = true;
 	}
 }

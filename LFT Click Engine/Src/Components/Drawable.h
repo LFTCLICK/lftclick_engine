@@ -14,7 +14,7 @@
 #include "Transform.h"
 #include "InputManager.h"
 #include "EventManager.h"
-#include "Graphics.h"
+#include "Renderer.h"
 #include "ConstantBuffer.h"
 
 using json = nlohmann::json;

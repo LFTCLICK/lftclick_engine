@@ -18,7 +18,7 @@ void Damageable::Start()
 	trans = parent->getComponent<Transform>();
 	anim = parent->getComponent<SpriteAnimator>();
 	audio = parent->getComponent<Audible>();
-	EventManager::getInstance().Subscribe(Message::TRIGGER_COLLISION, parent);
+	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, parent);
 }
 
 void Damageable::Update()
