@@ -29,6 +29,9 @@ public:
 	virtual int getCompId();
 	virtual Component* Clone(GameObject* newParent);
 	void HandleMessage(Message* e);
+
+	float GetlastMovementX();
+	float GetlastMovementY();
 	DirectX::SimpleMath::Vector2 CurrentPos();
 	DirectX::XMFLOAT4X4 GetXMMatrix();
 	DirectX::XMVECTOR GetPosXMVector();

@@ -2,54 +2,43 @@
 #include "Player.h"
 #include "GameManager.h"
 #include "FrameRateController.h"
+#include "../LuaManager.h"
 
 void Player::Start()
 {
+	//LuaManager::getInstance().RegGlobals(lua_player_state);
+	InputManager::getInstance().RegGlobals(lua_player_state);
+	FrameRateController::getInstance().RegGlobals(lua_player_state);
+	LuaManager::getInstance().RegObjectFunctions(lua_player_state, parent);
+	player_script_update = lua_player_state.load_file(script);
+
+	lua_player_state.open_libraries(sol::lib::base, sol::lib::package);
+
 	trans = parent->getComponent<Transform>();
-	gun = parent->getComponent<Gun>();
 	cam = parent->getComponent<Camera>();
 	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
 
 	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+
 	wood = 0;
-	hp = maxHp;
+	//hp = player_script_update["maxHp"];
 	timer = damageCooldownTimer;
 }
 
 void Player::Update()
 {
 	ImGui::SetNextWindowPos({ 0,0 });
-	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | 
+		ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | 
+		ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | 
+		ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 	ImGui::Text("Wood: %i", wood);
 	ImGui::Text("hp: %.0f", hp);
 	ImGui::End();
 
+	player_script_update();
 
-	InputManager& im = InputManager::getInstance();
 	float deltaTime = FrameRateController::getInstance().DeltaTime();
-
-	if (im.isKeyPressed(SDL_SCANCODE_W)) Move(0, playerSpeed * deltaTime);
-	if (im.isKeyPressed(SDL_SCANCODE_S)) Move(0, -playerSpeed * deltaTime);
-	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_D)) Move(playerSpeed * deltaTime, 0);
-	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_A)) Move(-playerSpeed * deltaTime, 0);
-
-	if (im.isKeyPressed(SDL_SCANCODE_UP)) cam->Move(0.0f, playerSpeed * deltaTime);
-	if (im.isKeyPressed(SDL_SCANCODE_DOWN)) cam->Move(0.0f, -playerSpeed * deltaTime);
-	if (im.isKeyPressed(SDL_SCANCODE_RIGHT)) cam->Move(playerSpeed * deltaTime, 0.0f);
-	if (im.isKeyPressed(SDL_SCANCODE_LEFT)) cam->Move(-playerSpeed * deltaTime, 0.0f);
-
-	if (im.isKeyTriggered(SDL_SCANCODE_SPACE)) Dash();
-
-	if (im.isMouseButtonTriggered(0)) {
-		float targetX = (float)(im.mouseX() - 400) + GameManager::getInstance().mainCamera->xPos;
-		float targetY = -1 * (float)(im.mouseY() - 400) + GameManager::getInstance().mainCamera->yPos;
-		gun->Fire(0, targetX, targetY);
-	}
-
-	if (im.isJoyStickMovedUp(SDL_CONTROLLER_AXIS_LEFTY)) Move(0, playerSpeed * deltaTime);
-	if (im.isJoyStickMovedDown(SDL_CONTROLLER_AXIS_LEFTY)) Move(0, -playerSpeed * deltaTime);
-	if (!autopilot && im.isJoyStickMovedRight(SDL_CONTROLLER_AXIS_LEFTX)) Move(playerSpeed * deltaTime, 0);
-	if (!autopilot && im.isJoyStickMovedLeft(SDL_CONTROLLER_AXIS_LEFTX)) Move(-playerSpeed * deltaTime, 0);
 
 	if (isDashing) {
 		dashTimer += deltaTime;
@@ -60,7 +49,7 @@ void Player::Update()
 		trans->Move(dashVelocity.x, dashVelocity.y);
 	}
 
-	if (autopilot) Sidescroll(deltaTime);
+	//if (autopilot) Sidescroll(deltaTime);
 
 	if (badTouch && timer <= 0)
 	{
@@ -92,6 +81,8 @@ Component* Player::Clone(GameObject* newParent)
 	toReturn->maxHp = maxHp;
 	toReturn->damageCooldownTimer = damageCooldownTimer;
 	toReturn->parent = newParent;
+
+	toReturn->script = script;
 	return (Component*)toReturn;
 }
 
@@ -103,6 +94,8 @@ void Player::Deserialize(nlohmann::json j, GameObject* parent)
 	if (j.contains("autopilot")) autopilot = j["autopilot"];
 	if (j.contains("maxHp")) maxHp = j["maxHp"];
 	if (j.contains("damageCooldownTimer")) damageCooldownTimer = j["damageCooldownTimer"];
+
+	if (j.contains("script")) script = j["script"];
 	this->parent = parent;
 }
 
@@ -140,7 +133,29 @@ void Player::Dash()
 	dashVelocity.y = trans->lastMovement.y * dashSpeedMultiplier;
 }
 
-void Player::Sidescroll(float deltaTime) {
+void Player::Sidescroll(float deltaTime) 
+{
 	auto pos = trans->CurrentPos();
 	Move((playerSpeed + (cam->xPos - pos.x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// LUA input checking code
+//sol::protected_function_result script2result = player_script_update();
+	//// optionally, check if it worked
+	//if (script2result.valid()) {
+	//	printf("if condition");
+	//}
+	//else {
+	//	printf("else condition");
+	//}

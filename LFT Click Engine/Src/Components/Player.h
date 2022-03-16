@@ -15,6 +15,9 @@
 #include "Camera.h"
 #include "Gun.h"
 
+#include <sol/sol.hpp>
+#include <cassert>
+
 using json = nlohmann::json;
 class Player : public Component
 {
@@ -39,6 +42,12 @@ public:
 
 	int wood;
 	float hp;
+
+
+	//For LUA
+	std::string script;
+	sol::state lua_player_state{};
+	sol::load_result player_script_update;
 
 private:
 	GameObject* parent;

@@ -9,6 +9,8 @@
 // ---------------------------------------------------------------------------
 #pragma once
 #include <SDL_stdinc.h>
+#include <sol/sol.hpp>
+
 
 class InputManager
 {
@@ -18,7 +20,7 @@ public:
 		static InputManager instance;
 		return instance;
 	}
-	InputManager(InputManager const&) = delete;
+//	InputManager(InputManager const&) = delete;
 	void operator=(InputManager const&) = delete;
 	~InputManager();
 	void Update();
@@ -36,6 +38,10 @@ public:
 	bool isJoyStickMovedDown(unsigned int joystickValue);
 	bool isJoyStickMovedLeft(unsigned int joystickValue);
 	bool isJoyStickMovedRight(unsigned int joystickValue);
+
+	void RegGlobals(sol::state& state);
+
+	void print();
 
 	
 

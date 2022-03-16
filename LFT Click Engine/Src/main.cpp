@@ -24,36 +24,47 @@
 #include "GameManager.h"
 #include "Components/Drawable.h"
 
+#include "..\LuaManager.h"
+
 using json = nlohmann::json;
 
 using namespace DirectX;
 
 std::unique_ptr<DebugRenderer> g_debugRenderer;
-
 int main(int argc, char* args[])
 {
-	int windowWidth = 800, windowHeight = 600;
+	int windowWidth, windowHeight;
 
-	// Create Lua State
-	lua_State* L = luaL_newstate();
+	sol::state lua_state;
 
-	// Adding standard libraries to Lua Virtual Machine
-	luaL_openlibs(L);
+	lua_state.open_libraries(sol::lib::base);
+	lua_state.script_file("Resources\\LuaScripts\\ConfigurationScript.lua");
 
-	if (CheckLua(L, luaL_dofile(L, "Resources\\LuaScripts\\ConfigurationScript.lua")))
-	{
-		lua_getglobal(L, "windowWidth");
-		if (lua_isnumber(L, -1))
-		{
-			windowWidth = (float)lua_tonumber(L, -1);
-		}
+	windowHeight = lua_state["configTrial"]["windowHeight"];
+	windowWidth = lua_state["configTrial"]["windowWidth"];
 
-		lua_getglobal(L, "windowHeight");
-		if (lua_isnumber(L, -1))
-		{
-			windowHeight = (float)lua_tonumber(L, -1);
-		}
-	}
+	//// Create Lua State
+	//lua_State* L = luaL_newstate();
+
+	//// Adding standard libraries to Lua Virtual Machine
+	//luaL_openlibs(L);
+
+
+	//if (CheckLua(L, luaL_dofile(L, "Resources\\LuaScripts\\ConfigurationScript.lua")))
+	//{
+	//	lua_getglobal(L, "windowWidth");
+	//	if (lua_isnumber(L, -1))
+	//	{
+	//		windowWidth = (float)lua_tonumber(L, -1);
+	//	}
+
+	//	lua_getglobal(L, "windowHeight");
+	//	if (lua_isnumber(L, -1))
+	//	{
+	//		windowHeight = (float)lua_tonumber(L, -1);
+	//	}
+	//}
+
 	//Init SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
@@ -90,7 +101,7 @@ int main(int argc, char* args[])
 	ImGui_ImplSDL2_InitForD3D(pWindow);
 	ImGui_ImplDX11_Init(Graphics::getInstance().GetDevice(), Graphics::getInstance().GetContext());
 
-
+	LuaManager* p_lua_manager = new LuaManager;
 	GameObjectManager* gom = &GameObjectManager::getInstance();
 	EventManager::getInstance().init(gom);
 	GameObjectFactory* gof = &GameObjectFactory::getInstance();
@@ -147,6 +158,7 @@ int main(int argc, char* args[])
 					Graphics::getInstance().OnResize(windowWidth, windowHeight);
 				}
 			}
+			p_lua_manager->Update();
 			AudioManager::getInstance().Update();
 			InputManager::getInstance().Update();
 			gom->Update();
@@ -220,7 +232,7 @@ int main(int argc, char* args[])
 	AudioManager::getInstance().Term();
 	SDL_DestroyWindow(pWindow);
 	
-	lua_close(L); 
+	//lua_close(L); 
 	SDL_Quit();
 
 	return 0;
