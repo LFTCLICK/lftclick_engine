@@ -18,27 +18,33 @@
 #include "ConstantBuffer.h"
 
 using json = nlohmann::json;
+
 class Drawable : public Component
 {
-	struct  cbPerObject
+	struct  VS_cbPerObject
 	{
 		DirectX::XMMATRIX transform;
 		DirectX::XMFLOAT2 Offset;
 		DirectX::XMFLOAT2 Scale;
+
 		float flipX;
-		float alphaOverride;
-		DirectX::XMFLOAT2 padding;
 	};
-	static_assert(sizeof(cbPerObject) % 16 == 0, "Not 16-bytes aligned");
+	static_assert(sizeof(VS_cbPerObject) % 16 == 0, "Not 16-bytes aligned");
+
+	struct PS_cbPerObject
+	{
+		float alphaOverride;
+		DirectX::XMFLOAT3 padding;
+	};
+	static_assert(sizeof(PS_cbPerObject) % 16 == 0, "Not 16-bytes aligned");
 
 	struct Vertex
 	{
-		float cordX;
-		float cordY;
-		float cordZ;
-		float textureX;
-		float textureY;
+		DirectX::XMFLOAT3 Pos;
+		DirectX::XMFLOAT2 TexCoord;
 	};
+
+
 public:
 	Drawable();
 	~Drawable() = default;
@@ -50,6 +56,8 @@ public:
 	virtual void Draw();
 	virtual int getCompId();
 
+	void HUD_DrawTextCenter(std::string text, DirectX::SimpleMath::Vector2 offset = { 0, 0 },
+		DirectX::SimpleMath::Color color = DirectX::SimpleMath::Color(1.0f, 0.0f, 0.0f, 1.0f));
 public:
 	float xOffset, yOffset;
 	float xScale, yScale;
@@ -74,5 +82,8 @@ private:
 	float speed;
 	GameObject* parent;
 
-	ConstantBuffer<cbPerObject> cbPerObjectData;
+	ConstantBuffer<VS_cbPerObject> VS_cbPerObjectData;
+	ConstantBuffer<PS_cbPerObject> PS_cbPerObjectData;
+
+	Transform* transformComp;
 };

@@ -3,12 +3,18 @@
 #include "GameManager.h"
 #include "FrameRateController.h"
 #include "Collider.h"
+#include "SquareCollider.h"
+
+using namespace DirectX::SimpleMath;
 
 void Player::Start()
 {
 	trans = parent->getComponent<Transform>();
 	gun = parent->getComponent<Gun>();
 	cam = parent->getComponent<Camera>();
+	drawable = parent->getComponent<Drawable>();
+	squareCollider = parent->getComponent<SquareCollider>();
+
 	g_EventManager->Subscribe(Message::COLLISION, parent);
 
 	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
@@ -25,6 +31,7 @@ void Player::Update()
 	ImGui::Text("hp: %.0f", hp);
 	ImGui::End();
 
+	drawable->HUD_DrawTextCenter("Player", Vector2(0, -squareCollider->height/2.0f - 15.0f), Color(0.0f, 0.0f, 1.0f));
 
 	InputManager& im = *g_InputManager.get();
 	float deltaTime = g_FrameRateController->DeltaTime();

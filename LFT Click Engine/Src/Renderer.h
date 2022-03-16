@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 #include <SpriteBatch.h>
-
+#include <SpriteFont.h>
 
 class Renderer
 {
@@ -37,6 +37,8 @@ class Renderer
 	int width, height;
 
 	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
+	std::unique_ptr<DirectX::SpriteFont> spriteFont;
+
 public:
 	Renderer();
 	~Renderer();
@@ -53,6 +55,7 @@ public:
 	ID3D11DeviceContext* GetContext() const { return immediateContext.Get(); }
 	ID3D11Device* GetDevice() const { return device.Get(); }
 	DirectX::SpriteBatch* GetSpriteBatch() const { return spriteBatch.get(); }
+	DirectX::SpriteFont* GetSpriteFont() const { return spriteFont.get(); }
 	int GetWidth() const { return width; }
 	int GetHeight() const { return height; }
 private:

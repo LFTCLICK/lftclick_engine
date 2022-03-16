@@ -11,7 +11,6 @@ struct VSOut
 {
 	float2 tex : TEXCOORD;
 	float4 pos : SV_Position;
-	float alphaOverride : FOG;
 };
 
 struct VSIn
@@ -26,8 +25,6 @@ VSOut main(VSIn vin)
 	vout.pos = mul(float4(vin.PosWorld, 1.0f), transform);
 	
 	vout.tex = float2(xFlip * (Scale.x * vin.TexCoord.x + Offset.x), (Scale.y * vin.TexCoord.y) + Offset.y);
-	
-	vout.alphaOverride = alphaOverride;
 
 	return vout;
 }

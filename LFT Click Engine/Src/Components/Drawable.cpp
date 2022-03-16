@@ -14,6 +14,8 @@
 #include <WICTextureLoader.h>
 #include "Camera.h"
 #include "../GameManager.h"
+#include "Helpers.h"
+#include "SquareCollider.h"
 
 namespace
 {
@@ -60,11 +62,11 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	for (json::iterator vertex = vertexData.begin(); vertex != vertexData.end(); ++vertex) //process data or overrides
 	{
 		Vertex temp = {};
-		temp.cordY = vertex.value()["pos"][1];
-		temp.cordX = vertex.value()["pos"][0];
-		temp.cordZ = vertex.value()["pos"][2];
-		temp.textureX = vertex.value()["uv"][0];
-		temp.textureY = vertex.value()["uv"][1];
+		temp.Pos.x = vertex.value()["pos"][0];
+		temp.Pos.y = vertex.value()["pos"][1];
+		temp.Pos.z = vertex.value()["pos"][2];
+		temp.TexCoord.x = vertex.value()["uv"][0];
+		temp.TexCoord.y = vertex.value()["uv"][1];
 		vertexVector.push_back(temp);
 
 	}
@@ -75,28 +77,9 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 		indices.push_back(index.value());
 		++drawSize;
 	}
-	D3D11_BUFFER_DESC vertBufDes = {};
-	vertBufDes.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vertBufDes.Usage = D3D11_USAGE_DEFAULT;
-	vertBufDes.CPUAccessFlags = 0;
-	vertBufDes.MiscFlags = 0;
-	vertBufDes.ByteWidth = vertexVector.size() * sizeof(Vertex);
-	vertBufDes.StructureByteStride = sizeof(Vertex);
-	D3D11_SUBRESOURCE_DATA sd = {};
-	sd.pSysMem = &(vertexVector[0]);
-	g_Renderer->GetDevice()->CreateBuffer(&vertBufDes, &sd, &vertBuf);
 
-	D3D11_BUFFER_DESC indexBufDes = {};
-	indexBufDes.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufDes.Usage = D3D11_USAGE_DEFAULT;
-	indexBufDes.CPUAccessFlags = 0;
-	indexBufDes.MiscFlags = 0;
-	indexBufDes.ByteWidth = indices.size() * sizeof(unsigned short);
-	indexBufDes.StructureByteStride = sizeof(unsigned short);
-	D3D11_SUBRESOURCE_DATA sdIndex = {};
-	sdIndex.pSysMem = &(indices[0]);
-	g_Renderer->GetDevice()->CreateBuffer(&indexBufDes, &sdIndex, &indexBuf);
-
+	Helpers::CreateMeshBuffer(g_Renderer->GetDevice(), vertexVector, D3D11_BIND_VERTEX_BUFFER, vertBuf.ReleaseAndGetAddressOf());
+	Helpers::CreateMeshBuffer(g_Renderer->GetDevice(), indices, D3D11_BIND_INDEX_BUFFER, indexBuf.ReleaseAndGetAddressOf());
 
 	g_Renderer->GetDevice()->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
 	g_Renderer->GetDevice()->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
@@ -107,12 +90,8 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
-	g_Renderer->GetDevice()->CreateInputLayout(
-		ied, (UINT)std::size(ied),
-		g_CompiledVS,
-		sizeof(g_CompiledVS),
-		&inputLayout
-	);
+	g_Renderer->GetDevice()->CreateInputLayout(ied, (UINT)std::size(ied), g_CompiledVS, sizeof(g_CompiledVS),
+		inputLayout.ReleaseAndGetAddressOf());
 
 	std::wstring sprite = utf8_decode(j["image"]);
 	//force DTK to not load the texture as srgb
@@ -138,6 +117,10 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	g_Renderer->GetDevice()->CreateBlendState(&blendDesc, &blendState);
+
+	transformComp = parent->getComponent<Transform>();
+	assert(transformComp != nullptr);
+
 }
 
 Component* Drawable::Clone(GameObject* newParent)
@@ -151,7 +134,7 @@ Component* Drawable::Clone(GameObject* newParent)
 	toReturn->speed = speed;
 	toReturn->parent = newParent;
 	toReturn->pTransformationMatrix = pTransformationMatrix;
-
+	toReturn->transformComp = newParent->getComponent<Transform>();
 
 	vertBuf.CopyTo(toReturn->vertBuf.GetAddressOf());
 	indexBuf.CopyTo(toReturn->indexBuf.GetAddressOf());
@@ -169,7 +152,8 @@ Component* Drawable::Clone(GameObject* newParent)
 
 void Drawable::Start()
 {
-	cbPerObjectData.Create(g_Renderer->GetDevice());
+	VS_cbPerObjectData.Create(g_Renderer->GetDevice());
+	PS_cbPerObjectData.Create(g_Renderer->GetDevice());
 }
 
 void Drawable::Update()
@@ -180,26 +164,25 @@ void Drawable::Draw()
 {
 	const UINT stride = sizeof(Vertex);
 	const UINT offset = 0;
-	g_Renderer->GetContext()->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
-	g_Renderer->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
-	g_Renderer->GetContext()->PSSetShader(pixelShader.Get(), nullptr, 0);
-	g_Renderer->GetContext()->VSSetShader(vertShader.Get(), nullptr, 0);
-	g_Renderer->GetContext()->IASetInputLayout(inputLayout.Get());
-	g_Renderer->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
+	
 	DirectX::XMFLOAT4X4 mat = parent->getComponent<Transform>()->GetXMMatrix();
 
-	const cbPerObject cb =
+	const VS_cbPerObject cbValues_VS =
 	{
 		{
 			DirectX::XMLoadFloat4x4(&mat) * g_GameManager->mainCamera->GetProjectionMatrix()
 		},
 		XMFLOAT2(xOffset, yOffset),
 		XMFLOAT2(xScale, yScale),
-		xFlip,
+		xFlip
+	};
+
+	const PS_cbPerObject cbValues_PS = {
 		alphaOverride
 	};
-	cbPerObjectData.SetData(g_Renderer->GetContext(), cb);
+
+	VS_cbPerObjectData.SetData(g_Renderer->GetContext(), cbValues_VS);
+	PS_cbPerObjectData.SetData(g_Renderer->GetContext(), cbValues_PS);
 
 	g_Renderer->GetContext()->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
 	g_Renderer->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
@@ -207,11 +190,13 @@ void Drawable::Draw()
 	g_Renderer->GetContext()->VSSetShader(vertShader.Get(), nullptr, 0);
 	g_Renderer->GetContext()->IASetInputLayout(inputLayout.Get());
 	g_Renderer->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	g_Renderer->GetContext()->VSSetConstantBuffers(0, 1, cbPerObjectData.GetAddressOf());
+	g_Renderer->GetContext()->VSSetConstantBuffers(0, 1, VS_cbPerObjectData.GetAddressOf());
+	g_Renderer->GetContext()->PSSetConstantBuffers(0, 1, PS_cbPerObjectData.GetAddressOf());
 	g_Renderer->GetContext()->PSSetShaderResources(0, 1, shaderResourceView.GetAddressOf());
 	g_Renderer->GetContext()->PSSetSamplers(0, 1, sampState.GetAddressOf());
 	g_Renderer->GetContext()->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFFu);
 	g_Renderer->GetContext()->RSSetState(rastState.Get());
+	g_Renderer->GetContext()->OMSetDepthStencilState(nullptr, 0);
 
 	g_Renderer->GetContext()->DrawIndexed(drawSize, 0, 0);
 }
@@ -219,4 +204,18 @@ void Drawable::Draw()
 int Drawable::getCompId()
 {
 	return Component::DRAWABLE;
+}
+
+void Drawable::HUD_DrawTextCenter(std::string text, SimpleMath::Vector2 offset, DirectX::SimpleMath::Color color)
+{
+	SimpleMath::Vector2 pos = g_GameManager->mainCamera->WorldToScreenPos(
+		transformComp->CurrentPos(),
+		g_Renderer->GetWidth(), g_Renderer->GetHeight());
+
+	
+	pos.x -= XMVectorGetX(g_Renderer->GetSpriteFont()->MeasureString(text.c_str(), false)) / 2.0f;
+	pos.y -= XMVectorGetY(g_Renderer->GetSpriteFont()->MeasureString(text.c_str(), false)) / 2.0f;
+
+
+	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), text.c_str(), pos + offset, color);
 }
