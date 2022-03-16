@@ -62,11 +62,11 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	for (json::iterator vertex = vertexData.begin(); vertex != vertexData.end(); ++vertex) //process data or overrides
 	{
 		Vertex temp = {};
-		temp.cordY = vertex.value()["pos"][1];
-		temp.cordX = vertex.value()["pos"][0];
-		temp.cordZ = vertex.value()["pos"][2];
-		temp.textureX = vertex.value()["uv"][0];
-		temp.textureY = vertex.value()["uv"][1];
+		temp.Pos.x = vertex.value()["pos"][0];
+		temp.Pos.y = vertex.value()["pos"][1];
+		temp.Pos.z = vertex.value()["pos"][2];
+		temp.TexCoord.x = vertex.value()["uv"][0];
+		temp.TexCoord.y = vertex.value()["uv"][1];
 		vertexVector.push_back(temp);
 
 	}
@@ -152,7 +152,8 @@ Component* Drawable::Clone(GameObject* newParent)
 
 void Drawable::Start()
 {
-	cbPerObjectData.Create(g_Renderer->GetDevice());
+	VS_cbPerObjectData.Create(g_Renderer->GetDevice());
+	PS_cbPerObjectData.Create(g_Renderer->GetDevice());
 }
 
 void Drawable::Update()
@@ -166,17 +167,22 @@ void Drawable::Draw()
 	
 	DirectX::XMFLOAT4X4 mat = parent->getComponent<Transform>()->GetXMMatrix();
 
-	const cbPerObject cb =
+	const VS_cbPerObject cbValues_VS =
 	{
 		{
 			DirectX::XMLoadFloat4x4(&mat) * g_GameManager->mainCamera->GetProjectionMatrix()
 		},
 		XMFLOAT2(xOffset, yOffset),
 		XMFLOAT2(xScale, yScale),
-		xFlip,
+		xFlip
+	};
+
+	const PS_cbPerObject cbValues_PS = {
 		alphaOverride
 	};
-	cbPerObjectData.SetData(g_Renderer->GetContext(), cb);
+
+	VS_cbPerObjectData.SetData(g_Renderer->GetContext(), cbValues_VS);
+	PS_cbPerObjectData.SetData(g_Renderer->GetContext(), cbValues_PS);
 
 	g_Renderer->GetContext()->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
 	g_Renderer->GetContext()->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
@@ -184,7 +190,8 @@ void Drawable::Draw()
 	g_Renderer->GetContext()->VSSetShader(vertShader.Get(), nullptr, 0);
 	g_Renderer->GetContext()->IASetInputLayout(inputLayout.Get());
 	g_Renderer->GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	g_Renderer->GetContext()->VSSetConstantBuffers(0, 1, cbPerObjectData.GetAddressOf());
+	g_Renderer->GetContext()->VSSetConstantBuffers(0, 1, VS_cbPerObjectData.GetAddressOf());
+	g_Renderer->GetContext()->PSSetConstantBuffers(0, 1, PS_cbPerObjectData.GetAddressOf());
 	g_Renderer->GetContext()->PSSetShaderResources(0, 1, shaderResourceView.GetAddressOf());
 	g_Renderer->GetContext()->PSSetSamplers(0, 1, sampState.GetAddressOf());
 	g_Renderer->GetContext()->OMSetBlendState(blendState.Get(), nullptr, 0xFFFFFFFFu);

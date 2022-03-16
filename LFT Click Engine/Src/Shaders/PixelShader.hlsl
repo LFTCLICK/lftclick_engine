@@ -5,7 +5,12 @@ struct VSOut
 {
 	float2 tex : TEXCOORD;
 	float4 pos : SV_Position;
-	float alphaOverride : FOG;
+};
+
+cbuffer cbPerObject
+{
+	float alphaOverride;
+	float3 padding;
 };
 
 float4 main(VSOut pin) : SV_Target
@@ -14,8 +19,8 @@ float4 main(VSOut pin) : SV_Target
 
 	clip(textureColor.a < 0.1f ? -1 : 1);
 
-	if (textureColor.a > 0 && pin.alphaOverride < .99)
-		textureColor.a *= pin.alphaOverride;
+	if (textureColor.a > 0 && alphaOverride < .99)
+		textureColor.a *= alphaOverride;
 
 	return textureColor;
 }
