@@ -5,7 +5,7 @@
 
 void EnemySpawner::Start()
 {
-	myPos = parent->getComponent<Transform>()->CurrentPos();
+	myPos = componentOwner->getComponent<Transform>()->CurrentPos();
 }
 
 void EnemySpawner::Update()
@@ -26,9 +26,9 @@ void EnemySpawner::Update()
 	}
 }
 
-void EnemySpawner::Deserialize(nlohmann::json j, GameObject* parent)
+void EnemySpawner::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	slope = j["slope"];
 	c = j["c"];
 	timeBetweenPhases = j["timeBetweenPhases"];
@@ -48,6 +48,6 @@ Component* EnemySpawner::Clone(GameObject* newParent)
 	toReturn->targetPosOffset = targetPosOffset;
 	toReturn->objectSpawnName = objectSpawnName;
 	toReturn->bounds = bounds;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return toReturn;
 }

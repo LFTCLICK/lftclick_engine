@@ -38,15 +38,17 @@ public:
 		LEVEL_GENERATOR
 	};
 
-	Component();
+	Component() : componentOwner(nullptr) {};
+	virtual ~Component() = default;
+
 	virtual void Start() = 0;//called after the gameobject is made/cloned, comps are called in order of the ComponentType enum. But don't rely on this please
 	virtual void Update() = 0;//called every frame
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) = 0;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) = 0;
 	virtual Component* Clone(GameObject* newParent) = 0;//basically a copy constructor
 	virtual int getCompId() = 0;//needs to return its ComponentType enum
 	virtual void HandleMessage(Message* e) {};//message handling
-	virtual ~Component();
 
 public:
+	GameObject* componentOwner;
 	bool isFinishedDeleting = true;
 };

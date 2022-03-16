@@ -41,7 +41,7 @@ public:
 		currentAnimationIndex(0),
 		direction("right")
 	{}
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 public:
 	void UpdateDirection();
@@ -55,7 +55,6 @@ public:
 	void Revive();
 
 private:
-	GameObject* parent;
 	Drawable* draw;
 	Transform* trans;
 

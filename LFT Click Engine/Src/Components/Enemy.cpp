@@ -5,8 +5,8 @@
 
 void Enemy::Start()
 {
-	trans = parent->getComponent<Transform>();
-	g_EventManager->Subscribe(Message::COLLISION, parent);
+	trans = componentOwner->getComponent<Transform>();
+	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	switchToPlayer = false;
 }
 
@@ -35,9 +35,9 @@ void Enemy::Update()
 	hanginWithTheHomies = false;
 }
 
-void Enemy::Deserialize(nlohmann::json j, GameObject* parent)
+void Enemy::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	attackTimer = j["attackTimer"];
 	damage = j["damage"];
 	speed = j["speed"];
@@ -49,7 +49,7 @@ Component* Enemy::Clone(GameObject * newParent)
 	toReturn->attackTimer = attackTimer;
 	toReturn->damage = damage;
 	toReturn->speed = speed;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return toReturn;
 }
 

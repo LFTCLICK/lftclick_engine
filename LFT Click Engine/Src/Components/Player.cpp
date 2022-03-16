@@ -9,13 +9,13 @@ using namespace DirectX::SimpleMath;
 
 void Player::Start()
 {
-	trans = parent->getComponent<Transform>();
-	gun = parent->getComponent<Gun>();
-	cam = parent->getComponent<Camera>();
-	drawable = parent->getComponent<Drawable>();
-	squareCollider = parent->getComponent<SquareCollider>();
+	trans = componentOwner->getComponent<Transform>();
+	gun = componentOwner->getComponent<Gun>();
+	cam = componentOwner->getComponent<Camera>();
+	drawable = componentOwner->getComponent<Drawable>();
+	squareCollider = componentOwner->getComponent<SquareCollider>();
 
-	g_EventManager->Subscribe(Message::COLLISION, parent);
+	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 
 	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
 	wood = 0;
@@ -103,11 +103,11 @@ Component* Player::Clone(GameObject* newParent)
 	toReturn->autopilot = autopilot;
 	toReturn->maxHp = maxHp;
 	toReturn->damageCooldownTimer = damageCooldownTimer;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return (Component*)toReturn;
 }
 
-void Player::Deserialize(nlohmann::json j, GameObject* parent)
+void Player::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
 	if (j.contains("playerSpeed")) playerSpeed = j["playerSpeed"];
 	if (j.contains("dashSpeedMultiplier")) dashSpeedMultiplier = j["dashSpeedMultiplier"];
@@ -115,7 +115,7 @@ void Player::Deserialize(nlohmann::json j, GameObject* parent)
 	if (j.contains("autopilot")) autopilot = j["autopilot"];
 	if (j.contains("maxHp")) maxHp = j["maxHp"];
 	if (j.contains("damageCooldownTimer")) damageCooldownTimer = j["damageCooldownTimer"];
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 }
 
 void Player::HandleMessage(Message* e)
@@ -126,7 +126,7 @@ void Player::HandleMessage(Message* e)
 
 		Move(cm->deltaPos.x, cm->deltaPos.y);
 
-		if (e->otherObject->parent->tag == "enemy")
+		if (e->otherObject->componentOwner->tag == "enemy")
 		{
 			badTouch = true;
 		}

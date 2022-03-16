@@ -29,13 +29,12 @@ public:
 
 	FollowMouse() : gom(g_GameObjManager.get()) {}
 
-	void Deserialize(nlohmann::json j, GameObject* parent);
+	void Deserialize(nlohmann::json j, GameObject* componentOwner);
 
 public:
 	~FollowMouse();
 
 private:
-	GameObject* parent;
 	GameObjectManager* gom;
 	Transform* trans;
 };

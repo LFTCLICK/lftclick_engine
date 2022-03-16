@@ -49,7 +49,7 @@ public:
 	Drawable();
 	~Drawable() = default;
 
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual Component* Clone(GameObject* newParent);
 	virtual void Start();
 	virtual void Update();
@@ -80,7 +80,6 @@ private:
 	DirectX::XMMATRIX pTransformationMatrix;
 
 	float speed;
-	GameObject* parent;
 
 	ConstantBuffer<VS_cbPerObject> VS_cbPerObjectData;
 	ConstantBuffer<PS_cbPerObject> PS_cbPerObjectData;

@@ -15,18 +15,18 @@ const Audible::SoundEvent AUDIO_ON_DEATH = Audible::SoundEvent::AUDIO_ON_DEATH;
 
 void Damageable::Start()
 {
-	trans = parent->getComponent<Transform>();
-	anim = parent->getComponent<SpriteAnimator>();
-	audio = parent->getComponent<Audible>();
-	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, parent);
+	trans = componentOwner->getComponent<Transform>();
+	anim = componentOwner->getComponent<SpriteAnimator>();
+	audio = componentOwner->getComponent<Audible>();
+	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, componentOwner);
 }
 
 void Damageable::Update()
 {
-	if (destroyOnDeath && health < 1 && !parent->isDeletable) {
+	if (destroyOnDeath && health < 1 && !componentOwner->isDeletable) {
 		if (anim != nullptr) anim->Die(deathTime);
 		if (audio != nullptr) audio->PlaySoundsOnEvent(AUDIO_ON_DEATH);
-		parent->isDeletable = true;
+		componentOwner->isDeletable = true;
 	}
 	if (knockbackMod != 0 && (velocity.x != 0 || velocity.x != 0)) {
 		trans->Move(velocity.x * knockbackMod, velocity.y * knockbackMod);
@@ -36,9 +36,9 @@ void Damageable::Update()
 
 }
 
-void Damageable::Deserialize(nlohmann::json j, GameObject* parent)
+void Damageable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	health = j["health"];
 	if (j.contains("destroyOnDeath")) destroyOnDeath = j["destroyOnDeath"];
 	if (j.contains("knockbackMod")) knockbackMod = j["knockbackMod"];
@@ -47,7 +47,7 @@ void Damageable::Deserialize(nlohmann::json j, GameObject* parent)
 Component* Damageable::Clone(GameObject* newParent)
 {
 	Damageable* toReturn = new Damageable();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->health = health;
 	toReturn->inertiaMod = inertiaMod;
 	toReturn->velocity = velocity;
@@ -58,7 +58,7 @@ Component* Damageable::Clone(GameObject* newParent)
 }
 
 void Damageable::HandleMessage(Message* e) {
-	if (e->otherObject->parent->tag == "bullet") {
+	if (e->otherObject->componentOwner->tag == "bullet") {
 		//Transform* bulletTrans = e->otherObject != nullptr ? e->otherObject->getComponent<Transform>() : nullptr;
 		//if (bulletTrans != nullptr) velocity = bulletTrans->lastMovement;
 		TakeDamage(1);

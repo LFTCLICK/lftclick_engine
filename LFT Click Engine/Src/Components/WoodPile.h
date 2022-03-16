@@ -25,7 +25,7 @@ public:
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::WOOD_PILE; };
 	virtual Component* Clone(GameObject* newParent);
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	void HandleMessage(Message* e);
 
@@ -37,7 +37,6 @@ public:
 	float timeToCollect;
 
 private:
-	GameObject* parent;
 	Transform* trans;
 	//SquareCollider* sqCollider;
 	//Drawable* draw;

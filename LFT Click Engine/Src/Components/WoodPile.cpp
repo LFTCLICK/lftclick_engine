@@ -6,7 +6,7 @@
 void WoodPile::Start()
 {
 	p = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
-	trans = parent->getComponent<Transform>();
+	trans = componentOwner->getComponent<Transform>();
 }
 
 void WoodPile::Update()
@@ -38,15 +38,15 @@ void WoodPile::Update()
 Component* WoodPile::Clone(GameObject* newParent)
 {
 	WoodPile* toReturn = new WoodPile();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->woodPerCollect = woodPerCollect;
 	toReturn->timeToCollect = timeToCollect;
 	return (Component*)toReturn;
 }
 
-void WoodPile::Deserialize(nlohmann::json j, GameObject* parent)
+void WoodPile::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	timeToCollect = j["timeToCollect"];
 	woodPerCollect = j["woodPerCollect"];
 }
@@ -54,7 +54,7 @@ void WoodPile::Deserialize(nlohmann::json j, GameObject* parent)
 
 void WoodPile::HandleMessage(Message* e)
 {
-	if (e->otherObject->parent->tag == "player")
+	if (e->otherObject->componentOwner->tag == "player")
 	{
 		playerInRange = true;
 	}

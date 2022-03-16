@@ -32,14 +32,13 @@ public:
 	virtual Component* Clone(GameObject* newParent);
 
 	Gun();
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 public:
 	~Gun();
 	void Fire(int bulletIndex, float targetX, float targetY);
 
 private:
-	GameObject* parent;
 	Transform* trans;
 
 	GameObjectManager* gom;

@@ -5,16 +5,16 @@
 
 void Door::Start()
 {
-	trans = parent->getComponent<Transform>();
-	sqCollider = parent->getComponent<SquareCollider>();
-	draw = parent->getComponent<Drawable>();
+	trans = componentOwner->getComponent<Transform>();
+	sqCollider = componentOwner->getComponent<SquareCollider>();
+	draw = componentOwner->getComponent<Drawable>();
 	p = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
 	zeroIndexDoorPhases = doorPhases-1;
 	currentPhase = zeroIndexDoorPhases;
 	hp = maxHp;
 	hpPerPhase = maxHp / zeroIndexDoorPhases;
-	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, parent);
-	g_EventManager->Subscribe(Message::COLLISION, parent);
+	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, componentOwner);
+	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	UpdateImage();
 }
 
@@ -53,9 +53,9 @@ void Door::Update()
 	}
 }
 
-void Door::Deserialize(nlohmann::json j, GameObject* parent)
+void Door::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	doorPhases = j["doorPhases"];
 	maxHp = j["hp"];
 	woodRequiredPerPhase = j["woodRequiredPerPhase"];
@@ -69,7 +69,7 @@ Component* Door::Clone(GameObject* newParent)
 	toReturn->maxHp = maxHp;
 	toReturn->woodRequiredPerPhase = woodRequiredPerPhase;
 	toReturn->repairTime = repairTime;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return toReturn;
 }
 
@@ -80,13 +80,13 @@ void Door::UpdateImage()
 
 void Door::HandleMessage(Message* e)
 {
-	if (e->otherObject->parent->tag == "player")
+	if (e->otherObject->componentOwner->tag == "player")
 	{
 		playerInRange = true;
 	}
-	else if (e->otherObject->parent->tag == "enemy" && hp > 0)
+	else if (e->otherObject->componentOwner->tag == "enemy" && hp > 0)
 	{
-		Enemy* currentEnemy = e->otherObject->parent->getComponent<Enemy>();
+		Enemy* currentEnemy = e->otherObject->componentOwner->getComponent<Enemy>();
 		currentEnemy->timer+= g_FrameRateController->DeltaTime();
 		if (currentEnemy->timer > currentEnemy->attackTimer)
 		{

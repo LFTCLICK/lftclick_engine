@@ -23,7 +23,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::BULLET; };
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual void HandleMessage(Message* e) override;
 	virtual Component* Clone(GameObject* newParent);
 	Bullet() {};
@@ -34,6 +34,5 @@ public:
 	float animationTime, speed, timer, keepAliveTime;
 
 private:
-	GameObject* parent;
 	Transform* trans;
 };

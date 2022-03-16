@@ -46,9 +46,9 @@ public:
 	virtual int getCompId() override { return ComponentType::AUDIBLE; };
 	virtual Component* Clone(GameObject* newParent);
 	virtual void HandleMessage(Message* e) override;
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
-	Audible() : parent(nullptr), am(g_AudioManager.get()), sounds({}), frc(g_FrameRateController.get()) {}
+	Audible() : am(g_AudioManager.get()), sounds({}), frc(g_FrameRateController.get()) {}
 	~Audible();
 
 	void LoadSounds(std::vector<SoundInfo> newSounds);
@@ -73,7 +73,6 @@ public:
 	void HandleSoundsOnEvent(SoundEvent se);
 
 protected:
-	GameObject* parent;
 	AudioManager* am;
 	FrameRateController* frc;
 	Transform* trans;

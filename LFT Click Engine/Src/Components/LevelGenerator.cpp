@@ -22,16 +22,16 @@ void LevelGenerator::Start()
 				Create(key[objectTypeNum], j, i);
 		}
 	}
-	parent->isDeletable = true;
+	componentOwner->isDeletable = true;
 }
 
 void LevelGenerator::Update()
 {
 }
 
-void LevelGenerator::Deserialize(nlohmann::json j, GameObject* parent)
+void LevelGenerator::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	//for (auto row = std::begin(j["layout"]); row != std::end(j["layout"]); row++) {
 	for (auto row : j["layout"]) {
 		std::vector<int> currentRow;
@@ -54,7 +54,7 @@ void LevelGenerator::Create(std::string tag, int x, int y) {
 Component* LevelGenerator::Clone(GameObject* newParent)
 {
 	LevelGenerator* toReturn = new LevelGenerator();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->layout = layout;
 	toReturn->key = key;
 	return toReturn;

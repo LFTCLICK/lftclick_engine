@@ -19,7 +19,7 @@ using namespace DirectX::SimpleMath;
 
 void FollowMouse::Start()
 {
-	trans = parent->getComponent<Transform>();
+	trans = componentOwner->getComponent<Transform>();
 
 }
 
@@ -39,15 +39,15 @@ void FollowMouse::Update()
 	trans->SetPos(targetX, targetY);
 }
 
-void FollowMouse::Deserialize(nlohmann::json j, GameObject* parent)
+void FollowMouse::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 }
 
 Component* FollowMouse::Clone(GameObject* newParent)
 {
 	FollowMouse* toReturn = new FollowMouse();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->trans = trans;
 	toReturn->gom = gom;
 	return toReturn;

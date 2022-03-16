@@ -19,7 +19,7 @@ using json = nlohmann::json;
 class Transform : public Component {
 public:
 	Transform();
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual void Start();
 	virtual void Update();
 	virtual int getCompId();
@@ -43,7 +43,6 @@ public:
 	bool isMoving, wasMoving;
 
 private:
-	GameObject * parent;
 	float rotation, zPos;
 	DirectX::XMFLOAT4X4 m;
 	DirectX::XMVECTOR v;

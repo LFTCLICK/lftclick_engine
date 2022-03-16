@@ -25,7 +25,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::BULLET; };
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	virtual Component* Clone(GameObject* newParent);
 	LevelGenerator() {
@@ -37,7 +37,6 @@ public:
 	void Create(std::string tag, int row, int column);
 
 private:
-	GameObject* parent;
 	GameObjectManager* gom;
 	GameObjectFactory* gof;
 

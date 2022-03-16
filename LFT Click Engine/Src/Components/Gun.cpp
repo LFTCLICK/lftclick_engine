@@ -14,7 +14,7 @@ using json = nlohmann::json;
 
 void Gun::Start()
 {
-	trans = parent->getComponent<Transform>();
+	trans = componentOwner->getComponent<Transform>();
 	timer = 0;
 }
 
@@ -26,7 +26,7 @@ void Gun::Update()
 Component* Gun::Clone(GameObject* newParent)
 {
 	Gun* toReturn = new Gun();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->timer = 0;
 	toReturn->bulletTypes = bulletTypes;
 	return toReturn;
@@ -51,9 +51,9 @@ Gun::Gun()
 	gof = g_GameObjFactory.get();
 }
 
-void Gun::Deserialize(json j, GameObject* parent)
+void Gun::Deserialize(json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	timer = 0;
 	nextBulletID = 0;
 

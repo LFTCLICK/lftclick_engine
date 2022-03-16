@@ -40,7 +40,7 @@ public:
 		damageCooldownTimer(2.f), 
 		frc(g_FrameRateController.get()) 
 	{};
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	void HandleMessage(Message* e);
 
@@ -54,7 +54,6 @@ public:
 	float hp;
 
 private:
-	GameObject* parent;
 	Transform* trans;
 	Camera* cam;
 	Gun* gun;

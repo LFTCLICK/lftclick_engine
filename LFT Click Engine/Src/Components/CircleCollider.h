@@ -20,7 +20,7 @@ public:
 
 	virtual Component* Clone(GameObject* newParent);
 	void CollisionCheck(GameObject* toCheck);
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	void DebugDraw() override;
 private:

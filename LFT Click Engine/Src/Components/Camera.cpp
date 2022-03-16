@@ -31,16 +31,16 @@ Component* Camera::Clone(GameObject* newParent)
 	toReturn->isAutopilot = isAutopilot;
 	toReturn->autopilotDirection = autopilotDirection;
 	toReturn->autopilotSpeed = autopilotSpeed;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return (Component*)toReturn;
 }
 
-void Camera::Deserialize(nlohmann::json j, GameObject* parent)
+void Camera::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
 	xPos = j["startX"];
 	yPos = j["startY"];
 	zPos = j["startZ"];
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	speed = startingSpeed;
 	if (j["isMainCamera"])
 		g_GameManager->mainCamera = this;
@@ -63,8 +63,8 @@ void Camera::Update()
 		else if (autopilotDirection == "up") yPos += movement;
 		else if (autopilotDirection == "down") yPos -= movement;
 	}
-	else if (parent->getComponent<Transform>() != nullptr) {
-		auto pos = parent->getComponent<Transform>()->CurrentPos();
+	else if (componentOwner->getComponent<Transform>() != nullptr) {
+		auto pos = componentOwner->getComponent<Transform>()->CurrentPos();
 		xPos = pos.x;
 		yPos = pos.y;
 	}
@@ -103,7 +103,7 @@ void Camera::Move(float x, float y, float z)
 
 void Camera::SetAutopilotVelocity(std::string direction, float speed) {
 
-	auto pos = parent->getComponent<Transform>()->CurrentPos();
+	auto pos = componentOwner->getComponent<Transform>()->CurrentPos();
 	xPos = pos.x, yPos = pos.y;
 	autopilotSpeed = speed;
 	autopilotDirection = direction;

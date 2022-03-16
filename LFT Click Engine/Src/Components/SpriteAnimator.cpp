@@ -4,8 +4,8 @@
 
 void SpriteAnimator::Start()
 {
-	draw = parent->getComponent<Drawable>();
-	trans = parent->getComponent<Transform>();
+	draw = componentOwner->getComponent<Drawable>();
+	trans = componentOwner->getComponent<Transform>();
 	timer = 0;
 	xOffset = 1.0f / spriteSheetWidth;
 	yOffset = 1.0f / spriteSheetHeight;
@@ -97,7 +97,7 @@ void SpriteAnimator::Update()
 Component* SpriteAnimator::Clone(GameObject* newParent)
 {
 	SpriteAnimator* toReturn = new SpriteAnimator();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->spriteSheetWidth = spriteSheetWidth;
 	toReturn->spriteSheetHeight = spriteSheetHeight;
 	toReturn->currentAnimationIndex = currentAnimationIndex;
@@ -118,9 +118,9 @@ Component* SpriteAnimator::Clone(GameObject* newParent)
 	return toReturn;
 }
 
-void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* parent)
+void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 
 	std::vector<std::string> directions = { "right", "left", "up", "down" };
 	for (auto d : directions) {

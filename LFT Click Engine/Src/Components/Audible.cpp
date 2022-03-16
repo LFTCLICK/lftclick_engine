@@ -13,7 +13,7 @@
 using json = nlohmann::json;
 
 void Audible::Start() {
-	channelGroupName = parent->tag + am->GenerateUniqueChannelGroupID();
+	channelGroupName = componentOwner->tag + am->GenerateUniqueChannelGroupID();
 	am->LoadChannelGroup(channelGroupName);
 
 	if (sounds.empty()) {
@@ -24,7 +24,7 @@ void Audible::Start() {
 		PlaySoundsOnEvent(AUDIO_ON_START);
 	}
 
-	trans = parent->getComponent<Transform>();
+	trans = componentOwner->getComponent<Transform>();
 }
 
 void Audible::LoadSounds(std::vector<SoundInfo> newSounds) {
@@ -55,7 +55,7 @@ void Audible::Update() {
 
 Component* Audible::Clone(GameObject* newParent) {
 	Audible* toReturn = new Audible();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->am = g_AudioManager.get();
 	toReturn->sounds = sounds;
 	return toReturn;
@@ -163,9 +163,9 @@ void Audible::HandleMessage(Message* e) {
 
 }
 
-void Audible::Deserialize(nlohmann::json j, GameObject* parent)
+void Audible::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	am = g_AudioManager.get();
 	sounds = {};
 	if (j.contains("sounds")) {

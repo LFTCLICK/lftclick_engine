@@ -27,7 +27,7 @@ public:
 	virtual void Update() override;
 	virtual int getCompId() override;
 	virtual Component* Clone(GameObject* newParent);
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	
 
 	void SetPos(float x, float y, float z);
@@ -60,7 +60,6 @@ public:
 	float maxSpeed;
 private:
 	float speed, speedDelta, startingSpeed, autopilotSpeed;
-	GameObject* parent;
 	DirectX::XMMATRIX viewMatrix;
 	std::string autopilotDirection;
 	bool isAutopilot;

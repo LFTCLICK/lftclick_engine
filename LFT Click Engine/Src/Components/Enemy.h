@@ -24,7 +24,7 @@ public:
 	void HandleMessage(Message* e);
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::ENEMY; };
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	virtual Component* Clone(GameObject* newParent);
 	Enemy() {};
@@ -40,6 +40,5 @@ public:
 	DirectX::SimpleMath::Vector2 targetBeforePlayer;
 
 private:
-	GameObject* parent;
 	Transform* trans;
 };

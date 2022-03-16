@@ -14,9 +14,9 @@ Transform::Transform() : isMoving(false), wasMoving(false)
 {
 }
 
-void Transform::Deserialize(nlohmann::json j, GameObject* parent)
+void Transform::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	position = DirectX::SimpleMath::Vector2(0.0f, 0.0f);
 	position.x = j["startX"];
 	position.y = j["startY"];
@@ -24,14 +24,14 @@ void Transform::Deserialize(nlohmann::json j, GameObject* parent)
 	scale.y = j["scaleY"];
 	rotation = j["rot"];
 	zPos = j["zPos"];
-	parent->trans = this;
+	componentOwner->trans = this;
 }
 
 Component * Transform::Clone(GameObject* newParent)
 {
 	Transform* toReturn = new Transform();
 
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->position = position;
 	toReturn->oldPos = oldPos;
 	toReturn->lastMovement = lastMovement;

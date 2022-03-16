@@ -24,7 +24,7 @@ SquareCollider::SquareCollider()
 
 void SquareCollider::Start()
 {
-	Transform* trans = parent->getComponent<Transform>();
+	Transform* trans = componentOwner->getComponent<Transform>();
 	center.x *= trans->scale.x;
 	center.y *= trans->scale.y;
 	points = new float[8];
@@ -37,7 +37,7 @@ void SquareCollider::Start()
 	points[6] = (-.5f*width) + center.x;
 	points[7] = (.5f*height) + center.y;
 	maxBounds = sqrt(((width / 2)* (width / 2)) + ((height / 2)* (height / 2)));
-	parent->colliders.push_back(this);
+	componentOwner->colliders.push_back(this);
 }
 
 void SquareCollider::Update()
@@ -52,7 +52,7 @@ int SquareCollider::getCompId()
 Component * SquareCollider::Clone(GameObject * newParent)
 {
 	SquareCollider* toReturn = new SquareCollider();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->center = center;
 	toReturn->width = width;
 	toReturn->height = height;
@@ -66,7 +66,7 @@ Component * SquareCollider::Clone(GameObject * newParent)
 
 void SquareCollider::CollisionCheck(GameObject* toCheck)
 {
-	if (toCheck != parent)
+	if (toCheck != componentOwner)
 	{
 		if (toCheck->getRawComponentPointer(13))
 		{
@@ -75,7 +75,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 		else
 		{
 			SquareCollider* toCheckCollider = toCheck->getComponent<SquareCollider>();
-			DirectX::XMVECTOR myPos = parent->getComponent<Transform>()->GetPosXMVector();
+			DirectX::XMVECTOR myPos = componentOwner->getComponent<Transform>()->GetPosXMVector();
 			myPos.m128_f32[0] += center.x;
 			myPos.m128_f32[1] += center.y;
 			DirectX::XMVECTOR toCheckPos = toCheck->getComponent<Transform>()->GetPosXMVector();
@@ -134,7 +134,7 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 					}
 					toCheck->HandleMessage(new CollisionMessage(toCheckCollider, delta));
 				}
-				if (deleteOnCollison) parent->isDeletable = true;
+				if (deleteOnCollison) componentOwner->isDeletable = true;
 			}
 		}
 	}
@@ -145,9 +145,9 @@ float * SquareCollider::getPoints()
 	return points;
 }
 
-void SquareCollider::Deserialize(nlohmann::json j, GameObject* parent)
+void SquareCollider::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	std::vector<float> centerHelper = j["center"].get<std::vector<float>>();
 	center = { centerHelper[0], centerHelper[1] };
 	width = j["width"];
@@ -159,7 +159,7 @@ void SquareCollider::Deserialize(nlohmann::json j, GameObject* parent)
 	{
 		isStatic = j["static"];
 		if (!isStatic)
-			parent->hasNonStaticCollider = true;
+			componentOwner->hasNonStaticCollider = true;
 	}
 
 	deleteOnCollison = j["deleteOnCollison"];
@@ -167,7 +167,7 @@ void SquareCollider::Deserialize(nlohmann::json j, GameObject* parent)
 
 void SquareCollider::DebugDraw()
 {
-	Transform* t = parent->getComponent<Transform>();
+	Transform* t = componentOwner->getComponent<Transform>();
 	assert(t != nullptr);
 
 	auto cam = g_GameManager->mainCamera;

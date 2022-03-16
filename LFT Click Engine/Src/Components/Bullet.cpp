@@ -14,7 +14,7 @@
 
 void Bullet::Start()
 {
-	trans = parent->getComponent<Transform>();
+	trans = componentOwner->getComponent<Transform>();
 	timer = 0;
 }
 
@@ -27,13 +27,13 @@ void Bullet::Update()
 
 	if (!liveForever) {
 		timer += g_FrameRateController->DeltaTime();
-		if (timer > keepAliveTime) parent->isDeletable = true;
+		if (timer > keepAliveTime) componentOwner->isDeletable = true;
 	}
 }
 
-void Bullet::Deserialize(nlohmann::json j, GameObject* parent)
+void Bullet::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	animationTime = j["animationTime"];
 	keepAliveTime = j["keepAliveTime"];
 	speed = j["speed"];
@@ -42,14 +42,14 @@ void Bullet::Deserialize(nlohmann::json j, GameObject* parent)
 
 void Bullet::HandleMessage(Message* e)
 {
-	if(!e->otherObject->isTrigger && e->otherObject->parent->tag!="door")
-		parent->isDeletable = true;
+	if(!e->otherObject->isTrigger && e->otherObject->componentOwner->tag!="door")
+		componentOwner->isDeletable = true;
 }
 
 Component* Bullet::Clone(GameObject* newParent)
 {
 	Bullet* toReturn = new Bullet();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->animationTime = animationTime;
 	toReturn->speed = speed;
 	toReturn->direction = direction;

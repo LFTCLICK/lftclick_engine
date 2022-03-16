@@ -42,7 +42,7 @@ Drawable::Drawable()
 	xOffset = yOffset = 0;
 }
 
-void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
+void Drawable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
 	xScale = j["xScale"];
 	yScale = j["yScale"];
@@ -52,7 +52,7 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 	alphaOverride = 1;
 	xOffset = yOffset = 0;
 	xFlip = 1;
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 
 	useTextures = true;
 	std::vector<Vertex> vertexVector;
@@ -118,7 +118,7 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* parent)
 
 	g_Renderer->GetDevice()->CreateBlendState(&blendDesc, &blendState);
 
-	transformComp = parent->getComponent<Transform>();
+	transformComp = componentOwner->getComponent<Transform>();
 	assert(transformComp != nullptr);
 
 }
@@ -132,7 +132,7 @@ Component* Drawable::Clone(GameObject* newParent)
 	toReturn->drawSize = drawSize;
 	toReturn->useTextures = useTextures;
 	toReturn->speed = speed;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->pTransformationMatrix = pTransformationMatrix;
 	toReturn->transformComp = newParent->getComponent<Transform>();
 
@@ -165,7 +165,7 @@ void Drawable::Draw()
 	const UINT stride = sizeof(Vertex);
 	const UINT offset = 0;
 	
-	DirectX::XMFLOAT4X4 mat = parent->getComponent<Transform>()->GetXMMatrix();
+	DirectX::XMFLOAT4X4 mat = componentOwner->getComponent<Transform>()->GetXMMatrix();
 
 	const VS_cbPerObject cbValues_VS =
 	{
