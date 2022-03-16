@@ -57,6 +57,8 @@ private:
 	Camera* cam;
 	Gun* gun;
 	FrameRateController* frc;
+	Drawable* drawable;
+	SquareCollider* squareCollider;
 
 	DirectX::SimpleMath::Vector2 dashVelocity;
 	float playerSpeed, maxHp, timer, damageCooldownTimer, dashSpeedMultiplier, dashTime, dashTimer, deadZone = 8000;

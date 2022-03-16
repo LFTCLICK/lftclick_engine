@@ -18,6 +18,7 @@
 #include "ConstantBuffer.h"
 
 using json = nlohmann::json;
+
 class Drawable : public Component
 {
 	struct  cbPerObject
@@ -39,6 +40,8 @@ class Drawable : public Component
 		float textureX;
 		float textureY;
 	};
+
+
 public:
 	Drawable();
 	~Drawable() = default;
@@ -50,6 +53,8 @@ public:
 	virtual void Draw();
 	virtual int getCompId();
 
+	void HUD_DrawTextCenter(std::string text, DirectX::SimpleMath::Vector2 offset = { 0, 0 },
+		DirectX::SimpleMath::Color color = DirectX::SimpleMath::Color(1.0f, 0.0f, 0.0f, 1.0f));
 public:
 	float xOffset, yOffset;
 	float xScale, yScale;
@@ -75,4 +80,6 @@ private:
 	GameObject* parent;
 
 	ConstantBuffer<cbPerObject> cbPerObjectData;
+
+	Transform* transformComp;
 };

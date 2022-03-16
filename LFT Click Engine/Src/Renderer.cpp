@@ -108,25 +108,26 @@ void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 	OnResize(initWidth, initHeight);
 
 	spriteBatch = std::make_unique<SpriteBatch>(immediateContext.Get());
+	spriteFont = std::make_unique<SpriteFont>(device.Get(), L"Resources\\fonts\\font.spritefont");
+
 }
 
 void Renderer::PrepareForRendering()
 {
+	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
+	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
-
-	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
-	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	//spriteBatch->Begin();
+	spriteBatch->Begin();
 }
 
 void Renderer::PresentFrame()
 {
-	//spriteBatch->End();
-
+	spriteBatch->End();
+	
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
