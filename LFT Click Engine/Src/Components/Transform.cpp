@@ -61,6 +61,10 @@ void Transform::SetPos(float newX, float newY)
 	position.x = newX;
 	position.y = newY;
 }
+void Transform::SetPos(const DirectX::SimpleMath::Vector2& position)
+{
+	this->position = position;
+}
 void Transform::SetPos(float newX, float newY, float newZ)
 {
 	position.x = newX;

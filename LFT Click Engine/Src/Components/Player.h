@@ -17,6 +17,8 @@
 #include "AudioManager.h"
 #include "FrameRateController.h"
 
+class SquareCollider;
+
 using json = nlohmann::json;
 class Player : public Component
 {
@@ -59,7 +61,6 @@ private:
 	FrameRateController* frc;
 	Drawable* drawable;
 	SquareCollider* squareCollider;
-
 	DirectX::SimpleMath::Vector2 dashVelocity;
 	float playerSpeed, maxHp, timer, damageCooldownTimer, dashSpeedMultiplier, dashTime, dashTimer, deadZone = 8000;
 	bool isDashing, autopilot, badTouch;
