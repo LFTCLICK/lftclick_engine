@@ -75,4 +75,9 @@ float FrameRateController::DeltaTime()
 	return static_cast<float>(m_DeltaTime);
 }
 
+void FrameRateController::RegGlobals(sol::state& state)
+{
+	state.set_function("deltaTime", &FrameRateController::DeltaTime, this);
+}
+
 

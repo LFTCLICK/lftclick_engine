@@ -97,13 +97,7 @@
     ]
   },
   "7": {
-    "playerSpeed": 350,
-    "dashSpeedMultiplier": 4,
-    "dashTime": 0.2,
-    "dashRecoveryTime": 1,
-    "autopilot": false,
-    "maxHp": 100,
-    "damageCooldownTimer": 2
+    "script": "Resources\\LuaScripts\\playerScript.lua"
   },
   "10": {
     "bulletTypes": [

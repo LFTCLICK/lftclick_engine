@@ -79,9 +79,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\Libraries;..\Libraries\SDL2-2.0.14\include;..\Libraries\imgui-1.82\backends;..\Libraries\imgui-1.82;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>..\Libraries\sol2-develop\include;..\Libraries;..\Libraries\SDL2-2.0.14\include;..\Libraries\imgui-1.82\backends;..\Libraries\imgui-1.82;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
     <SourcePath>$(VC_SourcePath);..\Libraries\imgui-1.82\backends;$(ProjectDir)Src</SourcePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);..\Libraries\SDL2-2.0.14\lib\x64;..\Libraries\LUA</LibraryPath>
+    <LibraryPath>..\Libraries\lua-master;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);..\Libraries\SDL2-2.0.14\lib\x64;..\Libraries\LUA</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -122,8 +122,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Src;..\Libraries\FMOD Studio API Windows\api\core\inc;..\Libraries\FMOD Studio API Windows\api\studio\inc;..\Libraries\imgui-1.82\backends</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Src;..\Libraries\FMOD Studio API Windows\api\core\inc;..\Libraries\FMOD Studio API Windows\api\studio\inc;..\Libraries\imgui-1.82\backends;..\Libraries\LUA\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -209,6 +210,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="LuaManager.cpp" />
     <ClCompile Include="Src\AudioManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
@@ -350,6 +352,7 @@
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_textedit.h" />
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h" />
     <ClInclude Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="LuaManager.h" />
     <ClInclude Include="Src\AudioManager.h" />
     <ClInclude Include="Src\Components\Audible.h" />
     <ClInclude Include="Src\Components\Bullet.h" />
@@ -412,6 +415,7 @@
     <None Include="Resources\json\title.json" />
     <None Include="Resources\json\turret.json" />
     <None Include="Resources\LuaScripts\ConfigurationScript.lua" />
+    <None Include="Resources\LuaScripts\playerScript.lua" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

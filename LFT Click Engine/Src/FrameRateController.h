@@ -9,6 +9,7 @@
 // ---------------------------------------------------------------------------
 #pragma once
 #include <SDL.h>
+#include <sol/sol.hpp>
 
 class FrameRateController
 {
@@ -27,6 +28,8 @@ public:
 	void StartOfFrame();
 	void EndOfFrame();
 	float DeltaTime();
+
+	void RegGlobals(sol::state& state);
 private:
 	FrameRateController();
 	

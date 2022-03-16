@@ -150,6 +150,9 @@
     <ClCompile Include="Src\Components\Enemy.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="LuaManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
@@ -274,6 +277,7 @@
     <ClInclude Include="Src\Components\Enemy.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
+    <ClInclude Include="LuaManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
@@ -351,6 +355,7 @@
     <None Include="Resources\json\turret.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\LuaScripts\playerScript.lua" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">
