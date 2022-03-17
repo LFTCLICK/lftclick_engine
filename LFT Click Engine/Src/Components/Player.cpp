@@ -30,9 +30,9 @@ void Player::Update()
 	player_script_update();
 
 	ImGui::SetNextWindowPos({ 0,0 });
-	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | 
-		ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | 
-		ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | 
+	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize |
 		ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 	ImGui::Text("Wood: %i", wood);
 	ImGui::Text("hp: %i", hp);
@@ -101,7 +101,7 @@ void Player::Dash() {
 
 void Player::ChangePlayerState() {
 	hp -= 15;
-	if (hp <= 0){GameManager::getInstance().playerDead = true;}
+	if (hp <= 0) { GameManager::getInstance().playerDead = true; }
 }
 
 
@@ -133,36 +133,36 @@ void Player::ChangePlayerState() {
 
 
 
-//cam = parent->getComponent<Camera>();
+	//cam = parent->getComponent<Camera>();
 
 
-// LUA input checking code
-//sol::protected_function_result script2result = player_script_update();
-	//// optionally, check if it worked
-	//if (script2result.valid()) {
-	//	printf("if condition");
-	//}
-	//else {
-	//	printf("else condition");
-	//}
+	// LUA input checking code
+	//sol::protected_function_result script2result = player_script_update();
+		//// optionally, check if it worked
+		//if (script2result.valid()) {
+		//	printf("if condition");
+		//}
+		//else {
+		//	printf("else condition");
+		//}
 
 
-//if (j.contains("playerSpeed")) playerSpeed = j["playerSpeed"];
-//if (j.contains("dashSpeedMultiplier")) dashSpeedMultiplier = j["dashSpeedMultiplier"];
-//if (j.contains("dashTime")) dashTime = j["dashTime"];
-//if (j.contains("autopilot")) autopilot = j["autopilot"];
-//if (j.contains("maxHp")) maxHp = j["maxHp"];
-//if (j.contains("damageCooldownTimer")) damageCooldownTimer = j["damageCooldownTimer"];
+	//if (j.contains("playerSpeed")) playerSpeed = j["playerSpeed"];
+	//if (j.contains("dashSpeedMultiplier")) dashSpeedMultiplier = j["dashSpeedMultiplier"];
+	//if (j.contains("dashTime")) dashTime = j["dashTime"];
+	//if (j.contains("autopilot")) autopilot = j["autopilot"];
+	//if (j.contains("maxHp")) maxHp = j["maxHp"];
+	//if (j.contains("damageCooldownTimer")) damageCooldownTimer = j["damageCooldownTimer"];
 
-//toReturn->dashSpeedMultiplier = dashSpeedMultiplier;
-//toReturn->dashTime = dashTime;
-//toReturn->dashTimer = dashTimer;
-//toReturn->dashVelocity = dashVelocity;
-//toReturn->deadZone = deadZone;
-//toReturn->playerSpeed = playerSpeed;
-//toReturn->isDashing = isDashing;
-//toReturn->autopilot = autopilot;
-//toReturn->maxHp = maxHp;
-//toReturn->damageCooldownTimer = damageCooldownTimer;
+	//toReturn->dashSpeedMultiplier = dashSpeedMultiplier;
+	//toReturn->dashTime = dashTime;
+	//toReturn->dashTimer = dashTimer;
+	//toReturn->dashVelocity = dashVelocity;
+	//toReturn->deadZone = deadZone;
+	//toReturn->playerSpeed = playerSpeed;
+	//toReturn->isDashing = isDashing;
+	//toReturn->autopilot = autopilot;
+	//toReturn->maxHp = maxHp;
+	//toReturn->damageCooldownTimer = damageCooldownTimer;
 
-//if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	//if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);

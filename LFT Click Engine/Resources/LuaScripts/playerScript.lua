@@ -1,6 +1,4 @@
-
-playerHp = 100
-
+-- constants
 w_pressed = 26
 a_pressed = 4
 s_pressed = 22
@@ -10,6 +8,7 @@ space_pressed = 44
 
 left_mouse_click = 0
 
+playerHp = 100
 is_dashing = false
 dash_timer = 0
 dashTime = 0.2
@@ -24,7 +23,7 @@ function returnPlayerHp()
 	return playerHp
 end
 
-
+-- returns players dash_speed_multiplyer
 function dashSpeedMultiplyer()
 	return dash_speed_multiplyer
 end

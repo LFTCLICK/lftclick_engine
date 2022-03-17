@@ -47,7 +47,6 @@ public:
 	sol::state lua_player_state;
 	sol::load_result player_script_update;
 
-
 private:
 	GameObject* parent;
 	Transform* trans;
