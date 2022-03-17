@@ -22,7 +22,8 @@ void Player::Start()
 	dashSpeed = dashSpeedMultiplier();
 
 	trans = parent->getComponent<Transform>();
-	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	cam = parent->getComponent<Camera>();
+	timer = damageCooldownTimer;
 }
 
 void Player::Update()
@@ -38,8 +39,16 @@ void Player::Update()
 	ImGui::Text("hp: %i", hp);
 	ImGui::End();
 
-	if (isDashing) {
-		dashTimer += FrameRateController::getInstance().DeltaTime();
+	if (im.isKeyPressed(SDL_SCANCODE_W)) Move(0, playerSpeed * deltaTime);
+	if (im.isKeyPressed(SDL_SCANCODE_S)) Move(0, -playerSpeed * deltaTime);
+	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_D)) Move(playerSpeed * deltaTime, 0);
+	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_A)) Move(-playerSpeed * deltaTime, 0);
+
+	if (im.isKeyPressed(SDL_SCANCODE_UP)) cam->Move(0.0f, playerSpeed * deltaTime);
+	if (im.isKeyPressed(SDL_SCANCODE_DOWN)) cam->Move(0.0f, -playerSpeed * deltaTime);
+	if (im.isKeyPressed(SDL_SCANCODE_RIGHT)) cam->Move(playerSpeed * deltaTime, 0.0f);
+	damageCooldownTimer -= FrameRateController::getInstance().DeltaTime();
+}
 		if (dashTimer > dashTime) {
 			isDashing = false;
 			dashTimer = 0;
@@ -47,18 +56,35 @@ void Player::Update()
 		trans->Move(dashVelocity.x, dashVelocity.y);
 	}
 
-	damageCooldownTimer -= FrameRateController::getInstance().DeltaTime();
+	if (autopilot) Sidescroll(deltaTime);
+
+	if (badTouch && timer <= 0)
+void Player::Deserialize(nlohmann::json j, GameObject* parent) {
+	if (j.contains("script")) script = j["script"];
+	badTouch = false;
+	if (hp <= 0)
+	{
+		GameManager::getInstance().playerDead = true;
+	}
 }
 
 Component* Player::Clone(GameObject* newParent) {
 	Player* toReturn = new Player();
 	toReturn->script = script;
 	toReturn->parent = newParent;
+
+	toReturn->script = script;
 	return (Component*)toReturn;
 }
 
-void Player::Deserialize(nlohmann::json j, GameObject* parent) {
-	if (j.contains("script")) script = j["script"];
+void Player::Deserialize(nlohmann::json j, GameObject* parent)
+{
+	if (j.contains("playerSpeed")) playerSpeed = j["playerSpeed"];
+	if (j.contains("dashSpeedMultiplier")) dashSpeedMultiplier = j["dashSpeedMultiplier"];
+	if (j.contains("dashTime")) dashTime = j["dashTime"];
+	if (j.contains("autopilot")) autopilot = j["autopilot"];
+	if (j.contains("maxHp")) maxHp = j["maxHp"];
+	if (j.contains("damageCooldownTimer")) damageCooldownTimer = j["damageCooldownTimer"];
 	this->parent = parent;
 }
 
@@ -79,30 +105,6 @@ void Player::HandleMessage(Message* e)
 				damageCooldownTimer = 2;
 			}
 		}
-
-		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
-		{
-			isGrounded = true;
-		}*/
-		//std::cout << transform->GetPosXMVector().m128_f32[0] - lastGroundPos << std::endl;
-		//lastGroundPos = transform->GetPosXMVector().m128_f32[0];
-	}
-}
-
-void Player::Move(float deltaX, float deltaY) {
-	if (!isDashing) trans->Move(deltaX, deltaY);
-}
-
-void Player::Dash() {
-	isDashing = true;
-	dashVelocity.x = trans->lastMovement.x * dashSpeed;
-	dashVelocity.y = trans->lastMovement.y * dashSpeed;
-}
-
-void Player::ChangePlayerState() {
-	hp -= 15;
-	if (hp <= 0){GameManager::getInstance().playerDead = true;}
-}
 
 
 
@@ -166,3 +168,27 @@ void Player::ChangePlayerState() {
 //toReturn->damageCooldownTimer = damageCooldownTimer;
 
 //if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+		//std::cout << transform->GetPosXMVector().m128_f32[0] - lastGroundPos << std::endl;
+		//lastGroundPos = transform->GetPosXMVector().m128_f32[0];
+	}
+}
+
+void Player::Move(float deltaX, float deltaY) {
+	if (!isDashing) trans->Move(deltaX, deltaY);
+}
+
+void Player::Dash() {
+	isDashing = true;
+	dashVelocity.x = trans->lastMovement.x * dashSpeed;
+	dashVelocity.y = trans->lastMovement.y * dashSpeed;
+}
+
+void Player::ChangePlayerState() {
+	hp -= 15;
+	if (hp <= 0){GameManager::getInstance().playerDead = true;}
+}
+
+void Player::Sidescroll(float deltaTime) {
+	auto pos = trans->CurrentPos();
+	Move((playerSpeed + (cam->xPos - pos.x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
+}
