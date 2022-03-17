@@ -28,7 +28,8 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual Component* Clone(GameObject* newParent);
 
-	virtual int getCompId();
+	virtual int getCompId() override {return Component::DRAWABLE;};
+	static int getStaticCompId() {return Component::DRAWABLE;};
 
 	void HUD_DrawTextCenter(std::string text, DirectX::SimpleMath::Vector2 offset = { 0, 0 },
 		DirectX::SimpleMath::Color color = DirectX::SimpleMath::Color(1.0f, 0.0f, 0.0f, 1.0f));

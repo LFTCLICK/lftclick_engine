@@ -24,6 +24,7 @@ public:
 	void HandleMessage(Message* e);
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::ENEMY; };
+	static int getStaticCompId() { return ComponentType::ENEMY; };
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	virtual Component* Clone(GameObject* newParent);

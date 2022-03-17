@@ -44,11 +44,6 @@ void SquareCollider::Update()
 {
 }
 
-int SquareCollider::getCompId()
-{
-	return ComponentType::SQUARE_COLLLIDER;
-}
-
 Component * SquareCollider::Clone(GameObject * newParent)
 {
 	SquareCollider* toReturn = new SquareCollider();

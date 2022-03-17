@@ -21,7 +21,8 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual void Start();
 	virtual void Update();
-	virtual int getCompId();
+	virtual int getCompId() override {return Component::TRANSFORM;};
+	static int getStaticCompId() {return Component::TRANSFORM;};
 	virtual Component* Clone(GameObject* newParent);
 	void HandleMessage(Message* e);
 	~Transform();

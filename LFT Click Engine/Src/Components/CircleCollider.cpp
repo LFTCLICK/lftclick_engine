@@ -32,11 +32,6 @@ void CircleCollider::Update()
 {
 }
 
-int CircleCollider::getCompId()
-{
-	return ComponentType::CIRCLE_COLLIDER;
-}
-
 Component* CircleCollider::Clone(GameObject* newParent)
 {
 	CircleCollider* toReturn = new CircleCollider();

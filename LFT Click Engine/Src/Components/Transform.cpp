@@ -98,11 +98,6 @@ void Transform::Update()
 	}
 }
 
-int Transform::getCompId()
-{
-	return Component::TRANSFORM;
-}
-
 void Transform::HandleMessage(Message* e)
 {
 }

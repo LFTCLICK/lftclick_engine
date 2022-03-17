@@ -77,11 +77,6 @@ Component* Drawable::Clone(GameObject* newParent)
 	return (Component*)toReturn;
 }
 
-int Drawable::getCompId()
-{
-	return Component::DRAWABLE;
-}
-
 void Drawable::HUD_DrawTextCenter(std::string text, SimpleMath::Vector2 offset, DirectX::SimpleMath::Color color)
 {
 	SimpleMath::Vector2 pos = g_GameManager->mainCamera->WorldToScreenPos(

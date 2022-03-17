@@ -29,6 +29,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::SPRITE_ANIMATOR; };
+	static int getStaticCompId() { return ComponentType::SPRITE_ANIMATOR; };
 
 	virtual Component* Clone(GameObject* newParent);
 	SpriteAnimator() :

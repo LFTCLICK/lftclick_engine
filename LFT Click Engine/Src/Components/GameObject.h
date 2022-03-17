@@ -35,12 +35,11 @@ public:
 	template <typename T>
 	T* getComponent()
 	{
-		T temp;
-		auto toFind = comps.find(temp.getCompId());
+		auto toFind = comps.find(T::getStaticCompId());
 		if (toFind == comps.end()) {
 			return nullptr;
 		}
-		return dynamic_cast<T*>(comps[temp.getCompId()]);
+		return (T*)(toFind->second);
 	}
 	Component* getRawComponentPointer(int id);
 	~GameObject();
@@ -52,8 +51,8 @@ public:
 	std::list<Collider*> colliders;
 	Transform* trans;
 	bool isOnScreen;
-private:
 	std::map<int, Component*> comps;
+private:
 	GameObject* Clone();//ONLY FACTORY SHOULD TOUCH THIS
 	friend class GameObjectFactory;
 };

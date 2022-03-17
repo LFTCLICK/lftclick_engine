@@ -14,7 +14,8 @@ public:
 	CircleCollider();
 	virtual void Start();
 	virtual void Update();
-	int getCompId();
+	virtual int getCompId() override {return ComponentType::CIRCLE_COLLIDER;};
+	static int getStaticCompId() {return ComponentType::CIRCLE_COLLIDER;};
 	DirectX::SimpleMath::Vector2 center;
 	float radius;
 

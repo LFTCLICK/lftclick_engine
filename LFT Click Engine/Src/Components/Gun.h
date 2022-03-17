@@ -28,6 +28,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::GUN; };
+	static int getStaticCompId() { return ComponentType::GUN; };
 
 	virtual Component* Clone(GameObject* newParent);
 

@@ -26,6 +26,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::DOOR_OBJ; };
+	static int getStaticCompId() { return ComponentType::DOOR_OBJ; };
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual Component* Clone(GameObject* newParent);
 	void UpdateImage();

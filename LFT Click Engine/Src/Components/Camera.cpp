@@ -151,8 +151,3 @@ DirectX::XMMATRIX Camera::GetProjectionMatrix()
 	return translation * DirectX::XMMatrixOrthographicLH(g_Renderer->GetWidth(), g_Renderer->GetHeight(),
 		0.01f, 1000);
 }
-
-int Camera::getCompId()
-{
-	return ComponentType::CAMERA;
-}

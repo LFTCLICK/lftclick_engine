@@ -44,6 +44,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::AUDIBLE; };
+	static int getStaticCompId() { return ComponentType::AUDIBLE; };
 	virtual Component* Clone(GameObject* newParent);
 	virtual void HandleMessage(Message* e) override;
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;

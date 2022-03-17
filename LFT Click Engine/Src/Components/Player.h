@@ -28,6 +28,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::PLAYER; };
+	static int getStaticCompId() { return ComponentType::PLAYER; };
 
 	virtual Component* Clone(GameObject* newParent);
 	Player() : 

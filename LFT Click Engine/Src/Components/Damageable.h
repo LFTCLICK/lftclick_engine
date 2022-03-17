@@ -28,6 +28,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::DAMAGEABLE; };
+	static int getStaticCompId() { return ComponentType::DAMAGEABLE; };
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual void HandleMessage(Message* e) override;
 

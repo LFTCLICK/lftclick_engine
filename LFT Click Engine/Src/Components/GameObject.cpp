@@ -37,7 +37,7 @@ Component* GameObject::getRawComponentPointer(int id)
 	auto toFind = comps.find(id);
 	if (toFind == comps.end())
 		return nullptr;
-	return comps[id];
+	return toFind->second;
 }
 
 GameObject::~GameObject()
