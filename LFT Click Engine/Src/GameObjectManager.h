@@ -52,11 +52,11 @@ public:
 	void BroadcastMessage(Message* m);
 	~GameObjectManager();
 
-private:
-	GameObjectFactory* gof;
-
+public:
 	std::list<GameObject*> gameObjectList;
 	std::list<GameObject*> prefabList;
+private:
+	GameObjectFactory* gof;
 
 	// Gdiplus startup nonsense
 	ULONG_PTR gdiplusToken;

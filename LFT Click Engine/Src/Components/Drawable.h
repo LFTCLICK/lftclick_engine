@@ -21,30 +21,6 @@ using json = nlohmann::json;
 
 class Drawable : public Component
 {
-	struct  VS_cbPerObject
-	{
-		DirectX::XMMATRIX transform;
-		DirectX::XMFLOAT2 Offset;
-		DirectX::XMFLOAT2 Scale;
-
-		float flipX;
-	};
-	static_assert(sizeof(VS_cbPerObject) % 16 == 0, "Not 16-bytes aligned");
-
-	struct PS_cbPerObject
-	{
-		float alphaOverride;
-		DirectX::XMFLOAT3 padding;
-	};
-	static_assert(sizeof(PS_cbPerObject) % 16 == 0, "Not 16-bytes aligned");
-
-	struct Vertex
-	{
-		DirectX::XMFLOAT3 Pos;
-		DirectX::XMFLOAT2 TexCoord;
-	};
-
-
 public:
 	Drawable();
 	~Drawable() = default;
@@ -64,25 +40,10 @@ public:
 	float xFlip;
 	float alphaOverride;
 	int drawSize;
-	bool useTextures;
 
-private:
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertBuf;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuf;
-	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertShader;
-	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
-	Microsoft::WRL::ComPtr<ID3D11SamplerState> sampState;
-	Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;
-	Microsoft::WRL::ComPtr<ID3D11BlendState> blendState;
-
-	DirectX::XMMATRIX pTransformationMatrix;
-
+private:
 	float speed;
-
-	ConstantBuffer<VS_cbPerObject> VS_cbPerObjectData;
-	ConstantBuffer<PS_cbPerObject> PS_cbPerObjectData;
 
 	Transform* transformComp;
 };

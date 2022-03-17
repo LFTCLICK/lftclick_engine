@@ -63,12 +63,6 @@ void GameObjectManager::Draw()
 	{
 		if (g->isActive)
 		{
-			Drawable* s = g->getComponent<Drawable>();
-			if (s != nullptr)
-			{
-				s->Draw();
-			}
-
 #ifdef _DEBUG
 			if (!debugDraw)
 				continue;

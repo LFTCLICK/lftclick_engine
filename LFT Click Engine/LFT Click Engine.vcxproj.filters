@@ -282,14 +282,14 @@
     <ClInclude Include="Src\CollisionResolution.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Components\Helpers.h">
-      <Filter>Engine\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Components\FollowMouse.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Gun.h">
       <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Helpers.h">
+      <Filter>Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

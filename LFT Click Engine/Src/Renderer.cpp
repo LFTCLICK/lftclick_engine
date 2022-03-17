@@ -12,9 +12,20 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 #include <WICTextureLoader.h>
+#include "Helpers.h"
+#include "Components/Drawable.h"
+#include "GameObjectManager.h"
+#include <CommonStates.h>
+#include "GameManager.h"
 
 using namespace Microsoft::WRL;
 using namespace DirectX;
+
+namespace
+{
+#include "Shaders/Compiled/Compiled_PS.h"
+#include "Shaders/Compiled/Compiled_VS.h"
+}
 
 Renderer::Renderer() :
 	width(0), height(0),
@@ -107,8 +118,47 @@ void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 
 	OnResize(initWidth, initHeight);
 
+
+	CreateDeviceDependentResources();
+}
+
+void Renderer::CreateDeviceDependentResources()
+{
 	spriteBatch = std::make_unique<SpriteBatch>(immediateContext.Get());
 	spriteFont = std::make_unique<SpriteFont>(device.Get(), L"Resources\\fonts\\font.spritefont");
+	states = std::make_unique<CommonStates>(device.Get());
+
+	VS_cbPerObjectData.Create(device.Get());
+	PS_cbPerObjectData.Create(device.Get());
+
+	VertexType vertices[] =
+	{
+		XMFLOAT3(-0.5f, -0.5f, 0.0f), XMFLOAT2(0.0f, 1.0f),
+		XMFLOAT3(-0.5f, 0.5f, 0.0f), XMFLOAT2(0.0f, 0.0f),
+		XMFLOAT3(0.5f, 0.5f, 0.0f), XMFLOAT2(1.0f, 0.0f),
+		XMFLOAT3(0.5f, -0.5f, 0.0f), XMFLOAT2(1.0f, 1.0f)
+	};
+
+	short indices[] =
+	{
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	Helpers::CreateMeshBuffer(device.Get(), vertices, sizeof(vertices) / sizeof(vertices[0]), D3D11_BIND_VERTEX_BUFFER, vertBuf.ReleaseAndGetAddressOf());
+	Helpers::CreateMeshBuffer(device.Get(), indices, sizeof(indices) / sizeof(indices[0]), D3D11_BIND_INDEX_BUFFER, indexBuf.ReleaseAndGetAddressOf());
+
+	device->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
+	device->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
+
+	const D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+	};
+
+	g_Renderer->GetDevice()->CreateInputLayout(ied, (UINT)std::size(ied), g_CompiledVS, sizeof(g_CompiledVS),
+		inputLayout.ReleaseAndGetAddressOf());
 
 }
 
@@ -116,12 +166,65 @@ void Renderer::PrepareForRendering()
 {
 	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
 	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
 	spriteBatch->Begin();
+}
+
+void Renderer::Draw()
+{
+	UINT stride = sizeof(VertexType);
+	UINT offset = 0;
+
+	immediateContext->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
+	immediateContext->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
+	immediateContext->PSSetShader(pixelShader.Get(), nullptr, 0);
+	immediateContext->VSSetShader(vertShader.Get(), nullptr, 0);
+	immediateContext->IASetInputLayout(inputLayout.Get());
+	immediateContext->VSSetConstantBuffers(0, 1, VS_cbPerObjectData.GetAddressOf());
+	immediateContext->PSSetConstantBuffers(0, 1, PS_cbPerObjectData.GetAddressOf());
+	
+	ID3D11SamplerState* samStates[] = { states->PointWrap() };
+	immediateContext->PSSetSamplers(0, 1, samStates);
+	
+	immediateContext->OMSetBlendState(states->AlphaBlend(), nullptr, 0xFFFFFFFFu);
+	immediateContext->RSSetState(nullptr);
+	immediateContext->OMSetDepthStencilState(nullptr, 0);
+
+	for (auto gameObject : g_GameObjManager->gameObjectList)
+	{
+		Drawable* drawable = gameObject->getComponent<Drawable>();
+
+		if (drawable == nullptr)
+			continue;
+
+		DirectX::XMFLOAT4X4 mat = gameObject->getComponent<Transform>()->GetXMMatrix();
+
+		const VS_cbPerObject cbValues_VS =
+		{
+			{
+				DirectX::XMLoadFloat4x4(&mat) * g_GameManager->mainCamera->GetProjectionMatrix()
+			},
+			XMFLOAT2(drawable->xOffset, drawable->yOffset),
+			XMFLOAT2(drawable->xScale, drawable->yScale),
+			drawable->xFlip
+		};
+
+		const PS_cbPerObject cbValues_PS = {
+			drawable->alphaOverride
+		};
+
+		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
+		PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
+		
+		immediateContext->PSSetShaderResources(0, 1, drawable->shaderResourceView.GetAddressOf());
+	
+		immediateContext->DrawIndexed(6, 0, 0);
+	}
 }
 
 void Renderer::PresentFrame()

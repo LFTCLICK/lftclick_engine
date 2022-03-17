@@ -375,7 +375,6 @@
     <ClInclude Include="Src\Components\FollowMouse.h" />
     <ClInclude Include="Src\Components\GameObject.h" />
     <ClInclude Include="Src\Components\Gun.h" />
-    <ClInclude Include="Src\Components\Helpers.h" />
     <ClInclude Include="Src\Components\LevelGenerator.h" />
     <ClInclude Include="Src\Components\Player.h" />
     <ClInclude Include="Src\Components\SpriteAnimator.h" />
@@ -390,6 +389,7 @@
     <ClInclude Include="Src\GameManager.h" />
     <ClInclude Include="Src\GameObjectFactory.h" />
     <ClInclude Include="Src\GameObjectManager.h" />
+    <ClInclude Include="Src\Helpers.h" />
     <ClInclude Include="Src\Renderer.h" />
     <ClInclude Include="Src\InputManager.h" />
     <ClInclude Include="Src\Messages.h" />

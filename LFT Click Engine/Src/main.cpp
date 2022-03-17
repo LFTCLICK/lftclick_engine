@@ -153,6 +153,7 @@ int main(int argc, char* args[])
 
 
 			g_GameObjManager->Draw();
+			g_Renderer->Draw();
 
 #ifdef _DEBUG
 			g_DebugRenderer->Draw(g_Renderer->GetContext(), g_Renderer->GetWidth(), g_Renderer->GetHeight());
