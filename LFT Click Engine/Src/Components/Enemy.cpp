@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "Enemy.h"
 #include "FrameRateController.h"
+#include "EventManager.h"
 
 void Enemy::Start()
 {

@@ -12,6 +12,8 @@
 #include <list>
 #include <json.hpp>
 #include "Components\GameObject.h"
+#include "Renderer.h"
+#include "GameManager.h"
 #include "GameObjectFactory.h"
 #include <SDL.h>
 #include <codecvt>
@@ -67,3 +69,6 @@ private:
 };
 
 extern std::unique_ptr<GameObjectManager> g_GameObjManager;
+
+extern std::unique_ptr<Renderer> g_Renderer;
+//extern std::unique_ptr<GameManager> g_GameManager;

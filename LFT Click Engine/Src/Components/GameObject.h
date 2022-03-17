@@ -51,6 +51,7 @@ public:
 	bool isDeletable;
 	std::list<Collider*> colliders;
 	Transform* trans;
+	bool isOnScreen;
 private:
 	std::map<int, Component*> comps;
 	GameObject* Clone();//ONLY FACTORY SHOULD TOUCH THIS

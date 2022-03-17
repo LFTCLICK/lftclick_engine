@@ -195,11 +195,13 @@ void Renderer::Draw()
 	immediateContext->RSSetState(nullptr);
 	immediateContext->OMSetDepthStencilState(nullptr, 0);
 
+	DirectX::XMMATRIX projectionMat = g_GameManager->mainCamera->GetProjectionMatrix();
+
 	for (auto gameObject : g_GameObjManager->gameObjectList)
 	{
 		Drawable* drawable = gameObject->getComponent<Drawable>();
 
-		if (drawable == nullptr)
+		if (drawable == nullptr || !gameObject->isOnScreen)
 			continue;
 
 		Transform* drawableTransform = gameObject->getComponent<Transform>();
@@ -209,7 +211,7 @@ void Renderer::Draw()
 		const VS_cbPerObject cbValues_VS =
 		{
 			{
-				mat * g_GameManager->mainCamera->GetProjectionMatrix()
+				mat * projectionMat
 			},
 			XMFLOAT2(drawable->xOffset, drawable->yOffset),
 			XMFLOAT2(drawable->xScale, drawable->yScale),

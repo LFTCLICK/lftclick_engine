@@ -14,7 +14,6 @@
 #include "Components\SquareCollider.h"
 #include "Components\CircleCollider.h"
 #include "CollisionResolution.h"
-#include "GameManager.h"
 
 const int COLLIDER_IDS[] = { Component::SQUARE_COLLLIDER, Component::CIRCLE_COLLIDER };
 const int NUMBER_OF_COLLIDERS = 2;
@@ -60,7 +59,7 @@ void GameObjectManager::Draw()
 #endif
 
 	for (GameObject* g : gameObjectList)
-	{
+{
 		if (g->isActive)
 		{
 #ifdef _DEBUG
@@ -89,13 +88,30 @@ void GameObjectManager::ProcessCollision()
 {
 	TriggerCollisionMessage* toPassTrigger = new TriggerCollisionMessage();
 	CollisionMessage* toPassCollider = new CollisionMessage();
-
+	DirectX::SimpleMath::Vector2 cameraPos = DirectX::SimpleMath::Vector2(g_GameManager->mainCamera->getPos());
+	
+	DirectX::SimpleMath::Vector2 distanceFromCenter;
+	float maxDistance;
+	float maxScreenSize = g_Renderer->GetWidth() > g_Renderer->GetHeight() ? (float)g_Renderer->GetWidth() : (float)g_Renderer->GetHeight();
+	maxScreenSize += 0.0001f;
+	bool firstItt = true;
 	for (auto mainListItt = gameObjectList.begin(); mainListItt != gameObjectList.end(); ++mainListItt)
 	{
 		if (!(*mainListItt)->isActive || (*mainListItt)->isDeletable)
 			continue;
 		if (!(*mainListItt)->hasNonStaticCollider)
 			break;
+		if (firstItt)
+		{
+			(*mainListItt)->isOnScreen = false;
+			distanceFromCenter = cameraPos - (*mainListItt)->trans->position;
+			distanceFromCenter.x = std::fabsf(distanceFromCenter.x);
+			distanceFromCenter.y = std::fabsf(distanceFromCenter.y);
+			maxDistance = distanceFromCenter.x > distanceFromCenter.y ? distanceFromCenter.x : distanceFromCenter.y;
+			if (maxDistance - std::max((*mainListItt)->trans->scale.x, (*mainListItt)->trans->scale.y) < maxScreenSize)
+				(*mainListItt)->isOnScreen = true;
+		}
+	
 		Transform* mainTrans = (*mainListItt)->trans;
 		for (int mainColliderIndex=0; mainColliderIndex<NUMBER_OF_COLLIDERS; ++mainColliderIndex)
 		{
@@ -107,6 +123,16 @@ void GameObjectManager::ProcessCollision()
 				if (!(*innerLoop)->isActive || (*innerLoop)->isDeletable)
 					continue;
 				Transform* toCheckTrans = (*innerLoop)->trans;
+				if (firstItt)
+				{
+					(*innerLoop)->isOnScreen = false;
+					distanceFromCenter = cameraPos - (*innerLoop)->trans->position;
+					distanceFromCenter.x = std::fabsf(distanceFromCenter.x);
+					distanceFromCenter.y = std::fabsf(distanceFromCenter.y);
+					maxDistance = distanceFromCenter.x < distanceFromCenter.y ? distanceFromCenter.x : distanceFromCenter.y;
+					if (maxDistance - std::max((*innerLoop)->trans->scale.x, (*innerLoop)->trans->scale.y) < maxScreenSize)
+						(*innerLoop)->isOnScreen = true;
+				}
 				for (Collider* toCheckWith : (*innerLoop)->colliders)
 				{
 					//Collider* toCheckWith = (Collider*)(*innerLoop)->getRawComponentPointer(COLLIDER_IDS[innerColliderIndex]);
@@ -138,6 +164,7 @@ void GameObjectManager::ProcessCollision()
 				}
 			}
 		}
+		firstItt = false;
 	}
 	delete toPassCollider;
 	delete toPassTrigger;

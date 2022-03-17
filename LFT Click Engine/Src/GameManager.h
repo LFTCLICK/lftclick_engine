@@ -7,8 +7,7 @@
 // History			: 
 // ---------------------------------------------------------------------------
 #pragma once
-#include "Components\Camera.h"
-#include "GameObjectManager.h"
+#include "Components/Camera.h"
 
 class GameManager
 {
@@ -22,7 +21,6 @@ public:
 	bool playerRestart;
 	float playerScore;
 	Camera* mainCamera;
-	GameObjectManager* gom;
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

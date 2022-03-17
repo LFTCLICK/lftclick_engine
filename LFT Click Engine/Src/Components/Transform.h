@@ -12,7 +12,6 @@
 #include "GameObject.h"
 #include <json.hpp>
 #include <DirectXMath.h>
-#include "EventManager.h"
 
 using json = nlohmann::json;
 

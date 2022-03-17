@@ -154,5 +154,5 @@ DirectX::XMMATRIX Camera::GetProjectionMatrix()
 
 int Camera::getCompId()
 {
-	return CAMERA;
+	return ComponentType::CAMERA;
 }
