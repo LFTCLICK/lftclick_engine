@@ -55,6 +55,9 @@ public:
 public:
 	std::list<GameObject*> gameObjectList;
 	std::list<GameObject*> prefabList;
+
+	//Useful for indexed drawing. 
+	std::unordered_map<std::string, std::vector<GameObject*>> refGameObjListByPrefabAsKey;
 private:
 	GameObjectFactory* gof;
 

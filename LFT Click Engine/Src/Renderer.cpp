@@ -202,12 +202,14 @@ void Renderer::Draw()
 		if (drawable == nullptr)
 			continue;
 
-		DirectX::XMFLOAT4X4 mat = gameObject->getComponent<Transform>()->GetXMMatrix();
+		Transform* drawableTransform = gameObject->getComponent<Transform>();
+
+		DirectX::XMMATRIX mat = drawableTransform->GetXMMatrix();
 
 		const VS_cbPerObject cbValues_VS =
 		{
 			{
-				DirectX::XMLoadFloat4x4(&mat) * g_GameManager->mainCamera->GetProjectionMatrix()
+				mat * g_GameManager->mainCamera->GetProjectionMatrix()
 			},
 			XMFLOAT2(drawable->xOffset, drawable->yOffset),
 			XMFLOAT2(drawable->xScale, drawable->yScale),
@@ -221,7 +223,7 @@ void Renderer::Draw()
 		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
 		PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
 		
-		immediateContext->PSSetShaderResources(0, 1, drawable->shaderResourceView.GetAddressOf());
+		immediateContext->PSSetShaderResources(0, 1, drawable->textureSRV.GetAddressOf());
 	
 		immediateContext->DrawIndexed(6, 0, 0);
 	}
@@ -229,6 +231,13 @@ void Renderer::Draw()
 
 void Renderer::PresentFrame()
 {
+	if (ImGui::BeginMainMenuBar())
+	{
+		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+		ImGui::EndMainMenuBar();
+	}
+
 	spriteBatch->End();
 	
 	ImGui::Render();

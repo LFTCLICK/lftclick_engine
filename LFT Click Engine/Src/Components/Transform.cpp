@@ -112,19 +112,11 @@ DirectX::SimpleMath::Vector2 Transform::CurrentPos()
 	return position;
 }
 
-DirectX::XMFLOAT4X4 Transform::GetXMMatrix()
+DirectX::XMMATRIX Transform::GetXMMatrix()
 {
-	DirectX::XMMATRIX temp = DirectX::XMMatrixScaling(scale.x, scale.y, 1) *
+	return DirectX::XMMatrixScaling(scale.x, scale.y, 1) *
 		DirectX::XMMatrixRotationRollPitchYaw(0, 0, rotation) *
 		DirectX::XMMatrixTranslation(position.x, position.y, zPos);
-
-	XMStoreFloat4x4(&m, temp);
-	return m;
-}
-
-DirectX::XMVECTOR Transform::GetPosXMVector()
-{
-	return DirectX::XMVectorSet(position.x, position.y, 0.0, 1.0);
 }
 
 Transform::~Transform()

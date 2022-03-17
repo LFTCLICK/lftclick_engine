@@ -50,36 +50,14 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	xFlip = 1;
 	this->componentOwner = componentOwner;
 
-	
-	
 	std::wstring sprite = utf8_decode(j["image"]);
 	//force DTK to not load the texture as srgb
-	DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, &shaderResourceView);
+	DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, &textureSRV);
 	//	DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
 
-	//D3D11_SAMPLER_DESC sampDes = {};
-	//sampDes.Filter = D3D11_FILTER_MINIMUM_MIN_MAG_MIP_POINT;
-	//sampDes.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	//sampDes.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	//sampDes.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-
-	//g_Renderer->GetDevice()->CreateSamplerState(&sampDes, &sampState);
-
-	//D3D11_BLEND_DESC blendDesc = {};
-	//blendDesc.RenderTarget[0].BlendEnable = TRUE;
-	//blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	//blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	//blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	//blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
-	//blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	//blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	//blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-	//g_Renderer->GetDevice()->CreateBlendState(&blendDesc, &blendState);
 
 	transformComp = componentOwner->getComponent<Transform>();
 	assert(transformComp != nullptr);
-
 }
 
 Component* Drawable::Clone(GameObject* newParent)
@@ -94,23 +72,9 @@ Component* Drawable::Clone(GameObject* newParent)
 	toReturn->transformComp = newParent->getComponent<Transform>();
 	toReturn->alphaOverride = alphaOverride;
 
-	shaderResourceView.CopyTo(toReturn->shaderResourceView.GetAddressOf());
+	textureSRV.CopyTo(toReturn->textureSRV.GetAddressOf());
 
 	return (Component*)toReturn;
-}
-
-void Drawable::Start()
-{
-
-}
-
-void Drawable::Update()
-{
-}
-
-void Drawable::Draw()
-{
-
 }
 
 int Drawable::getCompId()

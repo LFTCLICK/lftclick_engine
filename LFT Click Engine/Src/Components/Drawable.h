@@ -27,9 +27,7 @@ public:
 
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual Component* Clone(GameObject* newParent);
-	virtual void Start();
-	virtual void Update();
-	virtual void Draw();
+
 	virtual int getCompId();
 
 	void HUD_DrawTextCenter(std::string text, DirectX::SimpleMath::Vector2 offset = { 0, 0 },
@@ -41,7 +39,7 @@ public:
 	float alphaOverride;
 	int drawSize;
 
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> shaderResourceView;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSRV;
 private:
 	float speed;
 

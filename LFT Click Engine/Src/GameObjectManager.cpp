@@ -28,7 +28,7 @@ GameObjectManager::GameObjectManager()
 void GameObjectManager::Update()
 {
 	//std::cout << "Size: " << gameObjectList.size() << std::endl;
-	std::list<GameObject*>::iterator objIt = gameObjectList.begin();
+	auto objIt = gameObjectList.begin();
 
 	while (objIt != gameObjectList.end()) {
 		GameObject* g = *objIt;
@@ -89,6 +89,7 @@ void GameObjectManager::ProcessCollision()
 {
 	TriggerCollisionMessage* toPassTrigger = new TriggerCollisionMessage();
 	CollisionMessage* toPassCollider = new CollisionMessage();
+
 	for (auto mainListItt = gameObjectList.begin(); mainListItt != gameObjectList.end(); ++mainListItt)
 	{
 		if (!(*mainListItt)->isActive || (*mainListItt)->isDeletable)
@@ -246,11 +247,12 @@ void GameObjectManager::DeleteAll()
 		delete g;
 	gameObjectList.clear();
 	prefabList.clear();
+	refGameObjListByPrefabAsKey.clear();
 }
 
 void GameObjectManager::DeleteObjectOfTag(std::string tag) 
 {
-	std::list<GameObject*>::iterator i = gameObjectList.begin();
+	auto i = gameObjectList.begin();
 	while (i != gameObjectList.end()) {
 		if ((*i)->tag == tag)
 			gameObjectList.erase(i++);  // alternatively, i = items.erase(i);
@@ -266,8 +268,12 @@ GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::s
 		if (g->tag == tag)
 		{
 			GameObject* go = gof->CloneObject(g);
+
 			if(!skipStart)
 				go->Start();
+
+			refGameObjListByPrefabAsKey[tag].push_back(go);
+
 			AddGameObject(go);
 			return go;
 		}

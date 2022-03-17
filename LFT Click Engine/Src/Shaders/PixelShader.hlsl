@@ -16,11 +16,10 @@ cbuffer cbPerObject
 float4 main(VSOut pin) : SV_Target
 {
 	float4 textureColor = diffuse.Sample(samState, pin.tex);
+	clip(textureColor.a - 0.1f);
 
-	clip(textureColor.a < 0.1f ? -1 : 1);
-
-	if (textureColor.a > 0 && alphaOverride < .99)
-		textureColor.a *= alphaOverride;
+	/*if (textureColor.a > 0 && alphaOverride < .99)
+		textureColor.a *= alphaOverride;*/
 
 	return textureColor;
 }
