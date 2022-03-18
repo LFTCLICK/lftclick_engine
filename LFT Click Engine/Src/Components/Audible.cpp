@@ -40,16 +40,30 @@ void Audible::Update() {
 		else
 			++channel;
 
+	if (positionless) {
+		auto playerTrans = g_GameManager->playerTrans;
+		if (playerTrans != nullptr) {
+			if (playerTrans->isMoving != playerTrans->wasMoving) {
+				HandleSoundsOnEvent(playerTrans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
+				if (!playerTrans->isMoving)
+					am->SetGroupSpatialPosition(channelGroupName, playerTrans->CurrentPos() / 100, { 0, 0 });
+			}
 
-	if (trans != nullptr) {
-		if (trans->isMoving != trans->wasMoving) {
-			HandleSoundsOnEvent(trans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-			if (!trans->isMoving)
-				am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100, { 0, 0 });
+			if (playerTrans->isMoving)
+				am->SetGroupSpatialPosition(channelGroupName, playerTrans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
+	}
+	else {
+		if (trans != nullptr) {
+			if (trans->isMoving != trans->wasMoving) {
+				HandleSoundsOnEvent(trans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
+				if (!trans->isMoving)
+					am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100, { 0, 0 });
+			}
 
-		if (trans->isMoving)
-			am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
+			if (trans->isMoving)
+				am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
+		}
 	}
 }
 
@@ -58,6 +72,7 @@ Component* Audible::Clone(GameObject* newParent) {
 	toReturn->componentOwner = newParent;
 	toReturn->am = g_AudioManager.get();
 	toReturn->sounds = sounds;
+	toReturn->positionless = positionless;
 	return toReturn;
 }
 
@@ -168,6 +183,7 @@ void Audible::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	this->componentOwner = componentOwner;
 	am = g_AudioManager.get();
 	sounds = {};
+
 	if (j.contains("sounds")) {
 		for (auto it = std::begin(j["sounds"]); it != std::end(j["sounds"]); it++) {
 			SoundInfo soundInfo;
@@ -190,4 +206,7 @@ void Audible::Deserialize(nlohmann::json j, GameObject* componentOwner)
 			sounds.push_back(soundInfo);
 		}
 	}
+
+	if (j.contains("positionless"))
+		positionless = j["positionless"];
 }

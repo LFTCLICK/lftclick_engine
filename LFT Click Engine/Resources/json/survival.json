@@ -37,6 +37,10 @@
       "tag": "door"
     },
     {
+      "prefab": "Resources\\json\\darkness.json",
+      "tag": "darkness"
+    },
+    {
       "prefab": "Resources\\json\\woodpile.json",
       "tag": "wood"
     },
@@ -56,9 +60,7 @@
   "Map": {
     "path": "Resources\\images\\map.png",
     "key": {
-      "5b3d2e": "wall",
-      "7d5440": "floor",
-      "3a5742": "grass"
+      "5b3d2e": "wall"
     },
     "objectSize": 60
   },
@@ -74,6 +76,22 @@
             "scaleY": 60,
             "rot": 0,
             "zPos": 5
+          }
+        }
+      ]
+    },
+    {
+      "object": "darkness",
+      "overrides": [
+        {
+          "1": {
+            "startX": 0.5,
+            "startY": 0.5,
+            "scaleX": 800,
+            "scaleY": 800,
+            "rot": 0,
+            "zPos": 5,
+            "matchPlayerPos": true
           }
         }
       ]

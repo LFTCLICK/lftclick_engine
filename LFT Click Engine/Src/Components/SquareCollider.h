@@ -13,6 +13,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include "EventManager.h"
+#include "Camera.h"
 
 using json = nlohmann::json;
 

@@ -65,6 +65,7 @@ public:
 	float alphaOverride;
 	int drawSize;
 	bool useTextures;
+	bool scaleAlphaWithLight;
 
 private:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> vertBuf;

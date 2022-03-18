@@ -2,15 +2,16 @@
   "1": {
     "startX": 0.5,
     "startY": 0.5,
-    "scaleX": 5120,
-    "scaleY": 5120,
+    "scaleX": 80,
+    "scaleY": 80,
     "rot": 0,
-    "zPos": 100
+    "zPos": 5,
+    "matchPlayerPos": true
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 4,
-    "yScale" : 4,
+    "xScale": 1,
+    "yScale": 1,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -31,20 +32,7 @@
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
-    "image": "Resources\\images\\bg2.png"
-
-  },
-  "8": {
-    "sounds": [
-      {
-        "name": ".\\Resources\\music\\background.mp3",
-        "loop": true,
-        "volume": 10,
-        "playEvents": [
-          1000
-        ]
-      }
-    ],
-    "positionless": true
+    "image": "Resources\\images\\darkness.png",
+    "scaleAlphaWithLight": true
   }
 }

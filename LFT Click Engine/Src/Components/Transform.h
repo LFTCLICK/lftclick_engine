@@ -13,6 +13,8 @@
 #include <json.hpp>
 #include <DirectXMath.h>
 #include "EventManager.h"
+#include "GameManager.h"
+#include "Camera.h"
 
 using json = nlohmann::json;
 
@@ -44,6 +46,7 @@ public:
 
 private:
 	float rotation, zPos;
+	bool matchPlayerPos;
 	DirectX::XMFLOAT4X4 m;
 	DirectX::XMVECTOR v;
 };

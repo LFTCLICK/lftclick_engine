@@ -48,7 +48,7 @@ public:
 	virtual void HandleMessage(Message* e) override;
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
-	Audible() : am(g_AudioManager.get()), sounds({}), frc(g_FrameRateController.get()) {}
+	Audible() : am(g_AudioManager.get()), sounds({}), frc(g_FrameRateController.get()), positionless(false) {}
 	~Audible();
 
 	void LoadSounds(std::vector<SoundInfo> newSounds);
@@ -80,4 +80,6 @@ protected:
 
 	std::vector<SoundInfo> sounds;
 	std::map<int, std::string> channels;
+
+	bool positionless;
 };

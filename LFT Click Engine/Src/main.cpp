@@ -106,8 +106,8 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 	while (masterLoop)
 	{
-		//std::fstream other("./Resources/json/survival.json");
-		std::fstream other("./Resources/json/demo.json");
+		std::fstream other("./Resources/json/survival.json");
+		//std::fstream other("./Resources/json/demo.json");
 		//std::fstream other("./Resources/json/concept_3_level.json");
 
 		json dataJson2;
@@ -117,7 +117,9 @@ int main(int argc, char* args[])
 		g_GameObjManager->Deserialize(g_GameObjFactory.get(), dataJson2);
 
 		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		g_GameManager->playerObj = playerObj;
 		g_GameManager->mainCamera = playerObj->getComponent<Camera>();
+		g_GameManager->playerTrans = playerObj->getComponent<Transform>();
 
 		isRunning = true;
 		g_FrameRateController->Init(144);
@@ -146,6 +148,7 @@ int main(int argc, char* args[])
 				}*/
 			}
 			g_AudioManager->Update();
+			g_GameManager->UpdateTime();
 			g_InputManager->Update();
 			g_GameObjManager->Update();
 			g_EventManager->ProcessCollision();

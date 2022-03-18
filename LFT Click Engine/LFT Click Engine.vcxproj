@@ -417,6 +417,7 @@
     <None Include="Resources\json\controls.json" />
     <None Include="Resources\json\credits.json" />
     <None Include="Resources\json\crosshairs.json" />
+    <None Include="Resources\json\darkness.json" />
     <None Include="Resources\json\demo.json" />
     <None Include="Resources\json\doorwayObj.json" />
     <None Include="Resources\json\doorwayObj_back.json" />

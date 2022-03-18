@@ -58,9 +58,11 @@ void GameObjectManager::Draw()
 	static bool debugDraw = false;
 	ImGui::Checkbox("Draw Colliders", &debugDraw);
 #endif
-
-	for (GameObject* g : gameObjectList)
+	//for (GameObject* g : gameObjectList)
+	for (std::list<GameObject*>::reverse_iterator i = gameObjectList.rbegin(); i != gameObjectList.rend(); ++i)
 	{
+		GameObject* g = *i;
+
 		if (g->isActive)
 		{
 			Drawable* s = g->getComponent<Drawable>();

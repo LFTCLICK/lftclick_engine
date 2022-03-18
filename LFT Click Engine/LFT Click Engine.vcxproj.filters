@@ -419,6 +419,7 @@
     <None Include="Resources\json\woodpile.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\darkness.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">
