@@ -196,18 +196,20 @@ void Renderer::Draw()
 	immediateContext->OMSetDepthStencilState(nullptr, 0);
 
 	DirectX::XMMATRIX projectionMat = g_GameManager->mainCamera->GetProjectionMatrix();
-
-	for (auto gameObject : g_GameObjManager->gameObjectList)
+	auto gameObjectIt = g_GameObjManager->gameObjectList.end();
+	while (gameObjectIt != g_GameObjManager->gameObjectList.begin())
 	{
+		--gameObjectIt;
+		GameObject* gameObject = *gameObjectIt;
 		Drawable* drawable = gameObject->getComponent<Drawable>();
-
+	
 		if (drawable == nullptr || !gameObject->isOnScreen)
 			continue;
-
-		Transform* drawableTransform = gameObject->getComponent<Transform>();
-
-		DirectX::XMMATRIX mat = drawableTransform->GetXMMatrix();
-
+	
+		//Transform* drawableTransform = gameObject->getComponent<Transform>();
+	
+		DirectX::XMMATRIX mat = gameObject->getComponent<Transform>()->GetXMMatrix();
+	
 		const VS_cbPerObject cbValues_VS =
 		{
 			{
@@ -217,18 +219,50 @@ void Renderer::Draw()
 			XMFLOAT2(drawable->xScale, drawable->yScale),
 			drawable->xFlip
 		};
-
+	
 		const PS_cbPerObject cbValues_PS = {
 			drawable->alphaOverride
 		};
-
+	
 		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
 		PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
-		
+	
 		immediateContext->PSSetShaderResources(0, 1, drawable->textureSRV.GetAddressOf());
 	
 		immediateContext->DrawIndexed(6, 0, 0);
 	}
+	//for (auto gameObject : g_GameObjManager->gameObjectList)
+	//{
+	//	Drawable* drawable = gameObject->getComponent<Drawable>();
+	//
+	//	if (drawable == nullptr || !gameObject->isOnScreen)
+	//		continue;
+	//
+	//	Transform* drawableTransform = gameObject->getComponent<Transform>();
+	//
+	//	DirectX::XMMATRIX mat = drawableTransform->GetXMMatrix();
+	//
+	//	const VS_cbPerObject cbValues_VS =
+	//	{
+	//		{
+	//			mat * projectionMat
+	//		},
+	//		XMFLOAT2(drawable->xOffset, drawable->yOffset),
+	//		XMFLOAT2(drawable->xScale, drawable->yScale),
+	//		drawable->xFlip
+	//	};
+	//
+	//	const PS_cbPerObject cbValues_PS = {
+	//		drawable->alphaOverride
+	//	};
+	//
+	//	VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
+	//	PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
+	//	
+	//	immediateContext->PSSetShaderResources(0, 1, drawable->textureSRV.GetAddressOf());
+	//
+	//	immediateContext->DrawIndexed(6, 0, 0);
+	//}
 }
 
 void Renderer::PresentFrame()
