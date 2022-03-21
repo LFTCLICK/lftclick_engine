@@ -29,8 +29,7 @@ public:
 	float GetlastMovementX();
 	float GetlastMovementY();
 	DirectX::SimpleMath::Vector2 CurrentPos();
-	DirectX::XMFLOAT4X4 GetXMMatrix();
-	DirectX::XMVECTOR GetPosXMVector();
+
 	~Transform();
 
 public:
@@ -41,7 +40,6 @@ public:
 
 	void SetPos(float newX, float newY, float newZ);
 	void Rotate(float angleDelta);
-	DirectX::SimpleMath::Vector2 CurrentPos();
 	
 	DirectX::XMMATRIX GetXMMatrix();
 

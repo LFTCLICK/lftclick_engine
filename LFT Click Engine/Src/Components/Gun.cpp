@@ -34,6 +34,9 @@ Component* Gun::Clone(GameObject* newParent)
 
 void Gun::Fire(int bulletIndex, float targetX, float targetY)
 {
+	if (trans == nullptr)
+		return;
+
 	GameObject* bullet = gom->ClonePrefabOfTag(gof, bulletTypes[bulletIndex].first);
 	Transform* bulletTransform = bullet->getComponent<Transform>();
 	Bullet* bulletComp = bullet->getComponent<Bullet>();

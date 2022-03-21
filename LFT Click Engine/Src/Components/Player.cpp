@@ -7,15 +7,23 @@ using namespace DirectX::SimpleMath;
 
 void Player::Start()
 {
-	trans = parent->getComponent<Transform>();
-	gun = parent->getComponent<Gun>();
-	cam = parent->getComponent<Camera>();
-	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	//LuaManager::getInstance().RegGlobals(lua_player_state);
+	g_InputManager->RegGlobals(lua_player_state);
+	g_FrameRateController->RegGlobals(lua_player_state);
+	g_LuaManager->RegObjectFunctions(lua_player_state, componentOwner);
+	lua_player_state.open_libraries(sol::lib::base, sol::lib::package);
 
-	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
-	wood = 0;
-	hp = maxHp;
-	timer = damageCooldownTimer;
+	player_script_update = lua_player_state.load_file(script);
+
+	// setting variables from LUA
+	player_script_update();
+	sol::function returnHp = lua_player_state["returnPlayerHp"];
+	hp = returnHp();
+	sol::function dashSpeedMultiplier = lua_player_state["dashSpeedMultiplyer"];
+	dashSpeed = dashSpeedMultiplier();
+
+	trans = componentOwner->getComponent<Transform>();
+	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 }
 
 void Player::Update()
@@ -32,34 +40,8 @@ void Player::Update()
 	ImGui::End();
 
 
-	InputManager& im = InputManager::getInstance();
-	float deltaTime = FrameRateController::getInstance().DeltaTime();
-
-	if (im.isKeyPressed(SDL_SCANCODE_W)) Move(0, playerSpeed * deltaTime);
-	if (im.isKeyPressed(SDL_SCANCODE_S)) Move(0, -playerSpeed * deltaTime);
-	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_D)) Move(playerSpeed * deltaTime, 0);
-	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_A)) Move(-playerSpeed * deltaTime, 0);
-
-	if (im.isKeyPressed(SDL_SCANCODE_UP)) cam->Move(0.0f, playerSpeed * deltaTime);
-	if (im.isKeyPressed(SDL_SCANCODE_DOWN)) cam->Move(0.0f, -playerSpeed * deltaTime);
-	if (im.isKeyPressed(SDL_SCANCODE_RIGHT)) cam->Move(playerSpeed * deltaTime, 0.0f);
-	if (im.isKeyPressed(SDL_SCANCODE_LEFT)) cam->Move(-playerSpeed * deltaTime, 0.0f);
-
-	if (im.isKeyTriggered(SDL_SCANCODE_SPACE)) Dash();
-
-	if (im.isMouseButtonTriggered(0)) {
-		float targetX = (float)(im.mouseX() - 400) + GameManager::getInstance().mainCamera->xPos;
-		float targetY = -1 * (float)(im.mouseY() - 400) + GameManager::getInstance().mainCamera->yPos;
-		gun->Fire(0, targetX, targetY);
-	}
-
-	if (im.isJoyStickMovedUp(SDL_CONTROLLER_AXIS_LEFTY)) Move(0, playerSpeed * deltaTime);
-	if (im.isJoyStickMovedDown(SDL_CONTROLLER_AXIS_LEFTY)) Move(0, -playerSpeed * deltaTime);
-	if (!autopilot && im.isJoyStickMovedRight(SDL_CONTROLLER_AXIS_LEFTX)) Move(playerSpeed * deltaTime, 0);
-	if (!autopilot && im.isJoyStickMovedLeft(SDL_CONTROLLER_AXIS_LEFTX)) Move(-playerSpeed * deltaTime, 0);
-
 	if (isDashing) {
-		dashTimer += FrameRateController::getInstance().DeltaTime();
+		dashTimer += g_FrameRateController->DeltaTime();
 		if (dashTimer > dashTime) {
 			isDashing = false;
 			dashTimer = 0;
@@ -67,34 +49,19 @@ void Player::Update()
 		trans->Move(dashVelocity.x, dashVelocity.y);
 	}
 
-	if (autopilot) Sidescroll(deltaTime);
-
-	if (badTouch && timer <= 0)
-	{
-		hp -= 15;
-		timer = damageCooldownTimer;
-	}
-	else if (timer > 0)
-	{
-		timer -= FrameRateController::getInstance().DeltaTime();
-	}
-	badTouch = false;
-	if (hp <= 0)
-	{
-		GameManager::getInstance().playerDead = true;
-	}
+	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 }
 
 Component* Player::Clone(GameObject* newParent) {
 	Player* toReturn = new Player();
 	toReturn->script = script;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return (Component*)toReturn;
 }
 
 void Player::Deserialize(nlohmann::json j, GameObject* parent) {
 	if (j.contains("script")) script = j["script"];
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 }
 
 void Player::HandleMessage(Message* e)
@@ -136,7 +103,7 @@ void Player::Dash() {
 
 void Player::ChangePlayerState() {
 	hp -= 15;
-	if (hp <= 0) { GameManager::getInstance().playerDead = true; }
+	if (hp <= 0) { g_GameManager->playerDead = true; }
 }
 
 
@@ -158,7 +125,7 @@ void Player::ChangePlayerState() {
 	}
 	else if (timer > 0)
 	{
-		timer -= FrameRateController::getInstance().DeltaTime();
+		timer -= g_FrameRateController->DeltaTime();
 	}*/
 	//badTouch = false;
 	/*if (hp <= 0)

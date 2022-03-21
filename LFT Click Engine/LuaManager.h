@@ -18,12 +18,6 @@ class LuaManager
 
 public:
 
-	static LuaManager& getInstance()
-	{
-		static LuaManager instance;
-		return instance;
-	}
-
 	LuaManager();
 	~LuaManager();
 	void Update();
@@ -37,3 +31,5 @@ public:
 	*/
 	//void LogMessage(std::string log_str);
 };
+
+extern std::unique_ptr<LuaManager> g_LuaManager;

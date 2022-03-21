@@ -8,6 +8,7 @@
 // - 2021/10/29		Singleton
 // ---------------------------------------------------------------------------
 #pragma once
+#include <memory.h>
 #include <SDL_stdinc.h>
 #include <sol/sol.hpp>
 

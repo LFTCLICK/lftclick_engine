@@ -25,10 +25,10 @@ void LuaManager::RegObjectFunctions(sol::state& state, GameObject* obj)
 {
 	if (obj->tag == "player")
 	{
-		Player* playerComponent = GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Player>();
-		Gun* gunComponent = GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Gun>();
-		Camera* cameraComponent = GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Camera>();
-		Transform* transformComponent = GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Transform>();
+		Player* playerComponent = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
+		Gun* gunComponent = g_GameObjManager->FindObjectOfTag("player")->getComponent<Gun>();
+		Camera* cameraComponent = g_GameObjManager->FindObjectOfTag("player")->getComponent<Camera>();
+		Transform* transformComponent = g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>();
 
 		state.set_function("move", &Player::Move, playerComponent);
 		state.set_function("dash", &Player::Dash, playerComponent);

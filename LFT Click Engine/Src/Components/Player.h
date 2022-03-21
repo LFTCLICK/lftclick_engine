@@ -16,7 +16,8 @@
 #include "Gun.h"
 #include "AudioManager.h"
 #include "FrameRateController.h"
-
+#include "../LuaManager.h"
+#include "Components/Collider.h"
 #include <sol/sol.hpp>
 #include <cassert>
 

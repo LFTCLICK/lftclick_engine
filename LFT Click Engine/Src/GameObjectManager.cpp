@@ -89,7 +89,7 @@ void GameObjectManager::ProcessCollision()
 	TriggerCollisionMessage* toPassTrigger = new TriggerCollisionMessage();
 	CollisionMessage* toPassCollider = new CollisionMessage();
 	DirectX::SimpleMath::Vector2 cameraPos = DirectX::SimpleMath::Vector2(g_GameManager->mainCamera->getPos());
-	
+
 	DirectX::SimpleMath::Vector2 distanceFromCenter;
 	float maxDistance;
 	float maxScreenSize = g_Renderer->GetWidth() > g_Renderer->GetHeight() ? (float)g_Renderer->GetWidth() : (float)g_Renderer->GetHeight();
@@ -111,11 +111,11 @@ void GameObjectManager::ProcessCollision()
 			if (maxDistance - std::max((*mainListItt)->trans->scale.x, (*mainListItt)->trans->scale.y) < maxScreenSize)
 				(*mainListItt)->isOnScreen = true;
 		}
-	
+
 		Transform* mainTrans = (*mainListItt)->trans;
-		for (int mainColliderIndex=0; mainColliderIndex<NUMBER_OF_COLLIDERS; ++mainColliderIndex)
+		for (int mainColliderIndex = 0; mainColliderIndex < NUMBER_OF_COLLIDERS; ++mainColliderIndex)
 		{
-			Collider* s = (Collider* )(*mainListItt)->getRawComponentPointer(COLLIDER_IDS[mainColliderIndex]);
+			Collider* s = (Collider*)(*mainListItt)->getRawComponentPointer(COLLIDER_IDS[mainColliderIndex]);
 			if (s == nullptr)
 				continue;
 			for (auto innerLoop = std::next(mainListItt); innerLoop != gameObjectList.end(); ++innerLoop)
