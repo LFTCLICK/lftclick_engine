@@ -58,7 +58,7 @@
     }
   ],
   "Map": {
-    "path": "Resources\\images\\map.png",
+    "path": "Resources\\images\\map3.png",
     "key": {
       "5b3d2e": "wall"
     },
@@ -75,7 +75,7 @@
             "scaleX": 60,
             "scaleY": 60,
             "rot": 0,
-            "zPos": 5
+            "zPos": 4
           }
         }
       ]
@@ -113,6 +113,14 @@
     },
     {
       "object": "crosshairs",
+      "overrides": []
+    },
+    {
+      "object": "grass",
+      "overrides": []
+    },
+    {
+      "object": "floor",
       "overrides": []
     }
   ]

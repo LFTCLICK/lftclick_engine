@@ -157,6 +157,9 @@
     <ClCompile Include="Src\Components\Gun.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Components\Interactable.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
@@ -291,6 +294,9 @@
     <ClInclude Include="Src\Components\Gun.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Components\Interactable.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
@@ -335,7 +341,7 @@
     <None Include="Resources\json\demo.json">
       <Filter>JSON</Filter>
     </None>
-    <None Include="Resources\json\floor.json">
+    <None Include="Resources\json\floorTile.json">
       <Filter>JSON</Filter>
     </None>
     <None Include="Resources\json\invin.json">
@@ -368,7 +374,7 @@
     <None Include="Resources\json\turret.json">
       <Filter>JSON</Filter>
     </None>
-    <None Include="Resources\json\grass.json">
+    <None Include="Resources\json\grassTile.json">
       <Filter>JSON</Filter>
     </None>
     <None Include="Resources\json\survival.json">
@@ -420,6 +426,12 @@
       <Filter>JSON</Filter>
     </None>
     <None Include="Resources\json\darkness.json" />
+    <None Include="Resources\json\floor.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\grass.json">
+      <Filter>JSON</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

@@ -48,10 +48,10 @@ void Player::Update()
 
 	if (im.isKeyTriggered(SDL_SCANCODE_SPACE)) Dash();
 
-	if (im.isMouseButtonTriggered(0)) {
+	if (im.isMouseButtonPressed(0) && gun != nullptr && gun->ReadyToFire()) {
 		float targetX = (float)(im.mouseX() - 400) + g_GameManager->mainCamera->xPos;
 		float targetY = -1 * (float)(im.mouseY() - 400) + g_GameManager->mainCamera->yPos;
-		gun->Fire(0, targetX, targetY);
+		gun->Fire(targetX, targetY);
 	}
 
 	if (im.isJoyStickMovedUp(SDL_CONTROLLER_AXIS_LEFTY)) Move(0, playerSpeed * deltaTime);

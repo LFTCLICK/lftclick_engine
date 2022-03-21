@@ -1,15 +1,15 @@
 {
   "1": {
-    "startX": -30.0,
-    "startY": 30.0,
-    "scaleX": 1920,
-    "scaleY": 1920,
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 60,
+    "scaleY": 60,
     "rot": 0,
-    "zPos": 100
+    "zPos": 10
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale": 1,
+    "xScale": 0.25,
     "yScale": 1,
     "vertices": [
       {
@@ -30,6 +30,6 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "image": "Resources\\images\\floor.png"
+    "image": "Resources\\images\\floorboard_sprite_sheet_long.png"
   }
 }

@@ -10,8 +10,8 @@
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 0.5,
-    "yScale" : 0.125,
+    "xScale": 0.5,
+    "yScale": 0.125,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -30,8 +30,16 @@
         "uv": [ 1, 1 ]
       }
     ],
-    "indicies": [ 0, 1, 2, 2, 3, 0 ], 
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "image": "Resources\\images\\player_sprite_sheet.png"
+  },
+  "4": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "width": 40,
+    "height": 50,
+    "trigger": false,
+    "static": false,
+    "deleteOnCollison": false
   },
   "5": {
     "speed": 0,
@@ -41,14 +49,6 @@
     "startY": 0,
     "startZ": 0,
     "isMainCamera": true
-  },
-  "4": {
-    "center": [ 0.0, 0.0, 0.0 ],
-    "width": 40,
-    "height": 50,
-    "trigger": false,
-    "static": false,
-    "deleteOnCollison": false
   },
   "6": {
     "spriteSheetWidth": 2,
@@ -108,9 +108,10 @@
   "10": {
     "bulletTypes": [
       {
-        "fireRate": 1,
+        "fireRate": 3,
         "prefabTag": "bullet"
       }
-    ]
+    ],
+    "defaultBulletIndex": 0
   }
 }
