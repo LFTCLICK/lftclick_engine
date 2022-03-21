@@ -146,16 +146,4 @@ bool InputManager::isJoyStickMovedRight(unsigned int joystickValue)
 }
 
 
-// registering input functions to LUA state (will move to LUA Manager)
-void InputManager::RegGlobals(sol::state& state)
-{
-	state.set_function("is_pressed", &InputManager::isKeyPressed, this);
-	state.set_function("is_released", &InputManager::isKeyReleased, this);
-	state.set_function("is_triggered", &InputManager::isKeyTriggered, this);
-	state.set_function("is_mouse_button_triggered", &InputManager::isMouseButtonTriggered, this);
-	state.set_function("mouse_pos_x", &InputManager::mouseX, this);
-	state.set_function("mouse_pos_y", &InputManager::mouseY, this);
-}
-
-
 

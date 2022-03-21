@@ -37,12 +37,6 @@ public:
 	bool isJoyStickMovedLeft(unsigned int joystickValue);
 	bool isJoyStickMovedRight(unsigned int joystickValue);
 
-	void RegGlobals(sol::state& state);
-
-	void print();
-
-	
-
 private:
 	Uint8 mCurrentState[512];
 	Uint8 mPreviousState[512];

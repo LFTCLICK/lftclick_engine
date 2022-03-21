@@ -7,9 +7,7 @@ using namespace DirectX::SimpleMath;
 
 void Player::Start()
 {
-	//LuaManager::getInstance().RegGlobals(lua_player_state);
-	g_InputManager->RegGlobals(lua_player_state);
-	g_FrameRateController->RegGlobals(lua_player_state);
+	g_LuaManager->RegGlobals(lua_player_state);
 	g_LuaManager->RegObjectFunctions(lua_player_state, componentOwner);
 	lua_player_state.open_libraries(sol::lib::base, sol::lib::package);
 

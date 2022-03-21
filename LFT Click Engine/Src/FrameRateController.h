@@ -25,7 +25,6 @@ public:
 	void EndOfFrame();
 	float DeltaTime();
 
-	void RegGlobals(sol::state& state);
 private:
 	__int64 m_CurrentTime;
 	__int64 m_PreviousTime;

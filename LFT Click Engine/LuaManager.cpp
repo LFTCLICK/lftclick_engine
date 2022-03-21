@@ -17,8 +17,14 @@ LuaManager::LuaManager() {
 // registers input functions from the input manager
 void LuaManager::RegGlobals(sol::state& state) 
 {
-	/*state.set_function("is_pressed", &InputManager::isKeyPressed, InputManager::getInstance());
-	state.set_function("is_released", &InputManager::isKeyReleased, InputManager::getInstance());*/
+	state.set_function("deltaTime", &FrameRateController::DeltaTime, g_FrameRateController.get());
+
+	state.set_function("is_pressed", &InputManager::isKeyPressed, g_InputManager.get());
+	state.set_function("is_released", &InputManager::isKeyReleased, g_InputManager.get());
+	state.set_function("is_triggered", &InputManager::isKeyTriggered, g_InputManager.get());
+	state.set_function("is_mouse_button_triggered", &InputManager::isMouseButtonTriggered, g_InputManager.get());
+	state.set_function("mouse_pos_x", &InputManager::mouseX, g_InputManager.get());
+	state.set_function("mouse_pos_y", &InputManager::mouseY, g_InputManager.get());
 }
 
 void LuaManager::RegObjectFunctions(sol::state& state, GameObject* obj)

@@ -57,7 +57,6 @@ end
 if is_mouse_button_triggered(left_mouse_click) then
 	x = (mouse_pos_x() - 400) + xPos_of_cam()
 	y = -1 * (mouse_pos_y() - 400) + yPos_of_cam()
-	print("called")
 	fire(0, x, y)
 end
 
