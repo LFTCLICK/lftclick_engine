@@ -20,20 +20,16 @@ using json = nlohmann::json;
 class Camera : public Component
 {
 public:
+	Camera();
 
 	// Inherited via Component
 	virtual void Start() override;
 	virtual void Update() override;
-	virtual int getCompId() override;
+	virtual int getCompId() override {return ComponentType::CAMERA;};
+	static int getStaticCompId() {return ComponentType::CAMERA;};
 	virtual Component* Clone(GameObject* newParent);
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
-	inline DirectX::SimpleMath::Vector2 WorldToScreenPos(DirectX::SimpleMath::Vector2 mycoords, float w, float h)
-	{
-		return DirectX::SimpleMath::Vector2((w / 2.0f) + (mycoords.x - xPos), (h / 2.0f) - (mycoords.y - yPos));
-	}
-	Camera();
-
-
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
+	
 
 	void SetPos(float x, float y, float z);
 	void SetRot(float x, float y, float z);
@@ -49,11 +45,22 @@ public:
 	void GetViewMatrix(DirectX::XMMATRIX& toReturn);
 	DirectX::XMMATRIX GetProjectionMatrix();
 
+
+	DirectX::SimpleMath::Vector2 WorldToScreenPos(DirectX::SimpleMath::Vector2 mycoords, float w, float h)
+	{
+		return DirectX::SimpleMath::Vector2((w / 2.0f) + (mycoords.x - xPos), (h / 2.0f) - (mycoords.y - yPos));
+	}
+
+	DirectX::SimpleMath::Vector2 ToScreenPos(DirectX::SimpleMath::Vector2 mycoords, float w, float h)
+	{
+		return DirectX::SimpleMath::Vector2((w / 2.0f) + mycoords.x, (h / 2.0f) - mycoords.y);
+	}
+	
+public:
 	float xPos, yPos, zPos, xRot, yRot, zRot;
 	float maxSpeed;
 private:
 	float speed, speedDelta, startingSpeed, autopilotSpeed;
-	GameObject* parent;
 	DirectX::XMMATRIX viewMatrix;
 	std::string autopilotDirection;
 	bool isAutopilot;

@@ -2,27 +2,20 @@
 #include "Player.h"
 #include "GameManager.h"
 #include "FrameRateController.h"
-#include "../LuaManager.h"
+
+using namespace DirectX::SimpleMath;
 
 void Player::Start()
 {
-	//LuaManager::getInstance().RegGlobals(lua_player_state);
-	InputManager::getInstance().RegGlobals(lua_player_state);
-	FrameRateController::getInstance().RegGlobals(lua_player_state);
-	LuaManager::getInstance().RegObjectFunctions(lua_player_state, parent);
-	lua_player_state.open_libraries(sol::lib::base, sol::lib::package);
-
-	player_script_update = lua_player_state.load_file(script);
-
-	// setting variables from LUA
-	player_script_update();
-	sol::function returnHp = lua_player_state["returnPlayerHp"];
-	hp = returnHp();
-	sol::function dashSpeedMultiplier = lua_player_state["dashSpeedMultiplyer"];
-	dashSpeed = dashSpeedMultiplier();
-
 	trans = parent->getComponent<Transform>();
+	gun = parent->getComponent<Gun>();
+	cam = parent->getComponent<Camera>();
 	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+
+	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	wood = 0;
+	hp = maxHp;
+	timer = damageCooldownTimer;
 }
 
 void Player::Update()
@@ -38,6 +31,33 @@ void Player::Update()
 	ImGui::Text("hp: %i", hp);
 	ImGui::End();
 
+
+	InputManager& im = InputManager::getInstance();
+	float deltaTime = FrameRateController::getInstance().DeltaTime();
+
+	if (im.isKeyPressed(SDL_SCANCODE_W)) Move(0, playerSpeed * deltaTime);
+	if (im.isKeyPressed(SDL_SCANCODE_S)) Move(0, -playerSpeed * deltaTime);
+	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_D)) Move(playerSpeed * deltaTime, 0);
+	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_A)) Move(-playerSpeed * deltaTime, 0);
+
+	if (im.isKeyPressed(SDL_SCANCODE_UP)) cam->Move(0.0f, playerSpeed * deltaTime);
+	if (im.isKeyPressed(SDL_SCANCODE_DOWN)) cam->Move(0.0f, -playerSpeed * deltaTime);
+	if (im.isKeyPressed(SDL_SCANCODE_RIGHT)) cam->Move(playerSpeed * deltaTime, 0.0f);
+	if (im.isKeyPressed(SDL_SCANCODE_LEFT)) cam->Move(-playerSpeed * deltaTime, 0.0f);
+
+	if (im.isKeyTriggered(SDL_SCANCODE_SPACE)) Dash();
+
+	if (im.isMouseButtonTriggered(0)) {
+		float targetX = (float)(im.mouseX() - 400) + GameManager::getInstance().mainCamera->xPos;
+		float targetY = -1 * (float)(im.mouseY() - 400) + GameManager::getInstance().mainCamera->yPos;
+		gun->Fire(0, targetX, targetY);
+	}
+
+	if (im.isJoyStickMovedUp(SDL_CONTROLLER_AXIS_LEFTY)) Move(0, playerSpeed * deltaTime);
+	if (im.isJoyStickMovedDown(SDL_CONTROLLER_AXIS_LEFTY)) Move(0, -playerSpeed * deltaTime);
+	if (!autopilot && im.isJoyStickMovedRight(SDL_CONTROLLER_AXIS_LEFTX)) Move(playerSpeed * deltaTime, 0);
+	if (!autopilot && im.isJoyStickMovedLeft(SDL_CONTROLLER_AXIS_LEFTX)) Move(-playerSpeed * deltaTime, 0);
+
 	if (isDashing) {
 		dashTimer += FrameRateController::getInstance().DeltaTime();
 		if (dashTimer > dashTime) {
@@ -47,7 +67,22 @@ void Player::Update()
 		trans->Move(dashVelocity.x, dashVelocity.y);
 	}
 
-	damageCooldownTimer -= FrameRateController::getInstance().DeltaTime();
+	if (autopilot) Sidescroll(deltaTime);
+
+	if (badTouch && timer <= 0)
+	{
+		hp -= 15;
+		timer = damageCooldownTimer;
+	}
+	else if (timer > 0)
+	{
+		timer -= FrameRateController::getInstance().DeltaTime();
+	}
+	badTouch = false;
+	if (hp <= 0)
+	{
+		GameManager::getInstance().playerDead = true;
+	}
 }
 
 Component* Player::Clone(GameObject* newParent) {
@@ -70,7 +105,7 @@ void Player::HandleMessage(Message* e)
 
 		Move(cm->deltaPos.x, cm->deltaPos.y);
 
-		if (e->sourceObjectTag == "enemy")
+		if (e->otherObject->componentOwner->tag == "enemy")
 		{
 			if (damageCooldownTimer < 0)
 			{

@@ -16,13 +16,14 @@
 #include "ResourceManager.h"
 #include "GameObjectFactory.h"
 #include "GameObjectManager.h"
-#include "Graphics.h"
+#include "Renderer.h"
 #include "Components/Transform.h"
 #include "EventManager.h"
 #include "AudioManager.h"
 #include "Messages.h"
 #include "GameManager.h"
 #include "Components/Drawable.h"
+#include "DebugRenderer.h"
 
 #include "..\LuaManager.h"
 
@@ -30,7 +31,19 @@ using json = nlohmann::json;
 
 using namespace DirectX;
 
-std::unique_ptr<DebugRenderer> g_debugRenderer;
+int g_WindowWidth = 800;
+int g_WindowHeight = 600;
+
+std::unique_ptr<DebugRenderer> g_DebugRenderer;
+std::unique_ptr<Renderer> g_Renderer;
+std::unique_ptr<FrameRateController> g_FrameRateController;
+std::unique_ptr<InputManager> g_InputManager;
+std::unique_ptr<GameObjectManager> g_GameObjManager;
+std::unique_ptr<GameObjectFactory> g_GameObjFactory;
+std::unique_ptr<EventManager> g_EventManager;
+std::unique_ptr<GameManager> g_GameManager;
+std::unique_ptr<AudioManager> g_AudioManager;
+
 int main(int argc, char* args[])
 {
 	int windowWidth, windowHeight;
@@ -43,50 +56,45 @@ int main(int argc, char* args[])
 	windowHeight = lua_state["configTrial"]["windowHeight"];
 	windowWidth = lua_state["configTrial"]["windowWidth"];
 
+		lua_getglobal(L, "windowHeight");
+		if (lua_isnumber(L, -1))
+		{
+			windowHeight = (float)lua_tonumber(L, -1);
+		}
+	}
 	//Init SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
 		std::cout << "SDL_Init failled, erorr" << std::endl;
 		return 1;
-	}
 
-	//Create SDL window
-	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo",
-		SDL_WINDOWPOS_UNDEFINED,
-		SDL_WINDOWPOS_UNDEFINED,
-		windowWidth,
-		windowHeight,
-		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-
-	if (pWindow == NULL)
-	{
-		std::cout << "Couldn't create window " << SDL_GetError();
+	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, g_WindowWidth, g_WindowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	
+	if (!pWindow)
 		return 1;
-	}
-	//load in and set icon
+
 	SDL_Surface* icon = ResourceManager::getInstance().GetResource("Resources\\images\\icon.bmp");
 	SDL_SetWindowIcon(pWindow, icon);
 
-	Graphics::getInstance().Initialize(GetActiveWindow(), windowWidth, windowHeight);
+	g_FrameRateController = std::make_unique<FrameRateController>();
+	g_InputManager = std::make_unique<InputManager>();
+	g_GameObjManager = std::make_unique<GameObjectManager>();
+	g_GameObjFactory = std::make_unique<GameObjectFactory>();
+	g_EventManager = std::make_unique<EventManager>();
+	g_GameManager = std::make_unique<GameManager>();
+	g_AudioManager = std::make_unique<AudioManager>();
 
-	g_debugRenderer = std::make_unique<DebugRenderer>(&Graphics::getInstance());
+	g_Renderer = std::make_unique<Renderer>();
+	g_Renderer->Initialize(GetActiveWindow(), g_WindowWidth, g_WindowHeight);
+	g_Renderer->InitImGui(pWindow);
 
-	////imgui setup
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
-	ImGui_ImplSDL2_InitForD3D(pWindow);
-	ImGui_ImplDX11_Init(Graphics::getInstance().GetDevice(), Graphics::getInstance().GetContext());
-
-	LuaManager* p_lua_manager = new LuaManager;
-	GameObjectManager* gom = &GameObjectManager::getInstance();
-	EventManager::getInstance().init(gom);
-	GameObjectFactory* gof = &GameObjectFactory::getInstance();
+	g_DebugRenderer = std::make_unique<DebugRenderer>(g_Renderer->GetDevice(), g_Renderer->GetContext());
 
 
-	FrameRateController::getInstance().Init(144);
-	AudioManager::getInstance().Init();
+	g_FrameRateController->Init(144);
+
+	g_AudioManager->Init();
+
 	bool masterLoop = true;
 	bool playGame = false;
 	bool doMenu = true;
@@ -95,28 +103,26 @@ int main(int argc, char* args[])
 	bool isRunning = true;
 	while (masterLoop)
 	{
+		std::fstream other("./Resources/json/survival.json");
+		//std::fstream other("./Resources/json/demo.json");
+		//std::fstream other("./Resources/json/concept_3_level.json");
 
-		std::fstream other("./Resources/json/demo.json");
 		json dataJson2;
 		other >> dataJson2;
 		other.close();
 
-		gom->Deserialize(gof, dataJson2);
+		g_GameObjManager->Deserialize(g_GameObjFactory.get(), dataJson2);
 
-		GameObject* playerObj = gom->FindObjectOfTag("player");
-		GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
+		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		g_GameManager->mainCamera = playerObj->getComponent<Camera>();
 
-		//gom->Start();
 		isRunning = true;
-		unsigned int lastTime = 0;
-		FrameRateController::getInstance().Init(144);
+		g_FrameRateController->Init(144);
+
 		while (isRunning)
 		{
-			FrameRateController::getInstance().Tick();
-
-				ImGui_ImplDX11_NewFrame();
-				ImGui_ImplSDL2_NewFrame();
-				ImGui::NewFrame();
+			g_FrameRateController->Tick();
+			g_Renderer->PrepareForRendering();
 
 			SDL_Event e;
 			while (SDL_PollEvent(&e) != 0)
@@ -128,54 +134,42 @@ int main(int argc, char* args[])
 					doMenu = false;
 					masterLoop = false;
 				}
-				if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
+				/*if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
 				{
-					windowWidth = e.window.data1;
-					windowHeight = e.window.data2;
-					SDL_SetWindowSize(pWindow, windowWidth, windowHeight);
-					Graphics::getInstance().OnResize(windowWidth, windowHeight);
-				}
+					g_WINDOW_WIDTH = e.window.data1;
+					g_WINDOW_HEIGHT = e.window.data2;
+					SDL_SetWindowSize(pWindow, g_WINDOW_WIDTH, g_WINDOW_HEIGHT);
+					g_Renderer->OnResize(g_WINDOW_WIDTH, g_WINDOW_HEIGHT);
+				}*/
 			}
-			p_lua_manager->Update();
-			AudioManager::getInstance().Update();
-			InputManager::getInstance().Update();
-			gom->Update();
-			EventManager::getInstance().ProcessCollision();
-			//gom->DoCollision(playerObj);//handle colision with respect to player, this will need to change
-			EventManager::getInstance().Update();
-
-			Graphics::getInstance().PrepareForRendering();
-
-			gom->Draw();
-
-	
-			g_debugRenderer->Draw(&Graphics::getInstance());
+			g_AudioManager->Update();
+			g_InputManager->Update();
+			g_GameObjManager->Update();
+			g_EventManager->ProcessCollision();
+			g_EventManager->Update();
 
 
-				bool open = true;
+			g_GameObjManager->Draw();
+			g_Renderer->Draw();
 
-				ImGui::SetNextWindowPos({ 0,0 });
-				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-				ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
-				ImGui::End();
-			if (GameManager::getInstance().playerDead)
+#ifdef _DEBUG
+			g_DebugRenderer->Draw(g_Renderer->GetContext(), g_Renderer->GetWidth(), g_Renderer->GetHeight());
+#endif
+			bool open = true;
+
+
+			if (g_GameManager->playerDead)
 			{
-				ImGui::SetNextWindowPos({ (float)((windowWidth/2)-50),(float)((windowHeight/2)+100)});
+				ImGui::SetNextWindowPos({ (float)((g_WindowWidth / 2) - 50),(float)((g_WindowHeight / 2) + 100) });
 				ImGui::Begin("mainMenu", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
-				if (ImGui::Button("Restart", { 100,50 }) || GameManager::getInstance().playerRestart)
+				if (ImGui::Button("Restart", { 100,50 }) || g_GameManager->playerRestart)
 				{
 					isRunning = false;
 					playGame = true;
 					doMenu = false;
 					masterLoop = true;
 				}
-				//if (ImGui::Button("Main Menu", { 100,50 }))
-				//{
-				//	isRunning = false;
-				//	playGame = false;
-				//	doMenu = true;
-				//	masterLoop = true;
-				//}
+
 				if (ImGui::Button("Quit", { 100,50 }))
 				{
 					isRunning = false;
@@ -187,30 +181,28 @@ int main(int argc, char* args[])
 				ImGui::End();
 			}
 
-			ImGui::Render();
-			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-			Graphics::getInstance().PresentFrame();
-
+			g_Renderer->PresentFrame();
 		}
 
-		gom->DeleteAll();
+		g_GameObjManager->DeleteAll();
 
-		EventManager::getInstance().Reset();
-		GameManager::getInstance().playerDead = false;
-		GameManager::getInstance().playerRestart = false;
-		GameManager::getInstance().playerScore = 0;
+		g_EventManager->Reset();
+		g_GameManager->playerDead = false;
+		g_GameManager->playerRestart = false;
+		g_GameManager->playerScore = 0;
 
 	}
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
 
-	g_debugRenderer.reset();
 
-	AudioManager::getInstance().Term();
+	g_DebugRenderer.reset();
+	g_FrameRateController.reset();
+	g_Renderer.reset();
+
+	g_AudioManager->Term();
+
 	SDL_DestroyWindow(pWindow);
 	
-	//lua_close(L); 
+	lua_close(L); 
 	SDL_Quit();
 
 	return 0;

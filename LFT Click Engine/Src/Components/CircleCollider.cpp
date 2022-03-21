@@ -13,9 +13,7 @@
 #include"Transform.h"
 #include "DebugRenderer.h"
 #include "GameManager.h"
-#include "Graphics.h"
-
-extern std::unique_ptr<DebugRenderer> g_debugRenderer;
+#include "Renderer.h"
 
 CircleCollider::CircleCollider()
 {
@@ -23,7 +21,9 @@ CircleCollider::CircleCollider()
 
 void CircleCollider::Start()
 {
-	Transform* trans = parent->getComponent<Transform>();
+	Transform* trans = componentOwner->getComponent<Transform>();
+	maxBounds = radius;
+	componentOwner->colliders.push_back(this);
 	//center.x *= trans->scale.x;
 	//center.y *= trans->scale.y;
 }
@@ -32,26 +32,23 @@ void CircleCollider::Update()
 {
 }
 
-int CircleCollider::getCompId()
-{
-	return ComponentType::CIRCLE_COLLIDER;
-}
-
 Component* CircleCollider::Clone(GameObject* newParent)
 {
 	CircleCollider* toReturn = new CircleCollider();
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	toReturn->center = center;
 	toReturn->radius = radius;
 	toReturn->isTrigger = isTrigger;
 	toReturn->isStatic = isStatic;
+	if (!isStatic)
+		newParent->hasNonStaticCollider = true;
 	toReturn->deleteOnCollison = deleteOnCollison;
 	return (Component*)toReturn;
 }
 
 void CircleCollider::CollisionCheck(GameObject* toCheck)
 {
-	if (toCheck != parent)
+	if (toCheck != componentOwner)
 	{
 		float toCheckRadius = 0;
 		if (toCheck->getRawComponentPointer(SQUARE_COLLLIDER))
@@ -75,42 +72,42 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 			if (circleDistance.x <= toCheck->getComponent<SquareCollider>()->width / 2
 				|| circleDistance.y <= toCheck->getComponent<SquareCollider>()->height / 2)
 			{
-				parent->HandleMessage(new DamageCollisionMessage(toCheck->tag, toCheck));
-				toCheck->HandleMessage(new DamageCollisionMessage(parent->tag, parent));
-				//EventManager::getInstance().BroadcastMessageToSubscribers(new DamageCollisionMessage(toCheck->tag));
-				//EventManager::getInstance().BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, toCheckPos));
+				parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck));
+				toCheck->HandleMessage(new TriggerCollisionMessage(parent->tag, parent));
+				//g_EventManager->BroadcastMessageToSubscribers(new TriggerCollisionMessage(toCheck->tag));
+				//g_EventManager->BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, toCheckPos));
 
 				if (deleteOnCollison) parent->isDeletable = true;
 			}*/
-
+			
 		}
 		else
 		{
 			toCheckRadius = toCheck->getComponent<CircleCollider>()->radius;
 		}
 
-		DirectX::SimpleMath::Vector2 myPos = parent->getComponent<Transform>()->CurrentPos();
+		DirectX::SimpleMath::Vector2 myPos = componentOwner->getComponent<Transform>()->CurrentPos();
 		DirectX::SimpleMath::Vector2 toCheckPos = toCheck->getComponent<Transform>()->CurrentPos();
 
 		float distance = DirectX::SimpleMath::Vector2::Distance(myPos, toCheckPos);
-		distance = distance - parent->getComponent<CircleCollider>()->radius - toCheckRadius;
+		distance = distance - componentOwner->getComponent<CircleCollider>()->radius - toCheckRadius;
 
 		if (distance <= 0)
 		{
-			parent->HandleMessage(new DamageCollisionMessage(toCheck->tag, toCheck));
-			toCheck->HandleMessage(new DamageCollisionMessage(parent->tag, parent));
-			//parent->HandleMessage(new DamageCollisionMessage(toCheck->tag, toCheck));
+			componentOwner->HandleMessage(new TriggerCollisionMessage(toCheck->getComponent<CircleCollider>()));
+			toCheck->HandleMessage(new TriggerCollisionMessage(componentOwner->getComponent<CircleCollider>()));
+			//parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck));
 			if (deleteOnCollison)
-				parent->isActive = false;
+				componentOwner->isActive = false;
 		}
 	}
 }
 
-void CircleCollider::Deserialize(nlohmann::json j, GameObject* parent)
+void CircleCollider::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	std::vector<float> centerHelper = j["center"].get<std::vector<float>>();
-	center = { centerHelper[0], centerHelper[1], centerHelper[2], 0 };
+	center = { centerHelper[0], centerHelper[1] };
 	radius = j["radius"];
 
 	isTrigger = false;
@@ -119,7 +116,11 @@ void CircleCollider::Deserialize(nlohmann::json j, GameObject* parent)
 
 	isStatic = false;
 	if (j.contains("static"))
+	{
 		isStatic = j["static"];
+		if(!isStatic)
+			componentOwner->hasNonStaticCollider = true;
+	}
 
 	deleteOnCollison = false;
 	if (j.contains("deleteOnCollision"))
@@ -128,10 +129,10 @@ void CircleCollider::Deserialize(nlohmann::json j, GameObject* parent)
 
 void CircleCollider::DebugDraw()
 {
-	Transform* t = parent->getComponent<Transform>();
+	Transform* t = componentOwner->getComponent<Transform>();
 	assert(t != nullptr);
-	DirectX::SimpleMath::Vector2 debugCirclePos = GameManager::getInstance().mainCamera->WorldToScreenPos(t->CurrentPos(),
-		Graphics::getInstance().GetWidth(), Graphics::getInstance().GetHeight());
+	DirectX::SimpleMath::Vector2 debugCirclePos = g_GameManager->mainCamera->WorldToScreenPos(t->CurrentPos(),
+		g_Renderer->GetWidth(), g_Renderer->GetHeight());
 
-	g_debugRenderer->DrawCircle(debugCirclePos, radius, 50.0f);
+	g_DebugRenderer->DrawCircle(debugCirclePos, radius, 50.0f);
 }

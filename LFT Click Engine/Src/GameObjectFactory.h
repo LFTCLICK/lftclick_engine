@@ -16,16 +16,13 @@ using json = nlohmann::json;
 class GameObjectFactory
 {
 public:
-	static GameObjectFactory& getInstance()
-	{
-		static GameObjectFactory instance;
-		return instance;
-	}
+	GameObjectFactory();
 	GameObject* const CreateObject(json type);
 	GameObject* const CloneObject(GameObject* toClone);
 
 private:
-	GameObjectFactory();
 	Component* const CreateComp(json::iterator type, GameObject* currentObj);
 	friend class GameObject;
 };
+
+extern std::unique_ptr<GameObjectFactory> g_GameObjFactory;

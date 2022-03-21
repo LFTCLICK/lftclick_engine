@@ -95,9 +95,6 @@
     <ClCompile Include="Src\EventManager.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Components\FollowMouse.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Src\FrameRateController.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
@@ -110,9 +107,6 @@
     <ClCompile Include="Src\GameObjectManager.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Components\Gun.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Src\InputManager.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
@@ -122,20 +116,13 @@
     <ClCompile Include="Src\ResourceManager.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Src\main.cpp" />
-    <ClCompile Include="Src\Graphics.cpp">
+    <ClCompile Include="Src\Renderer.cpp">
       <Filter>Engine\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Src\DebugRenderer.cpp">
       <Filter>Engine\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Damageable.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\CircleCollider.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\Collider.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Door.cpp">
@@ -149,9 +136,6 @@
     </ClCompile>
     <ClCompile Include="Src\Components\Enemy.cpp">
       <Filter>Engine\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="LuaManager.cpp">
-      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -224,9 +208,6 @@
     <ClInclude Include="Src\FMODResultStrings.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Components\FollowMouse.h">
-      <Filter>Engine\Core</Filter>
-    </ClInclude>
     <ClInclude Include="Src\FrameRateController.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
@@ -237,9 +218,6 @@
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\GameObjectManager.h">
-      <Filter>Engine\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Components\Gun.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Src\InputManager.h">
@@ -254,7 +232,7 @@
     <ClInclude Include="Src\ResourceManager.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Graphics.h">
+    <ClInclude Include="Src\Renderer.h">
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\ConstantBuffer.h">
@@ -263,8 +241,6 @@
     <ClInclude Include="Src\DebugRenderer.h">
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Components\Damageable.h" />
-    <ClInclude Include="Src\Components\CircleCollider.h" />
     <ClInclude Include="Src\Components\Door.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
@@ -277,7 +253,6 @@
     <ClInclude Include="Src\Components\Enemy.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="LuaManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
@@ -355,7 +330,6 @@
     <None Include="Resources\json\turret.json">
       <Filter>JSON</Filter>
     </None>
-    <None Include="Resources\LuaScripts\playerScript.lua" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">
@@ -364,5 +338,6 @@
     <FxCompile Include="Src\Shaders\VertexShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
   </ItemGroup>
 </Project>

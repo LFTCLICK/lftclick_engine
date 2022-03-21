@@ -5,19 +5,19 @@
 
 void EnemySpawner::Start()
 {
-	myPos = parent->getComponent<Transform>()->CurrentPos();
+	myPos = componentOwner->getComponent<Transform>()->CurrentPos();
 }
 
 void EnemySpawner::Update()
 {
-	timer += FrameRateController::getInstance().DeltaTime();
+	timer += g_FrameRateController->DeltaTime();
 	if (timer >= timeBetweenPhases)
 	{
 		timer = 0;
 		int toSpawn = slope * x + c;
 		for (int i = 0; i < toSpawn; i++)
 		{
-			GameObject* newObj = GameObjectManager::getInstance().ClonePrefabOfTag(&GameObjectFactory::getInstance(), "enemy");
+			GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
 			newObj->getComponent<Transform>()->SetPos(myPos.x+(rand()%(int)bounds.x)-(bounds.x/2), myPos.y+ (rand() % (int)bounds.y) - (bounds.y / 2));
 			DirectX::SimpleMath::Vector2 temp = myPos + targetPosOffset + DirectX::SimpleMath::Vector2(rand() % 80 - 40, 0);
 			newObj->getComponent<Enemy>()->targetBeforePlayer = temp;
@@ -26,9 +26,9 @@ void EnemySpawner::Update()
 	}
 }
 
-void EnemySpawner::Deserialize(nlohmann::json j, GameObject* parent)
+void EnemySpawner::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	slope = j["slope"];
 	c = j["c"];
 	timeBetweenPhases = j["timeBetweenPhases"];
@@ -36,6 +36,7 @@ void EnemySpawner::Deserialize(nlohmann::json j, GameObject* parent)
 	bounds = DirectX::SimpleMath::Vector2(spawnBoundsHelper[0], spawnBoundsHelper[1]);
 	std::vector<float> targetHelper = j["targetPosOffset"].get<std::vector<float>>();
 	targetPosOffset = DirectX::SimpleMath::Vector2(targetHelper[0], targetHelper[1]);
+	if (j.contains("objectSpawnName")) objectSpawnName = j["objectSpawnName"];
 }
 
 Component* EnemySpawner::Clone(GameObject* newParent)
@@ -45,7 +46,8 @@ Component* EnemySpawner::Clone(GameObject* newParent)
 	toReturn->c = c;
 	toReturn->timeBetweenPhases = timeBetweenPhases;
 	toReturn->targetPosOffset = targetPosOffset;
+	toReturn->objectSpawnName = objectSpawnName;
 	toReturn->bounds = bounds;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return toReturn;
 }

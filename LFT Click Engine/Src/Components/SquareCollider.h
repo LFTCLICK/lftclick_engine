@@ -22,19 +22,19 @@ public:
 	SquareCollider();
 	virtual void Start();
 	virtual void Update();
-	int getCompId();
-	DirectX::XMFLOAT4 center;
+	virtual int getCompId() override {return ComponentType::SQUARE_COLLLIDER;};
+	static int getStaticCompId() {return ComponentType::SQUARE_COLLLIDER;};
+	DirectX::SimpleMath::Vector2 center;
 	float width;
 	float height;
 
 	virtual Component* Clone(GameObject* newParent);
 	void CollisionCheck(GameObject* toCheck);
 	float* getPoints();
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	void DebugDraw() override;
 private:
-	GameObject* parent;
 	float* points;
 	bool deleteOnCollison;
 };

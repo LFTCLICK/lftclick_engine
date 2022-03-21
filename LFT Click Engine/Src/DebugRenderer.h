@@ -14,22 +14,25 @@
 #include <Effects.h>
 #include "CommonStates.h"
 
-class Graphics;
 
 class DebugRenderer
 {
 public:
-	DebugRenderer(Graphics* graphics);
+	DebugRenderer(ID3D11Device* device, ID3D11DeviceContext* context);
 	~DebugRenderer();
 
+	//Draw a Line from point 'a' to point 'b'
 	void DrawLine(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath::Vector2 b);
 
+	//Draws a Quad by drawing four lines -> a-b, b-c, c-d, and d-a
 	void DrawQuad(DirectX::SimpleMath::Vector2 a, DirectX::SimpleMath::Vector2 b,
 			      DirectX::SimpleMath::Vector2 c, DirectX::SimpleMath::Vector2 d);
 
+	//Approximates a circle using straight lines 'numlines'
 	void DrawCircle(DirectX::SimpleMath::Vector2 center, float radius, short numlines);
 	
-	void Draw(Graphics* graphics);
+	//Submits all the batched drawing from the above draw calls to the GPU 
+	void Draw(ID3D11DeviceContext* context, int screenwidth, int screenheight);
 
 private:
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> primitiveBatch;
@@ -41,3 +44,4 @@ private:
 
 };
 
+extern std::unique_ptr<DebugRenderer> g_DebugRenderer;

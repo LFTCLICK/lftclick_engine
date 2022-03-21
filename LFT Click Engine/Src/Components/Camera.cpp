@@ -9,7 +9,7 @@
 #include "pch.h"
 #include "Camera.h"
 #include "FrameRateController.h"
-#include "Graphics.h"
+#include "Renderer.h"
 #include "../GameManager.h"
 
 using json = nlohmann::json;
@@ -31,19 +31,19 @@ Component* Camera::Clone(GameObject* newParent)
 	toReturn->isAutopilot = isAutopilot;
 	toReturn->autopilotDirection = autopilotDirection;
 	toReturn->autopilotSpeed = autopilotSpeed;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return (Component*)toReturn;
 }
 
-void Camera::Deserialize(nlohmann::json j, GameObject* parent)
+void Camera::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
 	xPos = j["startX"];
 	yPos = j["startY"];
 	zPos = j["startZ"];
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	speed = startingSpeed;
 	if (j["isMainCamera"])
-		GameManager::getInstance().mainCamera = this;
+		g_GameManager->mainCamera = this;
 }
 
 void Camera::Start()
@@ -56,23 +56,23 @@ void Camera::Start()
 void Camera::Update()
 {
 	if (isAutopilot) {
-		float movement = autopilotSpeed * FrameRateController::getInstance().DeltaTime();
+		float movement = autopilotSpeed * g_FrameRateController->DeltaTime();
 
 		if (autopilotDirection == "right") xPos += movement;
 		else if (autopilotDirection == "left") xPos -= movement;
 		else if (autopilotDirection == "up") yPos += movement;
 		else if (autopilotDirection == "down") yPos -= movement;
 	}
-	else if (parent->getComponent<Transform>() != nullptr) {
-		auto pos = parent->getComponent<Transform>()->CurrentPos();
+	else if (componentOwner->getComponent<Transform>() != nullptr) {
+		auto pos = componentOwner->getComponent<Transform>()->CurrentPos();
 		xPos = pos.x;
 		yPos = pos.y;
 	}
 
 	/* Old Pengi Panic code I believe?
 
-	yPos += speed * FrameRateController::getInstance().DeltaTime();
-	speed += speedDelta * FrameRateController::getInstance().DeltaTime();
+	yPos += speed * g_FrameRateController->DeltaTime();
+	speed += speedDelta * g_FrameRateController->DeltaTime();
 	if (speed >= maxSpeed)
 		speed = maxSpeed;
 	*/
@@ -103,7 +103,7 @@ void Camera::Move(float x, float y, float z)
 
 void Camera::SetAutopilotVelocity(std::string direction, float speed) {
 
-	auto pos = parent->getComponent<Transform>()->CurrentPos();
+	auto pos = componentOwner->getComponent<Transform>()->CurrentPos();
 	xPos = pos.x, yPos = pos.y;
 	autopilotSpeed = speed;
 	autopilotDirection = direction;
@@ -148,11 +148,6 @@ DirectX::XMMATRIX Camera::GetProjectionMatrix()
 	DirectX::XMMATRIX translation;
 	GetViewMatrix(translation);
 
-	return translation * DirectX::XMMatrixOrthographicLH(Graphics::getInstance().GetWidth(), Graphics::getInstance().GetHeight(),
+	return translation * DirectX::XMMatrixOrthographicLH(g_Renderer->GetWidth(), g_Renderer->GetHeight(),
 		0.01f, 1000);
-}
-
-int Camera::getCompId()
-{
-	return CAMERA;
 }

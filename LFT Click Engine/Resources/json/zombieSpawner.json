@@ -1,0 +1,18 @@
+{
+  "1": {
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 144,
+    "scaleY": 20,
+    "rot": 0,
+    "zPos": 15
+  },
+  "101": {
+    "slope": 1,
+    "c": 1.0,
+    "timeBetweenPhases": 7.0,
+    "spawnBounds": [ 240.0, 320.0 ],
+    "targetPosOffset": [ 0.0, -350.0 ],
+    "objectSpawnName": "zombie"
+  }
+}

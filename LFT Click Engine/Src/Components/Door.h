@@ -26,7 +26,8 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::DOOR_OBJ; };
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	static int getStaticCompId() { return ComponentType::DOOR_OBJ; };
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual Component* Clone(GameObject* newParent);
 	void UpdateImage();
 	Door() {};
@@ -39,7 +40,6 @@ public:
 	float repairTime;
 
 private:
-	GameObject* parent;
 	Transform* trans;
 	SquareCollider* sqCollider;
 	Drawable* draw;

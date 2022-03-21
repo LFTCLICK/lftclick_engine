@@ -14,6 +14,8 @@
 #include "Drawable.h"
 #include "Camera.h"
 #include "Gun.h"
+#include "AudioManager.h"
+#include "FrameRateController.h"
 
 #include <sol/sol.hpp>
 #include <cassert>
@@ -27,6 +29,7 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::PLAYER; };
+	static int getStaticCompId() { return ComponentType::PLAYER; };
 
 	virtual Component* Clone(GameObject* newParent);
 	Player() : isDashing(false), dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), wood(0) {};
@@ -48,8 +51,9 @@ public:
 	sol::load_result player_script_update;
 
 private:
-	GameObject* parent;
 	Transform* trans;
+	Camera* cam;
+	Gun* gun;
 
 	DirectX::SimpleMath::Vector2 dashVelocity;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer;

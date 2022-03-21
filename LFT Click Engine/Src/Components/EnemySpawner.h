@@ -22,11 +22,12 @@ public:
 	// Inherited via Component
 	virtual void Start() override;
 	virtual void Update() override;
-	virtual int getCompId() override { return ComponentType::BULLET; };
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual int getCompId() override { return ComponentType::ENEMY_SPAWNER; };
+	static int getStaticCompId() { return ComponentType::ENEMY_SPAWNER; };
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	EnemySpawner() {};
+	EnemySpawner() : objectSpawnName("enemy") {};
 
 public:
 	DirectX::SimpleMath::Vector2 bounds;
@@ -34,6 +35,6 @@ public:
 	float slope, timeBetweenPhases, timer, c, x;
 
 private:
-	GameObject* parent;
 	DirectX::SimpleMath::Vector2 myPos;
+	std::string objectSpawnName;
 };

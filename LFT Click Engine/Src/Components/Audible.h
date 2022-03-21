@@ -14,14 +14,11 @@
 #include <json.hpp>
 #include "AudioManager.h"
 #include "EventManager.h"
+#include "FrameRateController.h"
 #include <string>
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
-#define ON_START 1000
-#define ON_MOVE 1001
-#define ON_HALT 1002
 
 struct SoundInfo {
 	std::string name;
@@ -36,17 +33,26 @@ struct SoundInfo {
 class Audible : public Component
 {
 public:
+	enum SoundEvent {
+		AUDIO_ON_START = 1000,
+		AUDIO_ON_MOVE,
+		AUDIO_ON_HALT,
+		AUDIO_ON_DAMAGE,
+		AUDIO_ON_DEATH
+	};
 	// Inherited via Component
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::AUDIBLE; };
+	static int getStaticCompId() { return ComponentType::AUDIBLE; };
 	virtual Component* Clone(GameObject* newParent);
 	virtual void HandleMessage(Message* e) override;
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
-	Audible() : parent(nullptr), am(&AudioManager::getInstance()), sounds({}), position({ 0.0f }), positionOffset({ 0.0f }) {}
+	Audible() : am(g_AudioManager.get()), sounds({}), frc(g_FrameRateController.get()) {}
 	~Audible();
 
+	void LoadSounds(std::vector<SoundInfo> newSounds);
 	void PlaySound(SoundInfo sound);
 	void Unpause();
 	void Pause();
@@ -63,14 +69,14 @@ public:
 	void Stop();
 	void StopSound(std::string soundName);
 
-
-	DirectX::SimpleMath::Vector2 positionOffset;
+	void PlaySoundsOnEvent(SoundEvent se);
+	void StopSoundsOnEvent(SoundEvent se);
+	void HandleSoundsOnEvent(SoundEvent se);
 
 protected:
-	GameObject* parent;
 	AudioManager* am;
-	DirectX::SimpleMath::Vector2 oldPosition, position;
-	bool wasMoving;
+	FrameRateController* frc;
+	Transform* trans;
 	std::string channelGroupName;
 
 	std::vector<SoundInfo> sounds;

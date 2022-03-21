@@ -2,11 +2,12 @@
 #include "pch.h"
 #include "Enemy.h"
 #include "FrameRateController.h"
+#include "EventManager.h"
 
 void Enemy::Start()
 {
-	trans = parent->getComponent<Transform>();
-	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	trans = componentOwner->getComponent<Transform>();
+	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	switchToPlayer = false;
 }
 
@@ -26,18 +27,18 @@ void Enemy::Update()
 	}
 	if (switchToPlayer)
 	{
-		targetVector += GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
+		targetVector += g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
 	}
-	targetVector = (speed * FrameRateController::getInstance().DeltaTime())/(DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector)) * targetVector;
+	targetVector = (speed * g_FrameRateController->DeltaTime())/(DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector)) * targetVector;
 	//if (hanginWithTheHomies)
 	//	targetVector *= .1f;
 	trans->Move(targetVector.x, targetVector.y);
 	hanginWithTheHomies = false;
 }
 
-void Enemy::Deserialize(nlohmann::json j, GameObject* parent)
+void Enemy::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	attackTimer = j["attackTimer"];
 	damage = j["damage"];
 	speed = j["speed"];
@@ -49,7 +50,7 @@ Component* Enemy::Clone(GameObject * newParent)
 	toReturn->attackTimer = attackTimer;
 	toReturn->damage = damage;
 	toReturn->speed = speed;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return toReturn;
 }
 
@@ -60,10 +61,6 @@ void Enemy::HandleMessage(Message* e)
 	if (e->id == Message::COLLISION)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
-		if (e->sourceObjectTag == "enemy")
-		{
-			cm->deltaPos *= .5f;
-		}
 		trans->Move(cm->deltaPos.x, cm->deltaPos.y);
 		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
 		{

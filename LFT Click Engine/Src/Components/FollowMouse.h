@@ -25,17 +25,17 @@ public:
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::FOLLOW_MOUSE; };
+	static int getStaticCompId() { return ComponentType::FOLLOW_MOUSE; };
 	virtual Component* Clone(GameObject* newParent);
 
-	FollowMouse() : gom(&GameObjectManager::getInstance()) {}
+	FollowMouse() : gom(g_GameObjManager.get()) {}
 
-	void Deserialize(nlohmann::json j, GameObject* parent);
+	void Deserialize(nlohmann::json j, GameObject* componentOwner);
 
 public:
 	~FollowMouse();
 
 private:
-	GameObject* parent;
 	GameObjectManager* gom;
 	Transform* trans;
 };

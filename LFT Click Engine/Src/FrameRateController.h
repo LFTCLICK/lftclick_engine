@@ -14,11 +14,7 @@
 class FrameRateController
 {
 public:
-	static FrameRateController& getInstance()
-	{
-		static FrameRateController instance;
-		return instance;
-	}
+	FrameRateController();
 	FrameRateController(FrameRateController const&) = delete;
 	void operator=(FrameRateController const&) = delete;
 	void Init(int desiredFPS);
@@ -31,8 +27,6 @@ public:
 
 	void RegGlobals(sol::state& state);
 private:
-	FrameRateController();
-	
 	__int64 m_CurrentTime;
 	__int64 m_PreviousTime;
 	__int64 countsPerFrame;
@@ -40,3 +34,5 @@ private:
 	double m_DeltaTime;
 	double m_SecondsPerCount;
 };
+
+extern std::unique_ptr<FrameRateController> g_FrameRateController;

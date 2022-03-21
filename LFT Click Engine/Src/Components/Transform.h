@@ -12,21 +12,17 @@
 #include "GameObject.h"
 #include <json.hpp>
 #include <DirectXMath.h>
-#include "EventManager.h"
 
 using json = nlohmann::json;
+
 class Transform : public Component {
 public:
 	Transform();
-	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
-	void Init(DirectX::SimpleMath::Vector2 const & v);
-	void Move(float deltaX, float deltaY);
-	void SetPos(float newX, float newY);
-	void SetPos(float newX, float newY, float newZ);
-	void Rotate(float angleDelta);
+	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual void Start();
 	virtual void Update();
-	virtual int getCompId();
+	virtual int getCompId() override {return Component::TRANSFORM;};
+	static int getStaticCompId() {return Component::TRANSFORM;};
 	virtual Component* Clone(GameObject* newParent);
 	void HandleMessage(Message* e);
 
@@ -36,16 +32,24 @@ public:
 	DirectX::XMFLOAT4X4 GetXMMatrix();
 	DirectX::XMVECTOR GetPosXMVector();
 	~Transform();
+
 public:
-	DirectX::SimpleMath::Vector2 scale;
-	bool isMoving;
-	DirectX::SimpleMath::Vector2 lastMovement;
-	DirectX::SimpleMath::Vector2 position;
+	void Init(DirectX::SimpleMath::Vector2 const& v);
+	void Move(float deltaX, float deltaY);
+	void SetPos(float newX, float newY);
+	void SetPos(const DirectX::SimpleMath::Vector2& position);
+
+	void SetPos(float newX, float newY, float newZ);
+	void Rotate(float angleDelta);
+	DirectX::SimpleMath::Vector2 CurrentPos();
+	
+	DirectX::XMMATRIX GetXMMatrix();
+
+	DirectX::SimpleMath::Vector2 position, oldPos, lastMovement, scale;
+	bool isMoving, wasMoving;
+
 private:
-	GameObject * parent;
-	DirectX::SimpleMath::Vector2 oldPos;
-	float rotation;
+	float rotation, zPos;
 	DirectX::XMFLOAT4X4 m;
 	DirectX::XMVECTOR v;
-	float zPos;
 };

@@ -12,41 +12,40 @@
 #include <string>
 #include "SimpleMath.h"
 
-class GameObject;
+class Collider;
 
 class Message
 {
 public:
-	enum MessageID{COLLISION, DAMAGE_COLLISION};
+	enum MessageID{COLLISION, TRIGGER_COLLISION};
 	MessageID id;
 	uint32_t tickTime;
-	std::string sourceObjectTag;
 	virtual ~Message() {};
-	GameObject* otherObject;
+	Collider* otherObject;
 };
 
 class CollisionMessage : public Message
 {
 public:
-	CollisionMessage(std::string sourceObjectTag, GameObject* other, DirectX::SimpleMath::Vector2 deltaPos = { 0,0 }, uint32_t runAtTick = 0) : deltaPos(deltaPos)
+	CollisionMessage() {};
+	CollisionMessage(Collider* other, DirectX::SimpleMath::Vector2 deltaPos = { 0,0 }, uint32_t runAtTick = 0) : deltaPos(deltaPos)
 	{
 		id = MessageID::COLLISION;
 		tickTime = runAtTick;
-		Message::sourceObjectTag = sourceObjectTag;
 		otherObject = other;
 
 	};
 	DirectX::SimpleMath::Vector2 deltaPos;
 };
 
-class DamageCollisionMessage : public Message
+class TriggerCollisionMessage : public Message
 {
 public:
-	DamageCollisionMessage(std::string sourceObjectTag, GameObject* other, uint32_t runAtTick = 0)
+	TriggerCollisionMessage() {};
+	TriggerCollisionMessage(Collider* other, uint32_t runAtTick = 0)
 	{
-		id = Message::MessageID::DAMAGE_COLLISION;
+		id = Message::MessageID::TRIGGER_COLLISION;
 		tickTime = runAtTick;
-		Message::sourceObjectTag = sourceObjectTag;
 		otherObject = other;
 	};
 

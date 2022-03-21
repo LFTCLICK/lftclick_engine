@@ -12,6 +12,9 @@
 #include "../Messages.h"
 #include <map>
 
+class Transform;
+class Collider;
+
 class GameObject
 {
 public:
@@ -32,21 +35,24 @@ public:
 	template <typename T>
 	T* getComponent()
 	{
-		T temp;
-		auto toFind = comps.find(temp.getCompId());
+		auto toFind = comps.find(T::getStaticCompId());
 		if (toFind == comps.end()) {
 			return nullptr;
 		}
-		return dynamic_cast<T*>(comps[temp.getCompId()]);
+		return (T*)(toFind->second);
 	}
 	Component* getRawComponentPointer(int id);
 	~GameObject();
 public:
 	std::string tag;
 	bool isActive;
+	bool hasNonStaticCollider;
 	bool isDeletable;
-private:
+	std::list<Collider*> colliders;
+	Transform* trans;
+	bool isOnScreen;
 	std::map<int, Component*> comps;
+private:
 	GameObject* Clone();//ONLY FACTORY SHOULD TOUCH THIS
 	friend class GameObjectFactory;
 };

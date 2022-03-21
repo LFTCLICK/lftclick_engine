@@ -5,16 +5,16 @@
 
 void Door::Start()
 {
-	trans = parent->getComponent<Transform>();
-	sqCollider = parent->getComponent<SquareCollider>();
-	draw = parent->getComponent<Drawable>();
-	p = GameObjectManager::getInstance().FindObjectOfTag("player")->getComponent<Player>();
+	trans = componentOwner->getComponent<Transform>();
+	sqCollider = componentOwner->getComponent<SquareCollider>();
+	draw = componentOwner->getComponent<Drawable>();
+	p = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
 	zeroIndexDoorPhases = doorPhases-1;
 	currentPhase = zeroIndexDoorPhases;
 	hp = maxHp;
 	hpPerPhase = maxHp / zeroIndexDoorPhases;
-	EventManager::getInstance().Subscribe(Message::DAMAGE_COLLISION, parent);
-	EventManager::getInstance().Subscribe(Message::COLLISION, parent);
+	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, componentOwner);
+	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	UpdateImage();
 }
 
@@ -23,12 +23,12 @@ void Door::Update()
 	if (playerInRange && currentPhase<zeroIndexDoorPhases)
 	{
 		//imgui stuff
-		if (InputManager::getInstance().isKeyPressed(SDL_SCANCODE_E) && p->wood> woodRequiredPerPhase)
+		if (g_InputManager->isKeyPressed(SDL_SCANCODE_E) && p->wood> woodRequiredPerPhase)
 		{
 			ImGui::Text("Repairing door...");
-			internalTimer += FrameRateController::getInstance().DeltaTime();
+			internalTimer += g_FrameRateController->DeltaTime();
 		}
-		else if (InputManager::getInstance().isKeyReleased(SDL_SCANCODE_E))
+		else if (g_InputManager->isKeyReleased(SDL_SCANCODE_E))
 		{
 			internalTimer = 0;
 		}
@@ -53,9 +53,9 @@ void Door::Update()
 	}
 }
 
-void Door::Deserialize(nlohmann::json j, GameObject* parent)
+void Door::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
-	this->parent = parent;
+	this->componentOwner = componentOwner;
 	doorPhases = j["doorPhases"];
 	maxHp = j["hp"];
 	woodRequiredPerPhase = j["woodRequiredPerPhase"];
@@ -69,7 +69,7 @@ Component* Door::Clone(GameObject* newParent)
 	toReturn->maxHp = maxHp;
 	toReturn->woodRequiredPerPhase = woodRequiredPerPhase;
 	toReturn->repairTime = repairTime;
-	toReturn->parent = newParent;
+	toReturn->componentOwner = newParent;
 	return toReturn;
 }
 
@@ -80,14 +80,14 @@ void Door::UpdateImage()
 
 void Door::HandleMessage(Message* e)
 {
-	if (e->sourceObjectTag == "player")
+	if (e->otherObject->componentOwner->tag == "player")
 	{
 		playerInRange = true;
 	}
-	else if (e->sourceObjectTag == "enemy" && hp>0)
+	else if (e->otherObject->componentOwner->tag == "enemy" && hp > 0)
 	{
-		Enemy* currentEnemy = e->otherObject->getComponent<Enemy>();
-		currentEnemy->timer+= FrameRateController::getInstance().DeltaTime();
+		Enemy* currentEnemy = e->otherObject->componentOwner->getComponent<Enemy>();
+		currentEnemy->timer+= g_FrameRateController->DeltaTime();
 		if (currentEnemy->timer > currentEnemy->attackTimer)
 		{
 			currentEnemy->timer = 0;
