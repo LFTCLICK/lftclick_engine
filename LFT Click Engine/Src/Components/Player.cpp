@@ -29,9 +29,12 @@ void Player::Update()
 	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 	ImGui::Text("Wood: %i", wood);
 	ImGui::Text("hp: %.0f", hp);
+	ImGui::Text("pos: %.0f, %.0f", trans->position.x, trans->position.y);
+	GridSpace gridPos = g_AStarTerrain->WorldToGridPos(trans->position);
+	ImGui::Text("pos: %i, %i", gridPos.col, gridPos.row);
 	ImGui::End();
 
-	drawable->HUD_DrawTextCenter("Player", Vector2(0, -squareCollider->height/2.0f - 15.0f), Color(0.0f, 0.0f, 1.0f));
+	drawable->HUD_DrawTextCenter("Player", Vector2(0, -squareCollider->height / 2.0f - 15.0f), Color(0.0f, 0.0f, 1.0f));
 
 	InputManager& im = *g_InputManager.get();
 	float deltaTime = g_FrameRateController->DeltaTime();

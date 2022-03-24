@@ -59,7 +59,7 @@ void GameObjectManager::Draw()
 #endif
 
 	for (GameObject* g : gameObjectList)
-{
+	{
 		if (g->isActive)
 		{
 #ifdef _DEBUG
@@ -67,7 +67,7 @@ void GameObjectManager::Draw()
 				continue;
 
 			CircleCollider* c = g->getComponent<CircleCollider>();
-			
+
 			if (c != nullptr)
 			{
 				c->DebugDraw();
@@ -89,7 +89,7 @@ void GameObjectManager::ProcessCollision()
 	TriggerCollisionMessage* toPassTrigger = new TriggerCollisionMessage();
 	CollisionMessage* toPassCollider = new CollisionMessage();
 	DirectX::SimpleMath::Vector2 cameraPos = DirectX::SimpleMath::Vector2(g_GameManager->mainCamera->getPos());
-	
+
 	DirectX::SimpleMath::Vector2 distanceFromCenter;
 	float maxDistance;
 	float maxScreenSize = g_Renderer->GetWidth() > g_Renderer->GetHeight() ? (float)g_Renderer->GetWidth() : (float)g_Renderer->GetHeight();
@@ -111,11 +111,11 @@ void GameObjectManager::ProcessCollision()
 			if (maxDistance - std::max((*mainListItt)->trans->scale.x, (*mainListItt)->trans->scale.y) < maxScreenSize)
 				(*mainListItt)->isOnScreen = true;
 		}
-	
+
 		Transform* mainTrans = (*mainListItt)->trans;
-		for (int mainColliderIndex=0; mainColliderIndex<NUMBER_OF_COLLIDERS; ++mainColliderIndex)
+		for (int mainColliderIndex = 0; mainColliderIndex < NUMBER_OF_COLLIDERS; ++mainColliderIndex)
 		{
-			Collider* s = (Collider* )(*mainListItt)->getRawComponentPointer(COLLIDER_IDS[mainColliderIndex]);
+			Collider* s = (Collider*)(*mainListItt)->getRawComponentPointer(COLLIDER_IDS[mainColliderIndex]);
 			if (s == nullptr)
 				continue;
 			for (auto innerLoop = std::next(mainListItt); innerLoop != gameObjectList.end(); ++innerLoop)
@@ -189,13 +189,13 @@ void GameObjectManager::DoCollision(GameObject* toCheckWith)
 			if (s != nullptr)
 				s->CollisionCheck(toCheckWith);
 			s = dynamic_cast<Collider*>(g->getComponent<CircleCollider>());
-			if (s != nullptr) 
+			if (s != nullptr)
 				s->CollisionCheck(toCheckWith);
 		}
 	}
 }
 
-void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPrefab)
+void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefab)
 {
 	this->gof = gof;
 
@@ -224,7 +224,7 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 		}
 	}
 
-	if (j.contains("Map")) 
+	if (j.contains("Map"))
 	{
 		json map = j["Map"];
 		int objectSize = map["objectSize"];
@@ -234,12 +234,18 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 
 		Gdiplus::Color currentColor;
 		int width = img.GetWidth(), height = img.GetHeight();
-		
+		g_AStarTerrain->width = width;
+		g_AStarTerrain->height = height;
+		g_AStarTerrain->nodeMap = new Node * [height];
+		g_AStarTerrain->tileSize = objectSize;
+		g_AStarTerrain->terrain = new int* [height];
 		for (int y = 0; y < height; y++) {
+			g_AStarTerrain->nodeMap[y] = new Node[width];
+			g_AStarTerrain->terrain[y] = new int[width];
 			for (int x = 0; x < width; x++) {
 				img.GetPixel(x, y, &currentColor);
 				if (currentColor.GetValue() != Gdiplus::Color::Black) {
-					
+
 					std::stringstream stream;
 					stream << std::hex << (int)currentColor.GetValue();
 					std::string colorHexString = stream.str().substr(2, 6);
@@ -248,6 +254,11 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString]);
 						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1;
 						obj->getComponent<Transform>()->SetPos(mapX, mapY);
+						if (!obj->getComponent<SquareCollider>() || obj->getComponent<SquareCollider>()->isTrigger)
+							g_AStarTerrain->terrain[y][x] = -1;
+						else
+							g_AStarTerrain->terrain[y][x] = 0;
+
 					}
 				}
 			}
@@ -258,9 +269,9 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 		g->Start();
 }
 
-void GameObjectManager::AddGameObject(GameObject * go)
+void GameObjectManager::AddGameObject(GameObject* go)
 {
-	if(go->hasNonStaticCollider)
+	if (go->hasNonStaticCollider)
 		gameObjectList.push_front(go);
 	else
 		gameObjectList.push_back(go);
@@ -277,7 +288,7 @@ void GameObjectManager::DeleteAll()
 	refGameObjListByPrefabAsKey.clear();
 }
 
-void GameObjectManager::DeleteObjectOfTag(std::string tag) 
+void GameObjectManager::DeleteObjectOfTag(std::string tag)
 {
 	auto i = gameObjectList.begin();
 	while (i != gameObjectList.end()) {
@@ -288,7 +299,7 @@ void GameObjectManager::DeleteObjectOfTag(std::string tag)
 	}
 }
 
-GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::string tag, bool skipStart)
+GameObject* GameObjectManager::ClonePrefabOfTag(GameObjectFactory* gof, std::string tag, bool skipStart)
 {
 	for (GameObject* g : prefabList)
 	{
@@ -296,7 +307,7 @@ GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::s
 		{
 			GameObject* go = gof->CloneObject(g);
 
-			if(!skipStart)
+			if (!skipStart)
 				go->Start();
 
 			refGameObjListByPrefabAsKey[tag].push_back(go);
@@ -308,7 +319,7 @@ GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::s
 	return nullptr;
 }
 
-GameObject * GameObjectManager::CloneObject(GameObject * go)
+GameObject* GameObjectManager::CloneObject(GameObject* go)
 {
 	GameObject* toReturn = gof->CloneObject(go);
 	toReturn->tag = go->tag;
@@ -318,7 +329,7 @@ GameObject * GameObjectManager::CloneObject(GameObject * go)
 
 }
 
-GameObject * GameObjectManager::FindObjectOfTag(std::string tag)
+GameObject* GameObjectManager::FindObjectOfTag(std::string tag)
 {
 	for (GameObject* g : gameObjectList)
 	{
@@ -330,7 +341,7 @@ GameObject * GameObjectManager::FindObjectOfTag(std::string tag)
 	return nullptr;
 }
 
-void GameObjectManager::BroadcastMessage(Message * m)
+void GameObjectManager::BroadcastMessage(Message* m)
 {
 	for (GameObject* g : gameObjectList)
 	{

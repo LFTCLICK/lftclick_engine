@@ -157,6 +157,9 @@
     <ClCompile Include="Src\Components\Gun.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Src\AStarTerrain.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
@@ -289,6 +292,9 @@
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\CollisionResolution.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AStarTerrain.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
   </ItemGroup>

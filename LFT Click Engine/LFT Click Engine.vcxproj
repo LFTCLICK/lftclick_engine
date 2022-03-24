@@ -217,6 +217,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Src\AStarTerrain.cpp" />
     <ClCompile Include="Src\AudioManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
@@ -359,6 +360,7 @@
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_textedit.h" />
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h" />
     <ClInclude Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="Src\AStarTerrain.h" />
     <ClInclude Include="Src\AudioManager.h" />
     <ClInclude Include="Src\CollisionResolution.h" />
     <ClInclude Include="Src\Components\Audible.h" />

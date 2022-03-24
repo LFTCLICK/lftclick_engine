@@ -16,6 +16,7 @@
 #include "Gun.h"
 #include "AudioManager.h"
 #include "FrameRateController.h"
+#include "AStarTerrain.h"
 
 class SquareCollider;
 
@@ -31,15 +32,15 @@ public:
 	static int getStaticCompId() { return ComponentType::PLAYER; };
 
 	virtual Component* Clone(GameObject* newParent);
-	Player() : 
-		isDashing(false), 
-		autopilot(false), 
-		playerSpeed(350.f), 
-		dashSpeedMultiplier(3.f), 
-		dashTime(0.2), 
-		maxHp(100.f), 
-		damageCooldownTimer(2.f), 
-		frc(g_FrameRateController.get()) 
+	Player() :
+		isDashing(false),
+		autopilot(false),
+		playerSpeed(350.f),
+		dashSpeedMultiplier(3.f),
+		dashTime(0.2),
+		maxHp(100.f),
+		damageCooldownTimer(2.f),
+		frc(g_FrameRateController.get())
 	{};
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 

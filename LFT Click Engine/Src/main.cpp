@@ -14,6 +14,7 @@
 #include "InputManager.h"
 #include "FrameRateController.h"
 #include "ResourceManager.h"
+#include "AStarTerrain.h"
 #include "GameObjectFactory.h"
 #include "GameObjectManager.h"
 #include "Renderer.h"
@@ -41,6 +42,7 @@ std::unique_ptr<GameObjectFactory> g_GameObjFactory;
 std::unique_ptr<EventManager> g_EventManager;
 std::unique_ptr<GameManager> g_GameManager;
 std::unique_ptr<AudioManager> g_AudioManager;
+std::unique_ptr<AStarTerrain> g_AStarTerrain;
 
 int main(int argc, char* args[])
 {
@@ -67,11 +69,11 @@ int main(int argc, char* args[])
 	}
 #endif
 
-	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK) < 0)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 		return 1;
 
 	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, g_WindowWidth, g_WindowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-	
+
 	if (!pWindow)
 		return 1;
 
@@ -85,6 +87,7 @@ int main(int argc, char* args[])
 	g_EventManager = std::make_unique<EventManager>();
 	g_GameManager = std::make_unique<GameManager>();
 	g_AudioManager = std::make_unique<AudioManager>();
+	g_AStarTerrain = std::make_unique<AStarTerrain>();
 
 	g_Renderer = std::make_unique<Renderer>();
 	g_Renderer->Initialize(GetActiveWindow(), g_WindowWidth, g_WindowHeight);
