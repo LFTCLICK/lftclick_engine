@@ -32,8 +32,8 @@ using json = nlohmann::json;
 
 using namespace DirectX;
 
-int g_WindowWidth = 800;
-int g_WindowHeight = 600;
+int g_WindowWidth;
+int g_WindowHeight;
 
 std::unique_ptr<DebugRenderer> g_DebugRenderer;
 std::unique_ptr<Renderer> g_Renderer;
@@ -56,8 +56,8 @@ int main(int argc, char* args[])
 	lua_state.open_libraries(sol::lib::base);
 	lua_state.script_file("Resources\\LuaScripts\\ConfigurationScript.lua");
 
-	windowHeight = lua_state["configTrial"]["windowHeight"];
-	windowWidth = lua_state["configTrial"]["windowWidth"];
+	g_WindowHeight = lua_state["configTrial"]["windowHeight"];
+	g_WindowWidth = lua_state["configTrial"]["windowWidth"];
 
 
 	//Init SDL
@@ -67,7 +67,6 @@ int main(int argc, char* args[])
 		return 1;
 
 	}
-#endif
 
 		SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, g_WindowWidth, g_WindowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
@@ -106,8 +105,8 @@ int main(int argc, char* args[])
 		bool isRunning = true;
 		while (masterLoop)
 		{
-			//std::fstream other("./Resources/json/survival.json");
-			std::fstream other("./Resources/json/demo.json");
+			std::fstream other("./Resources/json/survival.json");
+			//std::fstream other("./Resources/json/demo.json");
 			//std::fstream other("./Resources/json/concept_3_level.json");
 
 			json dataJson2;

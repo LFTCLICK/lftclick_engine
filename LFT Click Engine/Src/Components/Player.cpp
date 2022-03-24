@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "GameManager.h"
 #include "FrameRateController.h"
+#include "Collider.h"
+#include "SquareCollider.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -22,11 +24,15 @@ void Player::Start()
 
 	trans = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
-	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+
+	drawable = componentOwner->getComponent<Drawable>();
+	squareCollider = componentOwner->getComponent<SquareCollider>();
+
+	/*if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
 	wood = 0;
 	parts = 0;
 	hp = maxHp;
-	timer = damageCooldownTimer;
+	timer = damageCooldownTimer;*/
 }
 
 void Player::Update()
@@ -88,13 +94,6 @@ void Player::HandleMessage(Message* e)
 				damageCooldownTimer = 2;
 			}
 		}
-
-		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
-		{
-			isGrounded = true;
-		}*/
-		//std::cout << transform->GetPosXMVector().m128_f32[0] - lastGroundPos << std::endl;
-		//lastGroundPos = transform->GetPosXMVector().m128_f32[0];
 	}
 }
 
@@ -112,66 +111,3 @@ void Player::ChangePlayerState() {
 	hp -= 15;
 	if (hp <= 0) { g_GameManager->playerDead = true; }
 }
-
-
-
-
-
-//if (autopilot) Sidescroll(deltaTime);
-
-//void Player::Sidescroll(float deltaTime) 
-//{
-//	auto pos = trans->CurrentPos();
-//	Move((playerSpeed + (cam->xPos - pos.x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
-//}
-
-/*if (badTouch && timer <= 0)
-	{
-		hp -= 15;
-		timer = damageCooldownTimer;
-	}
-	else if (timer > 0)
-	{
-		timer -= g_FrameRateController->DeltaTime();
-	}*/
-	//badTouch = false;
-	/*if (hp <= 0)
-	{
-		GameManager::getInstance().playerDead = true;
-	}*/
-
-
-
-	//cam = parent->getComponent<Camera>();
-
-
-	// LUA input checking code
-	//sol::protected_function_result script2result = player_script_update();
-		//// optionally, check if it worked
-		//if (script2result.valid()) {
-		//	printf("if condition");
-		//}
-		//else {
-		//	printf("else condition");
-		//}
-
-
-	//if (j.contains("playerSpeed")) playerSpeed = j["playerSpeed"];
-	//if (j.contains("dashSpeedMultiplier")) dashSpeedMultiplier = j["dashSpeedMultiplier"];
-	//if (j.contains("dashTime")) dashTime = j["dashTime"];
-	//if (j.contains("autopilot")) autopilot = j["autopilot"];
-	//if (j.contains("maxHp")) maxHp = j["maxHp"];
-	//if (j.contains("damageCooldownTimer")) damageCooldownTimer = j["damageCooldownTimer"];
-
-	//toReturn->dashSpeedMultiplier = dashSpeedMultiplier;
-	//toReturn->dashTime = dashTime;
-	//toReturn->dashTimer = dashTimer;
-	//toReturn->dashVelocity = dashVelocity;
-	//toReturn->deadZone = deadZone;
-	//toReturn->playerSpeed = playerSpeed;
-	//toReturn->isDashing = isDashing;
-	//toReturn->autopilot = autopilot;
-	//toReturn->maxHp = maxHp;
-	//toReturn->damageCooldownTimer = damageCooldownTimer;
-
-	//if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);

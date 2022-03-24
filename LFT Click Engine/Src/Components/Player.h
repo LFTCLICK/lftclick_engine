@@ -24,6 +24,8 @@
 
 #include "AStarTerrain.h"
 
+class SquareCollider;
+
 using json = nlohmann::json;
 class Player : public Component
 {
@@ -58,6 +60,8 @@ private:
 	Transform* trans;
 	Camera* cam;
 	Gun* gun;
+	Drawable* drawable;
+	SquareCollider* squareCollider;
 
 	DirectX::SimpleMath::Vector2 dashVelocity;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer;
