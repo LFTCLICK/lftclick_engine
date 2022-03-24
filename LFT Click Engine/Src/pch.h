@@ -17,7 +17,6 @@
 #include <wrl/client.h>
 #include <DirectXColors.h>
 
-
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_dx11.h"
@@ -27,7 +26,7 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
-
+#ifdef _DEBUG
 // Integrating LUA
 extern "C"
 {
@@ -40,6 +39,10 @@ extern "C"
 // Linking lua library
 #ifdef _WIN64
 #pragma comment(lib, "liblua54.a")
+#endif
+
+// Error checking for LUA
+bool CheckLua(lua_State* L, int r);
 #endif
 
 namespace DX

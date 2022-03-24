@@ -9,6 +9,7 @@
 #include "pch.h"
 #include "InputManager.h"
 
+
 SDL_Joystick* gGameController = nullptr;
 
 InputManager::InputManager()

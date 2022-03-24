@@ -22,6 +22,8 @@
 #include <cassert>
 #include "AStarTerrain.h"
 
+#include "AStarTerrain.h"
+
 using json = nlohmann::json;
 class Player : public Component
 {
