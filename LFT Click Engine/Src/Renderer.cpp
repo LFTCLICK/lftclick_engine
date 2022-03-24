@@ -208,6 +208,7 @@ void Renderer::Draw()
 		if (drawable == nullptr)
 		{
 
+			skipped++;
 			continue;
 		}
 		if (!gameObject->isOnScreen)

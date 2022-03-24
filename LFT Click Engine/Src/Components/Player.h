@@ -52,7 +52,7 @@ public:
 	void Sidescroll(float deltaTime);
 	bool IsAutopilot() { return autopilot; }
 
-	int wood;
+	int wood, parts;
 	float hp;
 
 private:

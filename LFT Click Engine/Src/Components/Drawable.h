@@ -27,6 +27,7 @@ public:
 
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual Component* Clone(GameObject* newParent);
+	virtual void Update() override;
 
 	virtual int getCompId() override {return Component::DRAWABLE;};
 	static int getStaticCompId() {return Component::DRAWABLE;};
@@ -39,6 +40,8 @@ public:
 	float xFlip;
 	float alphaOverride;
 	int drawSize;
+	bool useTextures;
+	bool scaleAlphaWithLight;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSRV;
 private:

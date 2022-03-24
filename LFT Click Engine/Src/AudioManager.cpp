@@ -357,11 +357,11 @@ void AudioManager::StopGroup(std::string channelGroupName) {
 
 
 
-void AudioManager::LoadChannelGroup(std::string name) {
+void AudioManager::LoadChannelGroup(std::string name, FMOD_MODE mode) {
 	if (engine->channelGroups.find(name) == engine->channelGroups.end()) {
 		FMOD::ChannelGroup* channelGroup;
 		CheckResult(__func__, engine->system->createChannelGroup(name.c_str(), &channelGroup));
-		channelGroup->setMode(FMOD_3D);
+		channelGroup->setMode(mode);
 		engine->channelGroups[name] = channelGroup;
 	}
 }
