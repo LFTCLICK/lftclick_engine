@@ -22,6 +22,11 @@ void Player::Start()
 
 	trans = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
+	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	wood = 0;
+	parts = 0;
+	hp = maxHp;
+	timer = damageCooldownTimer;
 }
 
 void Player::Update()
@@ -34,9 +39,13 @@ void Player::Update()
 		ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize |
 		ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 	ImGui::Text("Wood: %i", wood);
-	ImGui::Text("hp: %i", hp);
+	ImGui::Text("Motorcycle Parts: %i/8", parts);
+	ImGui::Text("");
+	ImGui::Text("Day: %i", g_GameManager->day);
+	ImGui::Text("Time: %.2f", g_GameManager->time);
 	ImGui::End();
 
+	drawable->HUD_DrawTextCenter("Player", Vector2(0, -squareCollider->height / 2.0f - 15.0f), Color(0.0f, 0.0f, 1.0f));
 
 	if (isDashing) {
 		dashTimer += g_FrameRateController->DeltaTime();

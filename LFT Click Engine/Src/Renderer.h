@@ -11,6 +11,7 @@
 #include <SpriteFont.h>
 #include "ConstantBuffer.h"
 #include "CommonStates.h"
+#include "Components/Camera.h"
 
 class Renderer
 {

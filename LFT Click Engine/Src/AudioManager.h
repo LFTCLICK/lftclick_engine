@@ -88,7 +88,7 @@ public:
     // Functions for loading/unloading channel groups and adding to them.
     // Currently only one level of channel groups is planned for.
 
-    void LoadChannelGroup(std::string name);
+    void LoadChannelGroup(std::string name, FMOD_MODE mode = FMOD_3D);
     void UnloadChannelGroup(std::string name);
     void AddToChannelGroup(std::string channelGroupName, int channelID);
     void AddToChannelGroup(std::string channelGroupName, FMOD::Channel* channel);

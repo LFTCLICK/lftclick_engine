@@ -38,7 +38,10 @@ public:
 		AUDIO_ON_MOVE,
 		AUDIO_ON_HALT,
 		AUDIO_ON_DAMAGE,
-		AUDIO_ON_DEATH
+		AUDIO_ON_DEATH,
+		AUDIO_ON_INTERACTING,
+		AUDIO_ON_COLLECT,
+		AUDIO_ON_DELETE = 2000,
 	};
 	// Inherited via Component
 	virtual void Start() override;
@@ -49,7 +52,7 @@ public:
 	virtual void HandleMessage(Message* e) override;
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
-	Audible() : am(g_AudioManager.get()), sounds({}), frc(g_FrameRateController.get()) {}
+	Audible() : am(g_AudioManager.get()), sounds({}), frc(g_FrameRateController.get()), positionless(false) {}
 	~Audible();
 
 	void LoadSounds(std::vector<SoundInfo> newSounds);
@@ -81,4 +84,6 @@ protected:
 
 	std::vector<SoundInfo> sounds;
 	std::map<int, std::string> channels;
+
+	bool positionless;
 };

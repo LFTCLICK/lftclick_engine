@@ -38,6 +38,8 @@ public:
 		wasDamaged(false),
 		isDead(false),
 		wasDead(false),
+		isInRange(false),
+		wasInRange(false),
 		currentFrame(0),
 		currentAnimationIndex(0),
 		direction("right")
@@ -54,6 +56,8 @@ public:
 	void Damage(float time);
 	void Die(float time);
 	void Revive();
+	void InRange();
+	void OutOfRange();
 
 private:
 	Drawable* draw;
@@ -64,11 +68,11 @@ private:
 	std::map<int, AnimationInfo> animations;
 	std::map<std::string, int> moveAnimationIndices;
 	std::map<std::string, int> idleAnimationIndices;
-	int damageAnimationIndex, deathAnimationIndex;
+	int damageAnimationIndex, deathAnimationIndex, interactRangeAnimationIndex;
 
 	std::string oldDirection, direction;
 
 	float xOffset, yOffset, timer, damageTimer, damageTimeout, deathTimer, deathTimeout;
 	int spriteSheetWidth, spriteSheetHeight, currentFrame, currentAnimationIndex;
-	bool wasMoving, isDamaged, wasDamaged, isDead, wasDead;
+	bool wasMoving, isDamaged, wasDamaged, isDead, wasDead, isInRange, wasInRange;
 };

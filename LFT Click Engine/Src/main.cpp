@@ -14,6 +14,7 @@
 #include "InputManager.h"
 #include "FrameRateController.h"
 #include "ResourceManager.h"
+#include "AStarTerrain.h"
 #include "GameObjectFactory.h"
 #include "GameObjectManager.h"
 #include "Renderer.h"
@@ -44,6 +45,7 @@ std::unique_ptr<EventManager> g_EventManager;
 std::unique_ptr<GameManager> g_GameManager;
 std::unique_ptr<AudioManager> g_AudioManager;
 std::unique_ptr<LuaManager> g_LuaManager;
+std::unique_ptr<AStarTerrain> g_AStarTerrain;
 
 int main(int argc, char* args[])
 {
@@ -82,6 +84,7 @@ int main(int argc, char* args[])
 		g_EventManager = std::make_unique<EventManager>();
 		g_GameManager = std::make_unique<GameManager>();
 		g_AudioManager = std::make_unique<AudioManager>();
+		g_AStarTerrain = std::make_unique<AStarTerrain>();
 
 		g_Renderer = std::make_unique<Renderer>();
 		g_Renderer->Initialize(GetActiveWindow(), g_WindowWidth, g_WindowHeight);
@@ -112,8 +115,10 @@ int main(int argc, char* args[])
 
 			g_GameObjManager->Deserialize(g_GameObjFactory.get(), dataJson2);
 
-			GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
-			g_GameManager->mainCamera = playerObj->getComponent<Camera>();
+		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		g_GameManager->playerObj = playerObj;
+		g_GameManager->mainCamera = playerObj->getComponent<Camera>();
+		g_GameManager->playerTrans = playerObj->getComponent<Transform>();
 
 			isRunning = true;
 			g_FrameRateController->Init(144);
@@ -123,30 +128,31 @@ int main(int argc, char* args[])
 				g_FrameRateController->Tick();
 				g_Renderer->PrepareForRendering();
 
-				SDL_Event e;
-				while (SDL_PollEvent(&e) != 0)
+			SDL_Event e;
+			while (SDL_PollEvent(&e) != 0)
+			{
+				if (e.type == SDL_QUIT)
 				{
-					if (e.type == SDL_QUIT)
-					{
-						isRunning = false;
-						playGame = false;
-						doMenu = false;
-						masterLoop = false;
-					}
-					/*if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
-					{
-						g_WINDOW_WIDTH = e.window.data1;
-						g_WINDOW_HEIGHT = e.window.data2;
-						SDL_SetWindowSize(pWindow, g_WINDOW_WIDTH, g_WINDOW_HEIGHT);
-						g_Renderer->OnResize(g_WINDOW_WIDTH, g_WINDOW_HEIGHT);
-					}*/
+					isRunning = false;
+					playGame = false;
+					doMenu = false;
+					masterLoop = false;
 				}
-				g_AudioManager->Update();
-				g_InputManager->Update();
-				g_GameObjManager->Update();
-				g_EventManager->ProcessCollision();
-				g_EventManager->Update();
-				g_LuaManager->Update();
+				/*if (e.type == SDL_WINDOWEVENT && e.window.event == SDL_WINDOWEVENT_RESIZED)
+				{
+					g_WINDOW_WIDTH = e.window.data1;
+					g_WINDOW_HEIGHT = e.window.data2;
+					SDL_SetWindowSize(pWindow, g_WINDOW_WIDTH, g_WINDOW_HEIGHT);
+					g_Renderer->OnResize(g_WINDOW_WIDTH, g_WINDOW_HEIGHT);
+				}*/
+			}
+			g_AudioManager->Update();
+			g_GameManager->UpdateTime();
+			g_InputManager->Update();
+			g_GameObjManager->Update();
+			g_EventManager->ProcessCollision();
+			g_EventManager->Update();
+			g_LuaManager->Update();
 
 
 				g_GameObjManager->Draw();

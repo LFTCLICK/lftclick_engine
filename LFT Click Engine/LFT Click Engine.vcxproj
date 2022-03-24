@@ -219,6 +219,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="LuaManager.cpp" />
+    <ClCompile Include="Src\AStarTerrain.cpp" />
+    <ClCompile Include="Src\Components\Interactable.cpp" />
     <ClCompile Include="Src\AudioManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
@@ -362,6 +364,8 @@
     <ClInclude Include="..\Libraries\imgui-1.82\imstb_truetype.h" />
     <ClInclude Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="LuaManager.h" />
+    <ClInclude Include="Src\AStarTerrain.h" />
+    <ClInclude Include="Src\Components\Interactable.h" />
     <ClInclude Include="Src\AudioManager.h" />
     <ClInclude Include="Src\CollisionResolution.h" />
     <ClInclude Include="Src\Components\Audible.h" />
@@ -403,6 +407,8 @@
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\json\floor.json" />
+    <None Include="Resources\json\grass.json" />
     <None Include="packages.config" />
     <None Include="Resources\json\5thSprite.json" />
     <None Include="Resources\json\6thSprite.json" />
@@ -420,15 +426,17 @@
     <None Include="Resources\json\controls.json" />
     <None Include="Resources\json\credits.json" />
     <None Include="Resources\json\crosshairs.json" />
+    <None Include="Resources\json\darkness.json" />
     <None Include="Resources\json\demo.json" />
     <None Include="Resources\json\doorwayObj.json" />
     <None Include="Resources\json\doorwayObj_back.json" />
     <None Include="Resources\json\enemy.json" />
     <None Include="Resources\json\enemySpawner.json" />
     <None Include="Resources\json\enemy_bullet.json" />
-    <None Include="Resources\json\floor.json" />
-    <None Include="Resources\json\grass.json" />
+    <None Include="Resources\json\floorTile.json" />
+    <None Include="Resources\json\grassTile.json" />
     <None Include="Resources\json\invin.json" />
+    <None Include="Resources\json\junk.json" />
     <None Include="Resources\json\menu.json" />
     <None Include="Resources\json\player.json" />
     <None Include="Resources\json\prefabs.json" />

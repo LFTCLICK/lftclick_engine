@@ -20,6 +20,7 @@
 #include "Components/Collider.h"
 #include <sol/sol.hpp>
 #include <cassert>
+#include "AStarTerrain.h"
 
 using json = nlohmann::json;
 class Player : public Component
@@ -44,7 +45,7 @@ public:
 	//void Sidescroll(float deltaTime);
 	void ChangePlayerState();
 
-	int wood, hp;
+	int wood, hp, parts;
 
 	//initializing LUA state
 	std::string script;
