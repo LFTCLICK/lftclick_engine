@@ -28,6 +28,7 @@
 #include "Components/EnemySpawner.h"
 #include "Components/WoodPile.h"
 #include "Components/LevelGenerator.h"
+#include "Components/Interactable.h"
 
 #include <json.hpp>
 #include <string>
@@ -105,6 +106,8 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new WoodPile();
 	else if (compID == Component::LEVEL_GENERATOR)
 		currentComp = new LevelGenerator();
+	else if (compID == Component::INTERACTABLE)
+		currentComp = new Interactable();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

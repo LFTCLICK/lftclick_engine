@@ -36,12 +36,15 @@ void SpriteAnimator::UpdateDirection()
 }
 void SpriteAnimator::UpdateState()
 {
-	if (trans->isMoving != wasMoving || direction != oldDirection || isDamaged != wasDamaged || isDead != wasDead) {
+	if (trans->isMoving != wasMoving || direction != oldDirection || isDamaged != wasDamaged || isDead != wasDead || isInRange != wasInRange) {
 		if (isDead) {
 			SwitchAnimation(deathAnimationIndex);
 		}
 		else if (isDamaged) {
 			SwitchAnimation(damageAnimationIndex);
+		}
+		else if (isInRange) {
+			SwitchAnimation(interactRangeAnimationIndex);
 		}
 		else {
 			if (moveAnimationIndices["right"] > -1 && trans->isMoving)
@@ -52,6 +55,7 @@ void SpriteAnimator::UpdateState()
 		wasMoving = trans->isMoving;
 		wasDamaged = isDamaged;
 		wasDead = isDead;
+		wasInRange = isInRange;
 	}
 }
 void SpriteAnimator::UpdateFrame()
@@ -105,6 +109,7 @@ Component* SpriteAnimator::Clone(GameObject* newParent)
 	toReturn->moveAnimationIndices = moveAnimationIndices;
 	toReturn->damageAnimationIndex = damageAnimationIndex;
 	toReturn->deathAnimationIndex = deathAnimationIndex;
+	toReturn->interactRangeAnimationIndex = interactRangeAnimationIndex;
 	toReturn->xOffset = xOffset;
 	toReturn->yOffset = yOffset;
 	toReturn->timer = timer;
@@ -158,6 +163,9 @@ void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* componentOwner)
 				damageAnimationIndex = index;
 			else if (animation.contains("onDeath") && animation["onDeath"])
 				deathAnimationIndex = index;
+			else if (animation.contains("onInteractRange") && animation["onInteractRange"]) {
+				interactRangeAnimationIndex = index;
+			}
 		}
 
 		if (idleAnimationIndices["right"] > -1) currentAnimationIndex = idleAnimationIndices["right"];
@@ -187,13 +195,20 @@ void SpriteAnimator::Damage(float time) {
 }
 
 void SpriteAnimator::Die(float time) {
-	std::cout << "DEAD" << std::endl;
 	if (deathAnimationIndex > -1) {
 		isFinishedDeleting = false;
 		isDead = true;
 		deathTimeout = time;
 		deathTimer = 0;
 	}
+}
+
+void SpriteAnimator::InRange() {
+	isInRange = true;
+}
+
+void SpriteAnimator::OutOfRange() {
+	isInRange = false;
 }
 
 void SpriteAnimator::Revive() {

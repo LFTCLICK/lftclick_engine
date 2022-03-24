@@ -9,15 +9,19 @@
 #include "pch.h"
 #include "GameManager.h"
 
-//probably should be removed 
-GameManager::GameManager()
+void GameManager::UpdateTime()
 {
-	playerDead = false;
-	debugMode = false;
-	playerScore = 0;
-	playerRestart = false;
+	time += g_FrameRateController->DeltaTime();
+	if (time > DAY_LENGTH) {
+		time -= DAY_LENGTH;
+		day++;
+	}
 }
 
-GameManager::~GameManager()
+float GameManager::GetDarknessLevel()
 {
+	if (time < SUN_SETTING) return 0;
+	if (time < SUN_DOWN) return 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+	if (time < SUN_RISING) return 1;
+	return (DAY_LENGTH - time) / (DAY_LENGTH - SUN_RISING);
 }

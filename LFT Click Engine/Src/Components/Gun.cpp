@@ -15,29 +15,31 @@ using json = nlohmann::json;
 void Gun::Start()
 {
 	trans = componentOwner->getComponent<Transform>();
-	timer = 0;
+	fireRateTimer = 0;
 }
 
 void Gun::Update()
 {
-	timer += g_FrameRateController->DeltaTime();
+	fireRateTimer += g_FrameRateController->DeltaTime();
 }
 
 Component* Gun::Clone(GameObject* newParent)
 {
 	Gun* toReturn = new Gun();
 	toReturn->componentOwner = newParent;
-	toReturn->timer = 0;
+	toReturn->fireRateTimer = 0;
 	toReturn->bulletTypes = bulletTypes;
 	return toReturn;
 }
 
-void Gun::Fire(int bulletIndex, float targetX, float targetY)
+bool Gun::ReadyToFire()
 {
-	if (trans == nullptr)
-		return;
+	return fireRateTimer > bulletTypes[currentBulletIndex].second;
+}
 
-	GameObject* bullet = gom->ClonePrefabOfTag(gof, bulletTypes[bulletIndex].first);
+void Gun::Fire(float targetX, float targetY)
+{
+	GameObject* bullet = gom->ClonePrefabOfTag(gof, bulletTypes[currentBulletIndex].first);
 	Transform* bulletTransform = bullet->getComponent<Transform>();
 	Bullet* bulletComp = bullet->getComponent<Bullet>();
 	DirectX::SimpleMath::Vector2 parentPos = trans->CurrentPos();
@@ -46,26 +48,20 @@ void Gun::Fire(int bulletIndex, float targetX, float targetY)
 	bulletComp->direction = target - parentPos;
 	bulletComp->direction.Normalize();
 	bulletTransform->SetPos(parentPos.x + bulletComp->direction.x * 70, parentPos.y + bulletComp->direction.y * 70);
-}
 
-Gun::Gun()
-{
-	gom = g_GameObjManager.get();
-	gof = g_GameObjFactory.get();
+	fireRateTimer = 0;
 }
 
 void Gun::Deserialize(json j, GameObject* componentOwner)
 {
 	this->componentOwner = componentOwner;
-	timer = 0;
-	nextBulletID = 0;
 
 	int i = 0;
 	for (auto bulletData : j["bulletTypes"]) {
-		bulletTypes[i] = std::make_pair(bulletData["prefabTag"], bulletData["fireRate"]);
+		bulletTypes[i] = std::make_pair(bulletData["prefabTag"], 1.f / bulletData["fireRate"]);
 	}
 }
 
-Gun::~Gun() 
-{
+void Gun::SwitchBulletIndex(int bulletIndex) {
+	currentBulletIndex = bulletIndex;
 }

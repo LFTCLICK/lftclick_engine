@@ -22,21 +22,53 @@ void Player::Start()
 
 	trans = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
+	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	wood = 0;
+	parts = 0;
+	hp = maxHp;
+	timer = damageCooldownTimer;
 }
 
 void Player::Update()
 {
-	player_script_update();
-
-	ImGui::SetNextWindowPos({ 0,0 });
-	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove |
-		ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar |
-		ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize |
-		ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+	ImGui::SetNextWindowPos({ 0,15 });
+	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+	ImGui::Text("HP: %.0f", hp);
+	ImGui::Text("");
 	ImGui::Text("Wood: %i", wood);
-	ImGui::Text("hp: %i", hp);
+	ImGui::Text("Motorcycle Parts: %i/8", parts);
+	ImGui::Text("");
+	ImGui::Text("Day: %i", g_GameManager->day);
+	ImGui::Text("Time: %.2f", g_GameManager->time);
 	ImGui::End();
 
+	drawable->HUD_DrawTextCenter("Player", Vector2(0, -squareCollider->height / 2.0f - 15.0f), Color(0.0f, 0.0f, 1.0f));
+
+	InputManager& im = *g_InputManager.get();
+	float deltaTime = g_FrameRateController->DeltaTime();
+
+	if (im.isKeyPressed(SDL_SCANCODE_W)) Move(0, playerSpeed * deltaTime);
+	if (im.isKeyPressed(SDL_SCANCODE_S)) Move(0, -playerSpeed * deltaTime);
+	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_D)) Move(playerSpeed * deltaTime, 0);
+	if (!autopilot && im.isKeyPressed(SDL_SCANCODE_A)) Move(-playerSpeed * deltaTime, 0);
+
+	if (im.isKeyPressed(SDL_SCANCODE_UP)) cam->Move(0.0f, playerSpeed * deltaTime);
+	if (im.isKeyPressed(SDL_SCANCODE_DOWN)) cam->Move(0.0f, -playerSpeed * deltaTime);
+	if (im.isKeyPressed(SDL_SCANCODE_RIGHT)) cam->Move(playerSpeed * deltaTime, 0.0f);
+	if (im.isKeyPressed(SDL_SCANCODE_LEFT)) cam->Move(-playerSpeed * deltaTime, 0.0f);
+
+	if (im.isKeyTriggered(SDL_SCANCODE_SPACE)) Dash();
+
+	if (im.isMouseButtonTriggered(0)) {
+		float targetX = (float)(im.mouseX() - 400) + g_GameManager->mainCamera->xPos;
+		float targetY = -1 * (float)(im.mouseY() - 400) + g_GameManager->mainCamera->yPos;
+		gun->Fire(0, targetX, targetY);
+	}
+
+	if (im.isJoyStickMovedUp(SDL_CONTROLLER_AXIS_LEFTY)) Move(0, playerSpeed * deltaTime);
+	if (im.isJoyStickMovedDown(SDL_CONTROLLER_AXIS_LEFTY)) Move(0, -playerSpeed * deltaTime);
+	if (!autopilot && im.isJoyStickMovedRight(SDL_CONTROLLER_AXIS_LEFTX)) Move(playerSpeed * deltaTime, 0);
+	if (!autopilot && im.isJoyStickMovedLeft(SDL_CONTROLLER_AXIS_LEFTX)) Move(-playerSpeed * deltaTime, 0);
 
 	if (isDashing) {
 		dashTimer += g_FrameRateController->DeltaTime();

@@ -158,6 +158,12 @@
     <ClCompile Include="Src\Components\Gun.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Components\Interactable.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\AStarTerrain.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
@@ -283,6 +289,18 @@
     <ClInclude Include="Src\Components\Gun.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Components\Interactable.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Helpers.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionResolution.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\AStarTerrain.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">
@@ -327,7 +345,7 @@
     <None Include="Resources\json\demo.json">
       <Filter>JSON</Filter>
     </None>
-    <None Include="Resources\json\floor.json">
+    <None Include="Resources\json\floorTile.json">
       <Filter>JSON</Filter>
     </None>
     <None Include="Resources\json\invin.json">
@@ -378,6 +396,65 @@
     <None Include="Resources\json\zombie.json" />
     <None Include="Resources\json\zombieSpawner.json" />
     <None Include="Resources\LuaScripts\playerScript.lua" />
+    <None Include="Resources\json\grassTile.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\survival.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\zombie.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\zombieSpawner.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\6thSprite.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\bullet_fast.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_enemy.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_level.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_level_generator.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_player.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\doorwayObj.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\doorwayObj_back.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\enemy.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\enemy_bullet.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\enemySpawner.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\wall.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\woodpile.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\darkness.json" />
+    <None Include="Resources\json\floor.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\grass.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\junk.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

@@ -10,13 +10,14 @@
 #include "pch.h"
 #include "Transform.h"
 
-Transform::Transform() : isMoving(false), wasMoving(false)
+Transform::Transform() : isMoving(false), wasMoving(false), matchPlayerPos(false)
 {
 }
 
 void Transform::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
 	this->componentOwner = componentOwner;
+
 	position = DirectX::SimpleMath::Vector2(0.0f, 0.0f);
 	position.x = j["startX"];
 	position.y = j["startY"];
@@ -24,6 +25,10 @@ void Transform::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	scale.y = j["scaleY"];
 	rotation = j["rot"];
 	zPos = j["zPos"];
+
+	if (j.contains("matchPlayerPos")) 
+		matchPlayerPos = j["matchPlayerPos"];
+
 	componentOwner->trans = this;
 }
 
@@ -41,6 +46,7 @@ Component * Transform::Clone(GameObject* newParent)
 	toReturn->zPos = zPos;
 	toReturn->isMoving = isMoving;
 	toReturn->wasMoving = wasMoving;
+	toReturn->matchPlayerPos = matchPlayerPos;
 	newParent->trans = toReturn;
 	return (Component*)toReturn;
 }
@@ -96,6 +102,8 @@ void Transform::Update()
 		lastMovement.x = lastMovement.y = 0;
 		isMoving = false;
 	}
+
+	if (matchPlayerPos) SetPos(g_GameManager->playerTrans->CurrentPos());
 }
 
 void Transform::HandleMessage(Message* e)

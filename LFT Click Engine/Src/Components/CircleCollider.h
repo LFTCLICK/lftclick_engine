@@ -1,6 +1,7 @@
 #pragma once
 #include "Collider.h"
 #include "GameObject.h"
+#include "Camera.h"
 #include <json.hpp>
 #include <DirectXMath.h>
 #include <vector>

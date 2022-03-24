@@ -36,6 +36,14 @@ Drawable::Drawable()
 {
 	xFlip = 1;
 	xOffset = yOffset = 0;
+	scaleAlphaWithLight = false;
+}
+
+void Drawable::Update() {
+	if (scaleAlphaWithLight) { 
+		alphaOverride = g_GameManager->GetDarknessLevel();
+		//std::cout << alphaOverride << std::endl;
+	}
 }
 
 void Drawable::Deserialize(nlohmann::json j, GameObject* componentOwner)
@@ -48,6 +56,8 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	alphaOverride = 1;
 	xOffset = yOffset = 0;
 	xFlip = 1;
+	if (j.contains("scaleAlphaWithLight")) scaleAlphaWithLight = j["scaleAlphaWithLight"];
+
 	this->componentOwner = componentOwner;
 
 	std::wstring sprite = utf8_decode(j["image"]);
@@ -71,6 +81,9 @@ Component* Drawable::Clone(GameObject* newParent)
 	toReturn->componentOwner = newParent;
 	toReturn->transformComp = newParent->getComponent<Transform>();
 	toReturn->alphaOverride = alphaOverride;
+	toReturn->scaleAlphaWithLight = scaleAlphaWithLight;
+
+	//const PS_cbPerObject cbValues_PS = {scaleAlphaWithLight ? g_GameManager->GetDarknessLevel() : alphaOverride};
 
 	textureSRV.CopyTo(toReturn->textureSRV.GetAddressOf());
 
@@ -81,7 +94,8 @@ void Drawable::HUD_DrawTextCenter(std::string text, SimpleMath::Vector2 offset, 
 {
 	SimpleMath::Vector2 pos = g_GameManager->mainCamera->WorldToScreenPos(
 		transformComp->CurrentPos(),
-		g_Renderer->GetWidth(), g_Renderer->GetHeight());
+		g_Renderer->GetWidth(), g_Renderer->GetHeight()
+	);
 
 	
 	pos.x -= XMVectorGetX(g_Renderer->GetSpriteFont()->MeasureString(text.c_str(), false)) / 2.0f;

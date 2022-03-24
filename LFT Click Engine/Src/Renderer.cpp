@@ -177,6 +177,8 @@ void Renderer::PrepareForRendering()
 
 void Renderer::Draw()
 {
+	int called = 0;
+	int skipped = 0;
 	UINT stride = sizeof(VertexType);
 	UINT offset = 0;
 
@@ -203,8 +205,17 @@ void Renderer::Draw()
 		GameObject* gameObject = *gameObjectIt;
 		Drawable* drawable = gameObject->getComponent<Drawable>();
 	
-		if (drawable == nullptr || !gameObject->isOnScreen)
+		if (drawable == nullptr)
+		{
+
+			skipped++;
 			continue;
+		}
+		if (!gameObject->isOnScreen)
+		{
+			skipped++;
+			continue;
+		}
 	
 		//Transform* drawableTransform = gameObject->getComponent<Transform>();
 	
@@ -230,7 +241,9 @@ void Renderer::Draw()
 		immediateContext->PSSetShaderResources(0, 1, drawable->textureSRV.GetAddressOf());
 	
 		immediateContext->DrawIndexed(6, 0, 0);
+		called++;
 	}
+	int a = 0;
 	//for (auto gameObject : g_GameObjManager->gameObjectList)
 	//{
 	//	Drawable* drawable = gameObject->getComponent<Drawable>();
