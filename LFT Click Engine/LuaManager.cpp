@@ -49,40 +49,6 @@ void LuaManager::RegObjectFunctions(sol::state& state, GameObject* obj)
 	}
 }
 
-//void LuaManager::RegEvents(sol::state& state, TimedEvent* p_event) {
-//	if (p_event == nullptr) {
-//		state["received_event"] = false;
-//	}
-//	else {
-//		state["received_event"] = true;
-//		state["hit_event"] = false;
-//		state["impact_event"] = false;
-//		switch (p_event->event_id) {
-//		case EventID::hit:
-//			state["hit_event"] = true;
-//			state["hit_direction"] = static_cast<HitEvent*>(p_event)->direction;
-//			break;
-//		case EventID::impact:
-//			state["impact_event"] = true;
-//			break;
-//		}
-//	}
-//}
-
-//// reads and loads scripts for all gameobjects with the behavior component
-//void LuaManager::LoadBehaviorScripts() {
-//	for (auto& obj : p_game_obj_manager->game_object_list)
-//	{
-//		Component* bhv_comp = obj->HasComponent("BEHAVIOR");
-//
-//		if (bhv_comp != nullptr)
-//		{
-//			Behavior* move = dynamic_cast<Behavior*>(bhv_comp);
-//			move->LoadScript();
-//		}
-//	}
-//}
-
 // update
 void LuaManager::Update() 
 {
