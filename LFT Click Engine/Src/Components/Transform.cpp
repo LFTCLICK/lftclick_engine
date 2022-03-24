@@ -110,6 +110,16 @@ void Transform::HandleMessage(Message* e)
 {
 }
 
+float Transform::GetlastMovementX()
+{
+	return lastMovement.x;
+}
+
+float Transform::GetlastMovementY()
+{
+	return lastMovement.y;
+}
+
 DirectX::SimpleMath::Vector2 Transform::CurrentPos()
 {
 	return position;

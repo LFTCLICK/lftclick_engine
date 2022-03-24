@@ -137,22 +137,20 @@
     <ClCompile Include="Src\Components\Enemy.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Components\CircleCollider.cpp">
-      <Filter>Engine\Components</Filter>
+    <ClCompile Include="LuaManager.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Collider.cpp">
-      <Filter>Engine\Components</Filter>
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Src\pch.cpp" />
-    <ClCompile Include="Src\ResourceManager.cpp" />
-    <ClCompile Include="Src\main.cpp">
+    <ClCompile Include="Src\Components\FollowMouse.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\LevelGenerator.cpp">
-      <Filter>Engine\Components</Filter>
+      <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Components\FollowMouse.cpp">
-      <Filter>Engine\Components</Filter>
+    <ClCompile Include="Src\main.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Gun.cpp">
       <Filter>Engine\Components</Filter>
@@ -162,6 +160,9 @@
     </ClCompile>
     <ClCompile Include="Src\AStarTerrain.cpp">
       <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\CircleCollider.cpp">
+      <Filter>Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -279,15 +280,12 @@
     <ClInclude Include="Src\Components\Enemy.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Components\CircleCollider.h">
-      <Filter>Engine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Components\LevelGenerator.h">
-      <Filter>Engine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Components\FollowMouse.h">
-      <Filter>Engine\Components</Filter>
-    </ClInclude>
+    <ClInclude Include="LuaManager.h" />
+    <ClInclude Include="Src\CollisionResolution.h" />
+    <ClInclude Include="Src\Components\CircleCollider.h" />
+    <ClInclude Include="Src\Components\FollowMouse.h" />
+    <ClInclude Include="Src\Components\LevelGenerator.h" />
+    <ClInclude Include="Src\Helpers.h" />
     <ClInclude Include="Src\Components\Gun.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
@@ -380,6 +378,24 @@
     <None Include="Resources\json\turret.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\6thSprite.json" />
+    <None Include="Resources\json\bullet_fast.json" />
+    <None Include="Resources\json\concept_3_enemy.json" />
+    <None Include="Resources\json\concept_3_level.json" />
+    <None Include="Resources\json\concept_3_level_generator.json" />
+    <None Include="Resources\json\concept_3_player.json" />
+    <None Include="Resources\json\doorwayObj.json" />
+    <None Include="Resources\json\doorwayObj_back.json" />
+    <None Include="Resources\json\enemy.json" />
+    <None Include="Resources\json\enemySpawner.json" />
+    <None Include="Resources\json\enemy_bullet.json" />
+    <None Include="Resources\json\grass.json" />
+    <None Include="Resources\json\survival.json" />
+    <None Include="Resources\json\wall.json" />
+    <None Include="Resources\json\woodpile.json" />
+    <None Include="Resources\json\zombie.json" />
+    <None Include="Resources\json\zombieSpawner.json" />
+    <None Include="Resources\LuaScripts\playerScript.lua" />
     <None Include="Resources\json\grassTile.json">
       <Filter>JSON</Filter>
     </None>
