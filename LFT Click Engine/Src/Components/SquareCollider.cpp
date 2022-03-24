@@ -44,11 +44,6 @@ void SquareCollider::Update()
 {
 }
 
-int SquareCollider::getCompId()
-{
-	return ComponentType::SQUARE_COLLLIDER;
-}
-
 Component * SquareCollider::Clone(GameObject * newParent)
 {
 	SquareCollider* toReturn = new SquareCollider();
@@ -75,10 +70,10 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 		else
 		{
 			SquareCollider* toCheckCollider = toCheck->getComponent<SquareCollider>();
-			DirectX::XMVECTOR myPos = componentOwner->getComponent<Transform>()->GetPosXMVector();
+			DirectX::XMVECTOR myPos = componentOwner->getComponent<Transform>()->CurrentPos();
 			myPos.m128_f32[0] += center.x;
 			myPos.m128_f32[1] += center.y;
-			DirectX::XMVECTOR toCheckPos = toCheck->getComponent<Transform>()->GetPosXMVector();
+			DirectX::XMVECTOR toCheckPos = toCheck->getComponent<Transform>()->CurrentPos();
 			toCheckPos.m128_f32[0] += toCheckCollider->center.x;
 			toCheckPos.m128_f32[1] += toCheckCollider->center.y;
 

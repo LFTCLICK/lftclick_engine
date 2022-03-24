@@ -77,7 +77,8 @@ Component* Audible::Clone(GameObject* newParent) {
 }
 
 Audible::~Audible() {
-	Stop();
+	//Stop();
+	StopSoundsOnEvent(AUDIO_ON_DELETE);
 }
 
 

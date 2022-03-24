@@ -24,7 +24,8 @@ public:
 	// Inherited via Component
 	virtual void Start() override;
 	virtual void Update() override;
-	virtual int getCompId() override { return ComponentType::BULLET; };
+	virtual int getCompId() override { return ComponentType::LEVEL_GENERATOR; };
+	static int getStaticCompId() { return ComponentType::LEVEL_GENERATOR; };
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	virtual Component* Clone(GameObject* newParent);

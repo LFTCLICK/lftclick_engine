@@ -10,7 +10,7 @@
 #include "pch.h"
 #include "GameObject.h"
 
-GameObject::GameObject() : comps(std::map<int, Component*>()), isActive(true), isDeletable(false), hasNonStaticCollider(false) {}
+GameObject::GameObject() : comps(std::map<int, Component*>()), isActive(true), isDeletable(false), hasNonStaticCollider(false), isOnScreen(false) {}
 
 //will not be called if isActive is set to false
 void GameObject::Update()
@@ -37,7 +37,7 @@ Component* GameObject::getRawComponentPointer(int id)
 	auto toFind = comps.find(id);
 	if (toFind == comps.end())
 		return nullptr;
-	return comps[id];
+	return toFind->second;
 }
 
 GameObject::~GameObject()

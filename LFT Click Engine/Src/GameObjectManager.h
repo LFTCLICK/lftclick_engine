@@ -12,6 +12,8 @@
 #include <list>
 #include <json.hpp>
 #include "Components\GameObject.h"
+#include "Renderer.h"
+#include "GameManager.h"
 #include "GameObjectFactory.h"
 #include <SDL.h>
 #include <codecvt>
@@ -52,11 +54,14 @@ public:
 	void BroadcastMessage(Message* m);
 	~GameObjectManager();
 
-private:
-	GameObjectFactory* gof;
-
+public:
 	std::list<GameObject*> gameObjectList;
 	std::list<GameObject*> prefabList;
+
+	//Useful for indexed drawing. 
+	std::unordered_map<std::string, std::vector<GameObject*>> refGameObjListByPrefabAsKey;
+private:
+	GameObjectFactory* gof;
 
 	// Gdiplus startup nonsense
 	ULONG_PTR gdiplusToken;
@@ -64,3 +69,6 @@ private:
 };
 
 extern std::unique_ptr<GameObjectManager> g_GameObjManager;
+
+extern std::unique_ptr<Renderer> g_Renderer;
+//extern std::unique_ptr<GameManager> g_GameManager;

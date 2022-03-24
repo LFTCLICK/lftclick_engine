@@ -7,7 +7,6 @@
 // History			: 
 // ---------------------------------------------------------------------------
 #pragma once
-#include "GameObjectManager.h"
 #include "FrameRateController.h"
 
 #define DAY_LENGTH 10.f	// total length of a day
@@ -31,6 +30,7 @@
 
 class Camera;
 class Transform;
+class GameObject;
 
 class GameManager
 {
@@ -42,7 +42,6 @@ public:
 		playerScore(0), 
 		playerRestart(false),
 		mainCamera(nullptr),
-		gom(g_GameObjManager.get()),
 		day(1), 
 		time(0)
 	{}
@@ -59,7 +58,6 @@ public:
 	float playerScore;
 	Camera* mainCamera;
 	Transform* playerTrans;
-	GameObjectManager* gom;
 
 	int day;
 	float time;

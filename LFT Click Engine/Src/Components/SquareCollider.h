@@ -23,7 +23,8 @@ public:
 	SquareCollider();
 	virtual void Start();
 	virtual void Update();
-	int getCompId();
+	virtual int getCompId() override {return ComponentType::SQUARE_COLLLIDER;};
+	static int getStaticCompId() {return ComponentType::SQUARE_COLLLIDER;};
 	DirectX::SimpleMath::Vector2 center;
 	float width;
 	float height;

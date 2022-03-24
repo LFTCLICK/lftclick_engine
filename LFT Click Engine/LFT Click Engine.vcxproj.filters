@@ -282,12 +282,6 @@
     <ClInclude Include="Src\Components\LevelGenerator.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Src\CollisionResolution.h">
-      <Filter>Engine\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Components\Helpers.h">
-      <Filter>Engine\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Components\FollowMouse.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
@@ -296,6 +290,12 @@
     </ClInclude>
     <ClInclude Include="Src\Components\Interactable.h">
       <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Helpers.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\CollisionResolution.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -432,6 +432,7 @@
     <None Include="Resources\json\grass.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\junk.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

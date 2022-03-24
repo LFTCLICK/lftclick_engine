@@ -19,16 +19,22 @@ void Player::Start()
 
 	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
 	wood = 0;
+	parts = 0;
 	hp = maxHp;
 	timer = damageCooldownTimer;
 }
 
 void Player::Update()
 {
-	ImGui::SetNextWindowPos({ 0,0 });
+	ImGui::SetNextWindowPos({ 0,15 });
 	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
+	ImGui::Text("HP: %.0f", hp);
+	ImGui::Text("");
 	ImGui::Text("Wood: %i", wood);
-	ImGui::Text("hp: %.0f", hp);
+	ImGui::Text("Motorcycle Parts: %i/8", parts);
+	ImGui::Text("");
+	ImGui::Text("Day: %i", g_GameManager->day);
+	ImGui::Text("Time: %.2f", g_GameManager->time);
 	ImGui::End();
 
 	drawable->HUD_DrawTextCenter("Player", Vector2(0, -squareCollider->height/2.0f - 15.0f), Color(0.0f, 0.0f, 1.0f));

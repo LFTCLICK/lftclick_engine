@@ -25,7 +25,8 @@ public:
 	// Inherited via Component
 	virtual void Start() override;
 	virtual void Update() override;
-	virtual int getCompId() override;
+	virtual int getCompId() override {return ComponentType::CAMERA;};
+	static int getStaticCompId() {return ComponentType::CAMERA;};
 	virtual Component* Clone(GameObject* newParent);
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	

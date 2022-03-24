@@ -12,7 +12,11 @@
 #include "GameManager.h"
 #include "Component.h"
 #include "Transform.h"
+#include "Audible.h"
+#include "SpriteAnimator.h"
 #include "Player.h"
+#include "FrameRateController.h"
+#include "Collider.h"
 #include <json.hpp>
 
 
@@ -38,10 +42,15 @@ public:
 	float timeToCollect;
 
 private:
+	void StopInteraction();
+	bool IsPlayerInRange();
+
+private:
 	Transform* trans;
-	Player* p;
-	bool playerIsInRange;
-	bool playerWasInRange;
-	float internalTimer;
+	Audible* audio;
+	SpriteAnimator* anim;
+
+	bool playerIsInRange, playerWasInRange, interacting;
+	float internalTimer, interactDistance, interactDistanceSq;
 	int currentPhase, hpPerPhase;
 };

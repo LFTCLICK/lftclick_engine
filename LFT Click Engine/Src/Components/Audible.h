@@ -38,12 +38,16 @@ public:
 		AUDIO_ON_MOVE,
 		AUDIO_ON_HALT,
 		AUDIO_ON_DAMAGE,
-		AUDIO_ON_DEATH
+		AUDIO_ON_DEATH,
+		AUDIO_ON_INTERACTING,
+		AUDIO_ON_COLLECT,
+		AUDIO_ON_DELETE = 2000,
 	};
 	// Inherited via Component
 	virtual void Start() override;
 	virtual void Update() override;
 	virtual int getCompId() override { return ComponentType::AUDIBLE; };
+	static int getStaticCompId() { return ComponentType::AUDIBLE; };
 	virtual Component* Clone(GameObject* newParent);
 	virtual void HandleMessage(Message* e) override;
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
