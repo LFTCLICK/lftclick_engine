@@ -29,6 +29,9 @@ void Player::Update()
 	ImGui::SetNextWindowPos({ 0,15 });
 	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 	ImGui::Text("HP: %.0f", hp);
+	GridPos a = g_AStarTerrain->WorldToGridPos(trans->position);
+	ImGui::Text("%i, %i", a.row, a.col);
+	ImGui::Text("%.0f, %.0f", trans->position.x, trans->position.y);
 	ImGui::Text("");
 	ImGui::Text("Wood: %i", wood);
 	ImGui::Text("Motorcycle Parts: %i/8", parts);

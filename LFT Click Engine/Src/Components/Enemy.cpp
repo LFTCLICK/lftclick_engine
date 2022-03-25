@@ -13,23 +13,38 @@ void Enemy::Start()
 
 void Enemy::Update()
 {
-	DirectX::SimpleMath::Vector2 targetVector = -trans->CurrentPos();
-	if (!switchToPlayer)
+	if (pathTimer <= 1)
 	{
-		if(fabsf(trans->CurrentPos().y-targetBeforePlayer.y)<=20)
-		{
-			switchToPlayer = true;
-		}
-		else
-		{
-			targetVector += targetBeforePlayer;
-		}
+		GridPos start = g_AStarTerrain->WorldToGridPos(trans->position);
+		GridPos goal = g_AStarTerrain->WorldToGridPos(g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos());
+		g_AStarTerrain->ComputePath(&start, &goal, path);
+		currentPathPos = path.begin();
+		currentPathPos++;
+		pathTimer = 20;
 	}
-	if (switchToPlayer)
+	DirectX::SimpleMath::Vector2 targetVector = *currentPathPos -trans->CurrentPos();
+	//if (!switchToPlayer)
+	//{
+	//	if(fabsf(trans->CurrentPos().y-targetBeforePlayer.y)<=20)
+	//	{
+	//		switchToPlayer = true;
+	//	}
+	//	else
+	//	{
+	//		targetVector += targetBeforePlayer;
+	//	}
+	//}
+	//if (switchToPlayer)
+	//{
+	//	targetVector += g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
+	//}
+	float mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
+	if (mag <= speed * g_FrameRateController->DeltaTime())
 	{
-		targetVector += g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
+		currentPathPos++;
+		mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
 	}
-	targetVector = (speed * g_FrameRateController->DeltaTime())/(DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector)) * targetVector;
+	targetVector = (speed * g_FrameRateController->DeltaTime())/mag * targetVector;
 	//if (hanginWithTheHomies)
 	//	targetVector *= .1f;
 	trans->Move(targetVector.x, targetVector.y);

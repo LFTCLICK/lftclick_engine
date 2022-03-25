@@ -236,13 +236,20 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 		int width = img.GetWidth(), height = img.GetHeight();
 		g_AStarTerrain->width = width;
 		g_AStarTerrain->height = height;
-		g_AStarTerrain->nodeMap = new Node * [height];
+		g_AStarTerrain->nodeMap = new Node ** [height];
 		g_AStarTerrain->tileSize = objectSize;
 		g_AStarTerrain->terrain = new int* [height];
 		for (int y = 0; y < height; y++) {
-			g_AStarTerrain->nodeMap[y] = new Node[width];
+			g_AStarTerrain->nodeMap[y] = new Node*[width];
 			g_AStarTerrain->terrain[y] = new int[width];
 			for (int x = 0; x < width; x++) {
+				Node* current = new Node{};
+				current->pos = { y,x };
+				current->vec3 = DirectX::SimpleMath::Vector3((x - (width / 2)) * objectSize, (y - (height / 2)) * objectSize * -1, 0.0f);
+				//current->vec3.x += .5f * objectSize;
+				//current->vec3.y += .5f * objectSize;
+				g_AStarTerrain->nodeMap[y][x]= current;
+				g_AStarTerrain->terrain[y][x] = 0;
 				img.GetPixel(x, y, &currentColor);
 				if (currentColor.GetValue() != Gdiplus::Color::Black) {
 
@@ -254,11 +261,12 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString]);
 						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1;
 						obj->getComponent<Transform>()->SetPos(mapX, mapY);
-						if (!obj->getComponent<SquareCollider>() || obj->getComponent<SquareCollider>()->isTrigger)
-							g_AStarTerrain->terrain[y][x] = -1;
-						else
-							g_AStarTerrain->terrain[y][x] = 0;
+						if (obj->getComponent<SquareCollider>() && !obj->getComponent<SquareCollider>()->isTrigger)
+						{
 
+							g_AStarTerrain->terrain[y][x] = -1;
+							//obj->getComponent<SquareCollider>()->isTrigger = true;
+						}
 					}
 				}
 			}

@@ -28,18 +28,22 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	Enemy() {};
+	Enemy():path(){};
 
 public:
 	float attackTimer, timer;
 	float damage;
+	float pathTimer=0;
 	float speed;
 	float aiSwitchDistance;
 	bool hanginWithTheHomies;
 	bool switchToPlayer;
 	DirectX::SimpleMath::Vector2 goal;
 	DirectX::SimpleMath::Vector2 targetBeforePlayer;
+	std::list<DirectX::SimpleMath::Vector2> path;
+	std::list<DirectX::SimpleMath::Vector2>::iterator currentPathPos;
 
 private:
 	Transform* trans;
 };
+extern std::unique_ptr<AStarTerrain> g_AStarTerrain;
