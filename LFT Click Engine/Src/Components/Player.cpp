@@ -27,12 +27,6 @@ void Player::Start()
 
 	drawable = componentOwner->getComponent<Drawable>();
 	squareCollider = componentOwner->getComponent<SquareCollider>();
-
-	/*if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
-	wood = 0;
-	parts = 0;
-	hp = maxHp;
-	timer = damageCooldownTimer;*/
 }
 
 void Player::Update()
@@ -51,7 +45,8 @@ void Player::Update()
 	ImGui::Text("Time: %.2f", g_GameManager->time);
 	ImGui::End();
 
-	drawable->HUD_DrawTextCenter("Player", Vector2(0, -squareCollider->height / 2.0f - 15.0f), Color(0.0f, 0.0f, 1.0f));
+	
+	drawable->HUD_DrawTextCenter("Player", Vector2(0, -squareCollider->height / 2.0f - 15.0f), Color(1.0f, 1.0f, 0.0f, 0.1f));
 
 	if (isDashing) {
 		dashTimer += g_FrameRateController->DeltaTime();
@@ -103,8 +98,10 @@ void Player::Move(float deltaX, float deltaY) {
 
 void Player::Dash() {
 	isDashing = true;
-	dashVelocity.x = trans->lastMovement.x * dashSpeed;
-	dashVelocity.y = trans->lastMovement.y * dashSpeed;
+	/*dashVelocity.x = trans->lastMovement.x * dashSpeed;
+	dashVelocity.y = trans->lastMovement.y * dashSpeed;*/
+
+	dashVelocity = trans->lastMovement * dashSpeed;
 }
 
 void Player::ChangePlayerState() {

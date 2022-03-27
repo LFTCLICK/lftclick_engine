@@ -216,7 +216,6 @@ void Renderer::Draw()
 			skipped++;
 			continue;
 		}
-	
 		//Transform* drawableTransform = gameObject->getComponent<Transform>();
 	
 		DirectX::XMMATRIX mat = gameObject->getComponent<Transform>()->GetXMMatrix();
@@ -280,10 +279,11 @@ void Renderer::Draw()
 
 void Renderer::PresentFrame()
 {
+	static bool VSync = true;
 	if (ImGui::BeginMainMenuBar())
 	{
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-
+		ImGui::Checkbox("VSync", &VSync);
 		ImGui::EndMainMenuBar();
 	}
 
@@ -292,7 +292,7 @@ void Renderer::PresentFrame()
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-	DX::ThrowIfFailed(swapChain->Present(0, 0));
+	DX::ThrowIfFailed(swapChain->Present(VSync ? 1 : 0, 0));
 }
 
 

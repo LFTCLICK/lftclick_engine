@@ -49,6 +49,9 @@ private:
 	Transform* trans;
 	Audible* audio;
 	SpriteAnimator* anim;
+	Drawable* drawable;
+
+	static bool tutorialUI;
 
 	bool playerIsInRange, playerWasInRange, interacting;
 	float internalTimer, interactDistance, interactDistanceSq;
