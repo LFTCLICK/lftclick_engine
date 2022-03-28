@@ -45,5 +45,6 @@ public:
 
 private:
 	Transform* trans;
+	Transform* playerTrans;
 };
 extern std::unique_ptr<AStarTerrain> g_AStarTerrain;
