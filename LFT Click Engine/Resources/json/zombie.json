@@ -33,9 +33,10 @@
     "image": "Resources\\images\\zombie_sprite_sheet.png"
 
   },
-  "13": {
-    "center": [ 0.0, 0.0, 0.0 ],
-    "radius": 25,
+  "4": {
+    "center": [ 0.0, -0.0, 0.0 ],
+    "width": 64,
+    "height": 64,
     "trigger": false,
     "static": false,
     "deleteOnCollison": false

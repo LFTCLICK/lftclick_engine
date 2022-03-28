@@ -7,7 +7,6 @@
 // History			: 
 // ---------------------------------------------------------------------------
 #pragma once
-#include "FrameRateController.h"
 
 #define DAY_LENGTH 10.f	// total length of a day
 
@@ -40,6 +39,7 @@ public:
 		playerDead(false), 
 		debugMode(false), 
 		playerScore(0), 
+		mapHeight(10000.0f),
 		playerRestart(false),
 		mainCamera(nullptr),
 		day(1), 
@@ -56,6 +56,7 @@ public:
 	bool debugMode;
 	bool playerRestart;
 	float playerScore;
+	float mapHeight;
 	Camera* mainCamera;
 	Transform* playerTrans;
 

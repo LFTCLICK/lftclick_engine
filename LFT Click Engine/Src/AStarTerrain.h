@@ -43,6 +43,7 @@ public:
 	AStarTerrain() = default;
 	~AStarTerrain();
 
+	void Init();
 	GridPos WorldToGridPos(DirectX::SimpleMath::Vector2 pos);
-	bool ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::SimpleMath::Vector2>& path);
+	int ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::SimpleMath::Vector2>& path);
 };

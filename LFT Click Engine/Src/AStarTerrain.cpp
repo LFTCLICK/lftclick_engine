@@ -5,19 +5,9 @@
 #define SQRT_2 1.41421356237
 
 
-GridPos AStarTerrain::WorldToGridPos(DirectX::SimpleMath::Vector2 pos)
+void AStarTerrain::Init()
 {
-    //((x - (width / 2)) * objectSize, (y - (height / 2)) * objectSize * -1, 0.0f);
-    // int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1;
-    int xPos = (pos.x / tileSize) + (width / 2) - .5f;
-    int yPos = (-pos.y / tileSize) + (height / 2) - .5f;
-    return GridPos{ yPos+1,xPos+1 };
-}
 
-bool AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::SimpleMath::Vector2>& path)
-{
-    std::priority_queue<Node*, std::vector<Node*>, posComparisonHelper>  openList = std::priority_queue<Node*, std::vector<Node*>, posComparisonHelper>();
-    Node* startingPos = nodeMap[0][0];
     for (int row = 0; row < height; ++row)
     {
         for (int col = 0; col < width; ++col)
@@ -25,15 +15,47 @@ bool AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX:
             Node* current = nodeMap[row][col];
             current->gCost = FLT_MAX;
             current->fCost = FLT_MAX;
-            if (terrain[row][col]==-1)
+            if (terrain[row][col] == -1)
                 current->gCost = -10;
             current->parent = nullptr;
             current->onCloseList = false;
-            if (current->pos == *start)
-                startingPos = current;
 
         }
     }
+}
+
+GridPos AStarTerrain::WorldToGridPos(DirectX::SimpleMath::Vector2 pos)
+{
+    //((x - (width / 2)) * objectSize, (y - (height / 2)) * objectSize * -1, 0.0f);
+    // int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1;
+    int xPos = (pos.x / tileSize) + (width / 2) - .5f;
+    if(xPos<0)
+        xPos = (pos.x / tileSize) + (width / 2) - .5f;
+    int yPos = (-pos.y / tileSize) + (height / 2) - .5f;
+    return GridPos{ yPos+1,xPos+1 };
+}
+
+int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::SimpleMath::Vector2>& path)
+{
+    std::priority_queue<Node*, std::vector<Node*>, posComparisonHelper>  openList = std::priority_queue<Node*, std::vector<Node*>, posComparisonHelper>();
+    if (start->row < 0)
+        return -1;
+
+    for (int row = 0; row < height; ++row)
+    {
+        for (int col = 0; col < width; ++col)
+        {
+            Node* current = nodeMap[row][col];
+            current->gCost = FLT_MAX;
+            current->fCost = FLT_MAX;
+            if (terrain[row][col] == -1)
+                current->gCost = -10;
+            current->parent = nullptr;
+            current->onCloseList = false;
+
+        }
+    }
+    Node* startingPos = nodeMap[start->row][start->col];
     startingPos->gCost = 0;
     startingPos->fCost = Octile(start, goal);
 
@@ -83,12 +105,15 @@ bool AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX:
                     }
                 }
             }
+            int toReturn = -1;
             do
             {
                 path.push_front(DirectX::SimpleMath::Vector2(current->vec3.x, current->vec3.y));
                 current = current->parent;
+                ++toReturn;
             } while (current != nullptr);
-            return true;
+            path.pop_front();
+            return toReturn;
             //if (request.settings.rubberBanding && request.settings.smoothing)
             //{
             //    auto it = request.path.begin();
@@ -186,7 +211,7 @@ bool AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX:
                             continue;
                     }
 
-                    if (newSpace->gCost > newGCost + .01f)
+                    if (newSpace->gCost > newGCost + .0001f)
                     {
 
                         newSpace->fCost = Octile(&newSpace->pos, goal) + newGCost;
@@ -201,7 +226,7 @@ bool AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX:
         }
         current->onCloseList = true;
     }
-    return false;
+    return -1;
 }
 
 AStarTerrain::~AStarTerrain()

@@ -7,48 +7,51 @@
 void Enemy::Start()
 {
 	trans = componentOwner->getComponent<Transform>();
+	playerTrans = g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	switchToPlayer = false;
+	zHelper = g_GameManager->mapHeight * 2.0f / 4.0f;
 }
 
 void Enemy::Update()
 {
-	if (pathTimer <= 1)
+	if (pathTimer <= 0)
 	{
 		GridPos start = g_AStarTerrain->WorldToGridPos(trans->position);
-		GridPos goal = g_AStarTerrain->WorldToGridPos(g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos());
-		g_AStarTerrain->ComputePath(&start, &goal, path);
+		GridPos goal = g_AStarTerrain->WorldToGridPos(playerTrans->position);
+		path.clear();
+		path.push_back(playerTrans->position);
+		int pathSize = g_AStarTerrain->ComputePath(&start, &goal, path);
 		currentPathPos = path.begin();
-		currentPathPos++;
-		pathTimer = 20;
+		pathTimer = .2;
+		float distance = DirectX::SimpleMath::Vector2::Distance(trans->position, playerTrans->position);
+		if (distance > 400)
+		{
+			distance -= 400;
+			pathTimer += .5 * distance / 400;
+		}
 	}
+
 	DirectX::SimpleMath::Vector2 targetVector = *currentPathPos -trans->CurrentPos();
-	//if (!switchToPlayer)
-	//{
-	//	if(fabsf(trans->CurrentPos().y-targetBeforePlayer.y)<=20)
-	//	{
-	//		switchToPlayer = true;
-	//	}
-	//	else
-	//	{
-	//		targetVector += targetBeforePlayer;
-	//	}
-	//}
-	//if (switchToPlayer)
-	//{
-	//	targetVector += g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
-	//}
+
 	float mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
 	if (mag <= speed * g_FrameRateController->DeltaTime())
 	{
 		currentPathPos++;
+		if (currentPathPos == path.end())
+			pathTimer = 0;
 		mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
 	}
 	targetVector = (speed * g_FrameRateController->DeltaTime())/mag * targetVector;
 	//if (hanginWithTheHomies)
 	//	targetVector *= .1f;
 	trans->Move(targetVector.x, targetVector.y);
+	pathTimer -= g_FrameRateController->DeltaTime();
 	hanginWithTheHomies = false;
+
+	//trans->zPos = trans->position.y / 1000.0f;
+	//trans->zPos = (trans->position.y + g_GameManager->mapHeight) / 1000.0f;
+	trans->zPos = (trans->position.y + g_GameManager->mapHeight) / zHelper;
 }
 
 void Enemy::Deserialize(nlohmann::json j, GameObject* componentOwner)

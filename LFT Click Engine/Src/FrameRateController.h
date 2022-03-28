@@ -9,6 +9,7 @@
 // ---------------------------------------------------------------------------
 #pragma once
 #include <SDL.h>
+#include <GameManager.h>
 
 class FrameRateController
 {
@@ -33,3 +34,4 @@ private:
 };
 
 extern std::unique_ptr<FrameRateController> g_FrameRateController;
+extern std::unique_ptr<GameManager> g_GameManager;

@@ -135,7 +135,7 @@ void Player::HandleMessage(Message* e)
 
 		Move(cm->deltaPos.x, cm->deltaPos.y);
 
-		if (e->otherObject->componentOwner->tag == "enemy")
+		if (e->otherObject->componentOwner->tag == "zombie")
 		{
 			badTouch = true;
 		}
