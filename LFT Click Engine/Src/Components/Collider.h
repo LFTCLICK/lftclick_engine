@@ -24,7 +24,6 @@ public:
 
 	virtual void DebugDraw() {};
 
-	//static DirectX::SimpleMath::Vector2 ProcessCollision(Collider* a, Transform* aTrans, Collider* b, Transform* bTrans);
 public:
 	bool isTrigger;
 	bool isStatic;

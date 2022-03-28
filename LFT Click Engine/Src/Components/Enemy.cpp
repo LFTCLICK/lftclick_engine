@@ -29,7 +29,7 @@ void Enemy::Update()
 	{
 		targetVector += g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
 	}
-	targetVector = (speed * g_FrameRateController->DeltaTime())/(DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector)) * targetVector;
+	targetVector = speed * g_FrameRateController->DeltaTime() / targetVector.Length() * targetVector;
 	//if (hanginWithTheHomies)
 	//	targetVector *= .1f;
 	trans->Move(targetVector.x, targetVector.y);
@@ -62,12 +62,6 @@ void Enemy::HandleMessage(Message* e)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
 		trans->Move(cm->deltaPos.x, cm->deltaPos.y);
-		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
-		{
-			isGrounded = true;
-		}*/
-		//std::cout << transform->GetPosXMVector().m128_f32[0] - lastGroundPos << std::endl;
-		//lastGroundPos = transform->GetPosXMVector().m128_f32[0];
 	}
 }
 

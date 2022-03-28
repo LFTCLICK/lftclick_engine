@@ -47,7 +47,7 @@ void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 {
 	//setup devices
 
-	UINT flags = 0;
+	UINT flags = D3D11_CREATE_DEVICE_SINGLETHREADED;
 
 #if defined(DEBUG) || defined(_DEBUG)
 	flags |= D3D11_CREATE_DEVICE_DEBUG;
@@ -177,8 +177,6 @@ void Renderer::PrepareForRendering()
 
 void Renderer::Draw()
 {
-	int called = 0;
-	int skipped = 0;
 	UINT stride = sizeof(VertexType);
 	UINT offset = 0;
 
@@ -205,19 +203,9 @@ void Renderer::Draw()
 		GameObject* gameObject = *gameObjectIt;
 		Drawable* drawable = gameObject->getComponent<Drawable>();
 	
-		if (drawable == nullptr)
-		{
+		if (drawable == nullptr || !gameObject->isOnScreen)
+			continue;
 
-			skipped++;
-			continue;
-		}
-		if (!gameObject->isOnScreen)
-		{
-			skipped++;
-			continue;
-		}
-		//Transform* drawableTransform = gameObject->getComponent<Transform>();
-	
 		DirectX::XMMATRIX mat = gameObject->getComponent<Transform>()->GetXMMatrix();
 	
 		const VS_cbPerObject cbValues_VS =
@@ -240,9 +228,8 @@ void Renderer::Draw()
 		immediateContext->PSSetShaderResources(0, 1, drawable->textureSRV.GetAddressOf());
 	
 		immediateContext->DrawIndexed(6, 0, 0);
-		called++;
 	}
-	int a = 0;
+
 	//for (auto gameObject : g_GameObjManager->gameObjectList)
 	//{
 	//	Drawable* drawable = gameObject->getComponent<Drawable>();
