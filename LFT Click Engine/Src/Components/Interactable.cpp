@@ -80,8 +80,6 @@ void Interactable::StopInteraction() {
 
 bool Interactable::IsPlayerInRange() {
 	DirectX::SimpleMath::Vector2 pos = trans->CurrentPos(), playerPos = g_GameManager->playerTrans->CurrentPos();
-	/*float distanceX = abs(pos.x - playerPos.x), distanceY = abs(pos.y - playerPos.y);
-	return (distanceX * distanceX + distanceY * distanceY) < interactDistanceSq;*/
 
 	return (pos - playerPos).LengthSquared() < interactDistanceSq;
 }
