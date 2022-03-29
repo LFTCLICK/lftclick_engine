@@ -56,6 +56,14 @@ int main(int argc, char* args[])
 	g_WindowHeight = lua_state["configTrial"]["windowHeight"];
 	g_WindowWidth = lua_state["configTrial"]["windowWidth"];
 
+
+	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, L"CoInitializeEx failed", 0, MB_OK | MB_ICONERROR);
+		return -1;
+	}
+
 	//Init SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
@@ -63,6 +71,7 @@ int main(int argc, char* args[])
 		return 1;
 
 	}
+
 
 	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, g_WindowWidth, g_WindowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
@@ -131,6 +140,8 @@ int main(int argc, char* args[])
 #endif
 		g_Renderer->PresentFrame();
 	}
+
+	CoUninitialize();
 
 	g_GameObjManager->DeleteAll();
 

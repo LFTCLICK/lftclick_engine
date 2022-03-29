@@ -35,7 +35,7 @@ public:
 	void HandleMessage(Message* e);
 public:
 	int doorPhases, zeroIndexDoorPhases;
-	float maxHp, hp;
+	float maxHp, health;
 	int woodRequiredPerPhase;
 	float repairTime;
 

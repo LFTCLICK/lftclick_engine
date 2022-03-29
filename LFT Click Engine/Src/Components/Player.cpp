@@ -4,8 +4,10 @@
 #include "FrameRateController.h"
 #include "Collider.h"
 #include "SquareCollider.h"
+#include <WICTextureLoader.h>
 
 using namespace DirectX::SimpleMath;
+using namespace DirectX;
 
 void Player::Start()
 {
@@ -18,7 +20,7 @@ void Player::Start()
 	// setting variables from LUA
 	player_script_update();
 	sol::function returnHp = lua_player_state["returnPlayerHp"];
-	hp = returnHp();
+	health = returnHp();
 	sol::function dashSpeedMultiplier = lua_player_state["dashSpeedMultiplyer"];
 	dashSpeed = dashSpeedMultiplier();
 
@@ -27,26 +29,36 @@ void Player::Start()
 
 	drawable = componentOwner->getComponent<Drawable>();
 	squareCollider = componentOwner->getComponent<SquareCollider>();
+
+	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\wood_icon.png", nullptr, &woodSRV));
+	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\health_icon.png", nullptr, &healthSRV));
+	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\motorcycle_icon.png", nullptr, &bikepartsSRV));
 }
 
 void Player::Update()
 {
 	player_script_update();
 
-	ImGui::SetNextWindowPos({ 0,0 });
-	ImGui::Begin("2ndWindow", 0, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove |
-		ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar |
-		ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize |
-		ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
-	ImGui::Text("Wood: %i", wood);
-	ImGui::Text("Motorcycle Parts: %i/8", parts);
-	ImGui::Text("");
-	ImGui::Text("Day: %i", g_GameManager->day);
-	ImGui::Text("Time: %.2f", g_GameManager->time);
-	ImGui::End();
+	static XMFLOAT2 pos;
+	ImGui::DragFloat2("Pos", reinterpret_cast<float*>(&pos), 0.1, 0.0f, 100.0f);
+	static float scale = 1.0f;
+	ImGui::DragFloat("scale", &scale, 0.1, 1.0f, 10.0f);
 
-	
-	drawable->HUD_DrawTextCenter("Player", Vector2(0, -squareCollider->height / 2.0f - 15.0f), Color(1.0f, 1.0f, 0.0f, 0.1f));
+	g_Renderer->GetSpriteBatch()->Draw(woodSRV.Get(), XMVectorSet(4, 20, 0, 0), nullptr, 
+		Colors::White, 0.0f, XMVectorZero(), 2.6f);
+	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), std::to_string(wood).c_str(),
+		XMFLOAT2(50, 25), Colors::White, 0.0f, XMFLOAT2(0,0));
+
+	g_Renderer->GetSpriteBatch()->Draw(bikepartsSRV.Get(), XMVectorSet(4, 50, 0, 0), nullptr,
+		Colors::White, 0.0f, XMVectorZero(), 2.6f);
+	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), std::to_string(parts).c_str(),
+		XMFLOAT2(50, 60), Colors::White, 0.0f, XMFLOAT2(0, 0));
+
+	g_Renderer->GetSpriteBatch()->Draw(healthSRV.Get(), XMVectorSet(4, 90, 0, 0), nullptr,
+		Colors::White, 0.0f, XMVectorZero(), 2.6f);
+	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), std::to_string(health).c_str(),
+		XMFLOAT2(50, 100), Colors::White, 0.0f, XMFLOAT2(0, 0));
+
 
 	if (isDashing) {
 		dashTimer += g_FrameRateController->DeltaTime();
@@ -69,6 +81,8 @@ Component* Player::Clone(GameObject* newParent) {
 
 void Player::Deserialize(nlohmann::json j, GameObject* parent) {
 	if (j.contains("script")) script = j["script"];
+
+
 	this->componentOwner = componentOwner;
 }
 
@@ -80,7 +94,7 @@ void Player::HandleMessage(Message* e)
 
 		Move(cm->deltaPos.x, cm->deltaPos.y);
 
-		if (e->otherObject->componentOwner->tag == "enemy")
+		if (e->otherObject->componentOwner->tag == "zombie")
 		{
 			if (damageCooldownTimer < 0)
 			{
@@ -105,6 +119,6 @@ void Player::Dash() {
 }
 
 void Player::ChangePlayerState() {
-	hp -= 15;
-	if (hp <= 0) { g_GameManager->playerDead = true; }
+	health -= 15;
+	if (health <= 0) { g_GameManager->playerDead = true; }
 }

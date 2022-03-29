@@ -34,8 +34,8 @@ void Damageable::Update()
 	}
 	if (knockbackMod != 0 && (velocity.x != 0 || velocity.x != 0)) {
 		trans->Move(velocity.x * knockbackMod, velocity.y * knockbackMod);
-		velocity.x *= inertiaMod;
-		velocity.y *= inertiaMod;
+		
+		velocity *= inertiaMod;
 	}
 
 
@@ -49,10 +49,10 @@ void Damageable::Update()
 			healthPreview = false;
 		}
 		
-		Color drawColor = Color::Lerp(Color(1, 0, 0, 1), Color(0, 1, 0, 1),
-			static_cast<float>(health) / static_cast<float>(maxHealth));
+		Color healthTextColor = Color::Lerp(Color(1, 0, 0, 1), Color(0, 1, 0, 1), 
+			static_cast<float>(health) / maxHealth);
 		
-		drawable->HUD_DrawTextCenter(std::to_string(health), {0.0f, -50.0f}, drawColor);
+		drawable->HUD_DrawTextCenter(std::to_string(health), {0.0f, -50.0f}, healthTextColor);
 	}
 
 }

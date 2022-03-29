@@ -1,10 +1,9 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	Renderer.h
-// Author			:	Vance Howald, Abhijit Zala
-// Creation Date	:	2021/11/14
+// File Name		:	Renderer.cpp
+// Author			:	Abhijit Zala
+// Creation Date	:	
 // Purpose			:	DX11 Rendering stuff
-// History			:
 // ---------------------------------------------------------------------------
 #pragma once
 #include <SpriteBatch.h>

@@ -1,11 +1,9 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	Graphics.cpp
-// Author			:	Vance Howald, Abhijit Zala
-// Creation Date	:	2021/11/14
+// File Name		:	Renderer.cpp
+// Author			:	Abhijit Zala
+// Creation Date	:	
 // Purpose			:	DX11 Rendering stuff
-// History			:
-// 2021/12/01		-	Fixed color space issue
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "Renderer.h"
