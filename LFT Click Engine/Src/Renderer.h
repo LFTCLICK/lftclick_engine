@@ -20,6 +20,7 @@ class Renderer
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> alphaToCoverageBS;
 
 	DXGI_FORMAT backBufferFormat;
 	DXGI_FORMAT depthStencilBufferFormat;

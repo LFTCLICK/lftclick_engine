@@ -152,12 +152,22 @@ void Renderer::CreateDeviceDependentResources()
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
 		{"Position", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
-		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
 	g_Renderer->GetDevice()->CreateInputLayout(ied, (UINT)std::size(ied), g_CompiledVS, sizeof(g_CompiledVS),
 		inputLayout.ReleaseAndGetAddressOf());
 
+	CD3D11_DEFAULT d3dDefault;
+	CD3D11_BLEND_DESC a2CDesc(d3dDefault);
+	
+	a2CDesc.AlphaToCoverageEnable = TRUE;
+	a2CDesc.RenderTarget[0].BlendEnable = TRUE;
+	a2CDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	a2CDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	a2CDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+
+	DX::ThrowIfFailed(device->CreateBlendState(&a2CDesc, alphaToCoverageBS.ReleaseAndGetAddressOf()));
 }
 
 void Renderer::PrepareForRendering()
@@ -189,7 +199,7 @@ void Renderer::Draw()
 	ID3D11SamplerState* samStates[] = { states->PointWrap() };
 	immediateContext->PSSetSamplers(0, 1, samStates);
 	
-	immediateContext->OMSetBlendState(states->AlphaBlend(), nullptr, 0xFFFFFFFFu);
+	immediateContext->OMSetBlendState(alphaToCoverageBS.Get(), nullptr, 0xFFFFFFFFu);
 	immediateContext->RSSetState(nullptr);
 	immediateContext->OMSetDepthStencilState(nullptr, 0);
 
@@ -227,39 +237,6 @@ void Renderer::Draw()
 	
 		immediateContext->DrawIndexed(6, 0, 0);
 	}
-
-	//for (auto gameObject : g_GameObjManager->gameObjectList)
-	//{
-	//	Drawable* drawable = gameObject->getComponent<Drawable>();
-	//
-	//	if (drawable == nullptr || !gameObject->isOnScreen)
-	//		continue;
-	//
-	//	Transform* drawableTransform = gameObject->getComponent<Transform>();
-	//
-	//	DirectX::XMMATRIX mat = drawableTransform->GetXMMatrix();
-	//
-	//	const VS_cbPerObject cbValues_VS =
-	//	{
-	//		{
-	//			mat * projectionMat
-	//		},
-	//		XMFLOAT2(drawable->xOffset, drawable->yOffset),
-	//		XMFLOAT2(drawable->xScale, drawable->yScale),
-	//		drawable->xFlip
-	//	};
-	//
-	//	const PS_cbPerObject cbValues_PS = {
-	//		drawable->alphaOverride
-	//	};
-	//
-	//	VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
-	//	PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
-	//	
-	//	immediateContext->PSSetShaderResources(0, 1, drawable->textureSRV.GetAddressOf());
-	//
-	//	immediateContext->DrawIndexed(6, 0, 0);
-	//}
 }
 
 void Renderer::PresentFrame()

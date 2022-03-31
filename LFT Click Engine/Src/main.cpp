@@ -25,7 +25,7 @@
 #include "GameManager.h"
 #include "Components/Drawable.h"
 #include "DebugRenderer.h"
-
+#include <WICTextureLoader.h>
 #include "..\LuaManager.h"
 
 using json = nlohmann::json;
@@ -114,7 +114,7 @@ int main(int argc, char* args[])
 	g_GameManager->playerObj = playerObj;
 	g_GameManager->mainCamera = playerObj->getComponent<Camera>();
 	g_GameManager->playerTrans = playerObj->getComponent<Transform>();
-
+	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\menu_background.png", nullptr, g_GameManager->menuBackgroundSRV.ReleaseAndGetAddressOf()));
 	srand(time(NULL));
 
 	SDL_Event e = {};
@@ -147,7 +147,6 @@ int main(int argc, char* args[])
 
 	g_EventManager->Reset();
 	g_GameManager->playerDead = false;
-	g_GameManager->playerRestart = false;
 	g_GameManager->playerScore = 0;
 
 	SDL_DestroyWindow(pWindow);
