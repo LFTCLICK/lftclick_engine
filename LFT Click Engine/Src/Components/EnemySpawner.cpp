@@ -23,24 +23,27 @@ void EnemySpawner::Update()
 		if (objectSpawnName == "zombie")
 		{
 			int toSpawn;
-			if (g_GameManager->time > 0 && g_GameManager->time < 16.0f
-				|| g_GameManager->time > 22.0 && g_GameManager->time < 24.0f)
-				toSpawn = 20.0f;
+			// checking if its morning time
+			if (g_GameManager->time < SUN_SETTING || g_GameManager->time > SUN_RISING)
+				toSpawn = 10.0f;
 			else
-				toSpawn = 50.0f;
+				toSpawn = 30.0f;
 
+			totalZombiesOnMap += toSpawn;
 			for (int i = 0; i < toSpawn; i++)
 			{
 				GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
 				newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
 			}
+			printf("Total zombies on map are %d\n", totalZombiesOnMap);
 		}
 		
 		if (objectSpawnName == "enemy")
 		{
+			ghostsOnMap += 1;
 			GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
-			newObj->getComponent<Transform>()->SetPos(1.0f, 1.0f);
-			//newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
+			newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
+			printf("Total ghosts on map are %d\n", ghostsOnMap);
 		}
 
 		++x;

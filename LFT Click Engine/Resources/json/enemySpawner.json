@@ -10,7 +10,7 @@
   "101":{
     "slope": 1,
     "c": 1.0,
-    "timeBetweenPhases": 7.0,
+    "timeBetweenPhases": 30.0,
     "objectSpawnName": "enemy"
   }
 }

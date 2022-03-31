@@ -37,7 +37,7 @@ public:
 	Vector2 bounds;
 	Vector2 targetPosOffset;
 	float slope, timeBetweenPhases, c, x, spawnTimer;
-	int totalEnemies;
+	int totalZombiesOnMap, ghostsOnMap;
 
 private:
 	Vector2 myPos;
