@@ -28,6 +28,8 @@ public:
 	void UnsubscribeFromAllEvents(GameObject* g);
 	bool RemoveOld(const Message& m) { return SDL_GetTicks() >= m.tickTime; }
 	void Reset();
+
+private:
 	void ProcessCollision();
 
 private:

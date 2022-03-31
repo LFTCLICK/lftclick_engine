@@ -39,6 +39,8 @@ bool Gun::ReadyToFire()
 
 void Gun::Fire(float targetX, float targetY)
 {
+	if (trans == nullptr) return;
+
 	GameObject* bullet = gom->ClonePrefabOfTag(gof, bulletTypes[currentBulletIndex].first);
 	Transform* bulletTransform = bullet->getComponent<Transform>();
 	Bullet* bulletComp = bullet->getComponent<Bullet>();

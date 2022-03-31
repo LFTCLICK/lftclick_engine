@@ -18,6 +18,7 @@ using json = nlohmann::json;
 class Enemy : public Component
 {
 public:
+	Enemy() = default;
 
 	// Inherited via Component
 	virtual void Start() override;
@@ -28,7 +29,6 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	Enemy() {};
 
 public:
 	float attackTimer, timer;

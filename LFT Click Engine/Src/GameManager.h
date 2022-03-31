@@ -9,8 +9,6 @@
 #pragma once
 #include "FrameRateController.h"
 
-#define DAY_LENGTH 262.f	// total length of a day
-
 // The idea is that when "time" is: 
 // 
 // Between 0 and SUN_SETTING, the alpha on the darkness will remain at 0
@@ -45,7 +43,6 @@ public:
 	GameManager() : 
 		playerObj(nullptr),
 		playerDead(false), 
-		debugMode(false), 
 		playerScore(0), 
 		darknessLevel(0),
 		monsterCount(0),
@@ -85,7 +82,6 @@ public:
 public:
 	GameObject* playerObj;
 	bool playerDead;
-	bool debugMode;
 	bool playerRestart;
 	float playerScore;
 	float darknessLevel;
@@ -98,6 +94,8 @@ public:
 	float time;
 
 	float chanceOfFindingPart;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> menuBackgroundSRV;
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

@@ -1,4 +1,10 @@
-windowWidth = 800;
-windowHeight = 800;
+config = {
+	windowWidth = 500,
+	windowHeight = 800
+}
 
---GameObject* temp = gom->FindObjectOfTag("Player");
+
+configTrial = {
+	windowWidth = 800,
+	windowHeight = 800
+}

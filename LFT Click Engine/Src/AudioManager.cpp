@@ -50,6 +50,8 @@ int FMODEngine::GenerateChannelID() {
 AudioManager::AudioManager() : engine(nullptr), nextChannelGroupID(0) {}
 
 
+
+
 // Initializes the manager and FMOD engine. Should run only on game initialization.
 void AudioManager::Init() {
 	engine = new FMODEngine;
@@ -60,8 +62,13 @@ void AudioManager::Update() {
 	CheckResult(__func__, engine->Update());
 }
 
-// Terminates the manager and FMOD engine. Should run only on game termination.
-void AudioManager::Term() {
+//// Terminates the manager and FMOD engine. Should run only on game termination.
+//void AudioManager::Term() {
+//	delete engine;
+//}
+
+AudioManager::~AudioManager()
+{
 	delete engine;
 }
 

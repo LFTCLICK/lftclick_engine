@@ -16,6 +16,11 @@
 #include "Gun.h"
 #include "AudioManager.h"
 #include "FrameRateController.h"
+#include "../LuaManager.h"
+#include "Components/Collider.h"
+#include <sol/sol.hpp>
+#include <cassert>
+#include "AStarTerrain.h"
 
 class SquareCollider;
 
@@ -31,37 +36,36 @@ public:
 	static int getStaticCompId() { return ComponentType::PLAYER; };
 
 	virtual Component* Clone(GameObject* newParent);
-	Player() : 
-		isDashing(false), 
-		autopilot(false), 
-		playerSpeed(350.f), 
-		dashSpeedMultiplier(3.f), 
-		dashTime(0.2), 
-		maxHp(100.f), 
-		damageCooldownTimer(2.f), 
-		frc(g_FrameRateController.get()) 
-	{};
-	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
+	Player() : isDashing(false), dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), wood(0) {};
+	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	void HandleMessage(Message* e);
 
 public:
 	void Move(float deltaX, float deltaY);
 	void Dash();
-	void Sidescroll(float deltaTime);
-	bool IsAutopilot() { return autopilot; }
+	//void Sidescroll(float deltaTime);
+	void ChangePlayerState();
 
-	int wood, parts;
-	float hp;
+	int wood, health, parts;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> woodSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> healthSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> bikepartsSRV;
+
+	//initializing LUA state
+	std::string script;
+	sol::state lua_player_state;
+	sol::load_result player_script_update;
 
 private:
 	Transform* trans;
 	Camera* cam;
 	Gun* gun;
-	FrameRateController* frc;
 	Drawable* drawable;
 	SquareCollider* squareCollider;
+
 	DirectX::SimpleMath::Vector2 dashVelocity;
-	float playerSpeed, maxHp, timer, damageCooldownTimer, dashSpeedMultiplier, dashTime, dashTimer, deadZone = 8000;
-	bool isDashing, autopilot, badTouch;
+	float damageCooldownTimer, dashSpeed, dashTime, dashTimer;
+	bool isDashing;
 };

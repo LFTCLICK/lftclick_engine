@@ -13,7 +13,8 @@
 #include <json.hpp>
 #include "Components\GameObject.h"
 #include "Renderer.h"
-#include "GameManager.h"
+#include "GameManager.h"	
+#include "AStarTerrain.h"
 #include "GameObjectFactory.h"
 #include <SDL.h>
 #include <codecvt>
@@ -43,12 +44,12 @@ public:
 	void Start();
 	void Draw();
 	void ProcessCollision();
-	void DoCollision(GameObject * toCheckWith);
-	void Deserialize(GameObjectFactory * gof, json j, bool isPrefab = false);
+	void DoCollision(GameObject* toCheckWith);
+	void Deserialize(GameObjectFactory* gof, json j, bool isPrefab = false);
 	void AddGameObject(GameObject* go);
 	void DeleteAll();
 	void DeleteObjectOfTag(std::string tag);
-	GameObject* ClonePrefabOfTag(GameObjectFactory * gof, std::string tag, bool skipStart = false);
+	GameObject* ClonePrefabOfTag(GameObjectFactory* gof, std::string tag, bool skipStart = false);
 	GameObject* CloneObject(GameObject* go);
 	GameObject* FindObjectOfTag(std::string tag);
 	void BroadcastMessage(Message* m);
@@ -71,4 +72,5 @@ private:
 extern std::unique_ptr<GameObjectManager> g_GameObjManager;
 
 extern std::unique_ptr<Renderer> g_Renderer;
+extern std::unique_ptr<AStarTerrain> g_AStarTerrain;
 //extern std::unique_ptr<GameManager> g_GameManager;
