@@ -48,11 +48,13 @@ class AudioManager
 {
 public:
     AudioManager();
+    ~AudioManager();
+
     AudioManager(AudioManager const&) = delete;
     void operator=(AudioManager const&) = delete;
     void Init();
     void Update();
-    void Term();
+    //void Term();
 
 
     // Functions for loading/unloading sounds and playing them.

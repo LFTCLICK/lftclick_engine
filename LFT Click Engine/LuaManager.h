@@ -7,9 +7,15 @@
 // Purpose			:	Takes care of binding LUA functions
 // History			:
 // ---------------------------------------------------------------------------
-#include <sol/sol.hpp>
+#include "InputManager.h"
+#include "GameObjectManager.h"
 #include "Components/GameObject.h"
-#include <string>
+#include "Components/Player.h"
+#include "Components/Camera.h"
+#include "Components/Gun.h"
+#include "Components/Transform.h"
+#include "FrameRateController.h"
+#include <sol/sol.hpp>
 
 // Luabinding wrapper class using SOL
 class LuaManager
@@ -23,7 +29,6 @@ public:
 	void Update();
 	void RegObjectFunctions(sol::state& state, GameObject* obj);
 	void RegGlobals(sol::state& state);
-	void print();
 
 	/*Call SDL_Log
 	* accessed from inside Lua script

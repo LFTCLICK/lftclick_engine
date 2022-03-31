@@ -16,6 +16,7 @@
 #include "GameManager.h"	
 #include "AStarTerrain.h"
 #include "GameObjectFactory.h"
+#include "GameManager.h"
 #include <SDL.h>
 #include <codecvt>
 #include <iomanip>
@@ -73,4 +74,4 @@ extern std::unique_ptr<GameObjectManager> g_GameObjManager;
 
 extern std::unique_ptr<Renderer> g_Renderer;
 extern std::unique_ptr<AStarTerrain> g_AStarTerrain;
-//extern std::unique_ptr<GameManager> g_GameManager;
+extern std::unique_ptr<GameManager> g_GameManager;

@@ -11,10 +11,6 @@
     <Filter Include="Engine\Components">
       <UniqueIdentifier>{1856f23c-347c-4eee-bf7c-4b0c92ea47fd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Dependencies">
       <UniqueIdentifier>{83574552-3c02-493e-ad05-068508ce3464}</UniqueIdentifier>
     </Filter>
@@ -29,6 +25,10 @@
     </Filter>
     <Filter Include="JSON">
       <UniqueIdentifier>{0f8d8bba-31f6-4fc9-a5d3-2a6887308b48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering\Shaders">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -137,15 +137,6 @@
     <ClCompile Include="Src\Components\Enemy.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Components\FollowMouse.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\LevelGenerator.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\main.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Components\Gun.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
@@ -158,12 +149,19 @@
     <ClCompile Include="Src\Components\CircleCollider.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
-    <ClCompile Include="LuaManager.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Components\Collider.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Src\Components\FollowMouse.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\LevelGenerator.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="LuaManager.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
@@ -280,10 +278,6 @@
     <ClInclude Include="Src\Components\Enemy.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Src\CollisionResolution.h" />
-    <ClInclude Include="Src\Components\FollowMouse.h" />
-    <ClInclude Include="Src\Components\LevelGenerator.h" />
-    <ClInclude Include="Src\Helpers.h" />
     <ClInclude Include="Src\Components\Gun.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
@@ -299,11 +293,23 @@
     <ClInclude Include="Src\AStarTerrain.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Components\CircleCollider.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\FollowMouse.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\LevelGenerator.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
     <ClInclude Include="LuaManager.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Components\CircleCollider.h">
-      <Filter>Engine\Components</Filter>
+    <ClInclude Include="Src\CollisionResolution.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Helpers.h">
+      <Filter>Engine\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -382,7 +388,6 @@
     <None Include="Resources\json\turret.json">
       <Filter>JSON</Filter>
     </None>
-    <None Include="Resources\LuaScripts\playerScript.lua" />
     <None Include="Resources\json\grassTile.json">
       <Filter>JSON</Filter>
     </None>
@@ -482,6 +487,45 @@
     <None Include="Resources\json\junk.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\tree.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\6thSprite.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\bullet_fast.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_enemy.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_level.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_level_generator.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_player.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\darkness.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\doorwayObj.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\doorwayObj_back.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\enemy.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\enemy_bullet.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\enemySpawner.json">
+      <Filter>JSON</Filter>
+    </None>
     <None Include="Resources\json\survival.json">
       <Filter>JSON</Filter>
     </None>
@@ -497,13 +541,22 @@
     <None Include="Resources\json\zombieSpawner.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\grass.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\junk.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\LuaScripts\playerScript.lua">
+      <Filter>Lua Scripts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Rendering\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="Src\Shaders\VertexShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Rendering\Shaders</Filter>
     </FxCompile>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
   </ItemGroup>

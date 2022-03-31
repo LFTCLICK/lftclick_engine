@@ -24,6 +24,7 @@ struct SoundInfo {
 	std::string name;
 	bool loop = false;
 	bool compressed = true;
+	bool scaleVolumeWithDanger = false;
 	float pitchRange[2] = { 1.f, 1.f };
 	float volume = 100.f;
 	std::vector<int> playEvents;
@@ -52,7 +53,14 @@ public:
 	virtual void HandleMessage(Message* e) override;
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
-	Audible() : am(g_AudioManager.get()), sounds({}), frc(g_FrameRateController.get()), positionless(false) {}
+	Audible() : 
+		am(g_AudioManager.get()), 
+		sounds({}), 
+		frc(g_FrameRateController.get()), 
+		positionless(false),
+		dangerScaleChannel(-1),
+		dangerScaleChannelVolumeMax(100)
+	{}
 	~Audible();
 
 	void LoadSounds(std::vector<SoundInfo> newSounds);
@@ -86,4 +94,6 @@ protected:
 	std::map<int, std::string> channels;
 
 	bool positionless;
+	int dangerScaleChannel;
+	float dangerScaleChannelVolumeMax;
 };

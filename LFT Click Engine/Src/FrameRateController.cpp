@@ -1,18 +1,16 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
 // File Name		:	FrameRateController.cpp
-// Author			:	Vance Howald
+// Author			:	Abhijit Zala
 // Creation Date	:	2021/10/06
-// Purpose			:	Implementation
-// History			:
+// Purpose			:	Frame Controller
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "FrameRateController.h"
 #include <iostream>
 #include <Windows.h>
 #include <synchapi.h>
-//This has to be called if there is a considerable gap (especially because of loading) between end and start of frame
-//ticksSinceLastFrame is used for DeltaTime and if there is a big gap due to loading the start of the game thinks the player needs to move a lot farther than they should
+
 
 void FrameRateController::Init(int desiredFPS)
 {
@@ -68,6 +66,8 @@ void FrameRateController::Tick()
 
 	if (m_DeltaTime < 0.0)
 		m_DeltaTime = 0.0;
+	if (g_GameManager->playerDead)
+		m_DeltaTime = 0;
 }
 
 float FrameRateController::DeltaTime()

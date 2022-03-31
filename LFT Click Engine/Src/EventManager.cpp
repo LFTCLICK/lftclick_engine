@@ -37,6 +37,8 @@ void EventManager::AddedTimedMessage(Message * m)
 
 void EventManager::Update()//handles timed messages
 {
+	ProcessCollision();
+
 	std::list<Message*>::iterator it = messageQueue.begin();
 	while (it != messageQueue.end())
 	{

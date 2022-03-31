@@ -11,7 +11,7 @@ void Door::Start()
 	p = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
 	zeroIndexDoorPhases = doorPhases-1;
 	currentPhase = zeroIndexDoorPhases;
-	hp = maxHp;
+	health = maxHp;
 	hpPerPhase = maxHp / zeroIndexDoorPhases;
 	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, componentOwner);
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
@@ -37,7 +37,7 @@ void Door::Update()
 			p->wood -= woodRequiredPerPhase;
 			internalTimer = 0;
 			currentPhase++;
-			hp += hpPerPhase;
+			health += hpPerPhase;
 			UpdateImage();
 			if (sqCollider->isTrigger)
 				sqCollider->isTrigger = false;
@@ -46,7 +46,7 @@ void Door::Update()
 	else
 		internalTimer = 0;
 	playerInRange = false;
-	if (hp <= 0 && !sqCollider->isTrigger)
+	if (health <= 0 && !sqCollider->isTrigger)
 	{
 		UpdateImage();
 		sqCollider->isTrigger = true;
@@ -84,15 +84,15 @@ void Door::HandleMessage(Message* e)
 	{
 		playerInRange = true;
 	}
-	else if (e->otherObject->componentOwner->tag == "enemy" && hp > 0)
+	else if (e->otherObject->componentOwner->tag == "enemy" && health > 0)
 	{
 		Enemy* currentEnemy = e->otherObject->componentOwner->getComponent<Enemy>();
 		currentEnemy->timer+= g_FrameRateController->DeltaTime();
 		if (currentEnemy->timer > currentEnemy->attackTimer)
 		{
 			currentEnemy->timer = 0;
-			hp -= currentEnemy->damage;
-			while(hp < maxHp * ((float)(currentPhase - 1) / zeroIndexDoorPhases))
+			health -= currentEnemy->damage;
+			while(health < maxHp * ((float)(currentPhase - 1) / zeroIndexDoorPhases))
 			{
 				currentPhase--;
 				UpdateImage();

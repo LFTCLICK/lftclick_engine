@@ -1,16 +1,15 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
 // File Name		:	FrameRateController.h
-// Author			:	Vance Howald
+// Author			:	Abhijit Zala
 // Creation Date	:	2021/10/06
-// Purpose			:	Frame Controler
-// History			: 
-// - 2021/10/29		Singleton
+// Purpose			:	Frame Controller
 // ---------------------------------------------------------------------------
 #pragma once
 #include <SDL.h>
 #include <sol/sol.hpp>
 
+#include <GameManager.h>
 class FrameRateController
 {
 public:
@@ -21,8 +20,6 @@ public:
 
 	void Tick();
 	void Reset();
-	void StartOfFrame();
-	void EndOfFrame();
 	float DeltaTime();
 
 private:
@@ -35,3 +32,4 @@ private:
 };
 
 extern std::unique_ptr<FrameRateController> g_FrameRateController;
+extern std::unique_ptr<GameManager> g_GameManager;

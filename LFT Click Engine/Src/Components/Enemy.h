@@ -18,6 +18,7 @@ using json = nlohmann::json;
 class Enemy : public Component
 {
 public:
+	Enemy() :path() {};
 
 	// Inherited via Component
 	virtual void Start() override;
@@ -28,18 +29,27 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	Enemy() {};
 
 public:
 	float attackTimer, timer;
 	float damage;
+	float pathTimer=0;
 	float speed;
 	float aiSwitchDistance;
 	bool hanginWithTheHomies;
 	bool switchToPlayer;
 	DirectX::SimpleMath::Vector2 goal;
 	DirectX::SimpleMath::Vector2 targetBeforePlayer;
+	std::list<DirectX::SimpleMath::Vector2> path;
+	std::list<DirectX::SimpleMath::Vector2>::iterator currentPathPos;
+	bool useObstacleAvoidance;
+	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(0 - 2280.0f/2, -2280.0f/2, 2280.0f, 2280.0f);
+	bool doAstar;
+	float reEvaluateStratTimer;
 
 private:
 	Transform* trans;
+	Transform* playerTrans;
+	float zHelper;
 };
+extern std::unique_ptr<AStarTerrain> g_AStarTerrain;

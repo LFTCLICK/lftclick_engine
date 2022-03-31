@@ -54,7 +54,7 @@ if is_triggered(space_pressed) then
 end
 
 -- mouse left button clicked then shoot bullet
-if is_mouse_button_triggered(left_mouse_click) and fire_rate_timer() then
+if is_mouse_button_pressed(left_mouse_click) and fire_rate_timer() then
 	x = (mouse_pos_x() - 400) + xPos_of_cam()
 	y = -1 * (mouse_pos_y() - 400) + yPos_of_cam()
 	fire(x, y)

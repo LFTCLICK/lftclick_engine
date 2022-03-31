@@ -22,8 +22,6 @@
 #include <cassert>
 #include "AStarTerrain.h"
 
-#include "AStarTerrain.h"
-
 class SquareCollider;
 
 using json = nlohmann::json;
@@ -49,7 +47,11 @@ public:
 	//void Sidescroll(float deltaTime);
 	void ChangePlayerState();
 
-	int wood, hp, parts;
+	int wood, health, parts;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> woodSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> healthSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> bikepartsSRV;
 
 	//initializing LUA state
 	std::string script;

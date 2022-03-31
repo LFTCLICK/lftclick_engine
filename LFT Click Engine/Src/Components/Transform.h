@@ -46,9 +46,10 @@ public:
 
 	DirectX::SimpleMath::Vector2 position, oldPos, lastMovement, scale;
 	bool isMoving, wasMoving;
+	float zPos;
 
 private:
-	float rotation, zPos;
+	float rotation;
 	bool matchPlayerPos;
 	DirectX::XMFLOAT4X4 m;
 	DirectX::XMVECTOR v;

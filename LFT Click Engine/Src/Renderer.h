@@ -1,10 +1,9 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	Renderer.h
-// Author			:	Vance Howald, Abhijit Zala
-// Creation Date	:	2021/11/14
+// File Name		:	Renderer.cpp
+// Author			:	Abhijit Zala
+// Creation Date	:	
 // Purpose			:	DX11 Rendering stuff
-// History			:
 // ---------------------------------------------------------------------------
 #pragma once
 #include <SpriteBatch.h>
@@ -21,6 +20,7 @@ class Renderer
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
+	Microsoft::WRL::ComPtr<ID3D11BlendState> alphaToCoverageBS;
 
 	DXGI_FORMAT backBufferFormat;
 	DXGI_FORMAT depthStencilBufferFormat;
