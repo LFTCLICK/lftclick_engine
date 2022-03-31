@@ -1,13 +1,5 @@
 #include "pch.h"
 #include "LuaManager.h"
-#include "InputManager.h"
-#include "GameObjectManager.h"
-#include "GameManager.h"
-#include "Components/Player.h"
-#include "Components//Camera.h"
-#include "Components/Gun.h"
-#include "Components/Transform.h"
-#include "FrameRateController.h"
 
 // constructor
 LuaManager::LuaManager() {
