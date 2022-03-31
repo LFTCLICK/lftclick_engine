@@ -26,6 +26,11 @@ public:
 	static int getStaticCompId() {return Component::TRANSFORM;};
 	virtual Component* Clone(GameObject* newParent);
 	void HandleMessage(Message* e);
+
+	float GetlastMovementX();
+	float GetlastMovementY();
+	DirectX::SimpleMath::Vector2 CurrentPos();
+
 	~Transform();
 
 public:
@@ -36,7 +41,6 @@ public:
 
 	void SetPos(float newX, float newY, float newZ);
 	void Rotate(float angleDelta);
-	DirectX::SimpleMath::Vector2 CurrentPos();
 	
 	DirectX::XMMATRIX GetXMMatrix();
 

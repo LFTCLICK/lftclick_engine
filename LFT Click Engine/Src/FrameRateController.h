@@ -9,8 +9,9 @@
 // ---------------------------------------------------------------------------
 #pragma once
 #include <SDL.h>
-#include <GameManager.h>
+#include <sol/sol.hpp>
 
+#include <GameManager.h>
 class FrameRateController
 {
 public:
@@ -24,6 +25,7 @@ public:
 	void StartOfFrame();
 	void EndOfFrame();
 	float DeltaTime();
+
 private:
 	__int64 m_CurrentTime;
 	__int64 m_PreviousTime;
