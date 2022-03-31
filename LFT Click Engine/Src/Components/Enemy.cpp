@@ -3,37 +3,92 @@
 #include "Enemy.h"
 #include "FrameRateController.h"
 #include "EventManager.h"
+#include "Collider.h"
+#include "SquareCollider.h"
 
 void Enemy::Start()
 {
 	trans = componentOwner->getComponent<Transform>();
+	playerTrans = g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	switchToPlayer = false;
+	zHelper = g_GameManager->mapHeight * 2.0f / 4.0f;
+	reEvaluateStratTimer = -2;
 }
 
 void Enemy::Update()
 {
-	DirectX::SimpleMath::Vector2 targetVector = -trans->CurrentPos();
-	if (!switchToPlayer)
+	if (reEvaluateStratTimer <= 0.0f)
 	{
-		if(fabsf(trans->CurrentPos().y-targetBeforePlayer.y)<=20)
+		DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(playerTrans->position.x, playerTrans->position.y, 1.0f, 1.0f);
+		DirectX::SimpleMath::Rectangle c = DirectX::SimpleMath::Rectangle(trans->position.x, trans->position.y, 1.0f, 1.0f);
+		if (!cabinRect.Intersects(b))//player is outside
 		{
-			switchToPlayer = true;
+			if (!cabinRect.Intersects(c))//enemy is outside
+			{
+				doAstar = false;
+				pathTimer = -1.0f;
+				//do avoidance
+			}
+			else
+			{
+				doAstar = true;
+			}
 		}
 		else
 		{
-			targetVector += targetBeforePlayer;
+			doAstar = true;
 		}
+		reEvaluateStratTimer = .15f;
 	}
-	if (switchToPlayer)
+	DirectX::SimpleMath::Vector2 targetVector;
+	if (doAstar)
 	{
-		targetVector += g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
+		if (pathTimer <= 0)
+		{
+			GridPos start = g_AStarTerrain->WorldToGridPos(trans->position);
+			GridPos goal = g_AStarTerrain->WorldToGridPos(playerTrans->position);
+			path.clear();
+			path.push_back(playerTrans->position);
+			int pathSize = g_AStarTerrain->ComputePath(&start, &goal, path);
+			currentPathPos = path.begin();
+			pathTimer = .2;
+			float distance = DirectX::SimpleMath::Vector2::Distance(trans->position, playerTrans->position);
+			if (distance > 400)
+			{
+				distance -= 400;
+				pathTimer += .5 * distance / 400;
+			}
+		}
+
+		targetVector = *currentPathPos - trans->CurrentPos();
+
+		float mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
+		if (mag <= speed * g_FrameRateController->DeltaTime())
+		{
+			currentPathPos++;
+			if (currentPathPos == path.end())
+				pathTimer = 0;
+			mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
+		}
+		targetVector = (speed * g_FrameRateController->DeltaTime()) / mag * targetVector;
 	}
-	targetVector = speed * g_FrameRateController->DeltaTime() / targetVector.Length() * targetVector;
+	else
+	{
+		targetVector = playerTrans->position - trans->CurrentPos();
+		float mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
+		targetVector = (speed * g_FrameRateController->DeltaTime()) / mag * targetVector;
+	}
 	//if (hanginWithTheHomies)
 	//	targetVector *= .1f;
 	trans->Move(targetVector.x, targetVector.y);
+	pathTimer -= g_FrameRateController->DeltaTime();
+	reEvaluateStratTimer -= g_FrameRateController->DeltaTime();
 	hanginWithTheHomies = false;
+
+	//trans->zPos = trans->position.y / 1000.0f;
+	//trans->zPos = (trans->position.y + g_GameManager->mapHeight) / 1000.0f;
+	trans->zPos = (trans->position.y + g_GameManager->mapHeight) / zHelper;
 }
 
 void Enemy::Deserialize(nlohmann::json j, GameObject* componentOwner)

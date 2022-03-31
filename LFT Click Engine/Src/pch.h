@@ -20,7 +20,6 @@
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
 
-#ifdef _DEBUG
 // Integrating LUA
 extern "C"
 {
@@ -37,7 +36,6 @@ extern "C"
 
 // Error checking for LUA
 bool CheckLua(lua_State* L, int r);
-#endif
 
 namespace DX
 {

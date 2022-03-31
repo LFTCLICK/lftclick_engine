@@ -445,6 +445,12 @@
     <None Include="Resources\json\grass.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\junk.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\tree.json">
+      <Filter>JSON</Filter>
+    </None>
     <None Include="Resources\json\6thSprite.json">
       <Filter>JSON</Filter>
     </None>

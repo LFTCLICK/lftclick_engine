@@ -29,6 +29,10 @@
       "tag": "grass"
     },
     {
+      "prefab": "Resources\\json\\tree.json",
+      "tag": "tree"
+    },
+    {
       "prefab": "Resources\\json\\player.json",
       "tag": "player"
     },
@@ -65,7 +69,8 @@
     "path": "Resources\\images\\map3.png",
     "key": {
       "5b3d2e": "wall",
-      "133832": "junk"
+      "133832": "junk",
+      "a06524": "tree"
     },
     "objectSize": 60
   },

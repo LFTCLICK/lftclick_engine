@@ -33,15 +33,21 @@ void Audible::LoadSounds(std::vector<SoundInfo> newSounds) {
 }
 
 void Audible::Update() {
-	for (auto channel = channels.begin(); channel != channels.end();)
+	for (auto channel = channels.begin(); channel != channels.end();) {
 		if (!am->IsPaused(channel->first) && !am->IsPlaying(channel->first)) {
 			channel = channels.erase(channel);
-		}
-		else
+		} else {
 			++channel;
+		}
+
+		if (dangerScaleChannel > -1) {
+			am->SetVolume(dangerScaleChannel, g_GameManager->GetDangerLevel() * dangerScaleChannelVolumeMax);
+		}
+	}
 
 	if (positionless) {
 		auto playerTrans = g_GameManager->playerTrans;
+		
 		if (playerTrans != nullptr) {
 			if (playerTrans->isMoving != playerTrans->wasMoving) {
 				HandleSoundsOnEvent(playerTrans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
@@ -87,7 +93,12 @@ Audible::~Audible() {
 void Audible::PlaySound(SoundInfo sound) {
 	float pitch = sound.pitchRange[0] + (sound.pitchRange[0] == sound.pitchRange[1] ?
 		0 : ((float)rand() / RAND_MAX) * (sound.pitchRange[1] - sound.pitchRange[0]));
-	channels[am->PlaySound(sound.name, channelGroupName, sound.volume, pitch)] = sound.name;
+	int channelID = am->PlaySound(sound.name, channelGroupName, sound.volume, pitch);
+	channels[channelID] = sound.name;
+	if (sound.scaleVolumeWithDanger) {
+		dangerScaleChannel = channelID;
+		dangerScaleChannelVolumeMax = sound.volume;
+	}
 }
 
 void Audible::Unpause() {
@@ -146,6 +157,12 @@ void Audible::StopSound(std::string soundName) {
 	for (auto channelIt = channels.begin(); channelIt != channels.end(); ++channelIt) {
 		if (channelIt->second == soundName) {
 			am->Stop(channelIt->first);
+
+			if (channelIt->first == dangerScaleChannel) {
+				dangerScaleChannel = -1;
+				dangerScaleChannelVolumeMax = 100;
+			}
+
 			channels.erase(channelIt->first);
 			break;
 		}
@@ -194,6 +211,7 @@ void Audible::Deserialize(nlohmann::json j, GameObject* componentOwner)
 			if (sound.contains("loop")) soundInfo.loop = sound["loop"];
 			if (sound.contains("compressed")) soundInfo.compressed = sound["compressed"];
 			if (sound.contains("volume")) soundInfo.volume = sound["volume"];
+			if (sound.contains("scaleVolumeWithDanger")) soundInfo.scaleVolumeWithDanger = sound["scaleVolumeWithDanger"];
 			if (sound.contains("pitchRange")) {
 				soundInfo.pitchRange[0] = sound["pitchRange"][0];
 				soundInfo.pitchRange[1] = sound["pitchRange"][1];
@@ -204,10 +222,12 @@ void Audible::Deserialize(nlohmann::json j, GameObject* componentOwner)
 			if (sound.contains("stopEvents"))
 				soundInfo.stopEvents.insert(soundInfo.stopEvents.begin(), std::begin(sound["stopEvents"]), std::end(sound["stopEvents"]));
 
+
 			sounds.push_back(soundInfo);
 		}
 	}
 
 	if (j.contains("positionless"))
 		positionless = j["positionless"];
+
 }

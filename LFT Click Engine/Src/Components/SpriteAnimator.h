@@ -42,13 +42,14 @@ public:
 		wasInRange(false),
 		currentFrame(0),
 		currentAnimationIndex(0),
-		direction("right")
+		direction("right"),
+		currentPhase(0)
 	{}
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
 public:
 	void UpdateDirection();
-	void UpdateState();
+	void UpdateState(bool forceUpdate = false);
 	void UpdateFrame();
 	void SwitchAnimation(int index);
 	void SwitchAnimation(std::string name);
@@ -58,6 +59,7 @@ public:
 	void Revive();
 	void InRange();
 	void OutOfRange();
+	void SwitchPhase(int phase);
 
 private:
 	Drawable* draw;
@@ -68,7 +70,7 @@ private:
 	std::map<int, AnimationInfo> animations;
 	std::map<std::string, int> moveAnimationIndices;
 	std::map<std::string, int> idleAnimationIndices;
-	int damageAnimationIndex, deathAnimationIndex, interactRangeAnimationIndex;
+	int damageAnimationIndex, deathAnimationIndex, interactRangeAnimationIndex, currentPhase;
 
 	std::string oldDirection, direction;
 
