@@ -15,13 +15,18 @@ void AStarTerrain::Init()
             Node* current = nodeMap[row][col];
             current->gCost = FLT_MAX;
             current->fCost = FLT_MAX;
+            current->currentItr = -1;
             if (terrain[row][col] == -1)
+            {
                 current->gCost = -10;
+                current->currentItr = INT_MAX;
+            }
             current->parent = nullptr;
             current->onCloseList = false;
 
         }
     }
+    trueItr = 0;
 }
 
 GridPos AStarTerrain::WorldToGridPos(DirectX::SimpleMath::Vector2 pos)
@@ -41,24 +46,27 @@ int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::
     if (start->row < 0)
         return -1;
 
-    for (int row = 0; row < height; ++row)
-    {
-        for (int col = 0; col < width; ++col)
-        {
-            Node* current = nodeMap[row][col];
-            current->gCost = FLT_MAX;
-            current->fCost = FLT_MAX;
-            if (terrain[row][col] == -1)
-                current->gCost = -10;
-            current->parent = nullptr;
-            current->onCloseList = false;
-
-        }
-    }
+    //for (int row = 0; row < height; ++row)
+    //{
+    //    for (int col = 0; col < width; ++col)
+    //    {
+    //        Node* current = nodeMap[row][col];
+    //        current->gCost = FLT_MAX;
+    //        current->fCost = FLT_MAX;
+    //        if (terrain[row][col] == -1)
+    //            current->gCost = -10;
+    //        current->parent = nullptr;
+    //        current->onCloseList = false;
+    //
+    //    }
+    //}
+    trueItr++;
     Node* startingPos = nodeMap[start->row][start->col];
     startingPos->gCost = 0;
     startingPos->fCost = Octile(start, goal);
-
+    startingPos->currentItr = trueItr;
+    startingPos->parent = nullptr;
+    startingPos->onCloseList = false;
     openList.push(startingPos);
     while (!openList.empty())
     {
@@ -66,7 +74,6 @@ int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::
         openList.pop();
         if (current->onCloseList)
             continue;
-
         if (current->pos == *goal)
         {
             //do rubberbanding here
@@ -182,6 +189,15 @@ int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::
                 if (deltaRow + current->pos.row >= width || deltaRow + current->pos.row < 0 || deltaCol + current->pos.col >= height || deltaCol + current->pos.col < 0)
                     continue;
                 Node* newSpace = nodeMap[deltaRow + current->pos.row][current->pos.col + deltaCol];
+
+                if (newSpace->currentItr < trueItr)
+                {
+                    newSpace->gCost = FLT_MAX;
+                    newSpace->fCost = FLT_MAX;
+                    newSpace->currentItr = trueItr;
+                    newSpace->parent = nullptr;
+                    newSpace->onCloseList = false;
+                }
 
                 if ((deltaRow * deltaCol != 0 && newSpace->gCost > current->gCost + SQRT_2 + .01f) || (deltaRow * deltaCol == 0 && newSpace->gCost > newGCost + .01f))
                 {

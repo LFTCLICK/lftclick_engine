@@ -100,7 +100,8 @@ void GameObjectManager::ProcessCollision()
 	maxScreenSize /= 2;
 	maxScreenSize += 5;
 	bool firstItt = true;
-	for (auto mainListItt = gameObjectList.begin(); mainListItt != gameObjectList.end(); ++mainListItt)
+	auto gameObjectListEnd = gameObjectList.end();
+	for (auto mainListItt = gameObjectList.begin(); mainListItt != gameObjectListEnd; ++mainListItt)
 	{
 		if (!(*mainListItt)->isActive || (*mainListItt)->isDeletable)
 			continue;
@@ -123,7 +124,7 @@ void GameObjectManager::ProcessCollision()
 			Collider* s = (Collider*)(*mainListItt)->getRawComponentPointer(COLLIDER_IDS[mainColliderIndex]);
 			if (s == nullptr)
 				continue;
-			for (auto innerLoop = std::next(mainListItt); innerLoop != gameObjectList.end(); ++innerLoop)
+			for (auto innerLoop = std::next(mainListItt); innerLoop != gameObjectListEnd; ++innerLoop)
 			{
 				if (!(*innerLoop)->isActive || (*innerLoop)->isDeletable)
 					continue;
@@ -131,15 +132,16 @@ void GameObjectManager::ProcessCollision()
 				if (firstItt)
 				{
 					(*innerLoop)->isOnScreen = false;
-					distanceFromCenter = cameraPos - (*innerLoop)->trans->position;
+					distanceFromCenter = cameraPos - toCheckTrans->position;
 					distanceFromCenter.x = std::fabsf(distanceFromCenter.x);
 					distanceFromCenter.y = std::fabsf(distanceFromCenter.y);
 					maxDistance = distanceFromCenter.x > distanceFromCenter.y ? distanceFromCenter.x : distanceFromCenter.y;
-					if (maxDistance - std::max((*innerLoop)->trans->scale.x, (*innerLoop)->trans->scale.y) < maxScreenSize)
+					if (maxDistance - std::max(toCheckTrans->scale.x, toCheckTrans->scale.y) < maxScreenSize)
 					{
 						(*innerLoop)->isOnScreen = true;
 					}
 				}
+
 				for (Collider* toCheckWith : (*innerLoop)->colliders)
 				{
 					//Collider* toCheckWith = (Collider*)(*innerLoop)->getRawComponentPointer(COLLIDER_IDS[innerColliderIndex]);
@@ -179,11 +181,11 @@ void GameObjectManager::ProcessCollision()
 
 void GameObjectManager::DoCollision(GameObject* toCheckWith)
 {
-	/*for (std::list<GameObject*>::iterator it = gameObjectList.begin(); it != gameObjectList.end();)
+	/*for (std::list<GameObject*>::iterator it = gameObjectList.begin(); it != gameObjectList.gameObjectListEnd();)
 	{
 		GameObject* toCheck = *it;
 		++it;
-		for (std::list<GameObject*>::iterator innerIt = it; innerIt != gameObjectList.end(); ++innerIt)
+		for (std::list<GameObject*>::iterator innerIt = it; innerIt != gameObjectList.gameObjectListEnd(); ++innerIt)
 		{
 			CollisionResolution
 		}
