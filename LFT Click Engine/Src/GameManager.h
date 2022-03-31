@@ -8,6 +8,8 @@
 // ---------------------------------------------------------------------------
 #pragma once
 
+#define DAY_LENGTH 10.f	// total length of a day
+
 // The idea is that when "time" is: 
 // 
 // Between 0 and SUN_SETTING, the alpha on the darkness will remain at 0
@@ -36,6 +38,12 @@ class Camera;
 class Transform;
 class GameObject;
 
+enum class EGameLevel
+{
+	Mainmenu,
+	Level0
+};
+
 class GameManager
 {
 public:
@@ -51,9 +59,10 @@ public:
 		mainCamera(nullptr),
 		day(1), 
 		time(0),
-		chanceOfFindingPart(INITIAL_CHANCE_TO_FIND_PART)
+		chanceOfFindingPart(INITIAL_CHANCE_TO_FIND_PART),
+		currentLevel(EGameLevel::Mainmenu)
 	{}
-	~GameManager() {}
+	~GameManager() = default;
 
 	void UpdateTime();
 
@@ -97,6 +106,8 @@ public:
 	float chanceOfFindingPart;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> menuBackgroundSRV;
+
+	EGameLevel currentLevel;
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;
