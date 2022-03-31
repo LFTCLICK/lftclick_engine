@@ -22,8 +22,6 @@
 #include <cassert>
 #include "AStarTerrain.h"
 
-#include "AStarTerrain.h"
-
 class SquareCollider;
 
 using json = nlohmann::json;

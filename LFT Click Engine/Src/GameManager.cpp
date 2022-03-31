@@ -17,12 +17,46 @@ void GameManager::UpdateTime()
 		time -= DAY_LENGTH;
 		day++;
 	}
+
+	if (time < SUN_SETTING) darknessLevel = 0;
+	else if (time < SUN_DOWN) darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+	else if (time < SUN_RISING) darknessLevel = 1;
+	else darknessLevel = (DAY_LENGTH - time) / (DAY_LENGTH - SUN_RISING);
+
+	dangerLevel = (darknessLevel + (monsterCount < MAX_DANGER_ENEMY_COUNT ? (float)monsterCount / MAX_DANGER_ENEMY_COUNT : 1)) / 2.f;
 }
 
 float GameManager::GetDarknessLevel()
 {
-	if (time < SUN_SETTING) return 0;
-	if (time < SUN_DOWN) return 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
-	if (time < SUN_RISING) return 1;
-	return (DAY_LENGTH - time) / (DAY_LENGTH - SUN_RISING);
+	return darknessLevel;
+}
+
+float GameManager::GetDangerLevel()
+{
+	return dangerLevel;
+}
+
+float GameManager::GetChanceOfFindingPart()
+{
+	return chanceOfFindingPart;
+}
+
+void GameManager::PartSearchFailed()
+{
+	chanceOfFindingPart += CHANCE_TO_FIND_PART_INCREMENT;
+}
+
+void GameManager::PartSearchSuccessful()
+{
+	chanceOfFindingPart = INITIAL_CHANCE_TO_FIND_PART;
+}
+
+void GameManager::MonsterCountPlus() 
+{
+	monsterCount++;
+}
+
+void GameManager::MonsterCountMinus()
+{
+	if (monsterCount > 0) monsterCount--;
 }

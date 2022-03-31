@@ -9,6 +9,7 @@
 #include <SDL.h>
 #include <sol/sol.hpp>
 
+#include <GameManager.h>
 class FrameRateController
 {
 public:
@@ -31,3 +32,4 @@ private:
 };
 
 extern std::unique_ptr<FrameRateController> g_FrameRateController;
+extern std::unique_ptr<GameManager> g_GameManager;

@@ -32,10 +32,9 @@
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "image": "Resources\\images\\junk_sprite_sheet.png"
   },
-  "4": {
-    "center": [ 0.0, -0.0, 0.0 ],
-    "width": 90,
-    "height": 90,
+  "13": {
+    "center": [ 0.0, -5.0, 0.0 ],
+    "radius": 50,
     "trigger": false,
     "static": true,
     "deleteOnCollison": false
@@ -43,6 +42,7 @@
   "6": {
     "spriteSheetWidth": 4,
     "spriteSheetHeight": 8,
+    "interactable": true,
     "animations": [
       {
         "name": "outOfRangeJunk",
@@ -66,12 +66,13 @@
         "name": ".\\Resources\\sounds\\searching.mp3",
         "loop": true,
         "volume": 15,
-        "pitchRange": [ 0.85, 1.15 ],
+        "pitchRange": [ 0.9, 1.1 ],
         "playEvents": [
           1005
         ],
         "stopEvents": [
-          1005
+          1005,
+          2000
         ]
       },
       {

@@ -33,6 +33,10 @@ void GameObjectManager::Update()
 		GameObject* g = *objIt;
 
 		if (g->isDeletable) {
+
+			if (g->tag == "zombie" || g->tag == "ghost" || g->tag == "enemy") 
+				g_GameManager->MonsterCountMinus();
+
 			g_EventManager->UnsubscribeFromAllEvents(g);
 			objIt = gameObjectList.erase(objIt);
 			delete g;
@@ -60,7 +64,7 @@ void GameObjectManager::Draw()
 
 	for (GameObject* g : gameObjectList)
 	{
-		if (g->isActive)
+		if (g->isActive && g->isOnScreen)
 		{
 #ifdef _DEBUG
 			if (!debugDraw)
@@ -93,7 +97,8 @@ void GameObjectManager::ProcessCollision()
 	DirectX::SimpleMath::Vector2 distanceFromCenter;
 	float maxDistance;
 	float maxScreenSize = g_Renderer->GetWidth() > g_Renderer->GetHeight() ? (float)g_Renderer->GetWidth() : (float)g_Renderer->GetHeight();
-	maxScreenSize += 0.0001f;
+	maxScreenSize /= 2;
+	maxScreenSize += 5;
 	bool firstItt = true;
 	for (auto mainListItt = gameObjectList.begin(); mainListItt != gameObjectList.end(); ++mainListItt)
 	{
@@ -129,9 +134,11 @@ void GameObjectManager::ProcessCollision()
 					distanceFromCenter = cameraPos - (*innerLoop)->trans->position;
 					distanceFromCenter.x = std::fabsf(distanceFromCenter.x);
 					distanceFromCenter.y = std::fabsf(distanceFromCenter.y);
-					maxDistance = distanceFromCenter.x < distanceFromCenter.y ? distanceFromCenter.x : distanceFromCenter.y;
+					maxDistance = distanceFromCenter.x > distanceFromCenter.y ? distanceFromCenter.x : distanceFromCenter.y;
 					if (maxDistance - std::max((*innerLoop)->trans->scale.x, (*innerLoop)->trans->scale.y) < maxScreenSize)
+					{
 						(*innerLoop)->isOnScreen = true;
+					}
 				}
 				for (Collider* toCheckWith : (*innerLoop)->colliders)
 				{
@@ -207,6 +214,89 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 		prefabList.push_back(returned);
 	}
 
+
+	if (j.contains("Map"))
+	{
+		json map = j["Map"];
+		int objectSize = map["objectSize"], doubleObjectSize = objectSize * 2, halfObjectSize = objectSize / 2;
+
+		std::wstring mapFilePath = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(map["path"]);
+		Gdiplus::Bitmap img(mapFilePath.c_str());
+
+		Gdiplus::Color currentColor;
+		int width = img.GetWidth(), height = img.GetHeight();
+		g_GameManager->mapHeight = (height * objectSize / 2) + objectSize;
+		g_AStarTerrain->width = width;
+		g_AStarTerrain->height = height;
+		g_AStarTerrain->nodeMap = new Node * *[height];
+		g_AStarTerrain->tileSize = objectSize;
+		g_AStarTerrain->terrain = new int* [height];
+		for (int y = 0; y < height; y++)
+		{
+			g_AStarTerrain->nodeMap[y] = new Node * [width];
+			g_AStarTerrain->terrain[y] = new int[width];
+			for (int x = 0; x < width; x++)
+			{
+				Node* current = new Node{};
+				current->pos = { y,x };
+				current->vec3 = DirectX::SimpleMath::Vector3((x - (width / 2)) * objectSize, (y - (height / 2)) * objectSize * -1, 0.0f);
+				g_AStarTerrain->nodeMap[y][x] = current;
+				g_AStarTerrain->terrain[y][x] = 0;
+			}
+		}
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				img.GetPixel(x, y, &currentColor);
+				if (currentColor.GetValue() != Gdiplus::Color::Black) {
+
+					std::stringstream stream;
+					stream << std::hex << (int)currentColor.GetValue();
+					std::string colorHexString = stream.str().substr(2, 6);
+
+					if (map["key"].contains(colorHexString)) {
+						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString]);
+
+						Transform* trans = obj->getComponent<Transform>();
+						SquareCollider* collider = obj->getComponent<SquareCollider>();
+
+						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1, scaleX = trans->scale.x;
+
+						if (collider && !collider->isTrigger)
+						{
+							g_AStarTerrain->terrain[y][x] = -1;
+							//obj->getComponent<SquareCollider>()->isTrigger = true;
+						}
+
+						if (scaleX % doubleObjectSize == 0) {
+							mapX += halfObjectSize;
+							mapY += halfObjectSize;
+
+							if (collider && !collider->isTrigger)
+							{
+								g_AStarTerrain->terrain[y - 1][x] = -1;
+								g_AStarTerrain->terrain[y - 1][x + 1] = -1;
+								g_AStarTerrain->terrain[y][x + 1] = -1;
+							}
+						}
+
+						trans->SetPos(mapX, mapY);
+
+						// Think I basically handled this up above, but leaving this code in just in case
+						/*if (map["key"][colorHexString] == "junk")
+						{
+							obj->getComponent<Transform>()->Move(objectSize / 2, objectSize / 2);
+							g_AStarTerrain->terrain[y-1][x] = -1;
+							g_AStarTerrain->terrain[y-1][x+1] = -1;
+							g_AStarTerrain->terrain[y][x+1] = -1;
+							//obj->getComponent<SquareCollider>()->isTrigger = true;
+
+						}*/
+					}
+				}
+			}
+		}
+	}
 	prefabsJSON = j["Level"];
 	for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
 	{
@@ -224,46 +314,7 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 		}
 	}
 
-	if (j.contains("Map"))
-	{
-		json map = j["Map"];
-		int objectSize = map["objectSize"];
-
-		std::wstring mapFilePath = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(map["path"]);
-		Gdiplus::Bitmap img(mapFilePath.c_str());
-
-		Gdiplus::Color currentColor;
-		int width = img.GetWidth(), height = img.GetHeight();
-		g_AStarTerrain->width = width;
-		g_AStarTerrain->height = height;
-		g_AStarTerrain->nodeMap = new Node * [height];
-		g_AStarTerrain->tileSize = objectSize;
-		g_AStarTerrain->terrain = new int* [height];
-		for (int y = 0; y < height; y++) {
-			g_AStarTerrain->nodeMap[y] = new Node[width];
-			g_AStarTerrain->terrain[y] = new int[width];
-			for (int x = 0; x < width; x++) {
-				img.GetPixel(x, y, &currentColor);
-				if (currentColor.GetValue() != Gdiplus::Color::Black) {
-
-					std::stringstream stream;
-					stream << std::hex << (int)currentColor.GetValue();
-					std::string colorHexString = stream.str().substr(2, 6);
-
-					if (map["key"].contains(colorHexString)) {
-						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString]);
-						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1;
-						obj->getComponent<Transform>()->SetPos(mapX, mapY);
-						if (!obj->getComponent<SquareCollider>() || obj->getComponent<SquareCollider>()->isTrigger)
-							g_AStarTerrain->terrain[y][x] = -1;
-						else
-							g_AStarTerrain->terrain[y][x] = 0;
-
-					}
-				}
-			}
-		}
-	}
+	g_AStarTerrain->Init();
 
 	for (GameObject* g : gameObjectList)
 		g->Start();
@@ -301,6 +352,9 @@ void GameObjectManager::DeleteObjectOfTag(std::string tag)
 
 GameObject* GameObjectManager::ClonePrefabOfTag(GameObjectFactory* gof, std::string tag, bool skipStart)
 {
+	if (tag == "zombie" || tag == "ghost" || tag == "enemy")
+		g_GameManager->MonsterCountPlus();
+
 	for (GameObject* g : prefabList)
 	{
 		if (g->tag == tag)
@@ -316,6 +370,7 @@ GameObject* GameObjectManager::ClonePrefabOfTag(GameObjectFactory* gof, std::str
 			return go;
 		}
 	}
+
 	return nullptr;
 }
 

@@ -1,13 +1,5 @@
 #include "pch.h"
 #include "LuaManager.h"
-#include "InputManager.h"
-#include "GameObjectManager.h"
-#include "GameManager.h"
-#include "Components/Player.h"
-#include "Components//Camera.h"
-#include "Components/Gun.h"
-#include "Components/Transform.h"
-#include "FrameRateController.h"
 
 // constructor
 LuaManager::LuaManager() {
@@ -23,6 +15,7 @@ void LuaManager::RegGlobals(sol::state& state)
 	state.set_function("is_released", &InputManager::isKeyReleased, g_InputManager.get());
 	state.set_function("is_triggered", &InputManager::isKeyTriggered, g_InputManager.get());
 	state.set_function("is_mouse_button_triggered", &InputManager::isMouseButtonTriggered, g_InputManager.get());
+	state.set_function("is_mouse_button_pressed", &InputManager::isMouseButtonPressed, g_InputManager.get());
 	state.set_function("mouse_pos_x", &InputManager::mouseX, g_InputManager.get());
 	state.set_function("mouse_pos_y", &InputManager::mouseY, g_InputManager.get());
 }

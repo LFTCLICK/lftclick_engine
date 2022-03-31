@@ -4,7 +4,7 @@
 // File Name		:	Interactable.h
 // Author			:	Chris Fitch
 // Creation Date	:	2022/03/20
-// Purpose			:	Animates grabables
+// Purpose			:	Makes object interactable
 // History			: 
 // ---------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ public:
 
 	void HandleMessage(Message* e);
 
-	Interactable() {}
+	Interactable() : currentPhase(0), totalPhases(4), currentHp(1), hpPerPhase(1) {}
 
 
 public:
@@ -42,7 +42,10 @@ public:
 	float timeToCollect;
 
 private:
+	void StartInteraction();
 	void StopInteraction();
+	void ContinueInteraction();
+	void CompleteInteraction();
 	bool IsPlayerInRange();
 
 private:
@@ -55,5 +58,5 @@ private:
 
 	bool playerIsInRange, playerWasInRange, interacting;
 	float internalTimer, interactDistance, interactDistanceSq;
-	int currentPhase, hpPerPhase;
+	int currentPhase, totalPhases, currentHp, hpPerPhase;
 };
