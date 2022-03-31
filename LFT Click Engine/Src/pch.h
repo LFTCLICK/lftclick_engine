@@ -1,17 +1,11 @@
 #pragma once
 
 #include <iostream>
-#include <SDL.h>
-#include <SDL_syswm.h>
 #include <Windows.h>
 #include <fstream>
 #include <json.hpp>
 #include <time.h>
 #include <memory.h>
-#include <SDL_keyboard.h>
-#include <SDL_mouse.h>
-#include <SDL_joystick.h>
-#include <SDL_gamecontroller.h>
 #include <directxmath.h>
 #include <d3d11.h>
 #include <wrl/client.h>

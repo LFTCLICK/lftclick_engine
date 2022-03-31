@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "GameManager.h"
+#include "FrameRateController.h"
 
 void GameManager::UpdateTime()
 {

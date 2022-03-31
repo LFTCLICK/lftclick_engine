@@ -125,19 +125,47 @@ int main(int argc, char* args[])
 		g_FrameRateController->Tick();
 		g_Renderer->PrepareForRendering();
 
-		g_AudioManager->Update();
-		g_GameManager->UpdateTime();
-		g_InputManager->Update();
-		g_GameObjManager->Update();
-		g_EventManager->Update();
-		g_LuaManager->Update();
 
-		g_GameObjManager->Draw();
-		g_Renderer->Draw();
+		switch (g_GameManager->currentLevel)
+		{
+		case EGameLevel::Mainmenu:
+			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->menuBackgroundSRV.Get(), XMFLOAT2(0,0), nullptr,
+				Colors::White, 0.0f, XMFLOAT2(0,0), XMFLOAT2(1, 1));
+
+			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_WindowWidth)/2 - 50, 
+				static_cast<float>(g_WindowHeight)/2));
+			ImGui::Begin("mainMenu", nullptr, 
+				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove|ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar 
+				|ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
+
+			if (ImGui::Button("Play", { 100,50 }))
+			{
+				g_GameManager->currentLevel = EGameLevel::Level0;
+			}
+
+			ImGui::End();
+
+			break;
+		case EGameLevel::Level0:
+			g_AudioManager->Update();
+			g_GameManager->UpdateTime();
+			g_InputManager->Update();
+			g_GameObjManager->Update();
+			g_EventManager->Update();
+			g_LuaManager->Update();
+
+			g_GameObjManager->Draw();
+			g_Renderer->Draw();
 
 #ifdef _DEBUG
-		g_DebugRenderer->Draw(g_Renderer->GetContext(), g_Renderer->GetWidth(), g_Renderer->GetHeight());
+			g_DebugRenderer->Draw(g_Renderer->GetContext(), g_Renderer->GetWidth(), g_Renderer->GetHeight());
 #endif
+			break;
+		default:
+			assert("fix ur shit");
+			break;
+		}
+
 		g_Renderer->PresentFrame();
 	}
 
