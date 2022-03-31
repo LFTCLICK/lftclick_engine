@@ -33,6 +33,10 @@ void GameObjectManager::Update()
 		GameObject* g = *objIt;
 
 		if (g->isDeletable) {
+
+			if (g->tag == "zombie" || g->tag == "ghost" || g->tag == "enemy") 
+				g_GameManager->MonsterCountMinus();
+
 			g_EventManager->UnsubscribeFromAllEvents(g);
 			objIt = gameObjectList.erase(objIt);
 			delete g;
@@ -227,7 +231,7 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 	if (j.contains("Map")) 
 	{
 		json map = j["Map"];
-		int objectSize = map["objectSize"];
+		int objectSize = map["objectSize"], doubleObjectSize = objectSize * 2, halfObjectSize = objectSize / 2;
 
 		std::wstring mapFilePath = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(map["path"]);
 		Gdiplus::Bitmap img(mapFilePath.c_str());
@@ -246,8 +250,16 @@ void GameObjectManager::Deserialize(GameObjectFactory * gof, json j, bool isPref
 
 					if (map["key"].contains(colorHexString)) {
 						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString]);
-						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1;
-						obj->getComponent<Transform>()->SetPos(mapX, mapY);
+						Transform* trans = obj->getComponent<Transform>();
+						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1, scaleX = trans->scale.x;
+
+
+						if (scaleX % doubleObjectSize == 0) {
+							mapX += halfObjectSize;
+							mapY += halfObjectSize;
+						}
+
+						trans->SetPos(mapX, mapY);
 					}
 				}
 			}
@@ -290,6 +302,9 @@ void GameObjectManager::DeleteObjectOfTag(std::string tag)
 
 GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::string tag, bool skipStart)
 {
+	if (tag == "zombie" || tag == "ghost" || tag == "enemy")
+		g_GameManager->MonsterCountPlus();
+
 	for (GameObject* g : prefabList)
 	{
 		if (g->tag == tag)
@@ -305,6 +320,7 @@ GameObject * GameObjectManager::ClonePrefabOfTag(GameObjectFactory * gof, std::s
 			return go;
 		}
 	}
+
 	return nullptr;
 }
 

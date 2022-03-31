@@ -9,7 +9,7 @@
 #pragma once
 #include "FrameRateController.h"
 
-#define DAY_LENGTH 10.f	// total length of a day
+#define DAY_LENGTH 262.f	// total length of a day
 
 // The idea is that when "time" is: 
 // 
@@ -23,9 +23,16 @@
 // The darkness alpha level is produced by "GetDarknessLevel()".
 
 
-#define SUN_SETTING 2.f	// when the light should begin lowering
-#define SUN_DOWN 4.f		// when the light should remain at the lowest
-#define SUN_RISING 8.f	// when the light should begin getting brighter
+#define SUN_SETTING 73.2473118279552f	// when the light should begin lowering
+#define SUN_DOWN 125.3655913978464f		// when the light should remain at the lowest
+#define SUN_RISING 177.4838709677376f	// when the light should begin getting brighter
+#define DAY_LENGTH 262.f				// total length of a day
+
+
+#define INITIAL_CHANCE_TO_FIND_PART 0.05f
+#define CHANCE_TO_FIND_PART_INCREMENT 0.05f
+
+#define MAX_DANGER_ENEMY_COUNT 100.f
 
 
 class Camera;
@@ -40,15 +47,40 @@ public:
 		playerDead(false), 
 		debugMode(false), 
 		playerScore(0), 
+		darknessLevel(0),
+		monsterCount(0),
+		dangerLevel(0),
 		playerRestart(false),
 		mainCamera(nullptr),
 		day(1), 
-		time(0)
+		time(0),
+		chanceOfFindingPart(INITIAL_CHANCE_TO_FIND_PART)
 	{}
 	~GameManager() {}
 
 	void UpdateTime();
+
+	// Returns value between 0 and 1, 1 being night time and 0 being day time.
+	// Used for darkness overlay alpha.
 	float GetDarknessLevel();
+
+	// Returns value between 0 and 100, 0 being minimal danger, 100 being maximum.
+	// Calculated using level of darkness and number of zombies.
+	// Used to modify background music volume.
+	float GetDangerLevel();
+
+	// Returns value between 0 and 1. 
+	// 0 being no chance of finding a motorcycle part, 1 being 100% chance.
+	float GetChanceOfFindingPart();
+
+	// Resets 'chanceOfFindingPart' to 'INITIAL_CHANCE_TO_FIND_PART'
+	void PartSearchFailed();
+
+	// Increments 'chanceOfFindingPart' by 'CHANCE_TO_FIND_PART_INCREMENT'
+	void PartSearchSuccessful();
+
+	void MonsterCountPlus();
+	void MonsterCountMinus();
 
 public:
 	GameObject* playerObj;
@@ -56,11 +88,16 @@ public:
 	bool debugMode;
 	bool playerRestart;
 	float playerScore;
+	float darknessLevel;
+	int monsterCount;
+	float dangerLevel;
 	Camera* mainCamera;
 	Transform* playerTrans;
 
 	int day;
 	float time;
+
+	float chanceOfFindingPart;
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

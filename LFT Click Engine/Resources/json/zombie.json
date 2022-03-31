@@ -2,8 +2,8 @@
   "1": {
     "startX": 0.0,
     "startY": 0.0,
-    "scaleX": 80,
-    "scaleY": 80,
+    "scaleX": 50,
+    "scaleY": 50,
     "rot": 0,
     "zPos": 4
   },
@@ -32,14 +32,6 @@
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "image": "Resources\\images\\zombie_sprite_sheet.png"
 
-  },
-  "4": {
-    "center": [ 0.0, -0.0, 0.0 ],
-    "width": 64,
-    "height": 64,
-    "trigger": false,
-    "static": false,
-    "deleteOnCollison": false
   },
   "6": {
     "spriteSheetWidth": 4,
@@ -127,6 +119,13 @@
   },
   "12": {
     "health": 3
+  },
+  "13": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "radius": 25,
+    "trigger": false,
+    "static": false,
+    "deleteOnCollison": false
   },
   "103": {
     "attackTimer": 3.0,

@@ -105,6 +105,28 @@
     "maxHp": 100,
     "damageCooldownTimer": 2
   },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\music\\BackgroundMusicBase.mp3",
+        "loop": true,
+        "volume": 60,
+        "playEvents": [
+          1000
+        ]
+      },
+      {
+        "name": ".\\Resources\\music\\BackgroundMusicAddition.mp3",
+        "loop": true,
+        "volume": 60,
+        "playEvents": [
+          1000
+        ],
+        "scaleVolumeWithDanger": true
+      }
+    ],
+    "positionless": true
+  },
   "10": {
     "bulletTypes": [
       {

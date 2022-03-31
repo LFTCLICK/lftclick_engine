@@ -34,9 +34,15 @@ void SpriteAnimator::UpdateDirection()
 		}
 	}
 }
-void SpriteAnimator::UpdateState()
+void SpriteAnimator::UpdateState(bool forceUpdate)
 {
-	if (trans->isMoving != wasMoving || direction != oldDirection || isDamaged != wasDamaged || isDead != wasDead || isInRange != wasInRange) {
+	if (forceUpdate || 
+		trans->isMoving != wasMoving || 
+		direction != oldDirection || 
+		isDamaged != wasDamaged || 
+		isDead != wasDead || 
+		isInRange != wasInRange) 
+	{
 		if (isDead) {
 			SwitchAnimation(deathAnimationIndex);
 		}
@@ -163,9 +169,8 @@ void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* componentOwner)
 				damageAnimationIndex = index;
 			else if (animation.contains("onDeath") && animation["onDeath"])
 				deathAnimationIndex = index;
-			else if (animation.contains("onInteractRange") && animation["onInteractRange"]) {
+			else if (animation.contains("onInteractRange") && animation["onInteractRange"])
 				interactRangeAnimationIndex = index;
-			}
 		}
 
 		if (idleAnimationIndices["right"] > -1) currentAnimationIndex = idleAnimationIndices["right"];
@@ -174,7 +179,7 @@ void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* componentOwner)
 
 void SpriteAnimator::SwitchAnimation(int index) {
 	currentAnimationIndex = index;
-	draw->yOffset = animations[index].row * yOffset;
+	draw->yOffset = (animations[index].row + currentPhase) * yOffset;
 	currentFrame = 0;
 	timer = 0;
 }
@@ -214,4 +219,9 @@ void SpriteAnimator::OutOfRange() {
 void SpriteAnimator::Revive() {
 	isDead = false;
 	isFinishedDeleting = true;
+}
+
+void SpriteAnimator::SwitchPhase(int phase) {
+	currentPhase = phase;
+	SwitchAnimation(currentAnimationIndex);
 }

@@ -433,6 +433,7 @@
       <Filter>JSON</Filter>
     </None>
     <None Include="Resources\json\junk.json" />
+    <None Include="Resources\json\tree.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

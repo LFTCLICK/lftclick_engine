@@ -441,6 +441,7 @@
     <None Include="Resources\json\survival.json" />
     <None Include="Resources\json\tile.json" />
     <None Include="Resources\json\title.json" />
+    <None Include="Resources\json\tree.json" />
     <None Include="Resources\json\turret.json" />
     <None Include="Resources\json\wall.json" />
     <None Include="Resources\json\woodpile.json" />
