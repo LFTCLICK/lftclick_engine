@@ -11,8 +11,6 @@
     "slope": 1,
     "c": 1.0,
     "timeBetweenPhases": 7.0,
-    "spawnBounds": [ 240.0, 320.0 ],
-    "targetPosOffset": [ 0.0, -350.0 ],
     "objectSpawnName": "zombie"
   }
 }

@@ -9,7 +9,8 @@
 #pragma once
 #include "FrameRateController.h"
 
-#define DAY_LENGTH 10.f	// total length of a day
+//#define DAY_LENGTH 10.f	// total length of a day
+#define DAY_LENGTH 24.f	// total length of a day
 
 // The idea is that when "time" is: 
 // 
@@ -23,9 +24,9 @@
 // The darkness alpha level is produced by "GetDarknessLevel()".
 
 
-#define SUN_SETTING 2.f	// when the light should begin lowering
-#define SUN_DOWN 4.f		// when the light should remain at the lowest
-#define SUN_RISING 8.f	// when the light should begin getting brighter
+#define SUN_SETTING 16.f	// when the light should begin lowering
+#define SUN_DOWN 18.f		// when the light should remain at the lowest
+#define SUN_RISING 22.f	// when the light should begin getting brighter
 
 
 class Camera;

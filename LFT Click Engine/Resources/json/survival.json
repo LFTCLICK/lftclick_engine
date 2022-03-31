@@ -57,6 +57,10 @@
       "tag": "zombieSpawner"
     },
     {
+      "prefab": "Resources\\json\\enemySpawner.json",
+      "tag": "enemySpawner"
+    },
+    {
       "prefab": "Resources\\json\\junk.json",
       "tag": "junk"
     }
@@ -106,8 +110,23 @@
       "overrides": [
         {
           "1": {
-            "startX": 0.5,
-            "startY": 1200.5,
+            "startX": 0.0,
+            "startY": 0.0,
+            "scaleX": 40,
+            "scaleY": 40,
+            "rot": 0,
+            "zPos": 4
+          }
+        }
+      ]
+    },
+    {
+      "object": "enemySpawner",
+      "overrides": [
+        {
+          "1": {
+            "startX": 0.0,
+            "startY": 0.0,
             "scaleX": 40,
             "scaleY": 40,
             "rot": 0,
@@ -130,3 +149,7 @@
     }
   ]
 }
+
+
+//0.5,
+//1200.5,

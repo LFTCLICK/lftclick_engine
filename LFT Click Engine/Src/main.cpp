@@ -115,10 +115,10 @@ int main(int argc, char* args[])
 
 			g_GameObjManager->Deserialize(g_GameObjFactory.get(), dataJson2);
 
-		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
-		g_GameManager->playerObj = playerObj;
-		g_GameManager->mainCamera = playerObj->getComponent<Camera>();
-		g_GameManager->playerTrans = playerObj->getComponent<Transform>();
+			GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+			g_GameManager->playerObj = playerObj;
+			g_GameManager->mainCamera = playerObj->getComponent<Camera>();
+			g_GameManager->playerTrans = playerObj->getComponent<Transform>();
 
 			isRunning = true;
 			g_FrameRateController->Init(144);
@@ -155,8 +155,8 @@ int main(int argc, char* args[])
 			g_LuaManager->Update();
 
 
-				g_GameObjManager->Draw();
-				g_Renderer->Draw();
+			g_GameObjManager->Draw();
+			g_Renderer->Draw();
 
 #ifdef _DEBUG
 				g_DebugRenderer->Draw(g_Renderer->GetContext(), g_Renderer->GetWidth(), g_Renderer->GetHeight());

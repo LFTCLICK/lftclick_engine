@@ -14,9 +14,9 @@ void Enemy::Start()
 void Enemy::Update()
 {
 	DirectX::SimpleMath::Vector2 targetVector = -trans->CurrentPos();
-	if (!switchToPlayer)
+	if (!switchToPlayer && componentOwner->tag == "zombie")
 	{
-		if(fabsf(trans->CurrentPos().y-targetBeforePlayer.y)<=20)
+		if (fabsf(trans->CurrentPos().y - targetBeforePlayer.y) <= 20)
 		{
 			switchToPlayer = true;
 		}
@@ -25,15 +25,17 @@ void Enemy::Update()
 			targetVector += targetBeforePlayer;
 		}
 	}
-	if (switchToPlayer)
+	if (switchToPlayer || componentOwner->tag == "enemy")
 	{
 		targetVector += g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>()->CurrentPos();
 	}
-	targetVector = (speed * g_FrameRateController->DeltaTime())/(DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector)) * targetVector;
+	targetVector = (speed * g_FrameRateController->DeltaTime()) 
+		/ (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector)) * targetVector;
 	//if (hanginWithTheHomies)
 	//	targetVector *= .1f;
 	trans->Move(targetVector.x, targetVector.y);
 	hanginWithTheHomies = false;
+	
 }
 
 void Enemy::Deserialize(nlohmann::json j, GameObject* componentOwner)
@@ -60,8 +62,11 @@ void Enemy::HandleMessage(Message* e)
 {
 	if (e->id == Message::COLLISION)
 	{
-		CollisionMessage* cm = (CollisionMessage*)e;
-		trans->Move(cm->deltaPos.x, cm->deltaPos.y);
+		if (componentOwner->tag == "zombie")
+		{
+			CollisionMessage* cm = (CollisionMessage*)e;
+			trans->Move(cm->deltaPos.x, cm->deltaPos.y);
+		}
 		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
 		{
 			isGrounded = true;
