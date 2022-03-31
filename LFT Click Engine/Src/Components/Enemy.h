@@ -43,10 +43,9 @@ public:
 	std::list<DirectX::SimpleMath::Vector2> path;
 	std::list<DirectX::SimpleMath::Vector2>::iterator currentPathPos;
 	bool useObstacleAvoidance;
-	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(0, 0, 2280.0f, 2280.0f);
-
-	DirectX::SimpleMath::Vector2 cabinCenter;
-	DirectX::SimpleMath::Vector2 cabinBounds;
+	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(0 - 2280.0f/2, -2280.0f/2, 2280.0f, 2280.0f);
+	bool doAstar;
+	float reEvaluateStratTimer;
 
 private:
 	Transform* trans;
