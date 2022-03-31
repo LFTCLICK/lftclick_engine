@@ -14,7 +14,7 @@
 #include <json.hpp>
 #include <DirectXMath.h>
 
-#define AUTOPILOT_START_DISTANCE 240
+constexpr auto AUTOPILOT_START_DISTANCE = 240;
 
 using json = nlohmann::json;
 class Camera : public Component

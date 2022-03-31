@@ -24,8 +24,6 @@ void CircleCollider::Start()
 	Transform* trans = componentOwner->getComponent<Transform>();
 	maxBounds = radius;
 	componentOwner->colliders.push_back(this);
-	//center.x *= trans->scale.x;
-	//center.y *= trans->scale.y;
 }
 
 void CircleCollider::Update()
@@ -54,32 +52,7 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 		if (toCheck->getRawComponentPointer(SQUARE_COLLLIDER))
 		{
 			toCheckRadius = std::max(toCheck->getComponent<SquareCollider>()->width / 2, toCheck->getComponent<SquareCollider>()->height / 2);
-			//too tired to deal with this
-			/*DirectX::SimpleMath::Vector2 myPos = parent->getComponent<Transform>()->CurrentPos();
-			DirectX::SimpleMath::Vector2 toCheckPos = toCheck->getComponent<Transform>()->CurrentPos();
 
-			DirectX::SimpleMath::Vector2 circleDistance;
-
-			circleDistance.x = abs(myPos.x - toCheckPos.x);
-			circleDistance.y = abs(myPos.y - toCheckPos.y);
-
-			if (circleDistance.x > (toCheck->getComponent<SquareCollider>()->width / 2) + parent->getComponent<CircleCollider>()->radius
-				|| circleDistance.y > (toCheck->getComponent<SquareCollider>()->height / 2) + parent->getComponent<CircleCollider>()->radius)
-			{
-				return;
-			}
-
-			if (circleDistance.x <= toCheck->getComponent<SquareCollider>()->width / 2
-				|| circleDistance.y <= toCheck->getComponent<SquareCollider>()->height / 2)
-			{
-				parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck));
-				toCheck->HandleMessage(new TriggerCollisionMessage(parent->tag, parent));
-				//g_EventManager->BroadcastMessageToSubscribers(new TriggerCollisionMessage(toCheck->tag));
-				//g_EventManager->BroadcastMessageToSubscribers(new CollisionMessage(parent->tag, toCheckPos));
-
-				if (deleteOnCollison) parent->isDeletable = true;
-			}*/
-			
 		}
 		else
 		{
@@ -96,7 +69,7 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 		{
 			componentOwner->HandleMessage(new TriggerCollisionMessage(toCheck->getComponent<CircleCollider>()));
 			toCheck->HandleMessage(new TriggerCollisionMessage(componentOwner->getComponent<CircleCollider>()));
-			//parent->HandleMessage(new TriggerCollisionMessage(toCheck->tag, toCheck));
+
 			if (deleteOnCollison)
 				componentOwner->isActive = false;
 		}

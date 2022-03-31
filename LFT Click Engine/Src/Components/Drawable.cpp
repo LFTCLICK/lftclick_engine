@@ -42,7 +42,6 @@ Drawable::Drawable()
 void Drawable::Update() {
 	if (scaleAlphaWithLight) { 
 		alphaOverride = g_GameManager->GetDarknessLevel();
-		//std::cout << alphaOverride << std::endl;
 	}
 }
 
@@ -82,8 +81,6 @@ Component* Drawable::Clone(GameObject* newParent)
 	toReturn->transformComp = newParent->getComponent<Transform>();
 	toReturn->alphaOverride = alphaOverride;
 	toReturn->scaleAlphaWithLight = scaleAlphaWithLight;
-
-	//const PS_cbPerObject cbValues_PS = {scaleAlphaWithLight ? g_GameManager->GetDarknessLevel() : alphaOverride};
 
 	textureSRV.CopyTo(toReturn->textureSRV.GetAddressOf());
 

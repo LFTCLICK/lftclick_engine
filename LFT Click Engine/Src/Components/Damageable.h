@@ -33,12 +33,15 @@ public:
 	virtual void HandleMessage(Message* e) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	Damageable() : destroyOnDeath(true), health(1), damageTime(1.f), deathTime(0.75f), timer(0), knockbackMod(0), inertiaMod(0.95) {};
+	Damageable() : destroyOnDeath(true), health(1), maxHealth(1), damageTime(1.f), 
+		deathTime(0.75f), timer(0), knockbackMod(0), inertiaMod(0.95), healthPreview(false),
+		healthPreviewTime(2.0f) {};
 
 public:
 	void TakeDamage(int damage);
 
 	int health;
+	int maxHealth;
 
 	// For knockback (not working yet)
 	DirectX::SimpleMath::Vector2 velocity;
@@ -49,5 +52,9 @@ private:
 	Transform* trans;
 	SpriteAnimator* anim;
 	Audible* audio;
+	Drawable* drawable;
 	float damageTime, deathTime, timer, knockbackMod;
+
+	bool healthPreview;
+	float healthPreviewTime;
 };

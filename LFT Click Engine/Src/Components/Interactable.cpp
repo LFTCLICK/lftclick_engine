@@ -13,11 +13,15 @@
 const Audible::SoundEvent AUDIO_ON_INTERACTING = Audible::SoundEvent::AUDIO_ON_INTERACTING;
 const Audible::SoundEvent AUDIO_ON_COLLECT = Audible::SoundEvent::AUDIO_ON_COLLECT;
 
+bool Interactable::tutorialUI = true;
+
 void Interactable::Start()
 {
 	trans = componentOwner->getComponent<Transform>();
 	audio = componentOwner->getComponent<Audible>();
 	anim = componentOwner->getComponent<SpriteAnimator>();
+	drawable = componentOwner->getComponent<Drawable>();
+
 	interactDistanceSq = interactDistance * interactDistance;
 }
 
@@ -26,9 +30,14 @@ void Interactable::Update()
 	playerIsInRange = IsPlayerInRange();
 
 	if (playerIsInRange) {
+
+		if (tutorialUI)
+			drawable->HUD_DrawTextCenter("Press E to intereact", { 0.0f, -100.0f});
+		
 		if (g_InputManager->isKeyTriggered(SDL_SCANCODE_E)) {
 			audio->PlaySoundsOnEvent(AUDIO_ON_INTERACTING);
 			interacting = true;
+			tutorialUI = false;
 		}
 		else if (g_InputManager->isKeyReleased(SDL_SCANCODE_E)) {
 			internalTimer = 0;
@@ -71,9 +80,8 @@ void Interactable::StopInteraction() {
 
 bool Interactable::IsPlayerInRange() {
 	DirectX::SimpleMath::Vector2 pos = trans->CurrentPos(), playerPos = g_GameManager->playerTrans->CurrentPos();
-	float distanceX = abs(pos.x - playerPos.x), distanceY = abs(pos.y - playerPos.y);
-	return (distanceX * distanceX + distanceY * distanceY) < interactDistanceSq;
 
+	return (pos - playerPos).LengthSquared() < interactDistanceSq;
 }
 
 Component* Interactable::Clone(GameObject* newParent)

@@ -117,12 +117,6 @@ void Enemy::HandleMessage(Message* e)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
 		trans->Move(cm->deltaPos.x, cm->deltaPos.y);
-		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
-		{
-			isGrounded = true;
-		}*/
-		//std::cout << transform->GetPosXMVector().m128_f32[0] - lastGroundPos << std::endl;
-		//lastGroundPos = transform->GetPosXMVector().m128_f32[0];
 	}
 }
 
