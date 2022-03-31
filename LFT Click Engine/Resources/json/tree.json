@@ -32,10 +32,9 @@
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "image": "Resources\\images\\tree.png"
   },
-  "4": {
-    "center": [ 0.0, -0.0, 0.0 ],
-    "width": 60,
-    "height": 60,
+  "13": {
+    "center": [ 0.0, -7.0, 0.0 ],
+    "radius": 25.0,
     "trigger": false,
     "static": true,
     "deleteOnCollison": false

@@ -13,12 +13,12 @@ void Enemy::Start()
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	switchToPlayer = false;
 	zHelper = g_GameManager->mapHeight * 2.0f / 4.0f;
-	reEvaluateStratTimer = 2;
+	reEvaluateStratTimer = -2;
 }
 
 void Enemy::Update()
 {
-	if (reEvaluateStratTimer >= .15f)
+	if (reEvaluateStratTimer <= 0.0f)
 	{
 		DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(playerTrans->position.x, playerTrans->position.y, 1.0f, 1.0f);
 		DirectX::SimpleMath::Rectangle c = DirectX::SimpleMath::Rectangle(trans->position.x, trans->position.y, 1.0f, 1.0f);
@@ -39,7 +39,7 @@ void Enemy::Update()
 		{
 			doAstar = true;
 		}
-		reEvaluateStratTimer = 0;
+		reEvaluateStratTimer = .15f;
 	}
 	DirectX::SimpleMath::Vector2 targetVector;
 	if (doAstar)
