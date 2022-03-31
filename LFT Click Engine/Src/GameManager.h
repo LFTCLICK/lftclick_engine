@@ -38,9 +38,7 @@ public:
 	GameManager() : 
 		playerObj(nullptr),
 		playerDead(false), 
-		debugMode(false), 
 		playerScore(0), 
-		playerRestart(false),
 		mainCamera(nullptr),
 		day(1), 
 		time(0)
@@ -53,14 +51,14 @@ public:
 public:
 	GameObject* playerObj;
 	bool playerDead;
-	bool debugMode;
-	bool playerRestart;
 	float playerScore;
 	Camera* mainCamera;
 	Transform* playerTrans;
 
 	int day;
 	float time;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> menuBackgroundSRV;
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;
