@@ -19,7 +19,7 @@ struct Node
 	float fCost;
 	Node* parent;
 	DirectX::SimpleMath::Vector3 vec3;
-
+	int currentItr;
 };
 
 
@@ -39,7 +39,7 @@ public:
 	Node*** nodeMap;
 	float tileSize;
 	int width, height;
-
+	int trueItr;
 	AStarTerrain() = default;
 	~AStarTerrain();
 

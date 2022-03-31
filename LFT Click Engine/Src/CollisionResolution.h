@@ -134,7 +134,9 @@ public:
 	static DirectX::SimpleMath::Vector2 ProcessCollision(Collider* a, DirectX::SimpleMath::Vector2 aPos, Collider* b, DirectX::SimpleMath::Vector2 bPos, bool &didCollide)
 	{
 		float maxBoundsSquared = a->maxBounds + b->maxBounds;
-		if (DirectX::SimpleMath::Vector2::DistanceSquared(aPos,bPos)> maxBoundsSquared* maxBoundsSquared)
+		float xDif = aPos.x - bPos.x;
+		float yDif = aPos.y - bPos.y;
+		if ((xDif * xDif) + (yDif * yDif) > maxBoundsSquared * maxBoundsSquared)//Vector2::DistanceSquared converts both vectors to XMVECTOR and then does math on them, this is about 3 times faster
 			return DirectX::SimpleMath::Vector2();
 		if (a->getCompId() == Component::ComponentType::SQUARE_COLLLIDER && b->getCompId() == Component::ComponentType::SQUARE_COLLLIDER)
 		{
