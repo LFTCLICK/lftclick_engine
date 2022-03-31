@@ -117,17 +117,6 @@ void Enemy::HandleMessage(Message* e)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
 		trans->Move(cm->deltaPos.x, cm->deltaPos.y);
-		if (!doAstar && e->otherObject->isStatic)
-		{
-			SquareCollider* sq = e->otherObject->componentOwner->getComponent<SquareCollider>();
-			if (sq != nullptr && sq == e->otherObject)
-			{
-				DirectX::SimpleMath::Ray r = DirectX::SimpleMath::Ray(DirectX::SimpleMath::Vector3(trans->position.x, trans->position.y, 0.0f), DirectX::SimpleMath::Vector3(playerTrans->position.x, playerTrans->position.y, 0.0f));
-				DirectX::SimpleMath::Rectangle colliisionRect = DirectX::SimpleMath::Rectangle(sq->center.x - sq->width / 2, sq->center.y - sq->height / 2, sq->width, sq->height);
-				r.
-			}
-
-		}
 		/*if (cm->deltaPos.y >= 0 && (cm->deltaPos.x<0.0000001 && cm->deltaPos.x > -0.00001))
 		{
 			isGrounded = true;
