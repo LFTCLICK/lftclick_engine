@@ -47,6 +47,7 @@ void Audible::Update() {
 
 	if (positionless) {
 		auto playerTrans = g_GameManager->playerTrans;
+		
 		if (playerTrans != nullptr) {
 			if (playerTrans->isMoving != playerTrans->wasMoving) {
 				HandleSoundsOnEvent(playerTrans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);

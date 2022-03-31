@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "GameManager.h"
+#include "FrameRateController.h"
 
 void GameManager::UpdateTime()
 {
@@ -23,7 +24,6 @@ void GameManager::UpdateTime()
 	else darknessLevel = (DAY_LENGTH - time) / (DAY_LENGTH - SUN_RISING);
 
 	dangerLevel = (darknessLevel + (monsterCount < MAX_DANGER_ENEMY_COUNT ? (float)monsterCount / MAX_DANGER_ENEMY_COUNT : 1)) / 2.f;
-	std::cout << "dangerLevel " << dangerLevel << std::endl;
 }
 
 float GameManager::GetDarknessLevel()

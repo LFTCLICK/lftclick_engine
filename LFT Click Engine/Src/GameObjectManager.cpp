@@ -238,14 +238,27 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 
 		Gdiplus::Color currentColor;
 		int width = img.GetWidth(), height = img.GetHeight();
+		g_GameManager->mapHeight = (height*objectSize/2)+ objectSize;
 		g_AStarTerrain->width = width;
 		g_AStarTerrain->height = height;
-		g_AStarTerrain->nodeMap = new Node * [height];
+		g_AStarTerrain->nodeMap = new Node ** [height];
 		g_AStarTerrain->tileSize = objectSize;
 		g_AStarTerrain->terrain = new int* [height];
-		for (int y = 0; y < height; y++) {
-			g_AStarTerrain->nodeMap[y] = new Node[width];
+		for (int y = 0; y < height; y++)
+		{
+			g_AStarTerrain->nodeMap[y] = new Node * [width];
 			g_AStarTerrain->terrain[y] = new int[width];
+			for (int x = 0; x < width; x++)
+			{
+				Node* current = new Node{};
+				current->pos = { y,x };
+				current->vec3 = DirectX::SimpleMath::Vector3((x - (width / 2)) * objectSize, (y - (height / 2)) * objectSize * -1, 0.0f);
+				g_AStarTerrain->nodeMap[y][x] = current;
+				g_AStarTerrain->terrain[y][x] = 0;
+			}
+		}
+
+		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				img.GetPixel(x, y, &currentColor);
 				if (currentColor.GetValue() != Gdiplus::Color::Black) {
@@ -258,25 +271,47 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString]);
 
 						Transform* trans = obj->getComponent<Transform>();
+						SquareCollider* collider = obj->getComponent<SquareCollider>();
+
 						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1, scaleX = trans->scale.x;
 
+						if (collider && !collider->isTrigger)
+						{
+							g_AStarTerrain->terrain[y][x] = -1;
+							//obj->getComponent<SquareCollider>()->isTrigger = true;
+						}
 
 						if (scaleX % doubleObjectSize == 0) {
 							mapX += halfObjectSize;
 							mapY += halfObjectSize;
+
+							if (collider && !collider->isTrigger)
+							{
+								g_AStarTerrain->terrain[y - 1][x] = -1;
+								g_AStarTerrain->terrain[y - 1][x + 1] = -1;
+								g_AStarTerrain->terrain[y][x + 1] = -1;
+							}
 						}
 
 						trans->SetPos(mapX, mapY);
 
-						if (!obj->getComponent<SquareCollider>() || obj->getComponent<SquareCollider>()->isTrigger)
-							g_AStarTerrain->terrain[y][x] = -1;
-						else
-							g_AStarTerrain->terrain[y][x] = 0;
+						// Think I basically handled this up above, but leaving this code in just in case
+						/*if (map["key"][colorHexString] == "junk")
+						{
+							obj->getComponent<Transform>()->Move(objectSize / 2, objectSize / 2);
+							g_AStarTerrain->terrain[y-1][x] = -1;
+							g_AStarTerrain->terrain[y-1][x+1] = -1;
+							g_AStarTerrain->terrain[y][x+1] = -1;
+							//obj->getComponent<SquareCollider>()->isTrigger = true;
+
+						}*/
 					}
 				}
 			}
 		}
 	}
+
+	g_AStarTerrain->Init();
 
 	for (GameObject* g : gameObjectList)
 		g->Start();

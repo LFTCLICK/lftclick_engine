@@ -7,7 +7,6 @@
 // History			: 
 // ---------------------------------------------------------------------------
 #pragma once
-#include "FrameRateController.h"
 
 // The idea is that when "time" is: 
 // 
@@ -48,6 +47,7 @@ public:
 		monsterCount(0),
 		dangerLevel(0),
 		playerRestart(false),
+		mapHeight(10000.0f),
 		mainCamera(nullptr),
 		day(1), 
 		time(0),
@@ -87,6 +87,7 @@ public:
 	float darknessLevel;
 	int monsterCount;
 	float dangerLevel;
+	float mapHeight;
 	Camera* mainCamera;
 	Transform* playerTrans;
 

@@ -66,6 +66,8 @@ void FrameRateController::Tick()
 
 	if (m_DeltaTime < 0.0)
 		m_DeltaTime = 0.0;
+	if (g_GameManager->playerDead)
+		m_DeltaTime = 0;
 }
 
 float FrameRateController::DeltaTime()
