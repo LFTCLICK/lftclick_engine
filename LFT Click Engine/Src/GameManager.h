@@ -59,8 +59,7 @@ public:
 		mainCamera(nullptr),
 		day(1), 
 		time(0),
-		chanceOfFindingPart(INITIAL_CHANCE_TO_FIND_PART)
-		time(0),
+		chanceOfFindingPart(INITIAL_CHANCE_TO_FIND_PART),
 		currentLevel(EGameLevel::Mainmenu)
 	{}
 	~GameManager() = default;
