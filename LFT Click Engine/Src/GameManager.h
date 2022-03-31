@@ -8,6 +8,8 @@
 // ---------------------------------------------------------------------------
 #pragma once
 
+#define DAY_LENGTH 10.f	// total length of a day
+
 // The idea is that when "time" is: 
 // 
 // Between 0 and SUN_SETTING, the alpha on the darkness will remain at 0
