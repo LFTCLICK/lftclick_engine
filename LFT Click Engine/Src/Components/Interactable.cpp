@@ -23,6 +23,8 @@ void Interactable::Start()
 	drawable = componentOwner->getComponent<Drawable>();
 
 	interactDistanceSq = interactDistance * interactDistance;
+
+	currentHp = hpPerPhase;
 }
 
 void Interactable::Update()
@@ -122,6 +124,7 @@ Component* Interactable::Clone(GameObject* newParent)
 	toReturn->interactDistance = interactDistance;
 	toReturn->totalPhases = totalPhases;
 	toReturn->hpPerPhase = hpPerPhase;
+	std::cout << componentOwner->tag << " " << hpPerPhase << std::endl;
 	toReturn->hasParts = hasParts;
 	return (Component*)toReturn;
 }
