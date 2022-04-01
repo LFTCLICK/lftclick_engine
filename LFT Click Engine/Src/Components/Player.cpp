@@ -39,11 +39,6 @@ void Player::Update()
 {
 	player_script_update();
 
-	static XMFLOAT2 pos;
-	ImGui::DragFloat2("Pos", reinterpret_cast<float*>(&pos), 0.1, 0.0f, 100.0f);
-	static float scale = 1.0f;
-	ImGui::DragFloat("scale", &scale, 0.1, 1.0f, 10.0f);
-
 	//Wood count HUD
 	g_Renderer->GetSpriteBatch()->Draw(woodSRV.Get(), XMVectorSet(4, 20, 0, 0), nullptr, 
 		Colors::White, 0.0f, XMVectorZero(), 2.6f);

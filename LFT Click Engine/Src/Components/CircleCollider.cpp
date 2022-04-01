@@ -62,10 +62,10 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 		DirectX::SimpleMath::Vector2 myPos = componentOwner->getComponent<Transform>()->CurrentPos();
 		DirectX::SimpleMath::Vector2 toCheckPos = toCheck->getComponent<Transform>()->CurrentPos();
 
-		float distance = DirectX::SimpleMath::Vector2::Distance(myPos, toCheckPos);
-		distance = distance - componentOwner->getComponent<CircleCollider>()->radius - toCheckRadius;
+		float distanceSq = DirectX::SimpleMath::Vector2::DistanceSquared(myPos, toCheckPos);
+		float radius = componentOwner->getComponent<CircleCollider>()->radius + toCheckRadius;
 
-		if (distance <= 0)
+		if (distanceSq < radius*radius)
 		{
 			componentOwner->HandleMessage(new TriggerCollisionMessage(toCheck->getComponent<CircleCollider>()));
 			toCheck->HandleMessage(new TriggerCollisionMessage(componentOwner->getComponent<CircleCollider>()));

@@ -107,6 +107,9 @@
         "volume": 60,
         "playEvents": [
           1000
+        ],
+        "stopEvents": [
+          2000
         ]
       },
       {
@@ -115,6 +118,9 @@
         "volume": 60,
         "playEvents": [
           1000
+        ],
+        "stopEvents": [
+          2000
         ],
         "scaleVolumeWithDanger": true
       }
