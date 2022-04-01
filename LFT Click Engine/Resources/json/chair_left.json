@@ -1,16 +1,16 @@
 {
   "1": {
-    "startX": 60.0,
-    "startY": 120.0,
-    "scaleX": 120,
-    "scaleY": 120,
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 180,
+    "scaleY": 180,
     "rot": 0,
-    "zPos": 10
+    "zPos": 3
   },
   "2": {
     "onlyUVOverrides": false,
     "xScale": 1,
-    "yScale": 0.125,
+    "yScale": 0.25,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -30,33 +30,25 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "image": "Resources\\images\\junk_sprite_sheet.png"
-  },
-  "4": {
-    "center": [ 0.0, -0.0, 0.0 ],
-    "width": 90,
-    "height": 90,
-    "trigger": false,
-    "static": true,
-    "deleteOnCollison": false
+    "image": "Resources\\images\\chair_sprite_sheet_left.png"
   },
   "6": {
     "spriteSheetWidth": 1,
-    "spriteSheetHeight": 8,
+    "spriteSheetHeight": 4,
     "interactable": true,
     "animations": [
       {
-        "name": "outOfRangeJunk",
-        "length": 4,
+        "name": "outOfRangeChairLeft",
+        "length": 1,
         "frameDuration": 1000,
         "row": 0,
         "onIdle": true
       },
       {
-        "name": "inRangeJunk",
-        "length": 4,
+        "name": "inRangeChairLeft",
+        "length": 1,
         "frameDuration": 1000,
-        "row": 4,
+        "row": 2,
         "onInteractRange": true
       }
     ]
@@ -64,7 +56,7 @@
   "8": {
     "sounds": [
       {
-        "name": ".\\Resources\\sounds\\searching.mp3",
+        "name": ".\\Resources\\sounds\\woodchop.mp3",
         "loop": true,
         "volume": 15,
         "pitchRange": [ 0.9, 1.1 ],
@@ -87,9 +79,18 @@
       }
     ]
   },
+  "13": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "radius": 30,
+    "trigger": false,
+    "static": true,
+    "deleteOnCollison": false
+  },
   "14": {
     "timeToCollect": 1,
     "woodPerCollect": 3,
-    "interactDistance": 200
+    "interactDistance": 100,
+    "hpPerPhase": 2,
+    "totalPhases": 2
   }
 }

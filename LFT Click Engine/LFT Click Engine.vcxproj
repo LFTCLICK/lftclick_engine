@@ -409,6 +409,12 @@
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\json\big_tree.json" />
+    <None Include="Resources\json\chair_left.json" />
+    <None Include="Resources\json\chair_right.json" />
+    <None Include="Resources\json\couch.json" />
+    <None Include="Resources\json\couch_left.json" />
+    <None Include="Resources\json\couch_right.json" />
     <None Include="Resources\json\floor.json" />
     <None Include="Resources\json\grass.json" />
     <None Include="packages.config" />
@@ -456,6 +462,8 @@
     <None Include="Resources\json\zombieSpawner.json" />
     <None Include="Resources\LuaScripts\ConfigurationScript.lua" />
     <None Include="Resources\LuaScripts\playerScript.lua" />
+    <None Include="Resources\json\rug.json" />
+    <None Include="Resources\json\table.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

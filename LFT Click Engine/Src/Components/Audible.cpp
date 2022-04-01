@@ -51,11 +51,11 @@ void Audible::Update() {
 		if (playerTrans != nullptr) {
 			if (playerTrans->isMoving != playerTrans->wasMoving) {
 				HandleSoundsOnEvent(playerTrans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-				if (!playerTrans->isMoving)
+				if (!playerTrans->isMoving && playerTrans->CurrentPos().x < 10000000.f && playerTrans->CurrentPos().x > -10000000.f)
 					am->SetGroupSpatialPosition(channelGroupName, playerTrans->CurrentPos() / 100, { 0, 0 });
 			}
 
-			if (playerTrans->isMoving)
+			if (playerTrans->isMoving && playerTrans->CurrentPos().x < 10000000.f && playerTrans->CurrentPos().x > -10000000.f)
 				am->SetGroupSpatialPosition(channelGroupName, playerTrans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
 	}
@@ -63,11 +63,11 @@ void Audible::Update() {
 		if (trans != nullptr) {
 			if (trans->isMoving != trans->wasMoving) {
 				HandleSoundsOnEvent(trans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-				if (!trans->isMoving)
+				if (!trans->isMoving && trans->CurrentPos().x < 10000000.f && trans->CurrentPos().x > -10000000.f)
 					am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100, { 0, 0 });
 			}
 
-			if (trans->isMoving)
+			if (trans->isMoving && trans->CurrentPos().x < 10000000.f && trans->CurrentPos().x > -10000000.f)
 				am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
 	}
@@ -134,6 +134,7 @@ void Audible::SetPosition(float x, float y) {
 	am->SetGroupSpatialPosition(channelGroupName, x, y);
 }
 void Audible::SetPosition(DirectX::SimpleMath::Vector2 position) {
+	std::cout << "pos: " << position.x << " " << position.y << std::endl;
 	am->SetGroupSpatialPosition(channelGroupName, position);
 }
 

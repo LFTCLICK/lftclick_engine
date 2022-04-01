@@ -511,6 +511,30 @@
     <None Include="Resources\LuaScripts\playerScript.lua">
       <Filter>Lua Scripts</Filter>
     </None>
+    <None Include="Resources\json\table.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\chair_right.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\chair_left.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\couch_right.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\couch_left.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\couch.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\big_tree.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\rug.json">
+      <Filter>JSON</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

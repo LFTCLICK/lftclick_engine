@@ -34,7 +34,7 @@ public:
 
 	void HandleMessage(Message* e);
 
-	Interactable() : currentPhase(0), totalPhases(4), currentHp(1), hpPerPhase(1) {}
+	Interactable() : currentPhase(0), totalPhases(4), currentHp(1), hpPerPhase(1), hasParts(false) {}
 
 
 public:
@@ -56,7 +56,7 @@ private:
 
 	static bool tutorialUI;
 
-	bool playerIsInRange, playerWasInRange, interacting;
+	bool playerIsInRange, playerWasInRange, interacting, hasParts;
 	float internalTimer, interactDistance, interactDistanceSq;
 	int currentPhase, totalPhases, currentHp, hpPerPhase;
 };
