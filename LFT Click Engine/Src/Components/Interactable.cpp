@@ -95,7 +95,6 @@ void Interactable::CompleteInteraction() {
 		g_GameManager->playerObj->getComponent<Player>()->wood += woodPerCollect;
 	}
 
-	std::cout << currentHp << hpPerPhase << std::endl;
 	internalTimer = 0;
 	if (--currentHp < 1) {
 		++currentPhase;
@@ -106,7 +105,6 @@ void Interactable::CompleteInteraction() {
 		else
 			componentOwner->isDeletable = true;
 	}
-	std::cout << currentHp << std::endl << std::endl;
 }
 
 bool Interactable::IsPlayerInRange() {
@@ -124,7 +122,6 @@ Component* Interactable::Clone(GameObject* newParent)
 	toReturn->interactDistance = interactDistance;
 	toReturn->totalPhases = totalPhases;
 	toReturn->hpPerPhase = hpPerPhase;
-	std::cout << componentOwner->tag << " " << hpPerPhase << std::endl;
 	toReturn->hasParts = hasParts;
 	return (Component*)toReturn;
 }
