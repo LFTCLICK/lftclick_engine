@@ -35,7 +35,7 @@
   },
   "4": {
     "center": [0.0, -0.0, 0.0],
-    "width": 144,
+    "width": 240,
     "height": 20,
     "trigger": false,
     "static": true,
@@ -43,7 +43,7 @@
   },
   "13": {
     "center": [ 0.0, 0.0, 0.0 ],
-    "radius": 60,
+    "radius": 120,
     "trigger": true,
     "static": true,
     "deleteOnCollison": false

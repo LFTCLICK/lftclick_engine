@@ -126,6 +126,36 @@
       ]
     },
     {
+      "object": "door",
+      "overrides": [
+        {
+          "1": {
+            "startX": -30.0,
+            "startY": 960.0,
+            "scaleX": 240,
+            "scaleY": 60,
+            "rot": 0,
+            "zPos": 4
+          }
+        }
+      ]
+    },
+    {
+      "object": "door",
+      "overrides": [
+        {
+          "1": {
+            "startX": -810.0,
+            "startY": -900.0,
+            "scaleX": 240,
+            "scaleY": 60,
+            "rot": 0,
+            "zPos": 4
+          }
+        }
+      ]
+    },
+    {
       "object": "enemySpawner",
       "overrides": [
         {

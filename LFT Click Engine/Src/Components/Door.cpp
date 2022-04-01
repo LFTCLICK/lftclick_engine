@@ -36,8 +36,8 @@ void Door::Update()
 		{
 			p->wood -= woodRequiredPerPhase;
 			internalTimer = 0;
-			currentPhase++;
 			health += hpPerPhase;
+			currentPhase = health / hpPerPhase;
 			UpdateImage();
 			if (sqCollider->isTrigger)
 				sqCollider->isTrigger = false;
@@ -84,7 +84,7 @@ void Door::HandleMessage(Message* e)
 	{
 		playerInRange = true;
 	}
-	else if (e->otherObject->componentOwner->tag == "enemy" && health > 0)
+	else if (e->otherObject->componentOwner->tag == "zombie" && health > 0)
 	{
 		Enemy* currentEnemy = e->otherObject->componentOwner->getComponent<Enemy>();
 		currentEnemy->timer+= g_FrameRateController->DeltaTime();
@@ -92,14 +92,20 @@ void Door::HandleMessage(Message* e)
 		{
 			currentEnemy->timer = 0;
 			health -= currentEnemy->damage;
-			while(health < maxHp * ((float)(currentPhase - 1) / zeroIndexDoorPhases))
+			if (health <= 0)
 			{
-				currentPhase--;
-				UpdateImage();
-				if (currentPhase < 1)
-				{
-					sqCollider->isTrigger = true;
-				}
+				health = 0;
+				currentPhase = 0;
+			}
+			else
+			{
+				currentPhase = health / hpPerPhase;
+				currentPhase++;
+			}
+			UpdateImage();
+			if (currentPhase < 1)
+			{
+				sqCollider->isTrigger = true;
 			}
 			
 		}

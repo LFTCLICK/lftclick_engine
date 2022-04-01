@@ -43,7 +43,7 @@ GridPos AStarTerrain::WorldToGridPos(DirectX::SimpleMath::Vector2 pos)
 int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::SimpleMath::Vector2>& path)
 {
     std::priority_queue<Node*, std::vector<Node*>, posComparisonHelper>  openList = std::priority_queue<Node*, std::vector<Node*>, posComparisonHelper>();
-    if (start->row < 0 || (start->row>= height && start->col>= width))
+    if (start->row < 0 || start->row>= height || start->col>= width)
         return -1;
 
     //for (int row = 0; row < height; ++row)
