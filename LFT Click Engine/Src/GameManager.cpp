@@ -18,10 +18,10 @@ void GameManager::UpdateTime()
 		day++;
 	}
 
-	if (time < SUN_SETTING) darknessLevel = 0;
-	else if (time < SUN_DOWN) darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
-	else if (time < SUN_RISING) darknessLevel = 1;
-	else darknessLevel = (DAY_LENGTH - time) / (DAY_LENGTH - SUN_RISING);
+	if (time < SUN_RISING) darknessLevel = 1;
+	else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
+	else if (time < SUN_SETTING) darknessLevel = 0;
+	else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
 
 	dangerLevel = (darknessLevel + (monsterCount < MAX_DANGER_ENEMY_COUNT ? (float)monsterCount / MAX_DANGER_ENEMY_COUNT : 1)) / 2.f;
 
@@ -36,6 +36,11 @@ void GameManager::UpdateTime()
 float GameManager::GetDarknessLevel()
 {
 	return darknessLevel;
+}
+
+bool GameManager::IsNightTime()
+{
+	return darknessLevel > 0.5;
 }
 
 float GameManager::GetDangerLevel()
