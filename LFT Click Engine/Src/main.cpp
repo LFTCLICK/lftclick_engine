@@ -64,7 +64,6 @@ int main(int argc, char* args[])
 		return -1;
 	}
 
-	//Init SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
 		std::cout << "SDL_Init failed, erorr" << std::endl;
@@ -108,13 +107,12 @@ int main(int argc, char* args[])
 	other >> dataJson2;
 	other.close();
 
-	g_GameObjManager->Deserialize(g_GameObjFactory.get(), dataJson2);
+	DX::ThrowIfFailed(
+		DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(), 
+			L"Resources\\images\\mainMenu_background.png", 0, 
+			D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, 
+			g_GameManager->menuBackgroundSRV.ReleaseAndGetAddressOf()) );
 
-	GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
-	g_GameManager->playerObj = playerObj;
-	g_GameManager->mainCamera = playerObj->getComponent<Camera>();
-	g_GameManager->playerTrans = playerObj->getComponent<Transform>();
-	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\menu_background.png", nullptr, g_GameManager->menuBackgroundSRV.ReleaseAndGetAddressOf()));
 	srand(time(NULL));
 
 	SDL_Event e = {};
@@ -125,19 +123,60 @@ int main(int argc, char* args[])
 		g_FrameRateController->Tick();
 		g_Renderer->PrepareForRendering();
 
-		g_AudioManager->Update();
-		g_GameManager->UpdateTime();
-		g_InputManager->Update();
-		g_GameObjManager->Update();
-		g_EventManager->Update();
-		g_LuaManager->Update();
+		switch (g_GameManager->currentLevel)
+		{
+		case EGameLevel::Mainmenu:
+			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->menuBackgroundSRV.Get(), XMFLOAT2(0,0), nullptr,
+				Colors::White, 0.0f, XMFLOAT2(0,0), XMFLOAT2(1, 1));
 
-		g_GameObjManager->Draw();
-		g_Renderer->Draw();
+			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_WindowWidth)/2 - 50, static_cast<float>(g_WindowHeight)/2));
+			ImGui::Begin("menu", nullptr, 
+				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove|ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar 
+				|ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize| ImGuiWindowFlags_NoBackground);
+
+			if (ImGui::Button("Play", { 100,50 }))
+			{
+				g_GameObjManager->DeleteAll();
+				g_GameObjManager->Deserialize(g_GameObjFactory.get(), dataJson2);
+
+				GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+				g_GameManager->playerObj = playerObj;
+				g_GameManager->mainCamera = playerObj->getComponent<Camera>();
+				g_GameManager->playerTrans = playerObj->getComponent<Transform>();
+				g_GameManager->time = 0;
+
+				g_GameManager->currentLevel = EGameLevel::Level0;
+				g_FrameRateController->zeroDeltaTime = false;
+			}
+
+			if (ImGui::Button("Quit", { 100, 50 }))
+			{
+				e.type = SDL_QUIT;
+			}
+
+			ImGui::End();
+
+			break;
+		case EGameLevel::Level0:
+			g_AudioManager->Update();
+			g_GameManager->UpdateTime();
+			g_InputManager->Update();
+			g_GameObjManager->Update();
+			g_EventManager->Update();
+			g_LuaManager->Update();
+
+			g_GameObjManager->Draw();
+			g_Renderer->Draw();
 
 #ifdef _DEBUG
-		g_DebugRenderer->Draw(g_Renderer->GetContext(), g_Renderer->GetWidth(), g_Renderer->GetHeight());
+			g_DebugRenderer->Draw(g_Renderer->GetContext(), g_Renderer->GetWidth(), g_Renderer->GetHeight());
 #endif
+			break;
+		default:
+			assert("fix ur shit");
+			break;
+		}
+
 		g_Renderer->PresentFrame();
 	}
 

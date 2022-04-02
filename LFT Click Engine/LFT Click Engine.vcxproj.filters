@@ -445,6 +445,45 @@
     <None Include="Resources\json\grass.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\6thSprite.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\bullet_fast.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_enemy.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_level.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_level_generator.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\concept_3_player.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\darkness.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\doorwayObj.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\doorwayObj_back.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\enemy.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\enemy_bullet.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\enemySpawner.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\grass.json">
+      <Filter>JSON</Filter>
+    </None>
     <None Include="Resources\json\junk.json">
       <Filter>JSON</Filter>
     </None>

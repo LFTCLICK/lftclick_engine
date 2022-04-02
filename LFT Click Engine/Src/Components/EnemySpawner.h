@@ -2,9 +2,10 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
 // File Name		:	EnemySpawner.h
-// Author			:	Vance Howald
-// Creation Date	:	2021/12/10
-// Purpose			:	Creates a region where enemies can spawn and then spawns them in waves using a linear equation
+// Author			:	Rohit Punjabi
+// Creation Date	:	2022/03/27
+// Purpose			:	Selects a random position outside of house to spawn enemies.
+//						The number of enemies to spawn is decided on the day cycle.
 // History			: 
 // ---------------------------------------------------------------------------
 
@@ -14,6 +15,7 @@
 #include "GameObjectManager.h"
 #include <json.hpp>
 
+using namespace DirectX::SimpleMath;
 using json = nlohmann::json;
 class EnemySpawner : public Component
 {
@@ -26,15 +28,19 @@ public:
 	static int getStaticCompId() { return ComponentType::ENEMY_SPAWNER; };
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 
+	float randomNumberGetter();
+
 	virtual Component* Clone(GameObject* newParent);
 	EnemySpawner() : objectSpawnName("enemy") {};
 
 public:
-	DirectX::SimpleMath::Vector2 bounds;
-	DirectX::SimpleMath::Vector2 targetPosOffset;
-	float slope, timeBetweenPhases, timer, c, x;
+	Vector2 bounds;
+	Vector2 targetPosOffset;
+	float slope, timeBetweenPhases, c, x, spawnTimer;
+	int totalZombiesOnMap, ghostsOnMap;
 
 private:
-	DirectX::SimpleMath::Vector2 myPos;
+	Vector2 myPos;
+	Vector2 positiveBounds, negativeBounds;
 	std::string objectSpawnName;
 };

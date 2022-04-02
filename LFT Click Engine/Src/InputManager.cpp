@@ -8,7 +8,12 @@
 // ---------------------------------------------------------------------------
 #include "pch.h"
 #include "InputManager.h"
-
+#include <SDL.h>
+#include <SDL_syswm.h>
+#include <SDL_keyboard.h>
+#include <SDL_mouse.h>
+#include <SDL_joystick.h>
+#include <SDL_gamecontroller.h>
 
 SDL_Joystick* gGameController = nullptr;
 

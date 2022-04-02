@@ -48,7 +48,7 @@ public:
 	bool isActive;
 	bool hasNonStaticCollider;
 	bool isDeletable;
-	std::list<Collider*> colliders;
+	std::vector<Collider*> colliders;
 	Transform* trans;
 	bool isOnScreen;
 	std::map<int, Component*> comps;

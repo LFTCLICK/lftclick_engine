@@ -32,10 +32,9 @@
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "image": "Resources\\images\\junk_sprite_sheet.png"
   },
-  "4": {
-    "center": [ 0.0, -0.0, 0.0 ],
-    "width": 90,
-    "height": 90,
+  "13": {
+    "center": [ 0.0, -5.0, 0.0 ],
+    "radius": 50,
     "trigger": false,
     "static": true,
     "deleteOnCollison": false

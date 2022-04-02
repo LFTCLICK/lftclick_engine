@@ -24,6 +24,13 @@ void GameManager::UpdateTime()
 	else darknessLevel = (DAY_LENGTH - time) / (DAY_LENGTH - SUN_RISING);
 
 	dangerLevel = (darknessLevel + (monsterCount < MAX_DANGER_ENEMY_COUNT ? (float)monsterCount / MAX_DANGER_ENEMY_COUNT : 1)) / 2.f;
+
+	if (playerDead)
+	{
+		g_FrameRateController->zeroDeltaTime = true;
+		currentLevel = EGameLevel::Mainmenu;
+		playerDead = false;
+	}
 }
 
 float GameManager::GetDarknessLevel()

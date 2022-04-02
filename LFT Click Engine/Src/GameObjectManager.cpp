@@ -64,7 +64,7 @@ void GameObjectManager::Draw()
 
 	for (GameObject* g : gameObjectList)
 	{
-		if (g->isActive)
+		if (g->isActive && g->isOnScreen)
 		{
 #ifdef _DEBUG
 			if (!debugDraw)
@@ -97,9 +97,11 @@ void GameObjectManager::ProcessCollision()
 	DirectX::SimpleMath::Vector2 distanceFromCenter;
 	float maxDistance;
 	float maxScreenSize = g_Renderer->GetWidth() > g_Renderer->GetHeight() ? (float)g_Renderer->GetWidth() : (float)g_Renderer->GetHeight();
-	maxScreenSize += 0.0001f;
+	maxScreenSize /= 2;
+	maxScreenSize += 5;
 	bool firstItt = true;
-	for (auto mainListItt = gameObjectList.begin(); mainListItt != gameObjectList.end(); ++mainListItt)
+	auto gameObjectListEnd = gameObjectList.end();
+	for (auto mainListItt = gameObjectList.begin(); mainListItt != gameObjectListEnd; ++mainListItt)
 	{
 		if (!(*mainListItt)->isActive || (*mainListItt)->isDeletable)
 			continue;
@@ -122,7 +124,7 @@ void GameObjectManager::ProcessCollision()
 			Collider* s = (Collider*)(*mainListItt)->getRawComponentPointer(COLLIDER_IDS[mainColliderIndex]);
 			if (s == nullptr)
 				continue;
-			for (auto innerLoop = std::next(mainListItt); innerLoop != gameObjectList.end(); ++innerLoop)
+			for (auto innerLoop = std::next(mainListItt); innerLoop != gameObjectListEnd; ++innerLoop)
 			{
 				if (!(*innerLoop)->isActive || (*innerLoop)->isDeletable)
 					continue;
@@ -130,13 +132,16 @@ void GameObjectManager::ProcessCollision()
 				if (firstItt)
 				{
 					(*innerLoop)->isOnScreen = false;
-					distanceFromCenter = cameraPos - (*innerLoop)->trans->position;
+					distanceFromCenter = cameraPos - toCheckTrans->position;
 					distanceFromCenter.x = std::fabsf(distanceFromCenter.x);
 					distanceFromCenter.y = std::fabsf(distanceFromCenter.y);
-					maxDistance = distanceFromCenter.x < distanceFromCenter.y ? distanceFromCenter.x : distanceFromCenter.y;
-					if (maxDistance - std::max((*innerLoop)->trans->scale.x, (*innerLoop)->trans->scale.y) < maxScreenSize)
+					maxDistance = distanceFromCenter.x > distanceFromCenter.y ? distanceFromCenter.x : distanceFromCenter.y;
+					if (maxDistance - std::max(toCheckTrans->scale.x, toCheckTrans->scale.y) < maxScreenSize)
+					{
 						(*innerLoop)->isOnScreen = true;
+					}
 				}
+
 				for (Collider* toCheckWith : (*innerLoop)->colliders)
 				{
 					//Collider* toCheckWith = (Collider*)(*innerLoop)->getRawComponentPointer(COLLIDER_IDS[innerColliderIndex]);
@@ -176,11 +181,11 @@ void GameObjectManager::ProcessCollision()
 
 void GameObjectManager::DoCollision(GameObject* toCheckWith)
 {
-	/*for (std::list<GameObject*>::iterator it = gameObjectList.begin(); it != gameObjectList.end();)
+	/*for (std::list<GameObject*>::iterator it = gameObjectList.begin(); it != gameObjectList.gameObjectListEnd();)
 	{
 		GameObject* toCheck = *it;
 		++it;
-		for (std::list<GameObject*>::iterator innerIt = it; innerIt != gameObjectList.end(); ++innerIt)
+		for (std::list<GameObject*>::iterator innerIt = it; innerIt != gameObjectList.gameObjectListEnd(); ++innerIt)
 		{
 			CollisionResolution
 		}
@@ -211,22 +216,6 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 		prefabList.push_back(returned);
 	}
 
-	prefabsJSON = j["Level"];
-	for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
-	{
-		GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"], true);
-		std::string newObjectTag = currentObj.value()["object"];
-		json overrideList = currentObj.value()["overrides"];
-		for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
-		{
-			json actualOverride = c.value();
-			for (json::iterator realOverrides = actualOverride.begin(); realOverrides != actualOverride.end(); ++realOverrides)
-			{
-				int val = std::stoi(realOverrides.key());
-				newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
-			}
-		}
-	}
 
 	if (j.contains("Map"))
 	{
@@ -238,10 +227,10 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 
 		Gdiplus::Color currentColor;
 		int width = img.GetWidth(), height = img.GetHeight();
-		g_GameManager->mapHeight = (height*objectSize/2)+ objectSize;
+		g_GameManager->mapHeight = (height * objectSize / 2) + objectSize;
 		g_AStarTerrain->width = width;
 		g_AStarTerrain->height = height;
-		g_AStarTerrain->nodeMap = new Node ** [height];
+		g_AStarTerrain->nodeMap = new Node * *[height];
 		g_AStarTerrain->tileSize = objectSize;
 		g_AStarTerrain->terrain = new int* [height];
 		for (int y = 0; y < height; y++)
@@ -307,6 +296,22 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 						}*/
 					}
 				}
+			}
+		}
+	}
+	prefabsJSON = j["Level"];
+	for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
+	{
+		GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"], true);
+		std::string newObjectTag = currentObj.value()["object"];
+		json overrideList = currentObj.value()["overrides"];
+		for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
+		{
+			json actualOverride = c.value();
+			for (json::iterator realOverrides = actualOverride.begin(); realOverrides != actualOverride.end(); ++realOverrides)
+			{
+				int val = std::stoi(realOverrides.key());
+				newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
 			}
 		}
 	}
