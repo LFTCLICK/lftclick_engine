@@ -27,6 +27,7 @@ struct SoundInfo {
 	bool scaleVolumeWithDanger = false;
 	float pitchRange[2] = { 1.f, 1.f };
 	float volume = 100.f;
+	float startTime = 0;
 	std::vector<int> playEvents;
 	std::vector<int> stopEvents;
 };

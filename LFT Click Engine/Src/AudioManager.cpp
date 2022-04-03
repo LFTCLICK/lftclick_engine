@@ -99,7 +99,7 @@ void AudioManager::UnloadSound(std::string name) {
 // 
 // The volume value given is divided by 100 when being sent to FMOD,
 // as FMOD's volume operates between 0 and 1.
-int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, float pitch, bool startPaused) {
+int AudioManager::PlaySound(std::string name, std::string channelGroupName, float volume, float pitch, float startTime, bool startPaused) {
 	auto sound = engine->sounds.find(name);
 	if (sound == engine->sounds.end()) {
 		std::cout << name << " was not preloaded, loading from source instead." << std::endl;
@@ -115,6 +115,7 @@ int AudioManager::PlaySound(std::string name, std::string channelGroupName, floa
 
 		CheckResult(__func__, channel->setVolume(volume / VOLUME_DIV));
 		if (pitch != 1.f) CheckResult(__func__, channel->setPitch(pitch));
+		if (startTime != 0) CheckResult(__func__, channel->setPosition((int)(startTime * 1000), FMOD_TIMEUNIT_MS));
 		CheckResult(__func__, channel->setPaused(startPaused));
 
 		int channelIndex = engine->GenerateChannelID();
@@ -126,8 +127,8 @@ int AudioManager::PlaySound(std::string name, std::string channelGroupName, floa
 		return -1;
 	}
 }
-int AudioManager::PlaySound(std::string name, float volume, float pitch, bool startPaused) {
-	return AudioManager::PlaySound(name, "", volume, pitch, startPaused);
+int AudioManager::PlaySound(std::string name, float volume, float pitch, float startTime, bool startPaused) {
+	return AudioManager::PlaySound(name, "", volume, pitch, startTime, startPaused);
 }
 
 // Sets the position of orientation for spatial sounds.

@@ -21,10 +21,17 @@
 
 #include <json.hpp>
 
-#define SUN_SETTING 73.2473118279552f	// when the light should begin lowering
-#define SUN_DOWN 125.3655913978464f		// when the light should remain at the lowest
-#define SUN_RISING 177.4838709677376f	// when the light should begin getting brighter
-#define DAY_LENGTH 262.f				// total length of a day
+//#define SUN_RISING 73.2473f		// when the light should begin getting brighter
+//#define SUN_UP 125.3655f			// when the light should remain at the brightest
+//#define SUN_SETTING 177.4838f		// when the light should begin lowering
+//#define SUN_DOWN 262.f			// when the light should remain at the lowest
+
+#define SUN_RISING 156.965f			// when the light should begin getting brighter (230.49 on audio track)
+#define SUN_UP 172.525f				// total length of a day (246.05 on audio track)
+#define SUN_SETTING 199.792f		// when the light should begin lowering
+#define SUN_DOWN 262.595f			// when the light should remain at the lowest
+
+#define DAY_LENGTH 262.595f			// when the counter will flip back to zero
 
 
 #define INITIAL_CHANCE_TO_FIND_PART 0.05f
@@ -67,6 +74,9 @@ public:
 	// Returns value between 0 and 1, 1 being night time and 0 being day time.
 	// Used for darkness overlay alpha.
 	float GetDarknessLevel();
+
+	// Returns true if "darknessLevel" is over 0.9, false otherwise.
+	bool IsNightTime();
 
 	// Returns value between 0 and 100, 0 being minimal danger, 100 being maximum.
 	// Calculated using level of darkness and number of zombies.

@@ -67,6 +67,38 @@
     {
       "prefab": "Resources\\json\\junk.json",
       "tag": "junk"
+    },
+    {
+      "prefab": "Resources\\json\\big_tree.json",
+      "tag": "big_tree"
+    },
+    {
+      "prefab": "Resources\\json\\rug.json",
+      "tag": "rug"
+    },
+    {
+      "prefab": "Resources\\json\\table.json",
+      "tag": "table"
+    },
+    {
+      "prefab": "Resources\\json\\couch.json",
+      "tag": "couch"
+    },
+    {
+      "prefab": "Resources\\json\\couch_left.json",
+      "tag": "couch_left"
+    },
+    {
+      "prefab": "Resources\\json\\couch_right.json",
+      "tag": "couch_right"
+    },
+    {
+      "prefab": "Resources\\json\\chair_left.json",
+      "tag": "chair_left"
+    },
+    {
+      "prefab": "Resources\\json\\chair_right.json",
+      "tag": "chair_right"
     }
   ],
   "Map": {
@@ -74,7 +106,15 @@
     "key": {
       "5b3d2e": "wall",
       "133832": "junk",
-      "a06524": "tree"
+      "a06524": "tree",
+      "492f12": "big_tree",
+      "ba1717": "rug",
+      "baa017": "table",
+      "17ba17": "couch",
+      "176dba": "couch_left",
+      "2817ba": "couch_right",
+      "845786": "chair_left",
+      "974582": "chair_right"
     },
     "objectSize": 60
   },

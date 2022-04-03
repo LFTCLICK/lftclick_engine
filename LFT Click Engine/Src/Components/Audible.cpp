@@ -51,11 +51,11 @@ void Audible::Update() {
 		if (playerTrans != nullptr) {
 			if (playerTrans->isMoving != playerTrans->wasMoving) {
 				HandleSoundsOnEvent(playerTrans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-				if (!playerTrans->isMoving)
+				if (!playerTrans->isMoving && playerTrans->CurrentPos().x < 10000000.f && playerTrans->CurrentPos().x > -10000000.f)
 					am->SetGroupSpatialPosition(channelGroupName, playerTrans->CurrentPos() / 100, { 0, 0 });
 			}
 
-			if (playerTrans->isMoving)
+			if (playerTrans->isMoving && playerTrans->CurrentPos().x < 10000000.f && playerTrans->CurrentPos().x > -10000000.f)
 				am->SetGroupSpatialPosition(channelGroupName, playerTrans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
 	}
@@ -63,11 +63,11 @@ void Audible::Update() {
 		if (trans != nullptr) {
 			if (trans->isMoving != trans->wasMoving) {
 				HandleSoundsOnEvent(trans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-				if (!trans->isMoving)
+				if (!trans->isMoving && trans->CurrentPos().x < 10000000.f && trans->CurrentPos().x > -10000000.f)
 					am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100, { 0, 0 });
 			}
 
-			if (trans->isMoving)
+			if (trans->isMoving && trans->CurrentPos().x < 10000000.f && trans->CurrentPos().x > -10000000.f)
 				am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
 	}
@@ -93,7 +93,7 @@ Audible::~Audible() {
 void Audible::PlaySound(SoundInfo sound) {
 	float pitch = sound.pitchRange[0] + (sound.pitchRange[0] == sound.pitchRange[1] ?
 		0 : ((float)rand() / RAND_MAX) * (sound.pitchRange[1] - sound.pitchRange[0]));
-	int channelID = am->PlaySound(sound.name, channelGroupName, sound.volume, pitch);
+	int channelID = am->PlaySound(sound.name, channelGroupName, sound.volume, pitch, sound.startTime);
 	channels[channelID] = sound.name;
 	if (sound.scaleVolumeWithDanger) {
 		dangerScaleChannel = channelID;
@@ -134,6 +134,7 @@ void Audible::SetPosition(float x, float y) {
 	am->SetGroupSpatialPosition(channelGroupName, x, y);
 }
 void Audible::SetPosition(DirectX::SimpleMath::Vector2 position) {
+	std::cout << "pos: " << position.x << " " << position.y << std::endl;
 	am->SetGroupSpatialPosition(channelGroupName, position);
 }
 
@@ -207,11 +208,18 @@ void Audible::Deserialize(nlohmann::json j, GameObject* componentOwner)
 			SoundInfo soundInfo;
 			auto sound = *it;
 
-			if (sound.contains("name")) soundInfo.name = sound["name"];
-			if (sound.contains("loop")) soundInfo.loop = sound["loop"];
-			if (sound.contains("compressed")) soundInfo.compressed = sound["compressed"];
-			if (sound.contains("volume")) soundInfo.volume = sound["volume"];
-			if (sound.contains("scaleVolumeWithDanger")) soundInfo.scaleVolumeWithDanger = sound["scaleVolumeWithDanger"];
+			if (sound.contains("name")) 
+				soundInfo.name = sound["name"];
+			if (sound.contains("loop")) 
+				soundInfo.loop = sound["loop"];
+			if (sound.contains("compressed")) 
+				soundInfo.compressed = sound["compressed"];
+			if (sound.contains("volume")) 
+				soundInfo.volume = sound["volume"];
+			if (sound.contains("scaleVolumeWithDanger")) 
+				soundInfo.scaleVolumeWithDanger = sound["scaleVolumeWithDanger"];
+			if (sound.contains("startTime")) 
+				soundInfo.startTime = sound["startTime"];
 			if (sound.contains("pitchRange")) {
 				soundInfo.pitchRange[0] = sound["pitchRange"][0];
 				soundInfo.pitchRange[1] = sound["pitchRange"][1];
@@ -227,7 +235,7 @@ void Audible::Deserialize(nlohmann::json j, GameObject* componentOwner)
 		}
 	}
 
-	if (j.contains("positionless"))
+	if (j.contains("positionless")) 
 		positionless = j["positionless"];
 
 }

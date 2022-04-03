@@ -1,12 +1,11 @@
 {
   "1": {
-    "startX": 0.5,
-    "startY": 0.5,
-    "scaleX": 80,
-    "scaleY": 80,
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 240,
+    "scaleY": 180,
     "rot": 0,
-    "zPos": 5,
-    "matchPlayerPos": true
+    "zPos": 29
   },
   "2": {
     "onlyUVOverrides": false,
@@ -31,8 +30,6 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "scale": 1,
-    "image": "Resources\\images\\darkness2.png",
-    "scaleAlphaWithLight": true
+    "image": "Resources\\images\\rug.png"
   }
 }
