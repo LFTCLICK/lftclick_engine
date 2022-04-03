@@ -59,7 +59,11 @@ void GameObjectManager::Draw()
 {
 #ifdef _DEBUG
 	static bool debugDraw = false;
-	ImGui::Checkbox("Draw Colliders", &debugDraw);
+	if (ImGui::BeginMainMenuBar())
+	{
+		ImGui::Checkbox("Debug Drawing", &debugDraw);
+		ImGui::EndMainMenuBar();
+	}
 #endif
 
 	for (GameObject* g : gameObjectList)

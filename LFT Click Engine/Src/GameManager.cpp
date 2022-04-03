@@ -9,6 +9,25 @@
 #include "pch.h"
 #include "GameManager.h"
 #include "FrameRateController.h"
+#include "Renderer.h"
+#include "GameObjectManager.h"
+
+void GameManager::LoadLevel(json file)
+{
+	g_GameObjManager->DeleteAll();
+	g_GameObjManager->Deserialize(g_GameObjFactory.get(), file);
+
+	GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+	this->playerObj = playerObj;
+	this->mainCamera = playerObj->getComponent<Camera>();
+	this->playerTrans = playerObj->getComponent<Transform>();
+	this->time = 0;
+
+	this->currentLevel = EGameLevel::Level0;
+	g_FrameRateController->zeroDeltaTime = false;
+
+	playerDead = false;
+}
 
 void GameManager::UpdateTime()
 {
@@ -25,11 +44,9 @@ void GameManager::UpdateTime()
 
 	dangerLevel = (darknessLevel + (monsterCount < MAX_DANGER_ENEMY_COUNT ? (float)monsterCount / MAX_DANGER_ENEMY_COUNT : 1)) / 2.f;
 
-	if (playerDead)
+	if (playerDead && currentLevel != EGameLevel::Mainmenu)
 	{
-		g_FrameRateController->zeroDeltaTime = true;
-		currentLevel = EGameLevel::Mainmenu;
-		playerDead = false;
+		currentLevel = EGameLevel::Pausemenu;
 	}
 }
 

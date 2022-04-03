@@ -19,6 +19,7 @@
 //
 // The darkness alpha level is produced by "GetDarknessLevel()".
 
+#include <json.hpp>
 
 #define SUN_SETTING 73.2473118279552f	// when the light should begin lowering
 #define SUN_DOWN 125.3655913978464f		// when the light should remain at the lowest
@@ -39,6 +40,7 @@ class GameObject;
 enum class EGameLevel
 {
 	Mainmenu,
+	Pausemenu,
 	Level0
 };
 
@@ -48,11 +50,9 @@ public:
 	GameManager() : 
 		playerObj(nullptr),
 		playerDead(false), 
-		playerScore(0), 
 		darknessLevel(0),
 		monsterCount(0),
 		dangerLevel(0),
-		playerRestart(false),
 		mapHeight(10000.0f),
 		mainCamera(nullptr),
 		day(1), 
@@ -86,11 +86,11 @@ public:
 	void MonsterCountPlus();
 	void MonsterCountMinus();
 
+
+	void LoadLevel(nlohmann::json file);
 public:
 	GameObject* playerObj;
 	bool playerDead;
-	bool playerRestart;
-	float playerScore;
 	float darknessLevel;
 	int monsterCount;
 	float dangerLevel;
