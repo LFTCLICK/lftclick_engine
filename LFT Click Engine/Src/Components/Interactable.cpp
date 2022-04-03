@@ -41,7 +41,9 @@ void Interactable::Update()
 			drawable->HUD_DrawTextCenter("Press E to intereact", { 0.0f, -100.0f});
 
 		if (interacting) {
+#ifdef _DEBUG
 			ImGui::Text("Interacting...");
+#endif
 			internalTimer += g_FrameRateController->DeltaTime();
 		}
 

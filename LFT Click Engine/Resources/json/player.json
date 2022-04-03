@@ -110,7 +110,8 @@
         ],
         "stopEvents": [
           2000
-        ]
+        ],
+        "startTime": 73.525
       },
       {
         "name": ".\\Resources\\music\\BackgroundMusicAddition.mp3",
@@ -122,10 +123,10 @@
         "stopEvents": [
           2000
         ],
-        "scaleVolumeWithDanger": true
+        "scaleVolumeWithDanger": true,
+        "startTime": 73.525
       }
-    ],
-    "positionless": true
+    ]
   },
   "10": {
     "bulletTypes": [

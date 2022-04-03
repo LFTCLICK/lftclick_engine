@@ -71,7 +71,6 @@ int main(int argc, char* args[])
 
 	}
 
-
 	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, g_WindowWidth, g_WindowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if (!pWindow)
@@ -136,17 +135,7 @@ int main(int argc, char* args[])
 
 			if (ImGui::Button("Play", { 100,50 }))
 			{
-				g_GameObjManager->DeleteAll();
-				g_GameObjManager->Deserialize(g_GameObjFactory.get(), dataJson2);
-
-				GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
-				g_GameManager->playerObj = playerObj;
-				g_GameManager->mainCamera = playerObj->getComponent<Camera>();
-				g_GameManager->playerTrans = playerObj->getComponent<Transform>();
-				g_GameManager->time = 0;
-
-				g_GameManager->currentLevel = EGameLevel::Level0;
-				g_FrameRateController->zeroDeltaTime = false;
+				g_GameManager->LoadLevel(dataJson2);
 			}
 
 			if (ImGui::Button("Quit", { 100, 50 }))
@@ -157,7 +146,53 @@ int main(int argc, char* args[])
 			ImGui::End();
 
 			break;
+
+
 		case EGameLevel::Level0:
+		case EGameLevel::Pausemenu:
+
+			if (g_InputManager->isKeyPressed(SDL_SCANCODE_ESCAPE))
+			{
+				g_GameManager->currentLevel = EGameLevel::Pausemenu;
+			}
+
+			if (g_GameManager->currentLevel == EGameLevel::Pausemenu)
+			{
+				g_FrameRateController->zeroDeltaTime = true;
+				ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_WindowWidth) / 2 - 50, static_cast<float>(g_WindowHeight) / 2));
+				ImGui::Begin("pauseMenu", nullptr,
+					ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
+					| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+
+				if (g_GameManager->playerDead)
+				{
+					if (ImGui::Button("Restart", { 100,50 }))
+					{
+						g_GameManager->LoadLevel(dataJson2);
+					}
+				}
+				else
+				{
+					if (ImGui::Button("Continue", { 100, 50 }))
+					{
+						g_GameManager->currentLevel = EGameLevel::Level0;
+						g_FrameRateController->zeroDeltaTime = false;
+					}
+				}
+
+				if (ImGui::Button("Main Menu", { 100,50 }))
+				{
+					g_GameManager->currentLevel = EGameLevel::Mainmenu;
+				}
+
+				if (ImGui::Button("Quit", { 100, 50 }))
+				{
+					e.type = SDL_QUIT;
+				}
+
+				ImGui::End();
+			}
+
 			g_AudioManager->Update();
 			g_GameManager->UpdateTime();
 			g_InputManager->Update();
@@ -186,7 +221,6 @@ int main(int argc, char* args[])
 
 	g_EventManager->Reset();
 	g_GameManager->playerDead = false;
-	g_GameManager->playerScore = 0;
 
 	SDL_DestroyWindow(pWindow);
 	SDL_Quit();

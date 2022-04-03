@@ -62,8 +62,8 @@ public:
 
     void LoadSound(std::string name, bool loop = false, bool compressed = true);
     void UnloadSound(std::string name);
-    int PlaySound(std::string name, std::string channelGroupName, float volume = 100.f, float pitch = 1.f, bool startPaused = false);
-    int PlaySound(std::string name, float volume = 100.f, float pitch = 1.f, bool startPaused = false);
+    int PlaySound(std::string name, std::string channelGroupName, float volume = 100.f, float pitch = 1.f, float startTime = 0, bool startPaused = false);
+    int PlaySound(std::string name, float volume = 100.f, float pitch = 1.f, float startTime = 0, bool startPaused = false);
     void SetPlayerSpatialPosition(DirectX::SimpleMath::Vector2 _position, DirectX::SimpleMath::Vector2 _velocity = { 0, 0 });
 
 

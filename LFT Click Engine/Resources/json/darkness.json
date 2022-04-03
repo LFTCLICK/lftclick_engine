@@ -32,7 +32,7 @@
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
     "scale": 1,
-    "image": "Resources\\images\\darkness.png",
+    "image": "Resources\\images\\darkness2.png",
     "scaleAlphaWithLight": true
   }
 }
