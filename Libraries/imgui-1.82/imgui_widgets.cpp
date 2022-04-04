@@ -5081,7 +5081,7 @@ bool ImGui::ColorPicker4(const char* label, float col[4], ImGuiColorEditFlags fl
     ImGuiStyle& style = g.Style;
     ImGuiIO& io = g.IO;
 
-    const float width = CalcItemWidth();
+    const float clientWidth = CalcItemWidth();
     g.NextItemData.ClearFlags();
 
     PushID(label);
@@ -5110,7 +5110,7 @@ bool ImGui::ColorPicker4(const char* label, float col[4], ImGuiColorEditFlags fl
     ImVec2 picker_pos = window->DC.CursorPos;
     float square_sz = GetFrameHeight();
     float bars_width = square_sz; // Arbitrary smallish width of Hue/Alpha picking bars
-    float sv_picker_size = ImMax(bars_width * 1, width - (alpha_bar ? 2 : 1) * (bars_width + style.ItemInnerSpacing.x)); // Saturation/Value picking box
+    float sv_picker_size = ImMax(bars_width * 1, clientWidth - (alpha_bar ? 2 : 1) * (bars_width + style.ItemInnerSpacing.x)); // Saturation/Value picking box
     float bar0_pos_x = picker_pos.x + sv_picker_size + style.ItemInnerSpacing.x;
     float bar1_pos_x = bar0_pos_x + bars_width + style.ItemInnerSpacing.x;
     float bars_triangles_half_sz = IM_FLOOR(bars_width * 0.20f);
@@ -6640,17 +6640,17 @@ void ImGuiMenuColumns::CalcNextTotalWidth(bool update_offsets)
     bool want_spacing = false;
     for (int i = 0; i < IM_ARRAYSIZE(Widths); i++)
     {
-        ImU16 width = Widths[i];
-        if (want_spacing && width > 0)
+        ImU16 clientWidth = Widths[i];
+        if (want_spacing && clientWidth > 0)
             offset += Spacing;
-        want_spacing |= (width > 0);
+        want_spacing |= (clientWidth > 0);
         if (update_offsets)
         {
             if (i == 1) { OffsetLabel = offset; }
             if (i == 2) { OffsetShortcut = offset; }
             if (i == 3) { OffsetMark = offset; }
         }
-        offset += width;
+        offset += clientWidth;
     }
     NextTotalWidth = offset;
 }
@@ -6786,8 +6786,8 @@ bool ImGui::BeginMainMenuBar()
     // FIXME: Consider removing support for safe area down the line... it's messy. Nowadays consoles have support for TV calibration in OS settings.
     g.NextWindowData.MenuBarOffsetMinVal = ImVec2(g.Style.DisplaySafeAreaPadding.x, ImMax(g.Style.DisplaySafeAreaPadding.y - g.Style.FramePadding.y, 0.0f));
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_MenuBar;
-    float height = GetFrameHeight();
-    bool is_open = BeginViewportSideBar("##MainMenuBar", viewport, ImGuiDir_Up, height, window_flags);
+    float clientHeight = GetFrameHeight();
+    bool is_open = BeginViewportSideBar("##MainMenuBar", viewport, ImGuiDir_Up, clientHeight, window_flags);
     g.NextWindowData.MenuBarOffsetMinVal = ImVec2(0.0f, 0.0f);
 
     if (is_open)
@@ -8103,10 +8103,10 @@ void ImGui::TabItemBackground(ImDrawList* draw_list, const ImRect& bb, ImGuiTabI
 {
     // While rendering tabs, we trim 1 pixel off the top of our bounding box so they can fit within a regular frame height while looking "detached" from it.
     ImGuiContext& g = *GImGui;
-    const float width = bb.GetWidth();
+    const float clientWidth = bb.GetWidth();
     IM_UNUSED(flags);
-    IM_ASSERT(width > 0.0f);
-    const float rounding = ImMax(0.0f, ImMin((flags & ImGuiTabItemFlags_Button) ? g.Style.FrameRounding : g.Style.TabRounding, width * 0.5f - 1.0f));
+    IM_ASSERT(clientWidth > 0.0f);
+    const float rounding = ImMax(0.0f, ImMin((flags & ImGuiTabItemFlags_Button) ? g.Style.FrameRounding : g.Style.TabRounding, clientWidth * 0.5f - 1.0f));
     const float y1 = bb.Min.y + 1.0f;
     const float y2 = bb.Max.y - 1.0f;
     draw_list->PathLineTo(ImVec2(bb.Min.x, y2));

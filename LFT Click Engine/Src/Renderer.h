@@ -22,6 +22,14 @@ class Renderer
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11BlendState> alphaToCoverageBS;
 
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mOffscreenSRV;
+	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> mOffscreenUAV;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mOffscreenRTV;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mScreenQuadVB;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> mScreenQuadIB;
+
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> darknessSRV;
+
 	DXGI_FORMAT backBufferFormat;
 	DXGI_FORMAT depthStencilBufferFormat;
 	DXGI_FORMAT depthStencilViewFormat;
@@ -31,7 +39,7 @@ class Renderer
 	UINT msaaQuality;
 	UINT msaaSampleCount;
 
-	int width, height;
+	int clientWidth, clientHeight;
 
 	std::unique_ptr<DirectX::SpriteBatch> spriteBatch;
 	std::unique_ptr<DirectX::SpriteFont> spriteFont;
@@ -48,7 +56,7 @@ class Renderer
 
 	struct PS_cbPerObject
 	{
-		float alphaOverride;
+		float darknessFactor;
 		DirectX::XMFLOAT3 padding;
 	};
 	static_assert(sizeof(PS_cbPerObject) % 16 == 0, "Not 16-bytes aligned");
@@ -88,8 +96,8 @@ public:
 	ID3D11Device* GetDevice() const { return device.Get(); }
 	DirectX::SpriteBatch* GetSpriteBatch() const { return spriteBatch.get(); }
 	DirectX::SpriteFont* GetSpriteFont() const { return spriteFont.get(); }
-	int GetWidth() const { return width; }
-	int GetHeight() const { return height; }
+	int GetWidth() const { return clientWidth; }
+	int GetHeight() const { return clientHeight; }
 private:
 	void UpdateClientSizeVars();
 	void CreateDeviceDependentResources();

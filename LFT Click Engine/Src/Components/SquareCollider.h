@@ -26,8 +26,8 @@ public:
 	virtual int getCompId() override {return ComponentType::SQUARE_COLLLIDER;};
 	static int getStaticCompId() {return ComponentType::SQUARE_COLLLIDER;};
 	DirectX::SimpleMath::Vector2 center;
-	float width;
-	float height;
+	float clientWidth;
+	float clientHeight;
 
 	virtual Component* Clone(GameObject* newParent);
 	void CollisionCheck(GameObject* toCheck);

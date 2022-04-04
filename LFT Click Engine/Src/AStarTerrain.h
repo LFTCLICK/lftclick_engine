@@ -38,7 +38,7 @@ public:
 	int** terrain;
 	Node*** nodeMap;
 	float tileSize;
-	int width, height;
+	int clientWidth, clientHeight;
 	int trueItr;
 	AStarTerrain() = default;
 	~AStarTerrain();

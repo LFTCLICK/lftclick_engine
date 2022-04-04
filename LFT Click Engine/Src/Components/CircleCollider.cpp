@@ -51,7 +51,7 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 		float toCheckRadius = 0;
 		if (toCheck->getRawComponentPointer(SQUARE_COLLLIDER))
 		{
-			toCheckRadius = std::max(toCheck->getComponent<SquareCollider>()->width / 2, toCheck->getComponent<SquareCollider>()->height / 2);
+			toCheckRadius = std::max(toCheck->getComponent<SquareCollider>()->clientWidth / 2, toCheck->getComponent<SquareCollider>()->clientHeight / 2);
 
 		}
 		else

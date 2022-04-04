@@ -40,10 +40,7 @@
       "prefab": "Resources\\json\\doorwayObj.json",
       "tag": "door"
     },
-    {
-      "prefab": "Resources\\json\\darkness.json",
-      "tag": "darkness"
-    },
+
     {
       "prefab": "Resources\\json\\woodpile.json",
       "tag": "wood"
@@ -134,22 +131,7 @@
         }
       ]
     },
-    {
-      "object": "darkness",
-      "overrides": [
-        {
-          "1": {
-            "startX": 0.5,
-            "startY": 0.5,
-            "scaleX": 800,
-            "scaleY": 800,
-            "rot": 0,
-            "zPos": 5,
-            "matchPlayerPos": true
-          }
-        }
-      ]
-    },
+
     {
       "object": "zombieSpawner",
       "overrides": [

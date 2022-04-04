@@ -28,15 +28,15 @@ void SquareCollider::Start()
 	center.x *= trans->scale.x;
 	center.y *= trans->scale.y;
 	points = new float[8];
-	points[0] = (.5f*width) + center.x;
-	points[1] = (.5f*height) + center.y;
-	points[2] = (.5f*width) + center.x;
-	points[3] = (-.5f*height) + center.y;
-	points[4] = (-.5f*width) + center.x;
-	points[5] = (-.5f*height) + center.y;
-	points[6] = (-.5f*width) + center.x;
-	points[7] = (.5f*height) + center.y;
-	maxBounds = sqrt(((width / 2)* (width / 2)) + ((height / 2)* (height / 2)));
+	points[0] = (.5f*clientWidth) + center.x;
+	points[1] = (.5f*clientHeight) + center.y;
+	points[2] = (.5f*clientWidth) + center.x;
+	points[3] = (-.5f*clientHeight) + center.y;
+	points[4] = (-.5f*clientWidth) + center.x;
+	points[5] = (-.5f*clientHeight) + center.y;
+	points[6] = (-.5f*clientWidth) + center.x;
+	points[7] = (.5f*clientHeight) + center.y;
+	maxBounds = sqrt(((clientWidth / 2)* (clientWidth / 2)) + ((clientHeight / 2)* (clientHeight / 2)));
 	componentOwner->colliders.push_back(this);
 }
 
@@ -49,8 +49,8 @@ Component * SquareCollider::Clone(GameObject * newParent)
 	SquareCollider* toReturn = new SquareCollider();
 	toReturn->componentOwner = newParent;
 	toReturn->center = center;
-	toReturn->width = width;
-	toReturn->height = height;
+	toReturn->clientWidth = clientWidth;
+	toReturn->clientHeight = clientHeight;
 	toReturn->isTrigger = isTrigger;
 	toReturn->isStatic = isStatic;
 	if (!isStatic)
@@ -83,9 +83,9 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 			DirectX::XMFLOAT2 toCheckPosf;
 			DirectX::XMStoreFloat2(&toCheckPosf, toCheckPos);
 
-			DirectX::SimpleMath::Rectangle a = DirectX::SimpleMath::Rectangle(myPosf.x - (width / 2), myPosf.y - (height / 2), width, height);
-			DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(toCheckPosf.x - (toCheckCollider->width / 2), toCheckPosf.y - (toCheckCollider->height / 2),
-				toCheckCollider->width, toCheckCollider->height);
+			DirectX::SimpleMath::Rectangle a = DirectX::SimpleMath::Rectangle(myPosf.x - (clientWidth / 2), myPosf.y - (clientHeight / 2), clientWidth, clientHeight);
+			DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(toCheckPosf.x - (toCheckCollider->clientWidth / 2), toCheckPosf.y - (toCheckCollider->clientHeight / 2),
+				toCheckCollider->clientWidth, toCheckCollider->clientHeight);
 
 			bool intersects = a.Intersects(b);
 
@@ -99,8 +99,8 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 				{
 					DirectX::SimpleMath::Vector2 delta;
 					DirectX::XMVECTOR difference = DirectX::XMVectorSubtract(myPos, toCheckPos);
-					difference.m128_f32[0] = fabs(difference.m128_f32[0]) - ((width + toCheckCollider->width) / 2);
-					difference.m128_f32[1] = fabs(difference.m128_f32[1]) - ((height + toCheckCollider->height) / 2);
+					difference.m128_f32[0] = fabs(difference.m128_f32[0]) - ((clientWidth + toCheckCollider->clientWidth) / 2);
+					difference.m128_f32[1] = fabs(difference.m128_f32[1]) - ((clientHeight + toCheckCollider->clientHeight) / 2);
 					if (difference.m128_f32[1] > difference.m128_f32[0])
 					{
 						if (myPos.m128_f32[1] < toCheckPos.m128_f32[1])
@@ -145,8 +145,8 @@ void SquareCollider::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	this->componentOwner = componentOwner;
 	std::vector<float> centerHelper = j["center"].get<std::vector<float>>();
 	center = { centerHelper[0], centerHelper[1] };
-	width = j["width"];
-	height = j["height"];
+	clientWidth = j["width"];
+	clientHeight = j["height"];
 	isTrigger = j["trigger"];
 
 	isStatic = false;
@@ -169,10 +169,10 @@ void SquareCollider::DebugDraw()
 	float screenWidth = g_Renderer->GetWidth();
 	float screenHeight = g_Renderer->GetHeight();
 
-	Vector2 a = t->CurrentPos() - Vector2(width / 2.0f, -height / 2.0f);
-	Vector2 b = t->CurrentPos() + Vector2(width / 2.0f, height / 2.0f);
-	Vector2 c = t->CurrentPos() + Vector2(width / 2.0f, -height / 2.0f);
-	Vector2 d = t->CurrentPos() - Vector2(width / 2.0f, height / 2.0f);
+	Vector2 a = t->CurrentPos() - Vector2(clientWidth / 2.0f, -clientHeight / 2.0f);
+	Vector2 b = t->CurrentPos() + Vector2(clientWidth / 2.0f, clientHeight / 2.0f);
+	Vector2 c = t->CurrentPos() + Vector2(clientWidth / 2.0f, -clientHeight / 2.0f);
+	Vector2 d = t->CurrentPos() - Vector2(clientWidth / 2.0f, clientHeight / 2.0f);
 
 	a = cam->WorldToScreenPos(a, screenWidth, screenHeight);
 	b = cam->WorldToScreenPos(b, screenWidth, screenHeight);

@@ -151,9 +151,15 @@ int main(int argc, char* args[])
 		case EGameLevel::Level0:
 		case EGameLevel::Pausemenu:
 
-			if (g_InputManager->isKeyPressed(SDL_SCANCODE_ESCAPE))
+			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE))
 			{
-				g_GameManager->currentLevel = EGameLevel::Pausemenu;
+				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu))
+					g_GameManager->currentLevel = EGameLevel::Pausemenu;
+				else
+				{
+					g_GameManager->currentLevel = EGameLevel::Level0;
+					g_FrameRateController->zeroDeltaTime = false;
+				}
 			}
 
 			if (g_GameManager->currentLevel == EGameLevel::Pausemenu)

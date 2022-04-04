@@ -38,7 +38,7 @@ public:
 	float xOffset, yOffset;
 	float xScale, yScale;
 	float xFlip;
-	float alphaOverride;
+	float darknessFactor;
 	int drawSize;
 	bool useTextures;
 	bool scaleAlphaWithLight;

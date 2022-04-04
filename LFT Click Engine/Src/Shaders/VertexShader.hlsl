@@ -4,7 +4,7 @@ cbuffer cbPerObject
 	float2 Offset;
 	float2 Scale;
 	float xFlip;
-	float alphaOverride;
+	float darknessFactor;
 	float2 padding;
 };
 struct VSOut

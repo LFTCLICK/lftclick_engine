@@ -230,29 +230,29 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 		Gdiplus::Bitmap img(mapFilePath.c_str());
 
 		Gdiplus::Color currentColor;
-		int width = img.GetWidth(), height = img.GetHeight();
-		g_GameManager->mapHeight = (height * objectSize / 2) + objectSize;
-		g_AStarTerrain->width = width;
-		g_AStarTerrain->height = height;
-		g_AStarTerrain->nodeMap = new Node * *[height];
+		int clientWidth = img.GetWidth(), clientHeight = img.GetHeight();
+		g_GameManager->mapHeight = (clientHeight * objectSize / 2) + objectSize;
+		g_AStarTerrain->clientWidth = clientWidth;
+		g_AStarTerrain->clientHeight = clientHeight;
+		g_AStarTerrain->nodeMap = new Node * *[clientHeight];
 		g_AStarTerrain->tileSize = objectSize;
-		g_AStarTerrain->terrain = new int* [height];
-		for (int y = 0; y < height; y++)
+		g_AStarTerrain->terrain = new int* [clientHeight];
+		for (int y = 0; y < clientHeight; y++)
 		{
-			g_AStarTerrain->nodeMap[y] = new Node * [width];
-			g_AStarTerrain->terrain[y] = new int[width];
-			for (int x = 0; x < width; x++)
+			g_AStarTerrain->nodeMap[y] = new Node * [clientWidth];
+			g_AStarTerrain->terrain[y] = new int[clientWidth];
+			for (int x = 0; x < clientWidth; x++)
 			{
 				Node* current = new Node{};
 				current->pos = { y,x };
-				current->vec3 = DirectX::SimpleMath::Vector3((x - (width / 2)) * objectSize, (y - (height / 2)) * objectSize * -1, 0.0f);
+				current->vec3 = DirectX::SimpleMath::Vector3((x - (clientWidth / 2)) * objectSize, (y - (clientHeight / 2)) * objectSize * -1, 0.0f);
 				g_AStarTerrain->nodeMap[y][x] = current;
 				g_AStarTerrain->terrain[y][x] = 0;
 			}
 		}
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
+		for (int y = 0; y < clientHeight; y++) {
+			for (int x = 0; x < clientWidth; x++) {
 				img.GetPixel(x, y, &currentColor);
 				if (currentColor.GetValue() != Gdiplus::Color::Black) {
 
@@ -266,7 +266,7 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 						Transform* trans = obj->getComponent<Transform>();
 						SquareCollider* collider = obj->getComponent<SquareCollider>();
 
-						int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1, scaleX = trans->scale.x;
+						int mapX = (x - (clientWidth / 2)) * objectSize, mapY = (y - (clientHeight / 2)) * objectSize * -1, scaleX = trans->scale.x;
 
 						if (collider && !collider->isTrigger)
 						{
