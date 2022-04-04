@@ -104,7 +104,7 @@ void CircleCollider::DebugDraw()
 {
 	Transform* t = componentOwner->getComponent<Transform>();
 	assert(t != nullptr);
-	DirectX::SimpleMath::Vector2 debugCirclePos = g_GameManager->mainCamera->WorldToScreenPos(t->CurrentPos(),
+	DirectX::SimpleMath::Vector2 debugCirclePos = g_GameManager->mainCamera->WorldToScreenPos(t->CurrentPos()+center,
 		g_Renderer->GetWidth(), g_Renderer->GetHeight());
 
 	g_DebugRenderer->DrawCircle(debugCirclePos, radius, 50.0f);

@@ -123,6 +123,10 @@ private:
 
 			DirectX::SimpleMath::Vector2 delta = aPos-intersectionPoint;
 			delta = -distance / (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), delta)) * delta;
+			if (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), delta) > 200)
+			{
+				int a = 0;
+			}
 			return (delta);
 		}
 		return DirectX::SimpleMath::Vector2();
