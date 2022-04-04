@@ -4,9 +4,8 @@ cbuffer cbPerObject
 	float2 Offset;
 	float2 Scale;
 	float xFlip;
-	float darknessFactor;
-	float2 padding;
 };
+
 struct VSOut
 {
 	float2 tex : TEXCOORD;

@@ -161,8 +161,8 @@ void Renderer::CreateDeviceDependentResources()
 		0, 2, 3
 	};
 
-	Helpers::CreateMeshBuffer(device.Get(), screenQuadVertices, sizeof(screenQuadVertices) / sizeof(screenQuadVertices[0]), D3D11_BIND_VERTEX_BUFFER, mScreenQuadVB.ReleaseAndGetAddressOf());
-	Helpers::CreateMeshBuffer(device.Get(), screenQuadIndices, sizeof(screenQuadIndices) / sizeof(screenQuadIndices[0]), D3D11_BIND_INDEX_BUFFER, mScreenQuadIB.ReleaseAndGetAddressOf());
+	Helpers::CreateMeshBuffer(device.Get(), screenQuadVertices, sizeof(screenQuadVertices) / sizeof(screenQuadVertices[0]), D3D11_BIND_VERTEX_BUFFER, screenQuadVB.ReleaseAndGetAddressOf());
+	Helpers::CreateMeshBuffer(device.Get(), screenQuadIndices, sizeof(screenQuadIndices) / sizeof(screenQuadIndices[0]), D3D11_BIND_INDEX_BUFFER, screenQuadIB.ReleaseAndGetAddressOf());
 	
 	device->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
 	device->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
@@ -213,8 +213,8 @@ void Renderer::Draw()
 	UINT offset = 0;
 
 	//Bind offscreen texture
-	immediateContext->OMSetRenderTargets(1, mOffscreenRTV.GetAddressOf(), depthStencilView.Get());
-	immediateContext->ClearRenderTargetView(mOffscreenRTV.Get(), DirectX::Colors::Green);
+	immediateContext->OMSetRenderTargets(1, renderToTextureRTV.GetAddressOf(), depthStencilView.Get());
+	immediateContext->ClearRenderTargetView(renderToTextureRTV.Get(), DirectX::Colors::Green);
 	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	immediateContext->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
@@ -228,7 +228,7 @@ void Renderer::Draw()
 	ID3D11SamplerState* samStates[] = { states->PointWrap() };
 	immediateContext->PSSetSamplers(0, 1, samStates);
 	
-	immediateContext->OMSetBlendState(alphaToCoverageBS.Get(), nullptr, 0xFFFFFFFFu);
+	immediateContext->OMSetBlendState(states->AlphaBlend(), nullptr, 0xFFFFFFFFu);
 	immediateContext->RSSetState(nullptr);
 	immediateContext->OMSetDepthStencilState(nullptr, 0);
 
@@ -274,9 +274,10 @@ void Renderer::Draw()
 	immediateContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
 	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
 	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	immediateContext->OMSetBlendState(alphaToCoverageBS.Get(), nullptr, 0xFFFFFFFFu);
 
-	immediateContext->IASetVertexBuffers(0, 1, mScreenQuadVB.GetAddressOf(), &stride, &offset);
-	immediateContext->IASetIndexBuffer(mScreenQuadIB.Get(), DXGI_FORMAT_R16_UINT, 0);
+	immediateContext->IASetVertexBuffers(0, 1, screenQuadVB.GetAddressOf(), &stride, &offset);
+	immediateContext->IASetIndexBuffer(screenQuadIB.Get(), DXGI_FORMAT_R16_UINT, 0);
 
 	const VS_cbPerObject cbValues_VS =
 	{
@@ -290,10 +291,11 @@ void Renderer::Draw()
 		g_GameManager->GetDarknessLevel()
 	};
 
+
 	VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
 	PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
 
-	ID3D11ShaderResourceView* Srvs[] = { mOffscreenSRV.Get(), darknessSRV.Get() };
+	ID3D11ShaderResourceView* Srvs[] = { renderToTextureSRV.Get(), darknessSRV.Get() };
 
 	immediateContext->PSSetShaderResources(0, 2, Srvs);
 	immediateContext->DrawIndexed(6, 0, 0);
@@ -306,7 +308,6 @@ void Renderer::PresentFrame()
 	{
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Checkbox("VSync", &VSync);
-		ImGui::Text("Darkness: %f", g_GameManager->GetDarknessLevel());
 		ImGui::EndMainMenuBar();
 	}
 
@@ -389,9 +390,8 @@ void Renderer::OnResize(int newWidth, int newHeight)
 	immediateContext->RSSetViewports(1, &screenViewport);
 
 
-	mOffscreenSRV.Reset();
-	mOffscreenRTV.Reset();
-	mOffscreenUAV.Reset();
+	renderToTextureSRV.Reset();
+	renderToTextureRTV.Reset();
 
 	D3D11_TEXTURE2D_DESC texDesc;
 
@@ -403,7 +403,7 @@ void Renderer::OnResize(int newWidth, int newHeight)
 	texDesc.SampleDesc.Count = 1;
 	texDesc.SampleDesc.Quality = 0;
 	texDesc.Usage = D3D11_USAGE_DEFAULT;
-	texDesc.BindFlags = D3D11_BIND_RENDER_TARGET|D3D11_BIND_SHADER_RESOURCE|D3D11_BIND_UNORDERED_ACCESS;
+	texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;  
 	texDesc.CPUAccessFlags = 0;
 	texDesc.MiscFlags = 0;
 
@@ -411,12 +411,8 @@ void Renderer::OnResize(int newWidth, int newHeight)
 	DX::ThrowIfFailed(device->CreateTexture2D(&texDesc, 0, &offscreenTex));
 
 
-	DX::ThrowIfFailed(device->CreateShaderResourceView(offscreenTex.Get(), 0, &mOffscreenSRV));
-	DX::ThrowIfFailed(device->CreateRenderTargetView(offscreenTex.Get(), 0, &mOffscreenRTV));
-	DX::ThrowIfFailed(device->CreateUnorderedAccessView(offscreenTex.Get(), 0, &mOffscreenUAV));
-
-
-	//immediateContext->OMSetRenderTargets(1, mOffscreenRTV.GetAddressOf(), depthStencilView.Get());
+	DX::ThrowIfFailed(device->CreateShaderResourceView(offscreenTex.Get(), 0, &renderToTextureSRV));
+	DX::ThrowIfFailed(device->CreateRenderTargetView(offscreenTex.Get(), 0, &renderToTextureRTV));
 
 }
 

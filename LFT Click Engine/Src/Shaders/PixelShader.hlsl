@@ -18,19 +18,12 @@ cbuffer cbPerObject
 float4 main(VSOut pin) : SV_Target
 {
 	float4 textureColor = diffuse.Sample(samState, pin.tex);
-
 	clip(textureColor.a - 0.1f);
 
 	float4 darkness = darknessTex.Sample(samState, pin.tex);
 	float4 nightColor = textureColor * darkness;
 
 	float4 finalColor = lerp(textureColor, nightColor, darknessFactor);
-
-	//textureColor *= darkness;
-
-
-//	if (textureColor.a > 0 && alphaOverride < .99)
-	//	textureColor.a = alphaOverride;
 
 	return finalColor;
 }

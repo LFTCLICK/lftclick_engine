@@ -125,6 +125,7 @@ int main(int argc, char* args[])
 		switch (g_GameManager->currentLevel)
 		{
 		case EGameLevel::Mainmenu:
+
 			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->menuBackgroundSRV.Get(), XMFLOAT2(0,0), nullptr,
 				Colors::White, 0.0f, XMFLOAT2(0,0), XMFLOAT2(1, 1));
 

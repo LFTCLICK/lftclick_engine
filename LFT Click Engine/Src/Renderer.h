@@ -22,11 +22,11 @@ class Renderer
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer;
 	Microsoft::WRL::ComPtr<ID3D11BlendState> alphaToCoverageBS;
 
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> mOffscreenSRV;
-	Microsoft::WRL::ComPtr<ID3D11UnorderedAccessView> mOffscreenUAV;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> mOffscreenRTV;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> mScreenQuadVB;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> mScreenQuadIB;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> renderToTextureSRV;
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> renderToTextureRTV;
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> screenQuadVB;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> screenQuadIB;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> darknessSRV;
 

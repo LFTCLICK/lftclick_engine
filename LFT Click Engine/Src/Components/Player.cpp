@@ -118,9 +118,6 @@ void Player::Move(float deltaX, float deltaY) {
 
 void Player::Dash() {
 	isDashing = true;
-	/*dashVelocity.x = trans->lastMovement.x * dashSpeed;
-	dashVelocity.y = trans->lastMovement.y * dashSpeed;*/
-
 	dashVelocity = trans->lastMovement * dashSpeed;
 }
 

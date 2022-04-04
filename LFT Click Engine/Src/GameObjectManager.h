@@ -72,6 +72,3 @@ private:
 
 extern std::unique_ptr<GameObjectManager> g_GameObjManager;
 
-extern std::unique_ptr<Renderer> g_Renderer;
-extern std::unique_ptr<AStarTerrain> g_AStarTerrain;
-extern std::unique_ptr<GameManager> g_GameManager;

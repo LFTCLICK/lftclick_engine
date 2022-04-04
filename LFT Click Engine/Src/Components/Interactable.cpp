@@ -38,12 +38,18 @@ void Interactable::Update()
 			StopInteraction();
 
 		if (tutorialUI)
-			drawable->HUD_DrawTextCenter("Press E to intereact", { 0.0f, -100.0f});
+			drawable->HUD_DrawTextCenter("Hold E to Destroy", { 0.0f, -100.0f});
 
 		if (interacting) {
 #ifdef _DEBUG
 			ImGui::Text("Interacting...");
-#endif
+#endif		
+			
+			int destroyedProgress = (static_cast<float>(currentPhase) / totalPhases) * 100;
+			std::string progressText = "Destroying - " + std::to_string(destroyedProgress) + "%";
+
+			drawable->HUD_DrawTextCenter(progressText.c_str(), { 0.0f, -100.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+
 			internalTimer += g_FrameRateController->DeltaTime();
 		}
 
