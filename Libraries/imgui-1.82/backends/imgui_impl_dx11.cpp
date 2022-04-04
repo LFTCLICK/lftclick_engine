@@ -309,15 +309,15 @@ static void ImGui_ImplDX11_CreateFontsTexture()
     ImGuiIO& io = ImGui::GetIO();
     ImGui_ImplDX11_Data* bd = ImGui_ImplDX11_GetBackendData();
     unsigned char* pixels;
-    int width, height;
-    io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
+    int clientWidth, clientHeight;
+    io.Fonts->GetTexDataAsRGBA32(&pixels, &clientWidth, &clientHeight);
 
     // Upload texture to graphics system
     {
         D3D11_TEXTURE2D_DESC desc;
         ZeroMemory(&desc, sizeof(desc));
-        desc.Width = width;
-        desc.Height = height;
+        desc.Width = clientWidth;
+        desc.Height = clientHeight;
         desc.MipLevels = 1;
         desc.ArraySize = 1;
         desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;

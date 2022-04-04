@@ -26,12 +26,12 @@ namespace
 }
 
 Renderer::Renderer() :
-	width(0), height(0),
+	clientWidth(0), clientHeight(0),
 	backBufferFormat(DXGI_FORMAT_B8G8R8A8_UNORM),
 	depthStencilBufferFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
 	depthStencilViewFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
 	msaaQuality(0),
-	msaaSampleCount(4)
+	msaaSampleCount(1)
 {
 }
 
@@ -73,8 +73,8 @@ void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 
 	DXGI_SWAP_CHAIN_DESC sd;
 
-	sd.BufferDesc.Width = width;
-	sd.BufferDesc.Height = height;
+	sd.BufferDesc.Width = clientWidth;
+	sd.BufferDesc.Height = clientHeight;
 	sd.BufferDesc.RefreshRate.Numerator = 60;
 	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Format = backBufferFormat;
@@ -146,6 +146,24 @@ void Renderer::CreateDeviceDependentResources()
 	Helpers::CreateMeshBuffer(device.Get(), vertices, sizeof(vertices) / sizeof(vertices[0]), D3D11_BIND_VERTEX_BUFFER, vertBuf.ReleaseAndGetAddressOf());
 	Helpers::CreateMeshBuffer(device.Get(), indices, sizeof(indices) / sizeof(indices[0]), D3D11_BIND_INDEX_BUFFER, indexBuf.ReleaseAndGetAddressOf());
 
+
+	VertexType screenQuadVertices[] =
+	{
+		XMFLOAT3(-1.0f, -1.0f, 0.0f), XMFLOAT2(0.0f, 1.0f),
+		XMFLOAT3(-1.0f, +1.0f, 0.0f), XMFLOAT2(0.0f, 0.0f),
+		XMFLOAT3(+1.0f, +1.0f, 0.0f), XMFLOAT2(1.0f, 0.0f),
+		XMFLOAT3(+1.0f, -1.0f, 0.0f), XMFLOAT2(1.0f, 1.0f)
+	};
+
+	short screenQuadIndices[] =
+	{
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	Helpers::CreateMeshBuffer(device.Get(), screenQuadVertices, sizeof(screenQuadVertices) / sizeof(screenQuadVertices[0]), D3D11_BIND_VERTEX_BUFFER, screenQuadVB.ReleaseAndGetAddressOf());
+	Helpers::CreateMeshBuffer(device.Get(), screenQuadIndices, sizeof(screenQuadIndices) / sizeof(screenQuadIndices[0]), D3D11_BIND_INDEX_BUFFER, screenQuadIB.ReleaseAndGetAddressOf());
+	
 	device->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
 	device->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
 
@@ -168,13 +186,19 @@ void Renderer::CreateDeviceDependentResources()
 	a2CDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
 	DX::ThrowIfFailed(device->CreateBlendState(&a2CDesc, alphaToCoverageBS.ReleaseAndGetAddressOf()));
+
+	DX::ThrowIfFailed(
+		DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(),
+			L"Resources\\images\\23465-shade.jpg", 0,
+			D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr,
+			darknessSRV.ReleaseAndGetAddressOf() ) 
+	);
+
 }
 
 void Renderer::PrepareForRendering()
 {
-	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
-	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-	immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
@@ -188,6 +212,11 @@ void Renderer::Draw()
 	UINT stride = sizeof(VertexType);
 	UINT offset = 0;
 
+	//Bind offscreen texture
+	immediateContext->OMSetRenderTargets(1, renderToTextureRTV.GetAddressOf(), depthStencilView.Get());
+	immediateContext->ClearRenderTargetView(renderToTextureRTV.Get(), DirectX::Colors::Green);
+	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
 	immediateContext->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
 	immediateContext->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
 	immediateContext->PSSetShader(pixelShader.Get(), nullptr, 0);
@@ -199,11 +228,12 @@ void Renderer::Draw()
 	ID3D11SamplerState* samStates[] = { states->PointWrap() };
 	immediateContext->PSSetSamplers(0, 1, samStates);
 	
-	immediateContext->OMSetBlendState(alphaToCoverageBS.Get(), nullptr, 0xFFFFFFFFu);
+	immediateContext->OMSetBlendState(states->AlphaBlend(), nullptr, 0xFFFFFFFFu);
 	immediateContext->RSSetState(nullptr);
 	immediateContext->OMSetDepthStencilState(nullptr, 0);
 
 	DirectX::XMMATRIX projectionMat = g_GameManager->mainCamera->GetProjectionMatrix();
+
 	auto gameObjectIt = g_GameObjManager->gameObjectList.end();
 	while (gameObjectIt != g_GameObjManager->gameObjectList.begin())
 	{
@@ -227,16 +257,48 @@ void Renderer::Draw()
 		};
 	
 		const PS_cbPerObject cbValues_PS = {
-			drawable->alphaOverride
+			g_GameManager->GetDarknessLevel()
 		};
 	
 		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
 		PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
 	
-		immediateContext->PSSetShaderResources(0, 1, drawable->textureSRV.GetAddressOf());
+		ID3D11ShaderResourceView* Srvs[] = { drawable->textureSRV.Get(), darknessSRV.Get() };
+
+		immediateContext->PSSetShaderResources(0, 2, Srvs);
 	
 		immediateContext->DrawIndexed(6, 0, 0);
 	}
+
+	//Unbind offscreen texture and draw it
+	immediateContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
+	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
+	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	immediateContext->OMSetBlendState(alphaToCoverageBS.Get(), nullptr, 0xFFFFFFFFu);
+
+	immediateContext->IASetVertexBuffers(0, 1, screenQuadVB.GetAddressOf(), &stride, &offset);
+	immediateContext->IASetIndexBuffer(screenQuadIB.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+	const VS_cbPerObject cbValues_VS =
+	{
+		XMMatrixIdentity(),
+		XMFLOAT2(0, 0),
+		XMFLOAT2(1, 1),
+		1
+	};
+
+	const PS_cbPerObject cbValues_PS = {
+		g_GameManager->GetDarknessLevel()
+	};
+
+
+	VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
+	PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
+
+	ID3D11ShaderResourceView* Srvs[] = { renderToTextureSRV.Get(), darknessSRV.Get() };
+
+	immediateContext->PSSetShaderResources(0, 2, Srvs);
+	immediateContext->DrawIndexed(6, 0, 0);
 }
 
 void Renderer::PresentFrame()
@@ -275,15 +337,16 @@ void Renderer::InitImGui(SDL_Window* pWindow)
 
 void Renderer::OnResize(int newWidth, int newHeight)
 {
-	this->width = newWidth;
-	this->height = newHeight;
+	this->clientWidth = newWidth;
+	this->clientHeight = newHeight;
+
 	UpdateClientSizeVars();
 
 	renderTargetView.Reset();
 	depthStencilView.Reset();
 	depthStencilBuffer.Reset();
 
-	DX::ThrowIfFailed(swapChain->ResizeBuffers(1, width, height, backBufferFormat, 0));
+	DX::ThrowIfFailed(swapChain->ResizeBuffers(1, clientWidth, clientHeight, backBufferFormat, 0));
 
 	ComPtr<ID3D11Texture2D> backBuffer;
 	DX::ThrowIfFailed(swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backBuffer.GetAddressOf())));
@@ -295,8 +358,8 @@ void Renderer::OnResize(int newWidth, int newHeight)
 
 	depthStencilDesc.ArraySize = 1;
 	depthStencilDesc.MipLevels = 1;
-	depthStencilDesc.Width = width;
-	depthStencilDesc.Height = height;
+	depthStencilDesc.Width = clientWidth;
+	depthStencilDesc.Height = clientHeight;
 	depthStencilDesc.Format = depthStencilBufferFormat;
 	depthStencilDesc.SampleDesc.Count = msaaSampleCount;
 	depthStencilDesc.SampleDesc.Quality = msaaQuality - 1;
@@ -321,10 +384,35 @@ void Renderer::OnResize(int newWidth, int newHeight)
 	screenViewport.TopLeftY = 0.0f;
 	screenViewport.MinDepth = 0.0f;
 	screenViewport.MaxDepth = 1.0f;
-	screenViewport.Width = static_cast<float>(width);
-	screenViewport.Height = static_cast<float>(height);
+	screenViewport.Width = static_cast<float>(clientWidth);
+	screenViewport.Height = static_cast<float>(clientHeight);
 
 	immediateContext->RSSetViewports(1, &screenViewport);
+
+
+	renderToTextureSRV.Reset();
+	renderToTextureRTV.Reset();
+
+	D3D11_TEXTURE2D_DESC texDesc;
+
+	texDesc.Width = clientWidth;
+	texDesc.Height = clientHeight;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;  
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> offscreenTex;
+	DX::ThrowIfFailed(device->CreateTexture2D(&texDesc, 0, &offscreenTex));
+
+
+	DX::ThrowIfFailed(device->CreateShaderResourceView(offscreenTex.Get(), 0, &renderToTextureSRV));
+	DX::ThrowIfFailed(device->CreateRenderTargetView(offscreenTex.Get(), 0, &renderToTextureRTV));
 
 }
 

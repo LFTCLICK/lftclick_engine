@@ -40,7 +40,7 @@
     "deleteOnCollison": false
   },
   "6": {
-    "spriteSheetWidth": 4,
+    "spriteSheetWidth": 1,
     "spriteSheetHeight": 8,
     "interactable": true,
     "animations": [
@@ -78,7 +78,7 @@
       {
         "name": ".\\Resources\\sounds\\bwee.mp3",
         "loop": false,
-        "volume": 10,
+        "volume": 5,
         "pitchRange": [ 0.65, 0.85 ],
         "playEvents": [
           1006

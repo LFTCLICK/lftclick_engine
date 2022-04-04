@@ -24,9 +24,9 @@ private:
 		aPos += aRealCollider->center;
 		bPos += toCheckCollider->center;
 
-		DirectX::SimpleMath::Rectangle aRect = DirectX::SimpleMath::Rectangle(aPos.x - (aRealCollider->width / 2), aPos.y - (aRealCollider->height / 2), aRealCollider->width, aRealCollider->height);
-		DirectX::SimpleMath::Rectangle bRect = DirectX::SimpleMath::Rectangle(bPos.x - (toCheckCollider->width / 2), bPos.y - (toCheckCollider->height / 2),
-			toCheckCollider->width, toCheckCollider->height);
+		DirectX::SimpleMath::Rectangle aRect = DirectX::SimpleMath::Rectangle(aPos.x - (aRealCollider->clientWidth / 2), aPos.y - (aRealCollider->clientHeight / 2), aRealCollider->clientWidth, aRealCollider->clientHeight);
+		DirectX::SimpleMath::Rectangle bRect = DirectX::SimpleMath::Rectangle(bPos.x - (toCheckCollider->clientWidth / 2), bPos.y - (toCheckCollider->clientHeight / 2),
+			toCheckCollider->clientWidth, toCheckCollider->clientHeight);
 
 		didCollide = aRect.Intersects(bRect);
 
@@ -40,8 +40,8 @@ private:
 			{
 				DirectX::SimpleMath::Vector2 delta;
 				DirectX::XMVECTOR difference = DirectX::XMVectorSubtract(aPos, bPos);
-				difference.m128_f32[0] = fabs(difference.m128_f32[0]) - ((aRealCollider->width + toCheckCollider->width) / 2);
-				difference.m128_f32[1] = fabs(difference.m128_f32[1]) - ((aRealCollider->height + toCheckCollider->height) / 2);
+				difference.m128_f32[0] = fabs(difference.m128_f32[0]) - ((aRealCollider->clientWidth + toCheckCollider->clientWidth) / 2);
+				difference.m128_f32[1] = fabs(difference.m128_f32[1]) - ((aRealCollider->clientHeight + toCheckCollider->clientHeight) / 2);
 				if (difference.m128_f32[1] > difference.m128_f32[0])
 				{
 					if (aPos.y < bPos.y)
@@ -107,8 +107,8 @@ private:
 		aPos += aRealCollider->center;
 		bPos += toCheckCollider->center;
 		DirectX::SimpleMath::Vector2 intersectionPoint = DirectX::SimpleMath::Vector2(
-			std::max(bPos.x - (toCheckCollider->width / 2), std::min(aPos.x, bPos.x + (toCheckCollider->width / 2))),
-			std::max(bPos.y - (toCheckCollider->height / 2), std::min(aPos.y, bPos.y + (toCheckCollider->height / 2))));
+			std::max(bPos.x - (toCheckCollider->clientWidth / 2), std::min(aPos.x, bPos.x + (toCheckCollider->clientWidth / 2))),
+			std::max(bPos.y - (toCheckCollider->clientHeight / 2), std::min(aPos.y, bPos.y + (toCheckCollider->clientHeight / 2))));
 
 		float distance = DirectX::SimpleMath::Vector2::Distance(aPos, intersectionPoint);
 		distance = distance - aRealCollider->radius;

@@ -23,6 +23,8 @@ void Interactable::Start()
 	drawable = componentOwner->getComponent<Drawable>();
 
 	interactDistanceSq = interactDistance * interactDistance;
+
+	currentHp = hpPerPhase;
 }
 
 void Interactable::Update()
@@ -36,10 +38,18 @@ void Interactable::Update()
 			StopInteraction();
 
 		if (tutorialUI)
-			drawable->HUD_DrawTextCenter("Press E to intereact", { 0.0f, -100.0f});
+			drawable->HUD_DrawTextCenter("Hold E to Destroy", { 0.0f, -100.0f});
 
 		if (interacting) {
+#ifdef _DEBUG
 			ImGui::Text("Interacting...");
+#endif		
+			
+			int destroyedProgress = (static_cast<float>(currentPhase) / totalPhases) * 100;
+			std::string progressText = "Destroying - " + std::to_string(destroyedProgress) + "%";
+
+			drawable->HUD_DrawTextCenter(progressText.c_str(), { 0.0f, -100.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+
 			internalTimer += g_FrameRateController->DeltaTime();
 		}
 
@@ -79,19 +89,24 @@ void Interactable::StopInteraction() {
 void Interactable::CompleteInteraction() {
 	audio->PlaySoundsOnEvent(AUDIO_ON_COLLECT);
 
-	if (((float)rand() / RAND_MAX) < g_GameManager->GetChanceOfFindingPart()) {
-		g_GameManager->playerObj->getComponent<Player>()->parts++;
-		g_GameManager->PartSearchSuccessful();
+	if (hasParts) {
+		if (((float)rand() / RAND_MAX) < g_GameManager->GetChanceOfFindingPart()) {
+			g_GameManager->playerObj->getComponent<Player>()->parts++;
+			g_GameManager->PartSearchSuccessful();
+		}
+		else {
+			g_GameManager->playerObj->getComponent<Player>()->wood += woodPerCollect;
+			g_GameManager->PartSearchFailed();
+		}
 	}
 	else {
 		g_GameManager->playerObj->getComponent<Player>()->wood += woodPerCollect;
-		g_GameManager->PartSearchFailed();
 	}
-
 
 	internalTimer = 0;
 	if (--currentHp < 1) {
-		if (++currentPhase < totalPhases) {
+		++currentPhase;
+		if (currentPhase < totalPhases) {
 			currentHp = hpPerPhase;
 			anim->SwitchPhase(currentPhase);
 		}
@@ -113,15 +128,21 @@ Component* Interactable::Clone(GameObject* newParent)
 	toReturn->woodPerCollect = woodPerCollect;
 	toReturn->timeToCollect = timeToCollect;
 	toReturn->interactDistance = interactDistance;
+	toReturn->totalPhases = totalPhases;
+	toReturn->hpPerPhase = hpPerPhase;
+	toReturn->hasParts = hasParts;
 	return (Component*)toReturn;
 }
 
 void Interactable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
 	this->componentOwner = componentOwner;
-	timeToCollect = j["timeToCollect"];
-	woodPerCollect = j["woodPerCollect"];
-	interactDistance = j["interactDistance"];
+	if (j.contains("timeToCollect")) timeToCollect = j["timeToCollect"];
+	if (j.contains("woodPerCollect")) woodPerCollect = j["woodPerCollect"];
+	if (j.contains("interactDistance")) interactDistance = j["interactDistance"];
+	if (j.contains("totalPhases")) totalPhases = j["totalPhases"];
+	if (j.contains("hpPerPhase")) hpPerPhase = j["hpPerPhase"];
+	if (j.contains("hasParts")) hpPerPhase = j["hasParts"];
 }
 
 

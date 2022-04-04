@@ -2075,10 +2075,10 @@ ImGuiTextFilter::ImGuiTextFilter(const char* default_filter)
     }
 }
 
-bool ImGuiTextFilter::Draw(const char* label, float width)
+bool ImGuiTextFilter::Draw(const char* label, float clientWidth)
 {
-    if (width != 0.0f)
-        ImGui::SetNextItemWidth(width);
+    if (clientWidth != 0.0f)
+        ImGui::SetNextItemWidth(clientWidth);
     bool value_changed = ImGui::InputText(label, InputBuf, IM_ARRAYSIZE(InputBuf));
     if (value_changed)
         Build();

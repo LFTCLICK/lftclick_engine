@@ -41,7 +41,7 @@ Drawable::Drawable()
 
 void Drawable::Update() {
 	if (scaleAlphaWithLight) { 
-		alphaOverride = g_GameManager->GetDarknessLevel();
+		darknessFactor = g_GameManager->GetDarknessLevel();
 	}
 }
 
@@ -52,7 +52,7 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	if (j["onlyUVOverrides"])
 		return;
 
-	alphaOverride = 1;
+	darknessFactor = 1;
 	xOffset = yOffset = 0;
 	xFlip = 1;
 	if (j.contains("scaleAlphaWithLight")) scaleAlphaWithLight = j["scaleAlphaWithLight"];
@@ -79,7 +79,7 @@ Component* Drawable::Clone(GameObject* newParent)
 	toReturn->speed = speed;
 	toReturn->componentOwner = newParent;
 	toReturn->transformComp = newParent->getComponent<Transform>();
-	toReturn->alphaOverride = alphaOverride;
+	toReturn->darknessFactor = darknessFactor;
 	toReturn->scaleAlphaWithLight = scaleAlphaWithLight;
 
 	textureSRV.CopyTo(toReturn->textureSRV.GetAddressOf());

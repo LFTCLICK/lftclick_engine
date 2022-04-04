@@ -1,5 +1,7 @@
-Texture2D diffuse;
-SamplerState samState;
+Texture2D diffuse : register(t0);
+Texture2D darknessTex : register(t1);
+
+SamplerState samState : register(s0);
 
 struct VSOut
 {
@@ -9,17 +11,19 @@ struct VSOut
 
 cbuffer cbPerObject
 {
-	float alphaOverride;
+	float darknessFactor;
 	float3 padding;
 };
 
 float4 main(VSOut pin) : SV_Target
 {
 	float4 textureColor = diffuse.Sample(samState, pin.tex);
-	//clip(textureColor.a - 0.1f);
+	clip(textureColor.a - 0.1f);
 
-	if (textureColor.a > 0 && alphaOverride < .99)
-		textureColor.a *= alphaOverride;
+	float4 darkness = darknessTex.Sample(samState, pin.tex);
+	float4 nightColor = textureColor * darkness;
 
-	return textureColor;
+	float4 finalColor = lerp(textureColor, nightColor, darknessFactor);
+
+	return finalColor;
 }

@@ -23,7 +23,7 @@ void FrameRateController::Init(int desiredFPS)
 
 FrameRateController::FrameRateController() :
 	m_CurrentTime(0), m_PreviousTime(0),
-	m_DeltaTime(0)
+	m_DeltaTime(0), zeroDeltaTime(false)
 {
 	__int64 countsPerSecond;
 	QueryPerformanceFrequency((LARGE_INTEGER*)&countsPerSecond);
@@ -66,13 +66,11 @@ void FrameRateController::Tick()
 
 	if (m_DeltaTime < 0.0)
 		m_DeltaTime = 0.0;
-	if (g_GameManager->playerDead)
-		m_DeltaTime = 0;
 }
 
 float FrameRateController::DeltaTime()
 {
-	return static_cast<float>(m_DeltaTime);
+	return zeroDeltaTime ? 0.0f : static_cast<float>(m_DeltaTime);
 }
 
 

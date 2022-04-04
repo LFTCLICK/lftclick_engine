@@ -32,9 +32,6 @@ void FollowMouse::Update()
 	float targetX = (float)(g_InputManager->mouseX() - g_Renderer->GetWidth()/2.0f) + g_GameManager->mainCamera->xPos;
 	float targetY = -1 * (float)(g_InputManager->mouseY() - g_Renderer->GetHeight() / 2.0f) + g_GameManager->mainCamera->yPos;
 
-#ifdef _DEBUG
-	ImGui::Text("Mouse: %d %d\n", g_InputManager->mouseX(), g_InputManager->mouseY());
-#endif
 
 	trans->SetPos(targetX, targetY);
 }

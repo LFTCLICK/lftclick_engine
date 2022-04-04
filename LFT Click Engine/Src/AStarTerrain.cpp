@@ -8,9 +8,9 @@
 void AStarTerrain::Init()
 {
 
-    for (int row = 0; row < height; ++row)
+    for (int row = 0; row < clientHeight; ++row)
     {
-        for (int col = 0; col < width; ++col)
+        for (int col = 0; col < clientWidth; ++col)
         {
             Node* current = nodeMap[row][col];
             current->gCost = FLT_MAX;
@@ -33,17 +33,17 @@ GridPos AStarTerrain::WorldToGridPos(DirectX::SimpleMath::Vector2 pos)
 {
     //((x - (width / 2)) * objectSize, (y - (height / 2)) * objectSize * -1, 0.0f);
     // int mapX = (x - (width / 2)) * objectSize, mapY = (y - (height / 2)) * objectSize * -1;
-    int xPos = (pos.x / tileSize) + (width / 2) - .5f;
+    int xPos = (pos.x / tileSize) + (clientWidth / 2) - .5f;
     if(xPos<0)
-        xPos = (pos.x / tileSize) + (width / 2) - .5f;
-    int yPos = (-pos.y / tileSize) + (height / 2) - .5f;
+        xPos = (pos.x / tileSize) + (clientWidth / 2) - .5f;
+    int yPos = (-pos.y / tileSize) + (clientHeight / 2) - .5f;
     return GridPos{ yPos+1,xPos+1 };
 }
 
 int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::SimpleMath::Vector2>& path)
 {
     std::priority_queue<Node*, std::vector<Node*>, posComparisonHelper>  openList = std::priority_queue<Node*, std::vector<Node*>, posComparisonHelper>();
-    if (start->row < 0 || start->row>= height || start->col>= width)
+    if (start->row < 0 || start->row>= clientHeight || start->col>= clientWidth)
         return -1;
 
     //for (int row = 0; row < height; ++row)
@@ -186,7 +186,7 @@ int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::
 
                 //if (deltaRow * deltaCol != 0)
                 //    continue;
-                if (deltaRow + current->pos.row >= width || deltaRow + current->pos.row < 0 || deltaCol + current->pos.col >= height || deltaCol + current->pos.col < 0)
+                if (deltaRow + current->pos.row >= clientWidth || deltaRow + current->pos.row < 0 || deltaCol + current->pos.col >= clientHeight || deltaCol + current->pos.col < 0)
                     continue;
                 Node* newSpace = nodeMap[deltaRow + current->pos.row][current->pos.col + deltaCol];
 
@@ -212,7 +212,7 @@ int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::
                                 {
                                     if (diagHelperRow + deltaRow < -1 || diagHelperRow + deltaRow > 1 || diagHelperCol + deltaCol < -1 || diagHelperCol + deltaCol > 1 || (diagHelperRow == diagHelperCol && diagHelperRow == 0))
                                         continue;
-                                    if (diagHelperRow + deltaRow + current->pos.row >= width || diagHelperRow + deltaRow + current->pos.row < 0 || diagHelperCol + deltaCol + current->pos.col >= height || diagHelperCol + deltaCol + current->pos.col < 0)
+                                    if (diagHelperRow + deltaRow + current->pos.row >= clientWidth || diagHelperRow + deltaRow + current->pos.row < 0 || diagHelperCol + deltaCol + current->pos.col >= clientHeight || diagHelperCol + deltaCol + current->pos.col < 0)
                                         continue;
                                     int newRow = current->pos.row + deltaRow + diagHelperRow;
                                     int newCol = ((current->pos.col + diagHelperCol + deltaCol));
@@ -247,7 +247,7 @@ int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::
 
 AStarTerrain::~AStarTerrain()
 {
-    for (int i = 0; i < width; i++)
+    for (int i = 0; i < clientWidth; i++)
     {
         delete terrain[i];
         delete nodeMap[i];

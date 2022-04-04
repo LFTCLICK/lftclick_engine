@@ -22,6 +22,8 @@ public:
 	void Reset();
 	float DeltaTime();
 
+public:
+	bool zeroDeltaTime;
 private:
 	__int64 m_CurrentTime;
 	__int64 m_PreviousTime;
