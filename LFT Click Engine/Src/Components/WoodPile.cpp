@@ -5,7 +5,7 @@
 
 void WoodPile::Start()
 {
-	p = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
+	player = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
 	trans = componentOwner->getComponent<Transform>();
 }
 
@@ -25,7 +25,7 @@ void WoodPile::Update()
 		}
 		if (internalTimer >= timeToCollect)
 		{
-			p->wood += woodPerCollect;
+			player->wood += woodPerCollect;
 			internalTimer = 0;
 			currentPhase++;
 		}

@@ -1762,18 +1762,18 @@ static bool Items_SingleStringGetter(void* data, int idx, const char** out_text)
     // FIXME-OPT: we could pre-compute the indices to fasten this. But only 1 active combo means the waste is limited.
     const char* items_separated_by_zeros = (const char*)data;
     int items_count = 0;
-    const char* p = items_separated_by_zeros;
-    while (*p)
+    const char* player = items_separated_by_zeros;
+    while (*player)
     {
         if (idx == items_count)
             break;
-        p += strlen(p) + 1;
+        player += strlen(player) + 1;
         items_count++;
     }
-    if (!*p)
+    if (!*player)
         return false;
     if (out_text)
-        *out_text = p;
+        *out_text = player;
     return true;
 }
 
@@ -1833,10 +1833,10 @@ bool ImGui::Combo(const char* label, int* current_item, const char* const items[
 bool ImGui::Combo(const char* label, int* current_item, const char* items_separated_by_zeros, int height_in_items)
 {
     int items_count = 0;
-    const char* p = items_separated_by_zeros;       // FIXME-OPT: Avoid computing this, or at least only when combo is open
-    while (*p)
+    const char* player = items_separated_by_zeros;       // FIXME-OPT: Avoid computing this, or at least only when combo is open
+    while (*player)
     {
-        p += strlen(p) + 1;
+        player += strlen(player) + 1;
         items_count++;
     }
     bool value_changed = Combo(label, current_item, Items_SingleStringGetter, (void*)items_separated_by_zeros, items_count, height_in_items);
@@ -2192,13 +2192,13 @@ TYPE ImGui::RoundScalarWithFormatT(const char* format, ImGuiDataType data_type, 
     // Format value with our rounding, and read back
     char v_str[64];
     ImFormatString(v_str, IM_ARRAYSIZE(v_str), fmt_start, v);
-    const char* p = v_str;
-    while (*p == ' ')
-        p++;
+    const char* player = v_str;
+    while (*player == ' ')
+        player++;
     if (data_type == ImGuiDataType_Float || data_type == ImGuiDataType_Double)
-        v = (TYPE)ImAtof(p);
+        v = (TYPE)ImAtof(player);
     else
-        ImAtoi(p, (SIGNEDTYPE*)&v);
+        ImAtoi(player, (SIGNEDTYPE*)&v);
     return v;
 }
 
@@ -4671,7 +4671,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
             float bg_offy_up = is_multiline ? 0.0f : -1.0f;    // FIXME: those offsets should be part of the style? they don't play so well with multi-line selection.
             float bg_offy_dn = is_multiline ? 0.0f : 2.0f;
             ImVec2 rect_pos = draw_pos + select_start_offset - draw_scroll;
-            for (const ImWchar* p = text_selected_begin; p < text_selected_end; )
+            for (const ImWchar* player = text_selected_begin; player < text_selected_end; )
             {
                 if (rect_pos.y > clip_rect.w + g.FontSize)
                     break;
@@ -4679,13 +4679,13 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
                 {
                     //p = (const ImWchar*)wmemchr((const wchar_t*)p, '\n', text_selected_end - p);  // FIXME-OPT: Could use this when wchar_t are 16-bit
                     //p = p ? p + 1 : text_selected_end;
-                    while (p < text_selected_end)
-                        if (*p++ == '\n')
+                    while (player < text_selected_end)
+                        if (*player++ == '\n')
                             break;
                 }
                 else
                 {
-                    ImVec2 rect_size = InputTextCalcTextSizeW(p, text_selected_end, &p, NULL, true);
+                    ImVec2 rect_size = InputTextCalcTextSizeW(player, text_selected_end, &player, NULL, true);
                     if (rect_size.x <= 0.0f) rect_size.x = IM_FLOOR(g.Font->GetCharAdvance((ImWchar)' ') * 0.50f); // So we can see selected empty lines
                     ImRect rect(rect_pos + ImVec2(0.0f, bg_offy_up - g.FontSize), rect_pos + ImVec2(rect_size.x, bg_offy_dn));
                     rect.ClipWith(clip_rect);
@@ -4930,16 +4930,16 @@ bool ImGui::ColorEdit4(const char* label, float col[4], ImGuiColorEditFlags flag
         if (InputText("##Text", buf, IM_ARRAYSIZE(buf), ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_CharsUppercase))
         {
             value_changed = true;
-            char* p = buf;
-            while (*p == '#' || ImCharIsBlankA(*p))
-                p++;
+            char* player = buf;
+            while (*player == '#' || ImCharIsBlankA(*player))
+                player++;
             i[0] = i[1] = i[2] = 0;
             i[3] = 0xFF; // alpha default to 255 is not parsed by scanf (e.g. inputting #FFFFFF omitting alpha)
             int r;
             if (alpha)
-                r = sscanf(p, "%02X%02X%02X%02X", (unsigned int*)&i[0], (unsigned int*)&i[1], (unsigned int*)&i[2], (unsigned int*)&i[3]); // Treat at unsigned (%X is unsigned)
+                r = sscanf(player, "%02X%02X%02X%02X", (unsigned int*)&i[0], (unsigned int*)&i[1], (unsigned int*)&i[2], (unsigned int*)&i[3]); // Treat at unsigned (%X is unsigned)
             else
-                r = sscanf(p, "%02X%02X%02X", (unsigned int*)&i[0], (unsigned int*)&i[1], (unsigned int*)&i[2]);
+                r = sscanf(player, "%02X%02X%02X", (unsigned int*)&i[0], (unsigned int*)&i[1], (unsigned int*)&i[2]);
             IM_UNUSED(r); // Fixes C6031: Return value ignored: 'sscanf'.
         }
         if (!(flags & ImGuiColorEditFlags_NoOptions))

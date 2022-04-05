@@ -1209,7 +1209,7 @@ void ImGuiIO::AddFocusEvent(bool focused)
 // [SECTION] MISC HELPERS/UTILITIES (Geometry functions)
 //-----------------------------------------------------------------------------
 
-ImVec2 ImBezierCubicClosestPoint(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, const ImVec2& p, int num_segments)
+ImVec2 ImBezierCubicClosestPoint(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, const ImVec2& player, int num_segments)
 {
     IM_ASSERT(num_segments > 0); // Use ImBezierCubicClosestPointCasteljau()
     ImVec2 p_last = p1;
@@ -1219,8 +1219,8 @@ ImVec2 ImBezierCubicClosestPoint(const ImVec2& p1, const ImVec2& p2, const ImVec
     for (int i_step = 1; i_step <= num_segments; i_step++)
     {
         ImVec2 p_current = ImBezierCubicCalc(p1, p2, p3, p4, t_step * i_step);
-        ImVec2 p_line = ImLineClosestPoint(p_last, p_current, p);
-        float dist2 = ImLengthSqr(p - p_line);
+        ImVec2 p_line = ImLineClosestPoint(p_last, p_current, player);
+        float dist2 = ImLengthSqr(player - p_line);
         if (dist2 < p_closest_dist2)
         {
             p_closest = p_line;
@@ -1232,7 +1232,7 @@ ImVec2 ImBezierCubicClosestPoint(const ImVec2& p1, const ImVec2& p2, const ImVec
 }
 
 // Closely mimics PathBezierToCasteljau() in imgui_draw.cpp
-static void ImBezierCubicClosestPointCasteljauStep(const ImVec2& p, ImVec2& p_closest, ImVec2& p_last, float& p_closest_dist2, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, float tess_tol, int level)
+static void ImBezierCubicClosestPointCasteljauStep(const ImVec2& player, ImVec2& p_closest, ImVec2& p_last, float& p_closest_dist2, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, float tess_tol, int level)
 {
     float dx = x4 - x1;
     float dy = y4 - y1;
@@ -1243,8 +1243,8 @@ static void ImBezierCubicClosestPointCasteljauStep(const ImVec2& p, ImVec2& p_cl
     if ((d2 + d3) * (d2 + d3) < tess_tol * (dx * dx + dy * dy))
     {
         ImVec2 p_current(x4, y4);
-        ImVec2 p_line = ImLineClosestPoint(p_last, p_current, p);
-        float dist2 = ImLengthSqr(p - p_line);
+        ImVec2 p_line = ImLineClosestPoint(p_last, p_current, player);
+        float dist2 = ImLengthSqr(player - p_line);
         if (dist2 < p_closest_dist2)
         {
             p_closest = p_line;
@@ -1260,26 +1260,26 @@ static void ImBezierCubicClosestPointCasteljauStep(const ImVec2& p, ImVec2& p_cl
         float x123 = (x12 + x23)*0.5f,    y123 = (y12 + y23)*0.5f;
         float x234 = (x23 + x34)*0.5f,    y234 = (y23 + y34)*0.5f;
         float x1234 = (x123 + x234)*0.5f, y1234 = (y123 + y234)*0.5f;
-        ImBezierCubicClosestPointCasteljauStep(p, p_closest, p_last, p_closest_dist2, x1, y1, x12, y12, x123, y123, x1234, y1234, tess_tol, level + 1);
-        ImBezierCubicClosestPointCasteljauStep(p, p_closest, p_last, p_closest_dist2, x1234, y1234, x234, y234, x34, y34, x4, y4, tess_tol, level + 1);
+        ImBezierCubicClosestPointCasteljauStep(player, p_closest, p_last, p_closest_dist2, x1, y1, x12, y12, x123, y123, x1234, y1234, tess_tol, level + 1);
+        ImBezierCubicClosestPointCasteljauStep(player, p_closest, p_last, p_closest_dist2, x1234, y1234, x234, y234, x34, y34, x4, y4, tess_tol, level + 1);
     }
 }
 
 // tess_tol is generally the same value you would find in ImGui::GetStyle().CurveTessellationTol
 // Because those ImXXX functions are lower-level than ImGui:: we cannot access this value automatically.
-ImVec2 ImBezierCubicClosestPointCasteljau(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, const ImVec2& p, float tess_tol)
+ImVec2 ImBezierCubicClosestPointCasteljau(const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, const ImVec2& player, float tess_tol)
 {
     IM_ASSERT(tess_tol > 0.0f);
     ImVec2 p_last = p1;
     ImVec2 p_closest;
     float p_closest_dist2 = FLT_MAX;
-    ImBezierCubicClosestPointCasteljauStep(p, p_closest, p_last, p_closest_dist2, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y, tess_tol, 0);
+    ImBezierCubicClosestPointCasteljauStep(player, p_closest, p_last, p_closest_dist2, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y, tess_tol, 0);
     return p_closest;
 }
 
-ImVec2 ImLineClosestPoint(const ImVec2& a, const ImVec2& b, const ImVec2& p)
+ImVec2 ImLineClosestPoint(const ImVec2& a, const ImVec2& b, const ImVec2& player)
 {
-    ImVec2 ap = p - a;
+    ImVec2 ap = player - a;
     ImVec2 ab_dir = b - a;
     float dot = ap.x * ab_dir.x + ap.y * ab_dir.y;
     if (dot < 0.0f)
@@ -1290,33 +1290,33 @@ ImVec2 ImLineClosestPoint(const ImVec2& a, const ImVec2& b, const ImVec2& p)
     return a + ab_dir * dot / ab_len_sqr;
 }
 
-bool ImTriangleContainsPoint(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& p)
+bool ImTriangleContainsPoint(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& player)
 {
-    bool b1 = ((p.x - b.x) * (a.y - b.y) - (p.y - b.y) * (a.x - b.x)) < 0.0f;
-    bool b2 = ((p.x - c.x) * (b.y - c.y) - (p.y - c.y) * (b.x - c.x)) < 0.0f;
-    bool b3 = ((p.x - a.x) * (c.y - a.y) - (p.y - a.y) * (c.x - a.x)) < 0.0f;
+    bool b1 = ((player.x - b.x) * (a.y - b.y) - (player.y - b.y) * (a.x - b.x)) < 0.0f;
+    bool b2 = ((player.x - c.x) * (b.y - c.y) - (player.y - c.y) * (b.x - c.x)) < 0.0f;
+    bool b3 = ((player.x - a.x) * (c.y - a.y) - (player.y - a.y) * (c.x - a.x)) < 0.0f;
     return ((b1 == b2) && (b2 == b3));
 }
 
-void ImTriangleBarycentricCoords(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& p, float& out_u, float& out_v, float& out_w)
+void ImTriangleBarycentricCoords(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& player, float& out_u, float& out_v, float& out_w)
 {
     ImVec2 v0 = b - a;
     ImVec2 v1 = c - a;
-    ImVec2 v2 = p - a;
+    ImVec2 v2 = player - a;
     const float denom = v0.x * v1.y - v1.x * v0.y;
     out_v = (v2.x * v1.y - v1.x * v2.y) / denom;
     out_w = (v0.x * v2.y - v2.x * v0.y) / denom;
     out_u = 1.0f - out_v - out_w;
 }
 
-ImVec2 ImTriangleClosestPoint(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& p)
+ImVec2 ImTriangleClosestPoint(const ImVec2& a, const ImVec2& b, const ImVec2& c, const ImVec2& player)
 {
-    ImVec2 proj_ab = ImLineClosestPoint(a, b, p);
-    ImVec2 proj_bc = ImLineClosestPoint(b, c, p);
-    ImVec2 proj_ca = ImLineClosestPoint(c, a, p);
-    float dist2_ab = ImLengthSqr(p - proj_ab);
-    float dist2_bc = ImLengthSqr(p - proj_bc);
-    float dist2_ca = ImLengthSqr(p - proj_ca);
+    ImVec2 proj_ab = ImLineClosestPoint(a, b, player);
+    ImVec2 proj_bc = ImLineClosestPoint(b, c, player);
+    ImVec2 proj_ca = ImLineClosestPoint(c, a, player);
+    float dist2_ab = ImLengthSqr(player - proj_ab);
+    float dist2_bc = ImLengthSqr(player - proj_bc);
+    float dist2_ca = ImLengthSqr(player - proj_ca);
     float m = ImMin(dist2_ab, ImMin(dist2_bc, dist2_ca));
     if (m == dist2_ab)
         return proj_ab;
@@ -1376,8 +1376,8 @@ char* ImStrdupcpy(char* dst, size_t* p_dst_size, const char* src)
 
 const char* ImStrchrRange(const char* str, const char* str_end, char c)
 {
-    const char* p = (const char*)memchr(str, (int)c, str_end - str);
-    return p;
+    const char* player = (const char*)memchr(str, (int)c, str_end - str);
+    return player;
 }
 
 int ImStrlenW(const ImWchar* str)
@@ -1391,8 +1391,8 @@ int ImStrlenW(const ImWchar* str)
 // Find end-of-line. Return pointer will point to either first \n, either str_end.
 const char* ImStreolRange(const char* str, const char* str_end)
 {
-    const char* p = (const char*)memchr(str, '\n', str_end - str);
-    return p ? p : str_end;
+    const char* player = (const char*)memchr(str, '\n', str_end - str);
+    return player ? player : str_end;
 }
 
 const ImWchar* ImStrbolW(const ImWchar* buf_mid_line, const ImWchar* buf_begin) // find beginning-of-line
@@ -1427,17 +1427,17 @@ const char* ImStristr(const char* haystack, const char* haystack_end, const char
 // Trim str by offsetting contents when there's leading data + writing a \0 at the trailing position. We use this in situation where the cost is negligible.
 void ImStrTrimBlanks(char* buf)
 {
-    char* p = buf;
-    while (p[0] == ' ' || p[0] == '\t')     // Leading blanks
-        p++;
-    char* p_start = p;
-    while (*p != 0)                         // Find end of string
-        p++;
-    while (p > p_start && (p[-1] == ' ' || p[-1] == '\t'))  // Trailing blanks
-        p--;
+    char* player = buf;
+    while (player[0] == ' ' || player[0] == '\t')     // Leading blanks
+        player++;
+    char* p_start = player;
+    while (*player != 0)                         // Find end of string
+        player++;
+    while (player > p_start && (player[-1] == ' ' || player[-1] == '\t'))  // Trailing blanks
+        player--;
     if (p_start != buf)                     // Copy memory if we had leading blanks
-        memmove(buf, p_start, p - p_start);
-    buf[p - p_start] = 0;                   // Zero terminate
+        memmove(buf, p_start, player - p_start);
+    buf[player - p_start] = 0;                   // Zero terminate
 }
 
 const char* ImStrSkipBlank(const char* str)
@@ -1892,18 +1892,18 @@ void ImGui::ColorConvertHSVtoRGB(float h, float s, float v, float& out_r, float&
     h = ImFmod(h, 1.0f) / (60.0f / 360.0f);
     int   i = (int)h;
     float f = h - (float)i;
-    float p = v * (1.0f - s);
+    float player = v * (1.0f - s);
     float q = v * (1.0f - s * f);
     float t = v * (1.0f - s * (1.0f - f));
 
     switch (i)
     {
-    case 0: out_r = v; out_g = t; out_b = p; break;
-    case 1: out_r = q; out_g = v; out_b = p; break;
-    case 2: out_r = p; out_g = v; out_b = t; break;
-    case 3: out_r = p; out_g = q; out_b = v; break;
-    case 4: out_r = t; out_g = p; out_b = v; break;
-    case 5: default: out_r = v; out_g = p; out_b = q; break;
+    case 0: out_r = v; out_g = t; out_b = player; break;
+    case 1: out_r = q; out_g = v; out_b = player; break;
+    case 2: out_r = player; out_g = v; out_b = t; break;
+    case 3: out_r = player; out_g = q; out_b = v; break;
+    case 4: out_r = t; out_g = player; out_b = v; break;
+    case 5: default: out_r = v; out_g = player; out_b = q; break;
     }
 }
 
@@ -4810,8 +4810,8 @@ bool ImGui::IsMousePosValid(const ImVec2* mouse_pos)
     // Because GImGui is not dereferenced in every code path, the static analyzer assume that it may be NULL (which it doesn't for other functions).
     IM_ASSERT(GImGui != NULL);
     const float MOUSE_INVALID = -256000.0f;
-    ImVec2 p = mouse_pos ? *mouse_pos : GImGui->IO.MousePos;
-    return p.x >= MOUSE_INVALID && p.y >= MOUSE_INVALID;
+    ImVec2 player = mouse_pos ? *mouse_pos : GImGui->IO.MousePos;
+    return player.x >= MOUSE_INVALID && player.y >= MOUSE_INVALID;
 }
 
 bool ImGui::IsAnyMouseDown()
@@ -10718,8 +10718,8 @@ ImGuiWindowSettings* ImGui::CreateNewWindowSettings(const char* name)
 #if !IMGUI_DEBUG_INI_SETTINGS
     // Skip to the "###" marker if any. We don't skip past to match the behavior of GetID()
     // Preserve the full string when IMGUI_DEBUG_INI_SETTINGS is set to make .ini inspection easier.
-    if (const char* p = strstr(name, "###"))
-        name = p;
+    if (const char* player = strstr(name, "###"))
+        name = player;
 #endif
     const size_t name_len = strlen(name);
 
@@ -11227,8 +11227,8 @@ static void RenderViewportsThumbnails()
     ImRect bb_full(FLT_MAX, FLT_MAX, -FLT_MAX, -FLT_MAX);
     for (int n = 0; n < g.Viewports.Size; n++)
         bb_full.Add(g.Viewports[n]->GetMainRect());
-    ImVec2 p = window->DC.CursorPos;
-    ImVec2 off = p - bb_full.Min * SCALE;
+    ImVec2 player = window->DC.CursorPos;
+    ImVec2 off = player - bb_full.Min * SCALE;
     for (int n = 0; n < g.Viewports.Size; n++)
     {
         ImGuiViewportP* viewport = g.Viewports[n];
@@ -11893,8 +11893,8 @@ void ImGui::DebugNodeStorage(ImGuiStorage* storage, const char* label)
         return;
     for (int n = 0; n < storage->Data.Size; n++)
     {
-        const ImGuiStorage::ImGuiStoragePair& p = storage->Data[n];
-        BulletText("Key 0x%08X Value { i: %d }", p.key, p.val_i); // Important: we currently don't store a type, real value may not be integer.
+        const ImGuiStorage::ImGuiStoragePair& player = storage->Data[n];
+        BulletText("Key 0x%08X Value { i: %d }", player.key, player.val_i); // Important: we currently don't store a type, real value may not be integer.
     }
     TreePop();
 }
@@ -11904,18 +11904,18 @@ void ImGui::DebugNodeTabBar(ImGuiTabBar* tab_bar, const char* label)
 {
     // Standalone tab bars (not associated to docking/windows functionality) currently hold no discernible strings.
     char buf[256];
-    char* p = buf;
+    char* player = buf;
     const char* buf_end = buf + IM_ARRAYSIZE(buf);
     const bool is_active = (tab_bar->PrevFrameVisible >= GetFrameCount() - 2);
-    p += ImFormatString(p, buf_end - p, "%s 0x%08X (%d tabs)%s", label, tab_bar->ID, tab_bar->Tabs.Size, is_active ? "" : " *Inactive*");
-    p += ImFormatString(p, buf_end - p, "  { ");
+    player += ImFormatString(player, buf_end - player, "%s 0x%08X (%d tabs)%s", label, tab_bar->ID, tab_bar->Tabs.Size, is_active ? "" : " *Inactive*");
+    player += ImFormatString(player, buf_end - player, "  { ");
     for (int tab_n = 0; tab_n < ImMin(tab_bar->Tabs.Size, 3); tab_n++)
     {
         ImGuiTabItem* tab = &tab_bar->Tabs[tab_n];
-        p += ImFormatString(p, buf_end - p, "%s'%s'",
+        player += ImFormatString(player, buf_end - player, "%s'%s'",
             tab_n > 0 ? ", " : "", (tab->NameOffset != -1) ? tab_bar->GetTabName(tab) : "???");
     }
-    p += ImFormatString(p, buf_end - p, (tab_bar->Tabs.Size > 3) ? " ... }" : " } ");
+    player += ImFormatString(player, buf_end - player, (tab_bar->Tabs.Size > 3) ? " ... }" : " } ");
     if (!is_active) { PushStyleColor(ImGuiCol_Text, GetStyleColorVec4(ImGuiCol_TextDisabled)); }
     bool open = TreeNode(label, "%s", buf);
     if (!is_active) { PopStyleColor(); }

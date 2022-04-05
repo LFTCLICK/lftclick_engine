@@ -14,9 +14,12 @@
 #include "./Components/SquareCollider.h"
 #include "./Components/CircleCollider.h"
 
-class CollisionResolution{
+using namespace DirectX::SimpleMath;
+
+class CollisionResolution
+{
 private:
-	static DirectX::SimpleMath::Vector2 SquareSquareCollision(Collider* a, DirectX::SimpleMath::Vector2 aPos, Collider* b, DirectX::SimpleMath::Vector2 bPos, bool& didCollide)
+	static Vector2 SquareSquareCollision(Collider* a, Vector2 aPos, Collider* b, Vector2 bPos, bool& didCollide)
 	{
 		SquareCollider* aRealCollider = (SquareCollider*)a;
 		SquareCollider* toCheckCollider = (SquareCollider*)b;
@@ -34,11 +37,11 @@ private:
 		{
 			if (a->isTrigger||b->isTrigger)
 			{
-				return DirectX::SimpleMath::Vector2();
+				return Vector2();
 			}
 			else
 			{
-				DirectX::SimpleMath::Vector2 delta;
+				Vector2 delta;
 				DirectX::XMVECTOR difference = DirectX::XMVectorSubtract(aPos, bPos);
 				difference.m128_f32[0] = fabs(difference.m128_f32[0]) - ((aRealCollider->clientWidth + toCheckCollider->clientWidth) / 2);
 				difference.m128_f32[1] = fabs(difference.m128_f32[1]) - ((aRealCollider->clientHeight + toCheckCollider->clientHeight) / 2);
@@ -81,7 +84,7 @@ private:
 		CircleCollider* toCheckCollider = (CircleCollider*)b;
 		aPos += aRealCollider->center;
 		bPos += toCheckCollider->center;
-		float distance = DirectX::SimpleMath::Vector2::Distance(aPos, bPos);
+		float distance = DirectX::SimpleMath::Vector2::DistanceSquared(aPos, bPos);
 		distance = distance - aRealCollider->radius - toCheckCollider->radius;
 
 		if (distance <= 0.0001)
@@ -94,7 +97,7 @@ private:
 				return DirectX::SimpleMath::Vector2();
 
 			DirectX::SimpleMath::Vector2 delta =  bPos- aPos;
-			delta = -distance / (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), delta)) * delta;
+			delta = -distance / delta.Length() * delta;
 			return (delta);
 		}
 		return DirectX::SimpleMath::Vector2();
@@ -122,8 +125,8 @@ private:
 				return DirectX::SimpleMath::Vector2();
 
 			DirectX::SimpleMath::Vector2 delta = aPos-intersectionPoint;
-			delta = -distance / (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), delta)) * delta;
-			if (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), delta) > 200)
+			delta = -distance / delta.Length() * delta;
+			if (delta.Length() > 200)
 			{
 				int a = 0;
 			}

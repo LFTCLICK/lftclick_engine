@@ -4,7 +4,7 @@
 
 void SpriteAnimator::Start()
 {
-	draw = componentOwner->getComponent<Drawable>();
+	drawable = componentOwner->getComponent<Drawable>();
 	trans = componentOwner->getComponent<Transform>();
 	timer = 0;
 	xOffset = 1.0f / spriteSheetWidth;
@@ -72,10 +72,10 @@ void SpriteAnimator::UpdateFrame()
 		++currentFrame;
 
 		if (currentFrame < animations[currentAnimationIndex].length) {
-			draw->xOffset += xOffset;
+			drawable->xOffset += xOffset;
 		}
 		else {
-			draw->xOffset = 0;
+			drawable->xOffset = 0;
 			currentFrame = 0;
 		}
 	}
@@ -179,7 +179,7 @@ void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* componentOwner)
 
 void SpriteAnimator::SwitchAnimation(int index) {
 	currentAnimationIndex = index;
-	draw->yOffset = (animations[index].row + currentPhase) * yOffset;
+	drawable->yOffset = (animations[index].row + currentPhase) * yOffset;
 	currentFrame = 0;
 	timer = 0;
 }

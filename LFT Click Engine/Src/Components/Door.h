@@ -30,7 +30,8 @@ public:
 	virtual void Deserialize(nlohmann::json j, GameObject* componentOwner) override;
 	virtual Component* Clone(GameObject* newParent);
 	void UpdateImage();
-	Door() {};
+	
+	Door() : repairing(false) {}
 
 	void HandleMessage(Message* e);
 public:
@@ -41,11 +42,13 @@ public:
 
 private:
 	Transform* trans;
-	SquareCollider* sqCollider;
-	Drawable* draw;
-	Player* p;
+
+	SquareCollider* squareCollider;
+	Drawable* drawable;
+	Player* player;
 	bool playerInRange;
 	bool playerExited;
+	bool repairing;
 	float internalTimer;
 	int currentPhase, hpPerPhase;
 

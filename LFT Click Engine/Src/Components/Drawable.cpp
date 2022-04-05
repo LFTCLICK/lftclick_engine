@@ -94,7 +94,6 @@ void Drawable::HUD_DrawTextCenter(std::string text, SimpleMath::Vector2 offset, 
 		g_Renderer->GetWidth(), g_Renderer->GetHeight()
 	);
 
-	
 	pos.x -= XMVectorGetX(g_Renderer->GetSpriteFont()->MeasureString(text.c_str(), false)) / 2.0f;
 	pos.y -= XMVectorGetY(g_Renderer->GetSpriteFont()->MeasureString(text.c_str(), false)) / 2.0f;
 

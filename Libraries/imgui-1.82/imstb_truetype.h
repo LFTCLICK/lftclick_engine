@@ -1148,11 +1148,11 @@ static stbtt_uint32 stbtt__buf_get(stbtt__buf *b, int n)
    return v;
 }
 
-static stbtt__buf stbtt__new_buf(const void *p, size_t size)
+static stbtt__buf stbtt__new_buf(const void *player, size_t size)
 {
    stbtt__buf r;
    STBTT_assert(size < 0x40000000);
-   r.data = (stbtt_uint8*) p;
+   r.data = (stbtt_uint8*) player;
    r.size = (int) size;
    r.cursor = 0;
    return r;
@@ -1262,17 +1262,17 @@ static stbtt__buf stbtt__cff_index_get(stbtt__buf b, int i)
 // on platforms that don't allow misaligned reads, if we want to allow
 // truetype fonts that aren't padded to alignment, define ALLOW_UNALIGNED_TRUETYPE
 
-#define ttBYTE(p)     (* (stbtt_uint8 *) (p))
-#define ttCHAR(p)     (* (stbtt_int8 *) (p))
-#define ttFixed(p)    ttLONG(p)
+#define ttBYTE(player)     (* (stbtt_uint8 *) (player))
+#define ttCHAR(player)     (* (stbtt_int8 *) (player))
+#define ttFixed(player)    ttLONG(player)
 
-static stbtt_uint16 ttUSHORT(stbtt_uint8 *p) { return p[0]*256 + p[1]; }
-static stbtt_int16 ttSHORT(stbtt_uint8 *p)   { return p[0]*256 + p[1]; }
-static stbtt_uint32 ttULONG(stbtt_uint8 *p)  { return (p[0]<<24) + (p[1]<<16) + (p[2]<<8) + p[3]; }
-static stbtt_int32 ttLONG(stbtt_uint8 *p)    { return (p[0]<<24) + (p[1]<<16) + (p[2]<<8) + p[3]; }
+static stbtt_uint16 ttUSHORT(stbtt_uint8 *player) { return player[0]*256 + player[1]; }
+static stbtt_int16 ttSHORT(stbtt_uint8 *player)   { return player[0]*256 + player[1]; }
+static stbtt_uint32 ttULONG(stbtt_uint8 *player)  { return (player[0]<<24) + (player[1]<<16) + (player[2]<<8) + player[3]; }
+static stbtt_int32 ttLONG(stbtt_uint8 *player)    { return (player[0]<<24) + (player[1]<<16) + (player[2]<<8) + player[3]; }
 
-#define stbtt_tag4(p,c0,c1,c2,c3) ((p)[0] == (c0) && (p)[1] == (c1) && (p)[2] == (c2) && (p)[3] == (c3))
-#define stbtt_tag(p,str)           stbtt_tag4(p,str[0],str[1],str[2],str[3])
+#define stbtt_tag4(player,c0,c1,c2,c3) ((player)[0] == (c0) && (player)[1] == (c1) && (player)[2] == (c2) && (player)[3] == (c3))
+#define stbtt_tag(player,str)           stbtt_tag4(player,str[0],str[1],str[2],str[3])
 
 static int stbtt__isfont(stbtt_uint8 *font)
 {
@@ -2678,9 +2678,9 @@ typedef struct stbtt__hheap
 static void *stbtt__hheap_alloc(stbtt__hheap *hh, size_t size, void *userdata)
 {
    if (hh->first_free) {
-      void *p = hh->first_free;
-      hh->first_free = * (void **) p;
-      return p;
+      void *player = hh->first_free;
+      hh->first_free = * (void **) player;
+      return player;
    } else {
       if (hh->num_remaining_in_head_chunk == 0) {
          int count = (size < 32 ? 2000 : size < 128 ? 800 : 100);
@@ -2696,10 +2696,10 @@ static void *stbtt__hheap_alloc(stbtt__hheap *hh, size_t size, void *userdata)
    }
 }
 
-static void stbtt__hheap_free(stbtt__hheap *hh, void *p)
+static void stbtt__hheap_free(stbtt__hheap *hh, void *player)
 {
-   *(void **) p = hh->first_free;
-   hh->first_free = p;
+   *(void **) player = hh->first_free;
+   hh->first_free = player;
 }
 
 static void stbtt__hheap_cleanup(stbtt__hheap *hh, void *userdata)
@@ -3236,25 +3236,25 @@ static void stbtt__rasterize_sorted_edges(stbtt__bitmap *result, stbtt__edge *e,
 
 #define STBTT__COMPARE(a,b)  ((a)->y0 < (b)->y0)
 
-static void stbtt__sort_edges_ins_sort(stbtt__edge *p, int n)
+static void stbtt__sort_edges_ins_sort(stbtt__edge *player, int n)
 {
    int i,j;
    for (i=1; i < n; ++i) {
-      stbtt__edge t = p[i], *a = &t;
+      stbtt__edge t = player[i], *a = &t;
       j = i;
       while (j > 0) {
-         stbtt__edge *b = &p[j-1];
+         stbtt__edge *b = &player[j-1];
          int c = STBTT__COMPARE(a,b);
          if (!c) break;
-         p[j] = p[j-1];
+         player[j] = player[j-1];
          --j;
       }
       if (i != j)
-         p[j] = t;
+         player[j] = t;
    }
 }
 
-static void stbtt__sort_edges_quicksort(stbtt__edge *p, int n)
+static void stbtt__sort_edges_quicksort(stbtt__edge *player, int n)
 {
    /* threshold for transitioning to insertion sort */
    while (n > 12) {
@@ -3263,25 +3263,25 @@ static void stbtt__sort_edges_quicksort(stbtt__edge *p, int n)
 
       /* compute median of three */
       m = n >> 1;
-      c01 = STBTT__COMPARE(&p[0],&p[m]);
-      c12 = STBTT__COMPARE(&p[m],&p[n-1]);
+      c01 = STBTT__COMPARE(&player[0],&player[m]);
+      c12 = STBTT__COMPARE(&player[m],&player[n-1]);
       /* if 0 >= mid >= end, or 0 < mid < end, then use mid */
       if (c01 != c12) {
          /* otherwise, we'll need to swap something else to middle */
          int z;
-         c = STBTT__COMPARE(&p[0],&p[n-1]);
+         c = STBTT__COMPARE(&player[0],&player[n-1]);
          /* 0>mid && mid<n:  0>n => n; 0<n => 0 */
          /* 0<mid && mid>n:  0>n => 0; 0<n => n */
          z = (c == c12) ? 0 : n-1;
-         t = p[z];
-         p[z] = p[m];
-         p[m] = t;
+         t = player[z];
+         player[z] = player[m];
+         player[m] = t;
       }
       /* now p[m] is the median-of-three */
       /* swap it to the beginning so it won't move around */
-      t = p[0];
-      p[0] = p[m];
-      p[m] = t;
+      t = player[0];
+      player[0] = player[m];
+      player[m] = t;
 
       /* partition loop */
       i=1;
@@ -3290,36 +3290,36 @@ static void stbtt__sort_edges_quicksort(stbtt__edge *p, int n)
          /* handling of equality is crucial here */
          /* for sentinels & efficiency with duplicates */
          for (;;++i) {
-            if (!STBTT__COMPARE(&p[i], &p[0])) break;
+            if (!STBTT__COMPARE(&player[i], &player[0])) break;
          }
          for (;;--j) {
-            if (!STBTT__COMPARE(&p[0], &p[j])) break;
+            if (!STBTT__COMPARE(&player[0], &player[j])) break;
          }
          /* make sure we haven't crossed */
          if (i >= j) break;
-         t = p[i];
-         p[i] = p[j];
-         p[j] = t;
+         t = player[i];
+         player[i] = player[j];
+         player[j] = t;
 
          ++i;
          --j;
       }
       /* recurse on smaller side, iterate on larger */
       if (j < (n-i)) {
-         stbtt__sort_edges_quicksort(p,j);
-         p = p+i;
+         stbtt__sort_edges_quicksort(player,j);
+         player = player+i;
          n = n-i;
       } else {
-         stbtt__sort_edges_quicksort(p+i, n-i);
+         stbtt__sort_edges_quicksort(player+i, n-i);
          n = j;
       }
    }
 }
 
-static void stbtt__sort_edges(stbtt__edge *p, int n)
+static void stbtt__sort_edges(stbtt__edge *player, int n)
 {
-   stbtt__sort_edges_quicksort(p, n);
-   stbtt__sort_edges_ins_sort(p, n);
+   stbtt__sort_edges_quicksort(player, n);
+   stbtt__sort_edges_ins_sort(player, n);
 }
 
 typedef struct
@@ -3352,24 +3352,24 @@ static void stbtt__rasterize(stbtt__bitmap *result, stbtt__point *pts, int *wcou
 
    m=0;
    for (i=0; i < windings; ++i) {
-      stbtt__point *p = pts + m;
+      stbtt__point *player = pts + m;
       m += wcount[i];
       j = wcount[i]-1;
       for (k=0; k < wcount[i]; j=k++) {
          int a=k,b=j;
          // skip the edge if horizontal
-         if (p[j].y == p[k].y)
+         if (player[j].y == player[k].y)
             continue;
          // add edge from j to k to the list
          e[n].invert = 0;
-         if (invert ? p[j].y > p[k].y : p[j].y < p[k].y) {
+         if (invert ? player[j].y > player[k].y : player[j].y < player[k].y) {
             e[n].invert = 1;
             a=j,b=k;
          }
-         e[n].x0 = p[a].x * scale_x + shift_x;
-         e[n].y0 = (p[a].y * y_scale_inv + shift_y) * vsubsample;
-         e[n].x1 = p[b].x * scale_x + shift_x;
-         e[n].y1 = (p[b].y * y_scale_inv + shift_y) * vsubsample;
+         e[n].x0 = player[a].x * scale_x + shift_x;
+         e[n].y0 = (player[a].y * y_scale_inv + shift_y) * vsubsample;
+         e[n].x1 = player[b].x * scale_x + shift_x;
+         e[n].y1 = (player[b].y * y_scale_inv + shift_y) * vsubsample;
          ++n;
       }
    }
@@ -4375,9 +4375,9 @@ static float stbtt__cuberoot( float x )
 static int stbtt__solve_cubic(float a, float b, float c, float* r)
 {
 	float s = -a / 3;
-	float p = b - a*a / 3;
+	float player = b - a*a / 3;
 	float q = a * (2*a*a - 9*b) / 27 + c;
-   float p3 = p*p*p;
+   float p3 = player*player*player;
 	float d = q*q + 4*p3 / 27;
 	if (d >= 0) {
 		float z = (float) STBTT_sqrt(d);
@@ -4388,7 +4388,7 @@ static int stbtt__solve_cubic(float a, float b, float c, float* r)
 		r[0] = s + u + v;
 		return 1;
 	} else {
-	   float u = (float) STBTT_sqrt(-p/3);
+	   float u = (float) STBTT_sqrt(-player/3);
 	   float v = (float) STBTT_acos(-STBTT_sqrt(-27/p3) * q / 2) / 3; // p3 must be negative, since d is negative
 	   float m = (float) STBTT_cos(v);
       float n = (float) STBTT_cos(v-3.141592/2)*1.732050808f;

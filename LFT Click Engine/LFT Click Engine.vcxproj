@@ -377,7 +377,9 @@
     <ClInclude Include="Src\Components\Collider.h" />
     <ClInclude Include="Src\Components\Component.h" />
     <ClInclude Include="Src\Components\Damageable.h" />
-    <ClInclude Include="Src\Components\Door.h" />
+    <ClInclude Include="Src\Components\Door.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Src\Components\Drawable.h" />
     <ClInclude Include="Src\Components\Enemy.h" />
     <ClInclude Include="Src\Components\EnemySpawner.h" />

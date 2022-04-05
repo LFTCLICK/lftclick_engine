@@ -41,7 +41,7 @@ private:
 	Transform* trans;
 	//SquareCollider* sqCollider;
 	//Drawable* draw;
-	Player* p;
+	Player* player;
 	bool playerInRange;
 	bool playerExited;
 	float internalTimer;

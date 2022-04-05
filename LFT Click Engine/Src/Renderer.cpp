@@ -177,15 +177,15 @@ void Renderer::CreateDeviceDependentResources()
 		inputLayout.ReleaseAndGetAddressOf());
 
 	CD3D11_DEFAULT d3dDefault;
-	CD3D11_BLEND_DESC a2CDesc(d3dDefault);
+	CD3D11_BLEND_DESC desc(d3dDefault);
 	
-	a2CDesc.AlphaToCoverageEnable = TRUE;
-	a2CDesc.RenderTarget[0].BlendEnable = TRUE;
-	a2CDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	a2CDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	a2CDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	desc.AlphaToCoverageEnable = TRUE;
+	desc.RenderTarget[0].BlendEnable = TRUE;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 
-	DX::ThrowIfFailed(device->CreateBlendState(&a2CDesc, alphaToCoverageBS.ReleaseAndGetAddressOf()));
+	DX::ThrowIfFailed(device->CreateBlendState(&desc, alphaToCoverageBS.ReleaseAndGetAddressOf()));
 
 	DX::ThrowIfFailed(
 		DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(),
@@ -256,7 +256,8 @@ void Renderer::Draw()
 			drawable->xFlip
 		};
 	
-		const PS_cbPerObject cbValues_PS = {
+		const PS_cbPerObject cbValues_PS = 
+		{
 			g_GameManager->GetDarknessLevel()
 		};
 	
@@ -287,7 +288,8 @@ void Renderer::Draw()
 		1
 	};
 
-	const PS_cbPerObject cbValues_PS = {
+	const PS_cbPerObject cbValues_PS = 
+	{
 		g_GameManager->GetDarknessLevel()
 	};
 

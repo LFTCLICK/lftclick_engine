@@ -36,6 +36,8 @@ public:
 public:
 	void Init(DirectX::SimpleMath::Vector2 const& v);
 	void Move(float deltaX, float deltaY);
+	void Move(DirectX::SimpleMath::Vector2 const& vec);
+
 	void SetPos(float newX, float newY);
 	void SetPos(const DirectX::SimpleMath::Vector2& position);
 
