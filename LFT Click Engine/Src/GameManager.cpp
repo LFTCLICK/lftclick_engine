@@ -29,6 +29,15 @@ void GameManager::LoadLevel(json file)
 	playerDead = false;
 }
 
+void GameManager::Update() {
+	UpdateTime();
+	UpdateDanger();
+	UpdateLevel();
+	UpdateInsideHouse();
+	if (IsNightTime()) 
+		UpdateSpawners();
+}
+
 void GameManager::UpdateTime()
 {
 	time += g_FrameRateController->DeltaTime();
@@ -37,16 +46,55 @@ void GameManager::UpdateTime()
 		day++;
 	}
 
+	float oldDarknessLevel = darknessLevel;
+
 	if (time < SUN_RISING) darknessLevel = 1;
 	else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
 	else if (time < SUN_SETTING) darknessLevel = 0;
 	else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
 
-	dangerLevel = (darknessLevel + (monsterCount < MAX_DANGER_ENEMY_COUNT ? (float)monsterCount / MAX_DANGER_ENEMY_COUNT : 1)) / 2.f;
+	if (oldDarknessLevel >= DAY_NIGHT_THRESHOLD && !IsNightTime() && harshLightOfDay != day) {
+		harshLightOfDay = day;
+	}
+}
 
+void GameManager::UpdateDanger()
+{
+	dangerLevel = (darknessLevel + (monsterCount < MAX_DANGER_ENEMY_COUNT ? (float)monsterCount / MAX_DANGER_ENEMY_COUNT : 1)) / 2.f;
+}
+
+void GameManager::UpdateLevel() 
+{
 	if (playerDead && currentLevel != EGameLevel::Mainmenu)
-	{
 		currentLevel = EGameLevel::Pausemenu;
+}
+
+void GameManager::UpdateInsideHouse()
+{
+	playerInsideHouse = IsPosInsideHouse(playerTrans->CurrentPos());
+}
+
+void GameManager::UpdateSpawners()
+{
+	spawnTimer -= g_FrameRateController->DeltaTime();
+	if (spawnTimer < 0) {
+		if (playerInsideHouse) {
+			int randInt = rand();
+			float randFloat = (float)randInt / RAND_MAX;
+			activatedSpawner = randInt % totalSpawners;
+			spawnTimer = IsNightTime() ?
+				NIGHTTIME_SPAWN_INTERVAL_MIN + ((NIGHTTIME_SPAWN_INTERVAL_MAX - NIGHTTIME_SPAWN_INTERVAL_MIN) * randFloat) + (NIGHTTIME_SPAWN_MOD_PER_DAY * (day - 1)) :
+				DAYTIME_SPAWN_INTERVAL_MIN + ((DAYTIME_SPAWN_INTERVAL_MAX - DAYTIME_SPAWN_INTERVAL_MIN) * randFloat) + (DAYTIME_SPAWN_MOD_PER_DAY * (day - 1));
+		}
+		else {
+			float randFloat = (float)rand() / RAND_MAX;
+			activatedSpawner = NEARPLAYER_ENEMY_SPAWNER_ID;
+			spawnTimer = IsNightTime() ?
+				NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN + ((NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MAX - NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN) * randFloat) + (NIGHTTIME_SPAWN_MOD_PER_DAY * (day - 1)) :
+				DAYTIME_SPAWN_INTERVAL_MIN + ((DAYTIME_SPAWN_INTERVAL_MAX - DAYTIME_SPAWN_INTERVAL_MIN) * randFloat) + (DAYTIME_SPAWN_MOD_PER_DAY * (day - 1));
+		}
+
+		if (spawnTimer < 0) spawnTimer = MIN_TIME_BETWEEN_SPAWNS;
 	}
 }
 
@@ -57,12 +105,25 @@ float GameManager::GetDarknessLevel()
 
 bool GameManager::IsNightTime()
 {
-	return darknessLevel > 0.5;
+	return darknessLevel > DAY_NIGHT_THRESHOLD;
 }
 
 float GameManager::GetDangerLevel()
 {
 	return dangerLevel;
+}
+
+bool GameManager::IsSpawnerActivated(int spawnerID)
+{
+	if (activatedSpawner > -1) 
+	{
+		if (activatedSpawner == spawnerID)
+		{
+			activatedSpawner = -1;
+			return true;
+		}
+	}
+	return false;
 }
 
 float GameManager::GetChanceOfFindingPart()
@@ -88,4 +149,14 @@ void GameManager::MonsterCountPlus()
 void GameManager::MonsterCountMinus()
 {
 	if (monsterCount > 0) monsterCount--;
+}
+
+bool GameManager::IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos)
+{
+	auto halfHouseScale = HOUSE_SCALE / 2;
+
+	return pos.x < HOUSE_POS.x + halfHouseScale.x &&
+		pos.x > HOUSE_POS.x - halfHouseScale.x &&
+		pos.y < HOUSE_POS.y + halfHouseScale.y &&
+		pos.y > HOUSE_POS.y - halfHouseScale.y;
 }

@@ -2,15 +2,21 @@
   "1": {
     "startX": 0.0,
     "startY": 0.0,
-    "scaleX": 144,
-    "scaleY": 20,
+    "scaleX": 420,
+    "scaleY": 300,
     "rot": 0,
-    "zPos": 15
+    "zPos": 4
   },
-  "101":{
-    "slope": 1,
-    "c": 1.0,
-    "timeBetweenPhases": 30.0,
-    "objectSpawnName": "enemy"
+  "101": {
+    "enemyTypes": [
+      {
+        "name": "zombie",
+        "spawnChance": 80
+      },
+      {
+        "name": "ghost",
+        "spawnChance": 20
+      }
+    ]
   }
 }

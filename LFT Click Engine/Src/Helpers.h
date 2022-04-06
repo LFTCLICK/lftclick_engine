@@ -95,5 +95,13 @@ namespace Helpers
 		DX::ThrowIfFailed(device->CreateBuffer(&desc, &initData, outppBuffer));
 	}
 
+
+	inline float randFloat0to1() {
+		return (float)rand() / RAND_MAX;
+	}
+	template<typename T>
+	inline T randWithinRange(T rangeMin, T rangeMax) {
+		return rangeMin + (rangeMax - rangeMin) * randFloat0to1();
+	}
 };
 

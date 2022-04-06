@@ -5,7 +5,7 @@
     "scaleX": 300,
     "scaleY": 300,
     "rot": 0,
-    "zPos": 3
+    "zPos": 10
   },
   "2": {
     "onlyUVOverrides": false,

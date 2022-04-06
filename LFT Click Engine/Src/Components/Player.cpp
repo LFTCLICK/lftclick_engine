@@ -72,9 +72,7 @@ void Player::Update()
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
-	if (trans->isMoving) {
-		g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100);
-	}
+	g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100);
 }
 
 Component* Player::Clone(GameObject* newParent) {

@@ -12,8 +12,12 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Component.h"
+#include "Helpers.h"
 #include "GameObjectManager.h"
 #include <json.hpp>
+
+#define NEARPLAYER_SPAWN_DISTANCE_FROM_WINDOW 240.f
+#define NEARPLAYER_SPAWN_AREA_WIDTH 240.f
 
 using namespace DirectX::SimpleMath;
 using json = nlohmann::json;
@@ -31,16 +35,23 @@ public:
 	float randomNumberGetter();
 
 	virtual Component* Clone(GameObject* newParent);
-	EnemySpawner() : objectSpawnName("enemy") {};
+	EnemySpawner() : objectSpawnName("enemy"), timeBetweenPhases(10.f), spawnAroundPlayer(false), totalSpawnChance(0) {};
 
 public:
 	Vector2 bounds;
 	Vector2 targetPosOffset;
 	float slope, timeBetweenPhases, c, x, spawnTimer;
 	int totalZombiesOnMap, ghostsOnMap;
+	bool spawnAroundPlayer;
 
 private:
+	Transform* trans;
+
+	int spawnerID;
 	Vector2 myPos;
 	Vector2 positiveBounds, negativeBounds;
 	std::string objectSpawnName;
+
+	int totalSpawnChance;
+	std::map<int, std::string> enemyTypes;
 };

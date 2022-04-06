@@ -5,7 +5,7 @@
     "scaleX": 60,
     "scaleY": 60,
     "rot": 0,
-    "zPos": 5
+    "zPos": 15
 
   },
   "2": {
@@ -104,7 +104,7 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicBase.mp3",
         "loop": true,
-        "volume": 60,
+        "volume": 0,
         "playEvents": [
           1000
         ],
@@ -116,7 +116,7 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicAddition.mp3",
         "loop": true,
-        "volume": 60,
+        "volume": 1,
         "playEvents": [
           1000
         ],
@@ -126,7 +126,8 @@
         "scaleVolumeWithDanger": true,
         "startTime": 73.525
       }
-    ]
+    ],
+    "positionless": true
   },
   "10": {
     "bulletTypes": [

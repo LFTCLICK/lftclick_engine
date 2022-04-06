@@ -15,6 +15,7 @@
 #include "AudioManager.h"
 #include "EventManager.h"
 #include "FrameRateController.h"
+#include "Helpers.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -43,6 +44,7 @@ public:
 		AUDIO_ON_DEATH,
 		AUDIO_ON_INTERACTING,
 		AUDIO_ON_COLLECT,
+		AUDIO_ON_RANDOM,
 		AUDIO_ON_DELETE = 2000,
 	};
 	// Inherited via Component
@@ -60,7 +62,9 @@ public:
 		frc(g_FrameRateController.get()), 
 		positionless(false),
 		dangerScaleChannel(-1),
-		dangerScaleChannelVolumeMax(100)
+		dangerScaleChannelVolumeMax(100),
+		randomTime(-1.f),
+		generateRandomTime(false)
 	{}
 	~Audible();
 
@@ -94,7 +98,7 @@ protected:
 	std::vector<SoundInfo> sounds;
 	std::map<int, std::string> channels;
 
-	bool positionless;
+	bool positionless, generateRandomTime;
 	int dangerScaleChannel;
-	float dangerScaleChannelVolumeMax;
+	float dangerScaleChannelVolumeMax, randomTime;
 };

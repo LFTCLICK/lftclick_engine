@@ -409,6 +409,8 @@
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\json\enemySpawner2.json" />
+    <None Include="Resources\json\ghost.json" />
     <None Include="Resources\json\big_tree.json" />
     <None Include="Resources\json\chair_left.json" />
     <None Include="Resources\json\chair_right.json" />

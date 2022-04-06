@@ -10,15 +10,21 @@
 
 #include "GameObject.h"
 #include "Transform.h"
+#include "Damageable.h"
 #include "Component.h"
 #include "GameObjectManager.h"
+#include "Helpers.h"
 #include <json.hpp>
+
+#define DAYLIGHT_DEATH_TIME_MIN 0.f
+#define DAYLIGHT_DEATH_TIME_MAX 10.f
+#define DAYLIGHT_DEATH_CHANCE 0.9f
 
 using json = nlohmann::json;
 class Enemy : public Component
 {
 public:
-	Enemy() :path() {};
+	Enemy() : path(), ignoreWalls(false) {};
 
 	// Inherited via Component
 	virtual void Start() override;
@@ -38,6 +44,7 @@ public:
 	float aiSwitchDistance;
 	bool hanginWithTheHomies;
 	bool switchToPlayer;
+	bool ignoreWalls;
 	DirectX::SimpleMath::Vector2 goal;
 	DirectX::SimpleMath::Vector2 targetBeforePlayer;
 	std::list<DirectX::SimpleMath::Vector2> path;
@@ -46,6 +53,8 @@ public:
 	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(0 - 2280.0f/2, -2280.0f/2, 2280.0f, 2280.0f);
 	bool doAstar;
 	float reEvaluateStratTimer;
+	float daylightDeathTime, daylightDeathChance;
+	bool daylightDeathTriggered;
 
 private:
 	Transform* trans;

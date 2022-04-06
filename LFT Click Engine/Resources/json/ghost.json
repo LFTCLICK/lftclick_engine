@@ -2,14 +2,14 @@
   "1": {
     "startX": 0.0,
     "startY": 0.0,
-    "scaleX": 80,
-    "scaleY": 80,
+    "scaleX": 60,
+    "scaleY": 60,
     "rot": 0,
     "zPos": 15
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale": 0.25,
+    "xScale": 0.5,
     "yScale": 0.125,
     "vertices": [
       {
@@ -30,65 +30,65 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "image": "Resources\\images\\zombie_sprite_sheet.png"
+    "image": "Resources\\images\\ghost2_sprite_sheet.png"
 
   },
   "6": {
-    "spriteSheetWidth": 4,
+    "spriteSheetWidth": 2,
     "spriteSheetHeight": 8,
     "animations": [
       {
-        "name": "idleZombieDown",
-        "length": 4,
+        "name": "idleGhostDown",
+        "length": 2,
         "frameDuration": 1,
         "onIdle": true,
         "direction": "down"
       },
       {
-        "name": "movingZombieDown",
-        "length": 4,
+        "name": "movingGhostDown",
+        "length": 2,
         "frameDuration": 0.25,
         "onMove": true,
         "direction": "down"
       },
       {
-        "name": "idleZombieUp",
-        "length": 4,
+        "name": "idleGhostUp",
+        "length": 2,
         "frameDuration": 1,
         "onIdle": true,
         "direction": "up"
       },
       {
-        "name": "movingZombieUp",
-        "length": 4,
+        "name": "movingGhostUp",
+        "length": 2,
         "frameDuration": 0.25,
         "onMove": true,
         "direction": "up"
       },
       {
-        "name": "idleZombieLeft",
-        "length": 4,
+        "name": "idleGhostLeft",
+        "length": 2,
         "frameDuration": 1,
         "onIdle": true,
         "direction": "left"
       },
       {
-        "name": "movingZombieLeft",
-        "length": 4,
+        "name": "movingGhostLeft",
+        "length": 2,
         "frameDuration": 0.25,
         "onMove": true,
         "direction": "left"
       },
       {
-        "name": "idleZombieRight",
-        "length": 4,
+        "name": "idleGhostRight",
+        "length": 2,
         "frameDuration": 1,
         "onIdle": true,
         "direction": "right"
       },
       {
-        "name": "movingZombieRight",
-        "length": 4,
+        "name": "movingGhostRight",
+        "length": 2,
         "frameDuration": 0.25,
         "onMove": true,
         "direction": "right"
@@ -101,7 +101,7 @@
         "name": ".\\Resources\\sounds\\zombiedamage.mp3",
         "loop": false,
         "volume": 30,
-        "pitchRange": [ 0.85, 1.15 ],
+        "pitchRange": [ 1.35, 1.65 ],
         "playEvents": [
           1003
         ]
@@ -110,7 +110,7 @@
         "name": ".\\Resources\\sounds\\zombiedeathrattle.mp3",
         "loop": false,
         "volume": 40,
-        "pitchRange": [ 0.85, 1.15 ],
+        "pitchRange": [ 1.35, 1.65 ],
         "playEvents": [
           1004
         ]
@@ -119,7 +119,7 @@
         "name": ".\\Resources\\sounds\\hauntedbreath.mp3",
         "loop": false,
         "volume": 40,
-        "pitchRange": [ 0.85, 1.15 ],
+        "pitchRange": [ 1.35, 1.65 ],
         "playEvents": [
           1007
         ],
@@ -142,6 +142,7 @@
   "103": {
     "attackTimer": 3.0,
     "damage": 15.0,
-    "speed": 100.0
+    "speed": 75.0,
+    "ignoreWalls": true
   }
 }

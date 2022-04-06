@@ -25,6 +25,9 @@ void Audible::Start() {
 	}
 
 	trans = componentOwner->getComponent<Transform>();
+
+	if (generateRandomTime)
+		randomTime = ((float)rand() / RAND_MAX) * DAY_LENGTH;
 }
 
 void Audible::LoadSounds(std::vector<SoundInfo> newSounds) {
@@ -51,11 +54,9 @@ void Audible::Update() {
 		if (playerTrans != nullptr) {
 			if (playerTrans->isMoving != playerTrans->wasMoving) {
 				HandleSoundsOnEvent(playerTrans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-				if (!playerTrans->isMoving && playerTrans->CurrentPos().x < 10000000.f && playerTrans->CurrentPos().x > -10000000.f)
-					am->SetGroupSpatialPosition(channelGroupName, playerTrans->CurrentPos() / 100, { 0, 0 });
 			}
 
-			if (playerTrans->isMoving && playerTrans->CurrentPos().x < 10000000.f && playerTrans->CurrentPos().x > -10000000.f)
+			if (playerTrans->CurrentPos().x < 10000000.f && playerTrans->CurrentPos().x > -10000000.f)
 				am->SetGroupSpatialPosition(channelGroupName, playerTrans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
 	}
@@ -71,6 +72,9 @@ void Audible::Update() {
 				am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
 	}
+
+	if (generateRandomTime && g_GameManager->time < randomTime && g_GameManager->time + g_FrameRateController->DeltaTime() >= randomTime)
+		HandleSoundsOnEvent(AUDIO_ON_RANDOM);
 }
 
 Component* Audible::Clone(GameObject* newParent) {
@@ -79,6 +83,7 @@ Component* Audible::Clone(GameObject* newParent) {
 	toReturn->am = g_AudioManager.get();
 	toReturn->sounds = sounds;
 	toReturn->positionless = positionless;
+	toReturn->generateRandomTime = generateRandomTime;
 	return toReturn;
 }
 
@@ -91,8 +96,7 @@ Audible::~Audible() {
 
 
 void Audible::PlaySound(SoundInfo sound) {
-	float pitch = sound.pitchRange[0] + (sound.pitchRange[0] == sound.pitchRange[1] ?
-		0 : ((float)rand() / RAND_MAX) * (sound.pitchRange[1] - sound.pitchRange[0]));
+	float pitch = sound.pitchRange[0] == sound.pitchRange[1] ? 0 : Helpers::randWithinRange(sound.pitchRange[0], sound.pitchRange[1]);
 	int channelID = am->PlaySound(sound.name, channelGroupName, sound.volume, pitch, sound.startTime);
 	channels[channelID] = sound.name;
 	if (sound.scaleVolumeWithDanger) {
@@ -134,7 +138,6 @@ void Audible::SetPosition(float x, float y) {
 	am->SetGroupSpatialPosition(channelGroupName, x, y);
 }
 void Audible::SetPosition(DirectX::SimpleMath::Vector2 position) {
-	std::cout << "pos: " << position.x << " " << position.y << std::endl;
 	am->SetGroupSpatialPosition(channelGroupName, position);
 }
 
@@ -237,5 +240,7 @@ void Audible::Deserialize(nlohmann::json j, GameObject* componentOwner)
 
 	if (j.contains("positionless")) 
 		positionless = j["positionless"];
+	if (j.contains("generateRandomTime"))
+		generateRandomTime = j["generateRandomTime"];
 
 }

@@ -85,13 +85,18 @@ int main(int argc, char* args[])
 	g_GameObjManager = std::make_unique<GameObjectManager>();
 	g_GameObjFactory = std::make_unique<GameObjectFactory>();
 	g_EventManager = std::make_unique<EventManager>();
+
 	g_GameManager = std::make_unique<GameManager>();
+	g_GameManager->windowHeight = g_WindowHeight;
+	g_GameManager->windowWidth = g_WindowWidth;
+
 	g_AudioManager = std::make_unique<AudioManager>();
 	g_AStarTerrain = std::make_unique<AStarTerrain>();
 
 	g_Renderer = std::make_unique<Renderer>();
 	g_Renderer->Initialize(GetActiveWindow(), g_WindowWidth, g_WindowHeight);
 	g_Renderer->InitImGui(pWindow);
+
 	g_EventManager->init(g_GameObjManager.get());
 	g_DebugRenderer = std::make_unique<DebugRenderer>(g_Renderer->GetDevice(), g_Renderer->GetContext());
 
@@ -194,7 +199,7 @@ int main(int argc, char* args[])
 			}
 
 			g_AudioManager->Update();
-			g_GameManager->UpdateTime();
+			g_GameManager->Update();
 			g_InputManager->Update();
 			g_GameObjManager->Update();
 			g_EventManager->Update();

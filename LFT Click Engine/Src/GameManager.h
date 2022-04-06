@@ -21,10 +21,10 @@
 
 #include <json.hpp>
 
-//#define SUN_RISING 73.2473f		// when the light should begin getting brighter
-//#define SUN_UP 125.3655f			// when the light should remain at the brightest
-//#define SUN_SETTING 177.4838f		// when the light should begin lowering
-//#define SUN_DOWN 262.f			// when the light should remain at the lowest
+//#define SUN_SETTING 73.2473f		// when the light should begin getting brighter
+//#define SUN_DOWN 125.3655f		// when the light should remain at the brightest
+//#define SUN_RISING 177.4838f		// when the light should begin lowering
+//#define SUN_UP 262.f				// when the light should remain at the lowest
 
 #define SUN_RISING 156.965f			// when the light should begin getting brighter (230.49 on audio track)
 #define SUN_UP 172.525f				// total length of a day (246.05 on audio track)
@@ -39,10 +39,35 @@
 
 #define MAX_DANGER_ENEMY_COUNT 100.f
 
+#define DAY_NIGHT_THRESHOLD 0.5f
+
+#define HOUSE_POS DirectX::SimpleMath::Vector2(0, 0)
+#define HOUSE_SCALE DirectX::SimpleMath::Vector2(1920, 1920)
+
+// How frequently (roughly) enemies will spawn during the two different times of day, in seconds.
+// The min/max is for randomization of how long the spawn takes to go off.
+#define DAYTIME_SPAWN_INTERVAL_MIN 4.0f
+#define DAYTIME_SPAWN_INTERVAL_MAX 6.0f
+#define NIGHTTIME_SPAWN_INTERVAL_MIN 2.0f
+#define NIGHTTIME_SPAWN_INTERVAL_MAX 4.0f
+#define NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN  NIGHTTIME_SPAWN_INTERVAL_MIN / 4
+#define NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MAX  NIGHTTIME_SPAWN_INTERVAL_MAX / 4
+
+// The mod-per-day values are added to the intervals, and are multiplied by how many days have gone by.
+#define DAYTIME_SPAWN_MOD_PER_DAY -0.5f
+#define NIGHTTIME_SPAWN_MOD_PER_DAY -0.3f
+
+#define MIN_TIME_BETWEEN_SPAWNS 0.5f
+#define MAX_ENEMIES 10
+
+#define NEARPLAYER_ENEMY_SPAWNER_ID 1000
+
 
 class Camera;
 class Transform;
 class GameObject;
+
+
 
 enum class EGameLevel
 {
@@ -65,23 +90,40 @@ public:
 		day(1), 
 		time(0),
 		chanceOfFindingPart(INITIAL_CHANCE_TO_FIND_PART),
-		currentLevel(EGameLevel::Mainmenu)
+		currentLevel(EGameLevel::Mainmenu),
+		harshLightOfDay(day-1),
+		totalSpawners(0),
+		activatedSpawner(-1),
+		spawnTimer(0),
+		spawnIntervalMin(NIGHTTIME_SPAWN_INTERVAL_MIN),
+		spawnIntervalMax(NIGHTTIME_SPAWN_INTERVAL_MAX)
 	{}
 	~GameManager() = default;
 
+	// Update calls all Update functions.
+	void Update();
+
 	void UpdateTime();
+	void UpdateDanger();
+	void UpdateLevel();
+	void UpdateInsideHouse();
+	void UpdateSpawners();
 
 	// Returns value between 0 and 1, 1 being night time and 0 being day time.
 	// Used for darkness overlay alpha.
 	float GetDarknessLevel();
 
-	// Returns true if "darknessLevel" is over 0.9, false otherwise.
+	// Returns true if "darknessLevel" is over DAY_NIGHT_THRESHOLD, false otherwise.
 	bool IsNightTime();
 
 	// Returns value between 0 and 100, 0 being minimal danger, 100 being maximum.
 	// Calculated using level of darkness and number of zombies.
 	// Used to modify background music volume.
 	float GetDangerLevel();
+
+	// If the spawner's number comes up, it will be activated.
+	// Resets "activatedSpawner" to -1 when spawnerID is correct.
+	bool IsSpawnerActivated(int spawnerID);
 
 	// Returns value between 0 and 1. 
 	// 0 being no chance of finding a motorcycle part, 1 being 100% chance.
@@ -96,15 +138,23 @@ public:
 	void MonsterCountPlus();
 	void MonsterCountMinus();
 
+	bool IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos);
 
 	void LoadLevel(nlohmann::json file);
 public:
 	GameObject* playerObj;
 	bool playerDead;
+	bool playerInsideHouse;
 	float darknessLevel;
 	int monsterCount;
+	int harshLightOfDay;
+	int windowWidth;
+	int windowHeight;
 	float dangerLevel;
 	float mapHeight;
+	float spawnTimer;
+	float spawnIntervalMin;
+	float spawnIntervalMax;
 	Camera* mainCamera;
 	Transform* playerTrans;
 
@@ -112,6 +162,9 @@ public:
 	float time;
 
 	float chanceOfFindingPart;
+
+	int totalSpawners;
+	int activatedSpawner;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> menuBackgroundSRV;
 

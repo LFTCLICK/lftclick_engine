@@ -574,6 +574,12 @@
     <None Include="Resources\json\rug.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\enemySpawner2.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\ghost.json">
+      <Filter>JSON</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

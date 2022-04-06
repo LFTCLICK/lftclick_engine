@@ -1,10 +1,6 @@
 {
   "Prefabs": [
     {
-      "prefab": "Resources\\json\\tile.json",
-      "tag": "tile"
-    },
-    {
       "prefab": "Resources\\json\\wall.json",
       "tag": "wall"
     },
@@ -15,10 +11,6 @@
     {
       "prefab": "Resources\\json\\enemy.json",
       "tag": "enemy"
-    },
-    {
-      "prefab": "Resources\\json\\bg.json",
-      "tag": "bg"
     },
     {
       "prefab": "Resources\\json\\bullet.json",
@@ -57,12 +49,12 @@
       "tag": "zombie"
     },
     {
-      "prefab": "Resources\\json\\zombieSpawner.json",
-      "tag": "zombieSpawner"
+      "prefab": "Resources\\json\\ghost.json",
+      "tag": "ghost"
     },
     {
       "prefab": "Resources\\json\\enemySpawner.json",
-      "tag": "enemySpawner"
+      "tag": "enemy_spawner"
     },
     {
       "prefab": "Resources\\json\\junk.json",
@@ -114,56 +106,19 @@
       "176dba": "couch_left",
       "2817ba": "couch_right",
       "845786": "chair_left",
-      "974582": "chair_right"
+      "974582": "chair_right",
+      "00ffd6": "enemy_spawner"
     },
     "objectSize": 60
   },
   "Level": [
     {
       "object": "player",
-      "overrides": [
-        {
-          "1": {
-            "startX": 0.5,
-            "startY": 0.5,
-            "scaleX": 60,
-            "scaleY": 60,
-            "rot": 0,
-            "zPos": 4
-          }
-        }
-      ]
+      "overrides": []
     },
     {
       "object": "darkness",
-      "overrides": [
-        {
-          "1": {
-            "startX": 0.5,
-            "startY": 0.5,
-            "scaleX": 800,
-            "scaleY": 800,
-            "rot": 0,
-            "zPos": 5,
-            "matchPlayerPos": true
-          }
-        }
-      ]
-    },
-    {
-      "object": "zombieSpawner",
-      "overrides": [
-        {
-          "1": {
-            "startX": 0.0,
-            "startY": 0.0,
-            "scaleX": 40,
-            "scaleY": 40,
-            "rot": 0,
-            "zPos": 4
-          }
-        }
-      ]
+      "overrides": []
     },
     {
       "object": "door",
@@ -175,7 +130,7 @@
             "scaleX": 240,
             "scaleY": 60,
             "rot": 0,
-            "zPos": 4
+            "zPos": 9
           }
         }
       ]
@@ -190,22 +145,7 @@
             "scaleX": 240,
             "scaleY": 60,
             "rot": 0,
-            "zPos": 4
-          }
-        }
-      ]
-    },
-    {
-      "object": "enemySpawner",
-      "overrides": [
-        {
-          "1": {
-            "startX": 0.0,
-            "startY": 0.0,
-            "scaleX": 40,
-            "scaleY": 40,
-            "rot": 0,
-            "zPos": 4
+            "zPos": 9
           }
         }
       ]
@@ -221,10 +161,30 @@
     {
       "object": "floor",
       "overrides": []
+    },
+    {
+      "object": "enemy_spawner",
+      "overrides": [
+        {
+          "101": {
+            "enemyTypes": [
+              {
+                "name": "zombie",
+                "spawnChance": 80
+              },
+              {
+                "name": "ghost",
+                "spawnChance": 15
+              },
+              {
+                "name": "ghost",
+                "spawnChance": 5
+              }
+            ],
+            "spawnAroundPlayer": true
+          }
+        }
+      ]
     }
   ]
 }
-
-
-//0.5,
-//1200.5,

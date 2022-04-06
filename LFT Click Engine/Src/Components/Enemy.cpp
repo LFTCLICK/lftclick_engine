@@ -14,11 +14,13 @@ void Enemy::Start()
 	switchToPlayer = false;
 	zHelper = g_GameManager->mapHeight * 2.0f / 4.0f;
 	reEvaluateStratTimer = -2;
+	daylightDeathTime = Helpers::randWithinRange(DAYLIGHT_DEATH_TIME_MIN, DAYLIGHT_DEATH_TIME_MAX);
+	daylightDeathChance = Helpers::randFloat0to1();
 }
 
 void Enemy::Update()
 {
-	if (componentOwner->tag == "zombie")
+	if (!ignoreWalls)
 	{
 		if (reEvaluateStratTimer <= 0.0f)
 		{
@@ -92,14 +94,20 @@ void Enemy::Update()
 		//trans->zPos = trans->position.y / 1000.0f;
 		//trans->zPos = (trans->position.y + g_GameManager->mapHeight) / 1000.0f;
 		trans->zPos = (trans->position.y + g_GameManager->mapHeight) / zHelper;
-	}
 
-	if (componentOwner->tag == "enemy")
-	{
+	} else {
 		DirectX::SimpleMath::Vector2 targetVector;
 		targetVector = playerTrans->CurrentPos() - trans->CurrentPos();
 		targetVector.Normalize();
 		trans->Move(targetVector.x, targetVector.y);
+	}
+
+	if (g_GameManager->harshLightOfDay == g_GameManager->day && daylightDeathChance < DAYLIGHT_DEATH_CHANCE) {
+		float oldDaylightDeathTime = daylightDeathTime;
+		std::cout << daylightDeathTime << " " << componentOwner->isDeletable << std::endl;
+		daylightDeathTime -= g_FrameRateController->DeltaTime();
+		if (daylightDeathTime <= 0 && oldDaylightDeathTime >= 0)
+			componentOwner->getComponent<Damageable>()->health = 0;
 	}
 }
 
@@ -109,6 +117,8 @@ void Enemy::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	attackTimer = j["attackTimer"];
 	damage = j["damage"];
 	speed = j["speed"];
+	if (j.contains("ignoreWalls"))
+		ignoreWalls = j["ignoreWalls"];
 }
 
 Component* Enemy::Clone(GameObject * newParent)
@@ -117,6 +127,7 @@ Component* Enemy::Clone(GameObject * newParent)
 	toReturn->attackTimer = attackTimer;
 	toReturn->damage = damage;
 	toReturn->speed = speed;
+	toReturn->ignoreWalls = ignoreWalls;
 	toReturn->componentOwner = newParent;
 	return toReturn;
 }
@@ -127,7 +138,7 @@ void Enemy::HandleMessage(Message* e)
 {
 	if (e->id == Message::COLLISION)
 	{
-		if (componentOwner->tag == "zombie")
+		if (!ignoreWalls)
 		{
 			CollisionMessage* cm = (CollisionMessage*)e;
 			trans->Move(cm->deltaPos.x, cm->deltaPos.y);

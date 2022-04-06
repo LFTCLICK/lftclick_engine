@@ -13,14 +13,15 @@
 #include "Components\Collider.h"
 #include "Components\SquareCollider.h"
 #include "Components\CircleCollider.h"
+#include "Components\Enemy.h"
+#include "Components\EnemySpawner.h"
 #include "CollisionResolution.h"
 
 const int COLLIDER_IDS[] = { Component::SQUARE_COLLLIDER, Component::CIRCLE_COLLIDER };
 const int NUMBER_OF_COLLIDERS = 2;
 
-GameObjectManager::GameObjectManager()
+GameObjectManager::GameObjectManager() : gameObjectList(std::list<GameObject*>())
 {
-	gameObjectList = std::list<GameObject*>();
 	Gdiplus::GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 }
 
@@ -36,6 +37,10 @@ void GameObjectManager::Update()
 
 			if (g->tag == "zombie" || g->tag == "ghost" || g->tag == "enemy") 
 				g_GameManager->MonsterCountMinus();
+
+			//EnemySpawner* es = g->getComponent<EnemySpawner>();
+			//if (es != nullptr && !es->spawnAroundPlayer && g_GameManager->totalSpawners > 0)
+				//g_GameManager->totalSpawners--;
 
 			g_EventManager->UnsubscribeFromAllEvents(g);
 			objIt = gameObjectList.erase(objIt);
@@ -261,7 +266,7 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 					std::string colorHexString = stream.str().substr(2, 6);
 
 					if (map["key"].contains(colorHexString)) {
-						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString]);
+						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString], true);
 
 						Transform* trans = obj->getComponent<Transform>();
 						SquareCollider* collider = obj->getComponent<SquareCollider>();
@@ -289,6 +294,7 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 						trans->SetPos(mapX, mapY);
 
 						// Think I basically handled this up above, but leaving this code in just in case
+
 						/*if (map["key"][colorHexString] == "junk")
 						{
 							obj->getComponent<Transform>()->Move(objectSize / 2, objectSize / 2);
@@ -309,6 +315,7 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 		GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"], true);
 		std::string newObjectTag = currentObj.value()["object"];
 		json overrideList = currentObj.value()["overrides"];
+
 		for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
 		{
 			json actualOverride = c.value();
@@ -322,8 +329,9 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 
 	g_AStarTerrain->Init();
 
-	for (GameObject* g : gameObjectList)
+	for (GameObject* g : gameObjectList) {
 		g->Start();
+	}
 }
 
 void GameObjectManager::AddGameObject(GameObject* go)
@@ -358,8 +366,29 @@ void GameObjectManager::DeleteObjectOfTag(std::string tag)
 
 GameObject* GameObjectManager::ClonePrefabOfTag(GameObjectFactory* gof, std::string tag, bool skipStart)
 {
-	if (tag == "zombie" || tag == "ghost" || tag == "enemy")
+	// Cull most distant enemy if one is being spawned and there are too many
+	if (tag == "zombie" || tag == "ghost" || tag == "enemy") {
 		g_GameManager->MonsterCountPlus();
+		if (g_GameManager->monsterCount > MAX_ENEMIES) {
+			GameObject* furthestEnemy = nullptr;
+			auto playerPos = g_GameManager->playerTrans->CurrentPos();
+			float furthestDistance = 0;
+			for (GameObject* g : gameObjectList) {
+				if (g->tag == "zombie" || g->tag == "ghost" || g->tag == "enemy") {
+					Transform* trans = g->getComponent<Transform>();
+					float distance = DirectX::SimpleMath::Vector2::DistanceSquared(playerPos, trans->CurrentPos());
+					if (furthestDistance < distance) {
+						furthestDistance = distance;
+						furthestEnemy = g;
+					}
+				}
+			}
+			if (furthestDistance != 0) {
+				furthestEnemy->isDeletable = true;
+			}
+		}
+	}
+
 
 	for (GameObject* g : prefabList)
 	{
