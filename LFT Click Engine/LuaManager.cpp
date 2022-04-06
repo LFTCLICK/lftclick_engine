@@ -18,6 +18,9 @@ void LuaManager::RegGlobals(sol::state& state)
 	state.set_function("is_mouse_button_pressed", &InputManager::isMouseButtonPressed, g_InputManager.get());
 	state.set_function("mouse_pos_x", &InputManager::mouseX, g_InputManager.get());
 	state.set_function("mouse_pos_y", &InputManager::mouseY, g_InputManager.get());
+
+	state.set_function("screen_width", &Renderer::GetWidth, g_Renderer.get());
+	state.set_function("screen_height", &Renderer::GetHeight, g_Renderer.get());
 }
 
 void LuaManager::RegObjectFunctions(sol::state& state, GameObject* obj)

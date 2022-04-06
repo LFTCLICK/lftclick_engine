@@ -44,12 +44,12 @@ void Gun::Fire(float targetX, float targetY)
 	GameObject* bullet = gom->ClonePrefabOfTag(gof, bulletTypes[currentBulletIndex].first);
 	Transform* bulletTransform = bullet->getComponent<Transform>();
 	Bullet* bulletComp = bullet->getComponent<Bullet>();
-	DirectX::SimpleMath::Vector2 parentPos = trans->CurrentPos();
+	DirectX::SimpleMath::Vector2 playerPos = trans->CurrentPos();
 
 	DirectX::SimpleMath::Vector2 target(targetX, targetY);
-	bulletComp->direction = target - parentPos;
+	bulletComp->direction = target - playerPos;
 	bulletComp->direction.Normalize();
-	bulletTransform->SetPos(parentPos.x + bulletComp->direction.x * 70, parentPos.y + bulletComp->direction.y * 70);
+	bulletTransform->SetPos(playerPos.x + bulletComp->direction.x * 70, playerPos.y + bulletComp->direction.y * 70);
 
 	fireRateTimer = 0;
 }

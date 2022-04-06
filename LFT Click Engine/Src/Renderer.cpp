@@ -111,10 +111,10 @@ void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 		assert(false);
 
 
+	OnResize(initWidth, initHeight);
+
 	//disable ALT-enter fullscreen
 	dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
-
-	OnResize(initWidth, initHeight);
 
 
 	CreateDeviceDependentResources();
