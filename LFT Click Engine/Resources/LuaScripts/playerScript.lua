@@ -18,14 +18,26 @@ damage_cooldown_timer = 2
 
 playerSpeed = 350
 
+autopilot = false
+
 -- returns player Hp
 function returnPlayerHp()
 	return playerHp
 end
 
--- returns players dash_speed_multiplyer
+-- returns player's dash_speed_multiplyer
 function dashSpeedMultiplyer()
 	return dash_speed_multiplyer
+end
+
+-- returns whether player is running on autopilot
+function isAutopilot()
+	return autopilot
+end
+
+-- returns player's speed
+function getPlayerSpeed()
+	return playerSpeed
 end
 
 -- d pressed moving right

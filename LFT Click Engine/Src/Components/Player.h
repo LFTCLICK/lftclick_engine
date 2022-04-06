@@ -36,7 +36,7 @@ public:
 	static int getStaticCompId() { return ComponentType::PLAYER; };
 
 	virtual Component* Clone(GameObject* newParent);
-	Player() : isDashing(false), dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), wood(0) {};
+	Player() : isDashing(false), autopilot(false), dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), wood(0) {};
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	void HandleMessage(Message* e);
@@ -45,7 +45,9 @@ public:
 	void Move(float deltaX, float deltaY);
 	void Dash();
 	//void Sidescroll(float deltaTime);
-	void ChangePlayerState();
+	void ChangePlayerState(); 
+	void Sidescroll(float deltaTime);
+	bool IsAutopilot() { return autopilot; }
 
 	int wood, health, parts;
 
@@ -66,6 +68,6 @@ private:
 	SquareCollider* squareCollider;
 
 	DirectX::SimpleMath::Vector2 dashVelocity;
-	float damageCooldownTimer, dashSpeed, dashTime, dashTimer;
-	bool isDashing;
+	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed;
+	bool isDashing, autopilot;
 };

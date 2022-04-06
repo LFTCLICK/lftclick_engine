@@ -60,6 +60,7 @@ public:
 	float xPos, yPos, zPos, xRot, yRot, zRot;
 	float maxSpeed;
 private:
+	Transform* trans;
 	float speed, speedDelta, startingSpeed, autopilotSpeed;
 	DirectX::XMMATRIX viewMatrix;
 	std::string autopilotDirection;

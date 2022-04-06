@@ -11,6 +11,8 @@ using namespace DirectX;
 
 void Player::Start()
 {
+	cam = componentOwner->getComponent<Camera>();
+
 	g_LuaManager->RegGlobals(lua_player_state);
 	g_LuaManager->RegObjectFunctions(lua_player_state, componentOwner);
 	lua_player_state.open_libraries(sol::lib::base, sol::lib::package);
@@ -23,6 +25,10 @@ void Player::Start()
 	health = returnHp();
 	sol::function dashSpeedMultiplier = lua_player_state["dashSpeedMultiplyer"];
 	dashSpeed = dashSpeedMultiplier();
+	sol::function isAutopilot = lua_player_state["isAutopilot"];
+	autopilot = isAutopilot();
+	sol::function getPlayerSpeed = lua_player_state["getPlayerSpeed"];
+	playerSpeed = getPlayerSpeed();
 
 	trans = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
@@ -33,6 +39,8 @@ void Player::Start()
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\wood_icon.png", nullptr, &woodSRV));
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\health_icon.png", nullptr, &healthSRV));
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\motorcycle_icon.png", nullptr, &bikepartsSRV));
+
+	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
 }
 
 void Player::Update()
@@ -69,6 +77,9 @@ void Player::Update()
 		}
 		trans->Move(dashVelocity.x, dashVelocity.y);
 	}
+
+	if (autopilot)
+		Sidescroll(g_FrameRateController->DeltaTime());
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
@@ -122,4 +133,8 @@ void Player::Dash() {
 void Player::ChangePlayerState() {
 	health -= 15;
 	if (health <= 0) { g_GameManager->playerDead = true; }
+}
+
+void Player::Sidescroll(float deltaTime) {
+	Move((playerSpeed + (cam->xPos - trans->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
 }

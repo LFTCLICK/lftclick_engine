@@ -51,6 +51,7 @@ void Camera::Start()
 	xRot = 0;
 	yRot = 0;
 	zRot = 0;
+	trans = componentOwner->getComponent<Transform>();
 }
 
 void Camera::Update()
@@ -93,25 +94,21 @@ void Camera::Move(float x, float y, float z)
 
 
 
-void Camera::SetAutopilotVelocity(std::string direction, float speed) {
-
-	auto pos = componentOwner->getComponent<Transform>()->CurrentPos();
-	xPos = pos.x, yPos = pos.y;
+void Camera::SetAutopilotVelocity(std::string direction, float speed) 
+{
+	isAutopilot = true;
 	autopilotSpeed = speed;
 	autopilotDirection = direction;
 
-	if (direction != "" && direction != "none") {
-		if (direction == "right") xPos += AUTOPILOT_START_DISTANCE;
-		else if (direction == "left") xPos -= AUTOPILOT_START_DISTANCE;
-		else if (direction == "up") yPos += AUTOPILOT_START_DISTANCE;
-		else if (direction == "down") yPos -= AUTOPILOT_START_DISTANCE;
+	auto pos = trans->CurrentPos();
+	xPos = pos.x, yPos = pos.y;
 
-		isAutopilot = true;
+	if (autopilotDirection != "" && autopilotDirection != "none") {
+		if (autopilotDirection == "right") xPos += AUTOPILOT_START_DISTANCE;
+		else if (autopilotDirection == "left") xPos -= AUTOPILOT_START_DISTANCE;
+		else if (autopilotDirection == "up") yPos += AUTOPILOT_START_DISTANCE;
+		else if (autopilotDirection == "down") yPos -= AUTOPILOT_START_DISTANCE;
 	}
-	else {
-		isAutopilot = false;
-	}
-
 }
 
 DirectX::XMVECTOR Camera::getPos()
