@@ -38,7 +38,7 @@ public:
 	int** terrain;
 	Node*** nodeMap;
 	float tileSize;
-	int width, height;
+	int clientWidth, clientHeight;
 	int trueItr;
 	AStarTerrain() = default;
 	~AStarTerrain();
@@ -47,3 +47,5 @@ public:
 	GridPos WorldToGridPos(DirectX::SimpleMath::Vector2 pos);
 	int ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::SimpleMath::Vector2>& path);
 };
+
+extern std::unique_ptr<AStarTerrain> g_AStarTerrain;

@@ -87,8 +87,6 @@ int main(int argc, char* args[])
 	g_EventManager = std::make_unique<EventManager>();
 
 	g_GameManager = std::make_unique<GameManager>();
-	g_GameManager->windowHeight = g_WindowHeight;
-	g_GameManager->windowWidth = g_WindowWidth;
 
 	g_AudioManager = std::make_unique<AudioManager>();
 	g_AStarTerrain = std::make_unique<AStarTerrain>();
@@ -96,6 +94,9 @@ int main(int argc, char* args[])
 	g_Renderer = std::make_unique<Renderer>();
 	g_Renderer->Initialize(GetActiveWindow(), g_WindowWidth, g_WindowHeight);
 	g_Renderer->InitImGui(pWindow);
+
+	g_GameManager->windowHeight = g_Renderer->GetWidth();
+	g_GameManager->windowWidth = g_Renderer->GetHeight();
 
 	g_EventManager->init(g_GameObjManager.get());
 	g_DebugRenderer = std::make_unique<DebugRenderer>(g_Renderer->GetDevice(), g_Renderer->GetContext());
@@ -130,6 +131,7 @@ int main(int argc, char* args[])
 		switch (g_GameManager->currentLevel)
 		{
 		case EGameLevel::Mainmenu:
+
 			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->menuBackgroundSRV.Get(), XMFLOAT2(0,0), nullptr,
 				Colors::White, 0.0f, XMFLOAT2(0,0), XMFLOAT2(1, 1));
 
@@ -156,9 +158,15 @@ int main(int argc, char* args[])
 		case EGameLevel::Level0:
 		case EGameLevel::Pausemenu:
 
-			if (g_InputManager->isKeyPressed(SDL_SCANCODE_ESCAPE))
+			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE))
 			{
-				g_GameManager->currentLevel = EGameLevel::Pausemenu;
+				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu))
+					g_GameManager->currentLevel = EGameLevel::Pausemenu;
+				else
+				{
+					g_GameManager->currentLevel = EGameLevel::Level0;
+					g_FrameRateController->zeroDeltaTime = false;
+				}
 			}
 
 			if (g_GameManager->currentLevel == EGameLevel::Pausemenu)

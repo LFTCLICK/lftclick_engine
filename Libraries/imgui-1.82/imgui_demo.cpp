@@ -3008,9 +3008,9 @@ static void ShowDemoWindowLayout()
                 ImGui::SameLine();
                 ImGui::SetNextItemWidth(100);
                 ImGui::DragFloat("##csx", &contents_size_x);
-                ImVec2 p = ImGui::GetCursorScreenPos();
-                ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + 10, p.y + 10), IM_COL32_WHITE);
-                ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(p.x + contents_size_x - 10, p.y), ImVec2(p.x + contents_size_x, p.y + 10), IM_COL32_WHITE);
+                ImVec2 player = ImGui::GetCursorScreenPos();
+                ImGui::GetWindowDrawList()->AddRectFilled(player, ImVec2(player.x + 10, player.y + 10), IM_COL32_WHITE);
+                ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(player.x + contents_size_x - 10, player.y), ImVec2(player.x + contents_size_x, player.y + 10), IM_COL32_WHITE);
                 ImGui::Dummy(ImVec2(0, 10));
             }
             ImGui::PopStyleVar(2);
@@ -6187,8 +6187,8 @@ static void ShowExampleMenuFile()
         for (int i = 0; i < ImGuiCol_COUNT; i++)
         {
             const char* name = ImGui::GetStyleColorName((ImGuiCol)i);
-            ImVec2 p = ImGui::GetCursorScreenPos();
-            ImGui::GetWindowDrawList()->AddRectFilled(p, ImVec2(p.x + sz, p.y + sz), ImGui::GetColorU32((ImGuiCol)i));
+            ImVec2 player = ImGui::GetCursorScreenPos();
+            ImGui::GetWindowDrawList()->AddRectFilled(player, ImVec2(player.x + sz, player.y + sz), ImGui::GetColorU32((ImGuiCol)i));
             ImGui::Dummy(ImVec2(sz, sz));
             ImGui::SameLine();
             ImGui::MenuItem(name);
@@ -7204,15 +7204,15 @@ static void ShowExampleAppCustomRendering(bool* p_open)
             curve_segments_override |= ImGui::SliderInt("Curves segments override", &curve_segments_override_v, 3, 40);
             ImGui::ColorEdit4("Color", &colf.x);
 
-            const ImVec2 p = ImGui::GetCursorScreenPos();
+            const ImVec2 player = ImGui::GetCursorScreenPos();
             const ImU32 col = ImColor(colf);
             const float spacing = 10.0f;
             const ImDrawFlags corners_tl_br = ImDrawFlags_RoundCornersTopLeft | ImDrawFlags_RoundCornersBottomRight;
             const float rounding = sz / 5.0f;
             const int circle_segments = circle_segments_override ? circle_segments_override_v : 0;
             const int curve_segments = curve_segments_override ? curve_segments_override_v : 0;
-            float x = p.x + 4.0f;
-            float y = p.y + 4.0f;
+            float x = player.x + 4.0f;
+            float y = player.y + 4.0f;
             for (int n = 0; n < 2; n++)
             {
                 // First line uses a thickness of 1.0f, second line uses the configurable thickness
@@ -7236,7 +7236,7 @@ static void ShowExampleAppCustomRendering(bool* p_open)
                 ImVec2 cp4[4] = { ImVec2(x, y), ImVec2(x + sz * 1.3f, y + sz * 0.3f), ImVec2(x + sz - sz * 1.3f, y + sz - sz * 0.3f), ImVec2(x + sz, y + sz) };
                 draw_list->AddBezierCubic(cp4[0], cp4[1], cp4[2], cp4[3], col, th, curve_segments);
 
-                x = p.x + 4;
+                x = player.x + 4;
                 y += sz + spacing;
             }
             draw_list->AddNgonFilled(ImVec2(x + sz * 0.5f, y + sz * 0.5f), sz*0.5f, col, ngon_sides);               x += sz + spacing;  // N-gon

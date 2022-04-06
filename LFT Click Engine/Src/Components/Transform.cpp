@@ -62,6 +62,11 @@ void Transform::Move(float deltaX, float deltaY)
 	position.y += deltaY;
 }
 
+void Transform::Move(DirectX::SimpleMath::Vector2 const& vec)
+{
+	position += vec;
+}
+
 void Transform::SetPos(float newX, float newY)
 {
 	position.x = newX;

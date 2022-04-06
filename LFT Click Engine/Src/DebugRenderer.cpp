@@ -64,9 +64,9 @@ void DebugRenderer::DrawCircle(SimpleMath::Vector2 Center, float Radius, short n
 	}
 }
 
-void DebugRenderer::Draw(ID3D11DeviceContext* context, int width, int height)
+void DebugRenderer::Draw(ID3D11DeviceContext* context, int clientWidth, int clientHeight)
 {
-	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0, width, height, 0, 0, 1));
+	basicEffect->SetProjection(XMMatrixOrthographicOffCenterRH(0, clientWidth, clientHeight, 0, 0, 1));
 
 	basicEffect->SetColorAndAlpha(DirectX::Colors::Red);
 

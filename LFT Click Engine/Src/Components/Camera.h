@@ -42,7 +42,7 @@ public:
 	DirectX::XMVECTOR getRot();
 
 	void Render();
-	void GetViewMatrix(DirectX::XMMATRIX& toReturn);
+	DirectX::XMMATRIX GetViewMatrix();
 	DirectX::XMMATRIX GetProjectionMatrix();
 
 

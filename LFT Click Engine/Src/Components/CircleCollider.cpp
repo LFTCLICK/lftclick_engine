@@ -51,7 +51,7 @@ void CircleCollider::CollisionCheck(GameObject* toCheck)
 		float toCheckRadius = 0;
 		if (toCheck->getRawComponentPointer(SQUARE_COLLLIDER))
 		{
-			toCheckRadius = std::max(toCheck->getComponent<SquareCollider>()->width / 2, toCheck->getComponent<SquareCollider>()->height / 2);
+			toCheckRadius = std::max(toCheck->getComponent<SquareCollider>()->clientWidth / 2, toCheck->getComponent<SquareCollider>()->clientHeight / 2);
 
 		}
 		else
@@ -104,7 +104,7 @@ void CircleCollider::DebugDraw()
 {
 	Transform* t = componentOwner->getComponent<Transform>();
 	assert(t != nullptr);
-	DirectX::SimpleMath::Vector2 debugCirclePos = g_GameManager->mainCamera->WorldToScreenPos(t->CurrentPos(),
+	DirectX::SimpleMath::Vector2 debugCirclePos = g_GameManager->mainCamera->WorldToScreenPos(t->CurrentPos()+center,
 		g_Renderer->GetWidth(), g_Renderer->GetHeight());
 
 	g_DebugRenderer->DrawCircle(debugCirclePos, radius, 50.0f);

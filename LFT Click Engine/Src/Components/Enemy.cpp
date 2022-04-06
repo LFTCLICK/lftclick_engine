@@ -67,20 +67,20 @@ void Enemy::Update()
 
 			targetVector = *currentPathPos - trans->CurrentPos();
 
-			float mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
+			float mag = targetVector.Length();
 			if (mag <= speed * g_FrameRateController->DeltaTime())
 			{
 				currentPathPos++;
 				if (currentPathPos == path.end())
 					pathTimer = 0;
-				mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
+				mag = targetVector.Length();
 			}
 			targetVector = (speed * g_FrameRateController->DeltaTime()) / mag * targetVector;
 		}
 		else
 		{
 			targetVector = playerTrans->position - trans->CurrentPos();
-			float mag = (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), targetVector));
+			float mag = targetVector.Length();
 			targetVector = (speed * g_FrameRateController->DeltaTime()) / mag * targetVector;
 		}
 
@@ -99,7 +99,7 @@ void Enemy::Update()
 		DirectX::SimpleMath::Vector2 targetVector;
 		targetVector = playerTrans->CurrentPos() - trans->CurrentPos();
 		targetVector.Normalize();
-		trans->Move(targetVector.x, targetVector.y);
+		trans->Move(targetVector * speed * g_FrameRateController->DeltaTime());
 	}
 
 	if (g_GameManager->harshLightOfDay == g_GameManager->day && daylightDeathChance < DAYLIGHT_DEATH_CHANCE) {

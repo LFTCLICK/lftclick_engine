@@ -2067,14 +2067,14 @@ float ImGui::TableGetColumnWidthAuto(ImGuiTable* table, ImGuiTableColumn* column
 }
 
 // 'width' = inner column width, without padding
-void ImGui::TableSetColumnWidth(int column_n, float width)
+void ImGui::TableSetColumnWidth(int column_n, float clientWidth)
 {
     ImGuiContext& g = *GImGui;
     ImGuiTable* table = g.CurrentTable;
     IM_ASSERT(table != NULL && table->IsLayoutLocked == false);
     IM_ASSERT(column_n >= 0 && column_n < table->ColumnsCount);
     ImGuiTableColumn* column_0 = &table->Columns[column_n];
-    float column_0_width = width;
+    float column_0_width = clientWidth;
 
     // Apply constraints early
     // Compare both requested and actual given width to avoid overwriting requested width when column is stuck (minimum size, bounded)
@@ -3520,10 +3520,10 @@ static const char* DebugNodeTableGetSizingPolicyDesc(ImGuiTableFlags sizing_poli
 void ImGui::DebugNodeTable(ImGuiTable* table)
 {
     char buf[512];
-    char* p = buf;
+    char* player = buf;
     const char* buf_end = buf + IM_ARRAYSIZE(buf);
     const bool is_active = (table->LastFrameActive >= ImGui::GetFrameCount() - 2); // Note that fully clipped early out scrolling tables will appear as inactive here.
-    ImFormatString(p, buf_end - p, "Table 0x%08X (%d columns, in '%s')%s", table->ID, table->ColumnsCount, table->OuterWindow->Name, is_active ? "" : " *Inactive*");
+    ImFormatString(player, buf_end - player, "Table 0x%08X (%d columns, in '%s')%s", table->ID, table->ColumnsCount, table->OuterWindow->Name, is_active ? "" : " *Inactive*");
     if (!is_active) { PushStyleColor(ImGuiCol_Text, GetStyleColorVec4(ImGuiCol_TextDisabled)); }
     bool open = TreeNode(table, "%s", buf);
     if (!is_active) { PopStyleColor(); }
@@ -3736,17 +3736,17 @@ void ImGui::SetColumnOffset(int column_index, float offset)
     IM_ASSERT(column_index < columns->Columns.Size);
 
     const bool preserve_width = !(columns->Flags & ImGuiOldColumnFlags_NoPreserveWidths) && (column_index < columns->Count - 1);
-    const float width = preserve_width ? GetColumnWidthEx(columns, column_index, columns->IsBeingResized) : 0.0f;
+    const float clientWidth = preserve_width ? GetColumnWidthEx(columns, column_index, columns->IsBeingResized) : 0.0f;
 
     if (!(columns->Flags & ImGuiOldColumnFlags_NoForceWithinWindow))
         offset = ImMin(offset, columns->OffMaxX - g.Style.ColumnsMinSpacing * (columns->Count - column_index));
     columns->Columns[column_index].OffsetNorm = GetColumnNormFromOffset(columns, offset - columns->OffMinX);
 
     if (preserve_width)
-        SetColumnOffset(column_index + 1, offset + ImMax(g.Style.ColumnsMinSpacing, width));
+        SetColumnOffset(column_index + 1, offset + ImMax(g.Style.ColumnsMinSpacing, clientWidth));
 }
 
-void ImGui::SetColumnWidth(int column_index, float width)
+void ImGui::SetColumnWidth(int column_index, float clientWidth)
 {
     ImGuiWindow* window = GetCurrentWindowRead();
     ImGuiOldColumns* columns = window->DC.CurrentColumns;
@@ -3754,7 +3754,7 @@ void ImGui::SetColumnWidth(int column_index, float width)
 
     if (column_index < 0)
         column_index = columns->Current;
-    SetColumnOffset(column_index + 1, GetColumnOffset(column_index) + width);
+    SetColumnOffset(column_index + 1, GetColumnOffset(column_index) + clientWidth);
 }
 
 void ImGui::PushColumnClipRect(int column_index)
@@ -3890,8 +3890,8 @@ void ImGui::BeginColumns(const char* str_id, int columns_count, ImGuiOldColumnFl
     // We don't generally store Indent.x inside ColumnsOffset because it may be manipulated by the user.
     float offset_0 = GetColumnOffset(columns->Current);
     float offset_1 = GetColumnOffset(columns->Current + 1);
-    float width = offset_1 - offset_0;
-    PushItemWidth(width * 0.65f);
+    float clientWidth = offset_1 - offset_0;
+    PushItemWidth(clientWidth * 0.65f);
     window->DC.ColumnsOffset.x = ImMax(column_padding - window->WindowPadding.x, 0.0f);
     window->DC.CursorPos.x = IM_FLOOR(window->Pos.x + window->DC.Indent.x + window->DC.ColumnsOffset.x);
     window->WorkRect.Max.x = window->Pos.x + offset_1 - column_padding;
@@ -3947,8 +3947,8 @@ void ImGui::NextColumn()
     // FIXME-COLUMNS: Share code with BeginColumns() - move code on columns setup.
     float offset_0 = GetColumnOffset(columns->Current);
     float offset_1 = GetColumnOffset(columns->Current + 1);
-    float width = offset_1 - offset_0;
-    PushItemWidth(width * 0.65f);
+    float clientWidth = offset_1 - offset_0;
+    PushItemWidth(clientWidth * 0.65f);
     window->WorkRect.Max.x = window->Pos.x + offset_1 - column_padding;
 }
 

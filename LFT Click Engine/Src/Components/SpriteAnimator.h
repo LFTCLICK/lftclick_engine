@@ -62,7 +62,7 @@ public:
 	void SwitchPhase(int phase);
 
 private:
-	Drawable* draw;
+	Drawable* drawable;
 	Transform* trans;
 
 	DirectX::SimpleMath::Vector2 oldPosition, position;

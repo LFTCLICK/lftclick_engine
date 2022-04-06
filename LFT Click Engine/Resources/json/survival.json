@@ -33,10 +33,6 @@
       "tag": "door"
     },
     {
-      "prefab": "Resources\\json\\darkness.json",
-      "tag": "darkness"
-    },
-    {
       "prefab": "Resources\\json\\woodpile.json",
       "tag": "wood"
     },
@@ -114,10 +110,6 @@
   "Level": [
     {
       "object": "player",
-      "overrides": []
-    },
-    {
-      "object": "darkness",
       "overrides": []
     },
     {

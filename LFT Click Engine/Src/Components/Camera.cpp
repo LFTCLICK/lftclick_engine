@@ -68,14 +68,6 @@ void Camera::Update()
 		xPos = pos.x;
 		yPos = pos.y;
 	}
-
-	/* Old Pengi Panic code I believe?
-
-	yPos += speed * g_FrameRateController->DeltaTime();
-	speed += speedDelta * g_FrameRateController->DeltaTime();
-	if (speed >= maxSpeed)
-		speed = maxSpeed;
-	*/
 }
 
 void Camera::SetPos(float x, float y, float z)
@@ -137,17 +129,13 @@ void Camera::Render()
 	viewMatrix = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
 }
 
-void Camera::GetViewMatrix(DirectX::XMMATRIX& toReturn)
+DirectX::XMMATRIX Camera::GetViewMatrix()
 {
-	toReturn = DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
-	//toReturn = viewMatrix;
+	return DirectX::XMMatrixTranslation(-xPos, -yPos, zPos) * DirectX::XMMatrixRotationRollPitchYaw(xRot, yRot, zRot);
 }
 
 DirectX::XMMATRIX Camera::GetProjectionMatrix()
 {
-	DirectX::XMMATRIX translation;
-	GetViewMatrix(translation);
-
-	return translation * DirectX::XMMatrixOrthographicLH(g_Renderer->GetWidth(), g_Renderer->GetHeight(),
-		0.01f, 1000);
+	return GetViewMatrix() * DirectX::XMMatrixOrthographicLH(g_Renderer->GetWidth(), g_Renderer->GetHeight(),
+		0.1f, 1000);
 }

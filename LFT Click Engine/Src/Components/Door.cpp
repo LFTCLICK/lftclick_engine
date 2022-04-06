@@ -6,9 +6,9 @@
 void Door::Start()
 {
 	trans = componentOwner->getComponent<Transform>();
-	sqCollider = componentOwner->getComponent<SquareCollider>();
-	draw = componentOwner->getComponent<Drawable>();
-	p = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
+	squareCollider = componentOwner->getComponent<SquareCollider>();
+	drawable = componentOwner->getComponent<Drawable>();
+	player = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
 	zeroIndexDoorPhases = doorPhases-1;
 	currentPhase = zeroIndexDoorPhases;
 	health = maxHp;
@@ -20,36 +20,67 @@ void Door::Start()
 
 void Door::Update()
 {
-	if (playerInRange && currentPhase<zeroIndexDoorPhases)
+	
+	if (playerInRange)
 	{
-		//imgui stuff
-		if (g_InputManager->isKeyPressed(SDL_SCANCODE_E) && p->wood> woodRequiredPerPhase)
+		if (!repairing && health < maxHp)
 		{
-			ImGui::Text("Repairing door...");
-			internalTimer += g_FrameRateController->DeltaTime();
+			drawable->HUD_DrawTextCenter("Press E to repair the door", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 		}
-		else if (g_InputManager->isKeyReleased(SDL_SCANCODE_E))
+		if (currentPhase < zeroIndexDoorPhases)
 		{
-			internalTimer = 0;
-		}
-		if (internalTimer >= repairTime)
-		{
-			p->wood -= woodRequiredPerPhase;
-			internalTimer = 0;
-			health += hpPerPhase;
-			currentPhase = health / hpPerPhase;
-			UpdateImage();
-			if (sqCollider->isTrigger)
-				sqCollider->isTrigger = false;
+			if (g_InputManager->isKeyPressed(SDL_SCANCODE_E))
+			{
+				if (player->wood > woodRequiredPerPhase)
+				{
+					if (health < maxHp)
+					{
+						std::string text = "Repairing Door : " + std::to_string(static_cast<int>(internalTimer / repairTime * 100)) + "%";
+						drawable->HUD_DrawTextCenter(text, { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+
+						repairing = true;
+					}
+					else
+					{
+						repairing = false;
+					}
+
+					internalTimer += g_FrameRateController->DeltaTime();
+				}
+				else
+				{
+					drawable->HUD_DrawTextCenter("Not enough wood to repair!", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+					repairing = false;
+				}
+			}
+			else /*if (g_InputManager->isKeyReleased(SDL_SCANCODE_E))*/
+			{
+				internalTimer = 0;
+				repairing = false;
+			}
+			if (internalTimer >= repairTime)
+			{
+				player->wood -= woodRequiredPerPhase;
+				internalTimer = 0;
+				health += hpPerPhase;
+				currentPhase = health / hpPerPhase;
+				UpdateImage();
+				if (squareCollider->isTrigger)
+					squareCollider->isTrigger = false;
+			}
 		}
 	}
 	else
+	{
 		internalTimer = 0;
+		repairing = false;
+	}
+
 	playerInRange = false;
-	if (health <= 0 && !sqCollider->isTrigger)
+	if (health <= 0 && !squareCollider->isTrigger)
 	{
 		UpdateImage();
-		sqCollider->isTrigger = true;
+		squareCollider->isTrigger = true;
 	}
 }
 
@@ -75,7 +106,7 @@ Component* Door::Clone(GameObject* newParent)
 
 void Door::UpdateImage()
 {
-	draw->xOffset = std::max(0.0f, ((float)currentPhase / doorPhases));
+	drawable->xOffset = std::max(0.0f, ((float)currentPhase / doorPhases));
 }
 
 void Door::HandleMessage(Message* e)
@@ -105,7 +136,7 @@ void Door::HandleMessage(Message* e)
 			UpdateImage();
 			if (currentPhase < 1)
 			{
-				sqCollider->isTrigger = true;
+				squareCollider->isTrigger = true;
 			}
 			
 		}

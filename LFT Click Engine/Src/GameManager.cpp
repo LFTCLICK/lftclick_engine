@@ -34,8 +34,7 @@ void GameManager::Update() {
 	UpdateDanger();
 	UpdateLevel();
 	UpdateInsideHouse();
-	if (IsNightTime()) 
-		UpdateSpawners();
+	UpdateSpawners();
 }
 
 void GameManager::UpdateTime()
@@ -48,10 +47,17 @@ void GameManager::UpdateTime()
 
 	float oldDarknessLevel = darknessLevel;
 
+	//if (time < SUN_RISING) darknessLevel = 1;
+	//else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
+	//else if (time < SUN_SETTING) darknessLevel = 0;
+	//else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+
 	if (time < SUN_RISING) darknessLevel = 1;
 	else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
 	else if (time < SUN_SETTING) darknessLevel = 0;
 	else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+
+	ImGui::DragFloat("Darkness", &darknessLevel, 0.01f, 0.0f, 1.0f);
 
 	if (oldDarknessLevel >= DAY_NIGHT_THRESHOLD && !IsNightTime() && harshLightOfDay != day) {
 		harshLightOfDay = day;
