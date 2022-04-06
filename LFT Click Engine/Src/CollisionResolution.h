@@ -84,8 +84,8 @@ private:
 		CircleCollider* toCheckCollider = (CircleCollider*)b;
 		aPos += aRealCollider->center;
 		bPos += toCheckCollider->center;
-		float distance = DirectX::SimpleMath::Vector2::DistanceSquared(aPos, bPos);
-		distance = distance - aRealCollider->radius - toCheckCollider->radius;
+		float radiiSum = aRealCollider->radius + toCheckCollider->radius;
+		float distance = DirectX::SimpleMath::Vector2::Distance(aPos, bPos) - radiiSum;
 
 		if (distance <= 0.0001)
 			didCollide = true;
@@ -97,7 +97,7 @@ private:
 				return DirectX::SimpleMath::Vector2();
 
 			DirectX::SimpleMath::Vector2 delta =  bPos- aPos;
-			delta = -distance / delta.Length() * delta;
+			delta = -distance / (DirectX::SimpleMath::Vector2::Distance(DirectX::SimpleMath::Vector2(0, 0), delta)) * delta;
 			return (delta);
 		}
 		return DirectX::SimpleMath::Vector2();

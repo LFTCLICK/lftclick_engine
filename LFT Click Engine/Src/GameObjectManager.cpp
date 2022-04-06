@@ -317,7 +317,6 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 		json overrideList = currentObj.value()["overrides"];
 		for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
 		{
-			std::cout << c.value() << std::endl;
 			json actualOverride = c.value();
 			for (json::iterator realOverrides = actualOverride.begin(); realOverrides != actualOverride.end(); ++realOverrides)
 			{

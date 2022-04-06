@@ -108,7 +108,8 @@ void Transform::Update()
 		isMoving = false;
 	}
 
-	if (matchPlayerPos) SetPos(g_GameManager->playerTrans->CurrentPos());
+	if (matchPlayerPos) 
+		SetPos(g_GameManager->playerTrans->CurrentPos());
 }
 
 void Transform::HandleMessage(Message* e)
