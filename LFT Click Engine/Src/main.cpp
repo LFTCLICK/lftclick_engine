@@ -32,8 +32,8 @@ using json = nlohmann::json;
 
 using namespace DirectX;
 
-int g_WindowWidth;
-int g_WindowHeight;
+constexpr auto INITIAL_WINDOW_WIDTH = 800;
+constexpr auto INITIAL_WINDOW_HEIGHT = 600;
 
 std::unique_ptr<DebugRenderer> g_DebugRenderer;
 std::unique_ptr<Renderer> g_Renderer;
@@ -49,14 +49,6 @@ std::unique_ptr<AStarTerrain> g_AStarTerrain;
 
 int main(int argc, char* args[])
 {
-	sol::state lua_state;
-	lua_state.open_libraries(sol::lib::base);
-	lua_state.script_file("Resources\\LuaScripts\\ConfigurationScript.lua");
-
-	g_WindowHeight = lua_state["configTrial"]["windowHeight"];
-	g_WindowWidth = lua_state["configTrial"]["windowWidth"];
-
-
 	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
 	if (FAILED(hr))
 	{
@@ -71,7 +63,7 @@ int main(int argc, char* args[])
 
 	}
 
-	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, g_WindowWidth, g_WindowHeight, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if (!pWindow)
 		return 1;
@@ -90,7 +82,7 @@ int main(int argc, char* args[])
 	g_AStarTerrain = std::make_unique<AStarTerrain>();
 
 	g_Renderer = std::make_unique<Renderer>();
-	g_Renderer->Initialize(GetActiveWindow(), g_WindowWidth, g_WindowHeight);
+	g_Renderer->Initialize(GetActiveWindow(), INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT);
 	g_Renderer->InitImGui(pWindow);
 	g_EventManager->init(g_GameObjManager.get());
 	g_DebugRenderer = std::make_unique<DebugRenderer>(g_Renderer->GetDevice(), g_Renderer->GetContext());
@@ -99,8 +91,6 @@ int main(int argc, char* args[])
 	g_AudioManager->Init();
 
 	std::fstream other("./Resources/json/survival.json");
-	//std::fstream other("./Resources/json/demo.json");
-	//std::fstream other("./Resources/json/concept_3_level.json");
 
 	json dataJson2;
 	other >> dataJson2;
@@ -115,9 +105,21 @@ int main(int argc, char* args[])
 	srand(time(NULL));
 
 	SDL_Event e = {};
+
 	while (e.type != SDL_QUIT)
 	{
 		SDL_PollEvent(&e);
+
+		switch (e.type)
+		{
+		case SDL_WINDOWEVENT:
+			if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) 
+			{
+				SDL_SetWindowSize(pWindow, e.window.data1, e.window.data2);
+				g_Renderer->OnResize(e.window.data1, e.window.data2);
+			}
+			break;
+		}
 
 		g_FrameRateController->Tick();
 		g_Renderer->PrepareForRendering();
@@ -126,10 +128,13 @@ int main(int argc, char* args[])
 		{
 		case EGameLevel::Mainmenu:
 
-			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->menuBackgroundSRV.Get(), XMFLOAT2(0,0), nullptr,
-				Colors::White, 0.0f, XMFLOAT2(0,0), XMFLOAT2(1, 1));
+			RECT rect;
+			rect.left = rect.top = 0;
+			rect.right = g_Renderer->GetWidth();
+			rect.bottom = g_Renderer->GetHeight();
+			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->menuBackgroundSRV.Get(), rect);
 
-			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_WindowWidth)/2 - 50, static_cast<float>(g_WindowHeight)/2));
+			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth())/2 - 50, static_cast<float>(g_Renderer->GetHeight())/2));
 			ImGui::Begin("menu", nullptr, 
 				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove|ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar 
 				|ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize| ImGuiWindowFlags_NoBackground);
@@ -138,7 +143,7 @@ int main(int argc, char* args[])
 			{
 				g_GameManager->LoadLevel(dataJson2);
 			}
-
+			
 			if (ImGui::Button("Quit", { 100, 50 }))
 			{
 				e.type = SDL_QUIT;
@@ -166,7 +171,7 @@ int main(int argc, char* args[])
 			if (g_GameManager->currentLevel == EGameLevel::Pausemenu)
 			{
 				g_FrameRateController->zeroDeltaTime = true;
-				ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_WindowWidth) / 2 - 50, static_cast<float>(g_WindowHeight) / 2));
+				ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(g_Renderer->GetHeight()) / 2));
 				ImGui::Begin("pauseMenu", nullptr,
 					ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
 					| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
