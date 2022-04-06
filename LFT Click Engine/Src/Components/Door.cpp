@@ -50,7 +50,7 @@ void Door::Update()
 				else
 				{
 					drawable->HUD_DrawTextCenter("Not enough wood to repair!", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-					repairing = false;
+					repairing = true;
 				}
 			}
 			else /*if (g_InputManager->isKeyReleased(SDL_SCANCODE_E))*/

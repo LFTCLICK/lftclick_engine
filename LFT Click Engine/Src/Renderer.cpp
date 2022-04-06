@@ -256,9 +256,9 @@ void Renderer::Draw()
 			drawable->xFlip
 		};
 	
-		const PS_cbPerObject cbValues_PS = 
+		const PS_cbPerObject cbValues_PS =
 		{
-			g_GameManager->GetDarknessLevel()
+			(gameObject->tag == "player" || gameObject->tag == "zombie") ? 0.0f : g_GameManager->GetDarknessLevel()
 		};
 	
 		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
