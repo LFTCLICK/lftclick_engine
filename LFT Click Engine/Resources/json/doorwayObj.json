@@ -10,7 +10,7 @@
   "2": {
     "onlyUVOverrides": false,
     "xScale" : 0.2,
-    "yScale" : 1,
+    "yScale" : 0.5,
     "vertices" : [
     {
         "pos": [-0.5,-0.5,0],
@@ -49,6 +49,8 @@
     "deleteOnCollison": false
   },
   "102":{
+    "woodPileOffset": [ -128.0, -64.0],
+    "woodPileRadius": 25.0,
     "doorPhases": 5,
     "hp": 100,
     "woodRequiredPerPhase": 5,
