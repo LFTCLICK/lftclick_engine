@@ -96,7 +96,7 @@ Audible::~Audible() {
 
 
 void Audible::PlaySound(SoundInfo sound) {
-	float pitch = sound.pitchRange[0] == sound.pitchRange[1] ? 0 : Helpers::randWithinRange(sound.pitchRange[0], sound.pitchRange[1]);
+	float pitch = sound.pitchRange[0] == sound.pitchRange[1] ? 1 : Helpers::randWithinRange(sound.pitchRange[0], sound.pitchRange[1]);
 	std::cout << sound.name << " " << sound.volume << " " << pitch << std::endl;
 	int channelID = am->PlaySound(sound.name, channelGroupName, sound.volume, pitch, sound.startTime);
 	channels[channelID] = sound.name;
@@ -178,7 +178,7 @@ void Audible::StopSound(std::string soundName) {
 void Audible::PlaySoundsOnEvent(SoundEvent se) {
 	for (auto sound : sounds) {
 		if (std::find(sound.playEvents.begin(), sound.playEvents.end(), (int)se) != sound.playEvents.end()) {
-			std::cout << (int)se << std::endl;
+			std::cout << "start " << (int)se << std::endl;
 			PlaySound(sound);
 		}
 	}
@@ -187,7 +187,7 @@ void Audible::PlaySoundsOnEvent(SoundEvent se) {
 void Audible::StopSoundsOnEvent(SoundEvent se) {
 	for (auto sound : sounds) {
 		if (std::find(sound.stopEvents.begin(), sound.stopEvents.end(), (int)se) != sound.stopEvents.end()) {
-			std::cout << (int)se << std::endl;
+			std::cout << "stop " << (int)se << std::endl;
 			StopSound(sound.name);
 		}
 	}
