@@ -41,6 +41,7 @@ void Player::Start()
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\motorcycle_icon.png", nullptr, &bikepartsSRV));
 
 	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	zHelper = g_GameManager->mapHeight / 2.0f;
 }
 
 void Player::Update()
@@ -84,6 +85,7 @@ void Player::Update()
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
 	g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100);
+	trans->zPos = 5 + ((trans->position.y + g_GameManager->mapHeight) / zHelper);
 }
 
 Component* Player::Clone(GameObject* newParent) {
