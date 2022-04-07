@@ -1,0 +1,45 @@
+{
+  "1": {
+    "startX": -20.5,
+    "startY": 80.5,
+    "scaleX": 28,
+    "scaleY": 22,
+    "rot": 0,
+    "zPos": 10
+  },
+  "2": {
+    "vertices" : [
+    {
+        "pos": [-0.5,-0.5,0],
+        "uv": [0,1]
+    },
+    {
+        "pos": [-0.5,0.5,0],
+        "uv": [0,0]
+    },
+    {
+        "pos": [0.5,0.5,0],
+        "uv": [0.0833333333333333,0]
+    },
+    {
+        "pos": [0.5,-0.5,0],
+        "uv": [0.0833333333333333,1]
+    }
+    ],
+    "indicies": [0, 1, 2, 2, 3, 0],
+    "scale": 1,
+    "image": "Resources\\images\\invincibility.png"
+
+  },
+  "4": {
+    "center": [0.0, 0.0, 0.0],
+    "width": 28,
+    "height": 22,
+    "trigger": true,
+    "deleteOnCollison": true
+  },
+  "6": {
+    "animationTime": 0.15,
+    "offsetDenominator": 12.0  
+  }
+}

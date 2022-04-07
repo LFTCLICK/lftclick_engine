@@ -1,0 +1,47 @@
+{
+  "1": {
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 32,
+    "scaleY": 32,
+    "rot": 0,
+    "zPos": 10
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale" : 1,
+    "yScale" : 1,
+    "vertices" : [
+    {
+        "pos": [-0.5,-0.5,0],
+        "uv": [0,1]
+    },
+    {
+        "pos": [-0.5,0.5,0],
+        "uv": [0,0]
+    },
+    {
+        "pos": [0.5,0.5,0],
+        "uv": [1,0]
+    },
+    {
+        "pos": [0.5,-0.5,0],
+        "uv": [1,1]
+    }
+    ],
+    "indicies": [0, 1, 2, 2, 3, 0],
+    "image": "Resources\\images\\block.png"
+
+  },
+  "4": {
+    "center": [0.0, -0.0, 0.0],
+    "width": 32,
+    "height": 32,
+    "trigger": false,
+    "static": true,
+    "deleteOnCollison": false
+  },
+  "12": {
+    "health": 100000000
+  }
+}

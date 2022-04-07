@@ -1,0 +1,37 @@
+{
+  "1": {
+    "startX": 0,
+    "startY": 0,
+    "scaleX": 60,
+    "scaleY": 60,
+    "rot": 0,
+    "zPos": 100
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale": 0.25,
+    "yScale": 1,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
+    ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "scale": 1,
+    "image": "Resources\\images\\grass_sprite_sheet.png"
+
+  }
+}

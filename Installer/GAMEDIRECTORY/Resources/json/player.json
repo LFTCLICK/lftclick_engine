@@ -1,0 +1,140 @@
+{
+  "1": {
+    "startX": 0.5,
+    "startY": 0.5,
+    "scaleX": 60,
+    "scaleY": 60,
+    "rot": 0,
+    "zPos": 15
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale": 0.5,
+    "yScale": 0.125,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
+    ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "image": "Resources\\images\\player_sprite_sheet.png"
+  },
+  "4": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "width": 40,
+    "height": 50,
+    "trigger": false,
+    "static": false,
+    "deleteOnCollison": false
+  },
+  "5": {
+    "speed": 0,
+    "speedDelta": 5000000,
+    "maxSpeed": 0,
+    "startX": 0,
+    "startY": 0,
+    "startZ": 0,
+    "isMainCamera": true
+  },
+  "6": {
+    "spriteSheetWidth": 2,
+    "spriteSheetHeight": 8,
+    "animations": [
+      {
+        "name": "idlePlayerRight",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "right"
+      },
+      {
+        "name": "movingPlayerRight",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "right"
+      },
+      {
+        "name": "idlePlayerLeft",
+        "length": 2,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "left"
+      },
+      {
+        "name": "movingPlayerLeft",
+        "length": 2,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "left"
+      },
+      {
+        "name": "damagedPlayer",
+        "length": 2,
+        "frameDuration": 0.125,
+        "onDamage": true
+      },
+      {
+        "name": "deadPlayer",
+        "length": 2,
+        "frameDuration": 1,
+        "onDeath": true
+      }
+    ]
+  },
+  "7": {
+    "script": "Resources\\LuaScripts\\playerScript.lua"
+  },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\music\\BackgroundMusicBase.mp3",
+        "loop": true,
+        "volume": 30,
+        "playEvents": [
+          1000
+        ],
+        "stopEvents": [
+          2000
+        ],
+        "startTime": 73.525
+      },
+      {
+        "name": ".\\Resources\\music\\BackgroundMusicAddition.mp3",
+        "loop": true,
+        "volume": 30,
+        "playEvents": [
+          1000
+        ],
+        "stopEvents": [
+          2000
+        ],
+        "scaleVolumeWithDanger": true,
+        "startTime": 73.525
+      }
+    ],
+    "positionless": true
+  },
+  "10": {
+    "bulletTypes": [
+      {
+        "fireRate": 3,
+        "prefabTag": "bullet"
+      }
+    ],
+    "defaultBulletIndex": 0
+  }
+}

@@ -84,23 +84,31 @@ void GameManager::UpdateSpawners()
 {
 	spawnTimer -= g_FrameRateController->DeltaTime();
 	if (spawnTimer < 0) {
+		bool nightTime = IsNightTime();
+
+		int randInt = rand();
+		float randFloat = (float)randInt / RAND_MAX;
+		float minSpawnInterval = 0, maxSpawnInterval = 0;
+
+		float spawnMod = (nightTime ? NIGHTTIME_SPAWN_MOD_PER_DAY : DAYTIME_SPAWN_MOD_PER_DAY) * (day - 1);;
+
 		if (playerInsideHouse) {
-			int randInt = rand();
-			float randFloat = (float)randInt / RAND_MAX;
 			activatedSpawner = randInt % totalSpawners;
-			spawnTimer = IsNightTime() ?
-				NIGHTTIME_SPAWN_INTERVAL_MIN + ((NIGHTTIME_SPAWN_INTERVAL_MAX - NIGHTTIME_SPAWN_INTERVAL_MIN) * randFloat) + (NIGHTTIME_SPAWN_MOD_PER_DAY * (day - 1)) :
-				DAYTIME_SPAWN_INTERVAL_MIN + ((DAYTIME_SPAWN_INTERVAL_MAX - DAYTIME_SPAWN_INTERVAL_MIN) * randFloat) + (DAYTIME_SPAWN_MOD_PER_DAY * (day - 1));
+
+			minSpawnInterval = nightTime ? NIGHTTIME_SPAWN_INTERVAL_MIN : DAYTIME_SPAWN_INTERVAL_MIN;
+			maxSpawnInterval = nightTime ? NIGHTTIME_SPAWN_INTERVAL_MAX : DAYTIME_SPAWN_INTERVAL_MAX;
 		}
 		else {
-			float randFloat = (float)rand() / RAND_MAX;
 			activatedSpawner = NEARPLAYER_ENEMY_SPAWNER_ID;
-			spawnTimer = IsNightTime() ?
-				NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN + ((NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MAX - NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN) * randFloat) + (NIGHTTIME_SPAWN_MOD_PER_DAY * (day - 1)) :
-				DAYTIME_SPAWN_INTERVAL_MIN + ((DAYTIME_SPAWN_INTERVAL_MAX - DAYTIME_SPAWN_INTERVAL_MIN) * randFloat) + (DAYTIME_SPAWN_MOD_PER_DAY * (day - 1));
+
+			minSpawnInterval = nightTime ? NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN : DAYTIME_SPAWN_INTERVAL_MIN;
+			maxSpawnInterval = nightTime ? NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MAX : DAYTIME_SPAWN_INTERVAL_MAX;
 		}
 
-		if (spawnTimer < 0) spawnTimer = MIN_TIME_BETWEEN_SPAWNS;
+		spawnTimer = Helpers::randWithinRange(minSpawnInterval, maxSpawnInterval) + spawnMod;
+
+		if (spawnTimer < MIN_TIME_BETWEEN_SPAWNS) 
+			spawnTimer = MIN_TIME_BETWEEN_SPAWNS;
 	}
 }
 

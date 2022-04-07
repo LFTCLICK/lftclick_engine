@@ -15,6 +15,7 @@
 #include "Camera.h"
 #include "Gun.h"
 #include "AudioManager.h"
+#include "GameManager.h"
 #include "FrameRateController.h"
 #include "../LuaManager.h"
 #include "Components/Collider.h"
