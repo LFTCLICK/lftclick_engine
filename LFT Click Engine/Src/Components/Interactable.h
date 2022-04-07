@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "FrameRateController.h"
 #include "Collider.h"
+#include "Helpers.h"
 #include <json.hpp>
 
 
