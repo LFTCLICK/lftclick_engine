@@ -39,10 +39,12 @@ public:
 	float maxHp, health;
 	int woodRequiredPerPhase;
 	float repairTime;
+	bool inWoodPilePhase;
 
 private:
 	Transform* trans;
-
+	DirectX::SimpleMath::Vector2 woodPileOffset;
+	float woodPileRadius;
 	SquareCollider* squareCollider;
 	Drawable* drawable;
 	Player* player;

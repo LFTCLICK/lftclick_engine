@@ -106,8 +106,7 @@ void Player::HandleMessage(Message* e)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
 
-		if(e->otherObject->componentOwner->tag != "door")
-			Move(cm->deltaPos.x, cm->deltaPos.y);
+		Move(cm->deltaPos.x, cm->deltaPos.y);
 
 		if (e->otherObject->componentOwner->tag == "zombie")
 		{
