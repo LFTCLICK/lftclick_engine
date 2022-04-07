@@ -123,6 +123,14 @@
             "scaleY": 60,
             "rot": 0,
             "zPos": 9
+          },
+          "102":{
+            "woodPileOffset": [ -128.0, -64.0],
+            "woodPileRadius": 25.0,
+            "doorPhases": 5,
+            "hp": 100,
+            "woodRequiredPerPhase": 5,
+            "repairTime": 3
           }
         }
       ]
@@ -138,6 +146,14 @@
             "scaleY": 60,
             "rot": 0,
             "zPos": 9
+          },
+          "102":{
+            "woodPileOffset": [ 128.0, 64.0],
+            "woodPileRadius": 25.0,
+            "doorPhases": 5,
+            "hp": 100,
+            "woodRequiredPerPhase": 5,
+            "repairTime": 3
           }
         }
       ]
