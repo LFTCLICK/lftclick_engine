@@ -91,7 +91,7 @@ void Interactable::CompleteInteraction() {
 	audio->PlaySoundsOnEvent(AUDIO_ON_COLLECT);
 
 	if (hasParts) {
-		if (((float)rand() / RAND_MAX) < g_GameManager->GetChanceOfFindingPart()) {
+		if (Helpers::randFloat0to1() < g_GameManager->GetChanceOfFindingPart()) {
 			g_GameManager->playerObj->getComponent<Player>()->parts++;
 			g_GameManager->PartSearchSuccessful();
 		}
@@ -143,7 +143,7 @@ void Interactable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	if (j.contains("interactDistance")) interactDistance = j["interactDistance"];
 	if (j.contains("totalPhases")) totalPhases = j["totalPhases"];
 	if (j.contains("hpPerPhase")) hpPerPhase = j["hpPerPhase"];
-	if (j.contains("hasParts")) hpPerPhase = j["hasParts"];
+	if (j.contains("hasParts")) hasParts = j["hasParts"];
 }
 
 
