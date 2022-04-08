@@ -60,7 +60,6 @@ void GameManager::UpdateTime()
 	ImGui::DragFloat("Darkness", &darknessLevel, 0.01f, 0.0f, 1.0f);
 
 #endif // DEBUG
-	ImGui::DragFloat("Darkness", &darknessLevel, 0.01f, 0.0f, 1.0f);
 
 
 	if (oldDarknessLevel >= DAY_NIGHT_THRESHOLD && !IsNightTime() && harshLightOfDay != day) {
