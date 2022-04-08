@@ -28,6 +28,7 @@ void Door::Update()
 		if (inWoodPilePhase)
 		{
 
+			drawable->HUD_DrawTextCenter("Press Q to replace the door", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_Q))
 			{
 				inWoodPilePhase = false;
@@ -45,6 +46,7 @@ void Door::Update()
 		}
 		else
 		{
+			bool hasText = false;
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_Q))
 			{
 				inWoodPilePhase = true;
@@ -60,7 +62,7 @@ void Door::Update()
 			}
 			if (!repairing && health < maxHp)
 			{
-				drawable->HUD_DrawTextCenter("Press E to repair the door", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+				drawable->HUD_DrawTextCenter("Hold E to repair the door\nPress Q to remove", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 			}
 			if (currentPhase < zeroIndexDoorPhases)
 			{
@@ -103,6 +105,8 @@ void Door::Update()
 					if (squareCollider->isTrigger)
 						squareCollider->isTrigger = false;
 				}
+				if(!hasText)
+					drawable->HUD_DrawTextCenter("Press Q to remove the door", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 			}
 		}
 	}
