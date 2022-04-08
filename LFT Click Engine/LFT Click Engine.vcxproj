@@ -452,6 +452,7 @@
     <None Include="Resources\json\menu.json" />
     <None Include="Resources\json\player.json" />
     <None Include="Resources\json\prefabs.json" />
+    <None Include="Resources\json\side_scroller.json" />
     <None Include="Resources\json\sign.json" />
     <None Include="Resources\json\slow.json" />
     <None Include="Resources\json\spike.json" />

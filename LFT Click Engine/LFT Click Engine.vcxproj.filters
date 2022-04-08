@@ -580,6 +580,9 @@
     <None Include="Resources\json\ghost.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\side_scroller.json">
+      <Filter>JSON</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

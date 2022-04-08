@@ -96,7 +96,8 @@ int main(int argc, char* args[])
 	g_FrameRateController->Init(144);
 	g_AudioManager->Init();
 
-	std::fstream other("./Resources/json/survival.json");
+	//std::fstream other("./Resources/json/survival.json");
+	std::fstream other("./Resources/json/side_scroller.json");
 
 	json dataJson2;
 	other >> dataJson2;

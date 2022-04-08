@@ -1,0 +1,106 @@
+{
+  "Prefabs": [
+    {
+      "prefab": "Resources\\json\\wall.json",
+      "tag": "wall"
+    },
+    {
+      "prefab": "Resources\\json\\floor.json",
+      "tag": "floor"
+    },
+    {
+      "prefab": "Resources\\json\\enemy.json",
+      "tag": "enemy"
+    },
+    {
+      "prefab": "Resources\\json\\bullet.json",
+      "tag": "bullet"
+    },
+    {
+      "prefab": "Resources\\json\\grass.json",
+      "tag": "grass"
+    },
+    {
+      "prefab": "Resources\\json\\tree.json",
+      "tag": "tree"
+    },
+    {
+      "prefab": "Resources\\json\\player.json",
+      "tag": "player"
+    },
+    {
+      "prefab": "Resources\\json\\doorwayObj.json",
+      "tag": "door"
+    },
+    {
+      "prefab": "Resources\\json\\woodpile.json",
+      "tag": "wood"
+    },
+    {
+      "prefab": "Resources\\json\\crosshairs.json",
+      "tag": "crosshairs"
+    },
+    {
+      "prefab": "Resources\\json\\zombie.json",
+      "tag": "zombie"
+    },
+    {
+      "prefab": "Resources\\json\\ghost.json",
+      "tag": "ghost"
+    },
+    {
+      "prefab": "Resources\\json\\junk.json",
+      "tag": "junk"
+    },
+    {
+      "prefab": "Resources\\json\\big_tree.json",
+      "tag": "big_tree"
+    }
+  ],
+  "Map": {
+    "path": "Resources\\images\\side_scroller_map.png",
+    "key": {
+      "5b3d2e": "wall",
+      "f5b0cb": "junk",
+      "fbbc05": "tree",
+      "a37900": "big_tree"
+    },
+    "objectSize": 60
+  },
+  "Level": [
+    {
+      "object": "grass",
+      "overrides": [
+        {
+          "1": {
+            "startX": 0.0,
+            "startY": 0.0,
+            "scaleX": 25500,
+            "scaleY": 750,
+            "rot": 0,
+            "zPos": 100
+          }
+        }
+      ]
+    },
+    {
+      "object": "player",
+      "overrides": [
+        {
+          "1": {
+            "startX": -12552.0,
+            "startY": 0.0,
+            "scaleX": 60,
+            "scaleY": 60,
+            "rot": 0,
+            "zPos": 15
+          }
+        }
+      ]
+    },
+    {
+      "object": "crosshairs",
+      "overrides": []
+    }
+  ]
+}

@@ -18,6 +18,9 @@ damage_cooldown_timer = 2
 
 playerSpeed = 350
 
+camSpeed = 400
+playerSpeedForSideScroller = 380
+
 autopilot = false
 
 -- returns player Hp
@@ -38,6 +41,16 @@ end
 -- returns player's speed
 function getPlayerSpeed()
 	return playerSpeed
+end
+
+-- returns player's speed for level 2
+function getPlayerSpeedForSideScroller()
+	return playerSpeedForSideScroller
+end
+
+-- returns camera''s speed for level 2
+function getCamerSpeed()
+	return camSpeed
 end
 
 -- d pressed moving right

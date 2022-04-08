@@ -29,6 +29,12 @@ void Player::Start()
 	autopilot = isAutopilot();
 	sol::function getPlayerSpeed = lua_player_state["getPlayerSpeed"];
 	playerSpeed = getPlayerSpeed();
+	sol::function getPlayerSpeedForSideScroller = lua_player_state["getPlayerSpeedForSideScroller"];
+	playerSpeedForSideScroller = getPlayerSpeedForSideScroller();
+	sol::function getCamSpeed = lua_player_state["getCamerSpeed"];
+	camSpeed = getCamSpeed();
+
+	autopilot = true;
 
 	trans = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
@@ -40,7 +46,7 @@ void Player::Start()
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\health_icon.png", nullptr, &healthSRV));
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\motorcycle_icon.png", nullptr, &bikepartsSRV));
 
-	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	if (autopilot) cam->SetAutopilotVelocity("right", camSpeed);
 }
 
 void Player::Update()
@@ -95,8 +101,6 @@ Component* Player::Clone(GameObject* newParent) {
 
 void Player::Deserialize(nlohmann::json j, GameObject* parent) {
 	if (j.contains("script")) script = j["script"];
-
-
 	this->componentOwner = componentOwner;
 }
 
@@ -136,5 +140,5 @@ void Player::ChangePlayerState() {
 }
 
 void Player::Sidescroll(float deltaTime) {
-	Move((playerSpeed + (cam->xPos - trans->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
+	Move((playerSpeedForSideScroller + (cam->xPos - trans->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
 }
