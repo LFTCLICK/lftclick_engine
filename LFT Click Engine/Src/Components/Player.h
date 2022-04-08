@@ -67,6 +67,7 @@ private:
 	Gun* gun;
 	Drawable* drawable;
 	SquareCollider* squareCollider;
+	float introTimer;
 
 	DirectX::SimpleMath::Vector2 dashVelocity;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper;

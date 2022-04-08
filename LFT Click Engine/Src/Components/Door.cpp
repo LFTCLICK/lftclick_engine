@@ -63,6 +63,7 @@ void Door::Update()
 			if (!repairing && health < maxHp)
 			{
 				drawable->HUD_DrawTextCenter("Hold E to repair the door\nPress Q to remove", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+				hasText = true;
 			}
 			if (currentPhase < zeroIndexDoorPhases)
 			{
@@ -74,6 +75,7 @@ void Door::Update()
 						{
 							std::string text = "Repairing Door : " + std::to_string(static_cast<int>(internalTimer / repairTime * 100)) + "%";
 							drawable->HUD_DrawTextCenter(text, { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+							hasText = true;
 
 							repairing = true;
 						}
@@ -87,6 +89,7 @@ void Door::Update()
 					else
 					{
 						drawable->HUD_DrawTextCenter("Not enough wood to repair!", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+						hasText = true;
 						repairing = true;
 					}
 				}

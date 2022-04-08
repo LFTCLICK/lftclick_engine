@@ -42,6 +42,7 @@ void Player::Start()
 
 	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
 	zHelper = g_GameManager->mapHeight / 2.0f;
+	introTimer = 0;
 }
 
 void Player::Update()
@@ -79,6 +80,16 @@ void Player::Update()
 		trans->Move(dashVelocity.x, dashVelocity.y);
 	}
 
+	if (parts == 0 && introTimer<5.0f)
+	{
+
+		drawable->HUD_DrawTextCenter("I need to find 8 motorcycle parts to fix my bike.", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+	if (parts >= 8)
+	{
+		g_GameManager->playerDead = true;
+		g_GameManager->playerWon= true;
+	}
 	if (autopilot)
 		Sidescroll(g_FrameRateController->DeltaTime());
 
@@ -86,6 +97,7 @@ void Player::Update()
 
 	g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100);
 	trans->zPos = 5 + ((trans->position.y + g_GameManager->mapHeight) / zHelper);
+	introTimer += g_FrameRateController->DeltaTime();
 }
 
 Component* Player::Clone(GameObject* newParent) {

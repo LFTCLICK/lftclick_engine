@@ -83,6 +83,7 @@ public:
 	GameManager() : 
 		playerObj(nullptr),
 		playerDead(false), 
+		playerWon(false), 
 		darknessLevel(0),
 		monsterCount(0),
 		dangerLevel(0),
@@ -145,6 +146,7 @@ public:
 public:
 	GameObject* playerObj;
 	bool playerDead;
+	bool playerWon;
 	bool playerInsideHouse;
 	float darknessLevel;
 	int monsterCount;

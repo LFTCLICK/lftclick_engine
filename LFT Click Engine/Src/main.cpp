@@ -173,7 +173,6 @@ int main(int argc, char* args[])
 					g_FrameRateController->zeroDeltaTime = false;
 				}
 			}
-
 			if (g_GameManager->currentLevel == EGameLevel::Pausemenu)
 			{
 				g_FrameRateController->zeroDeltaTime = true;
@@ -184,9 +183,20 @@ int main(int argc, char* args[])
 
 				if (g_GameManager->playerDead)
 				{
-					if (ImGui::Button("Restart", { 100,50 }))
+					if (g_GameManager->playerWon)
 					{
-						g_GameManager->LoadLevel(dataJson2);
+						ImGui::Text("You win");
+						if (ImGui::Button("Restart", { 100,50 }))
+						{
+							g_GameManager->LoadLevel(dataJson2);
+						}
+					}
+					else
+					{
+						if (ImGui::Button("Restart", { 100,50 }))
+						{
+							g_GameManager->LoadLevel(dataJson2);
+						}
 					}
 				}
 				else
