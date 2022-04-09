@@ -1,7 +1,7 @@
 {
   "1": {
-    "startX": 0.0,
-    "startY": 0.0,
+    "startX": -300.0,
+    "startY": 300.0,
     "scaleX": 100,
     "scaleY": 100,
     "rot": 0,
@@ -9,28 +9,28 @@
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 1,
-    "yScale" : 1,
-    "vertices" : [
-    {
-        "pos": [-0.5,-0.5,0],
-        "uv": [0,1]
-    },
-    {
-        "pos": [-0.5,0.5,0],
-        "uv": [0,0]
-    },
-    {
-        "pos": [0.5,0.5,0],
-        "uv": [1,0]
-    },
-    {
-        "pos": [0.5,-0.5,0],
-        "uv": [1,1]
-    }
+    "xScale": 1,
+    "yScale": 1,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
     ],
-    "indicies": [0, 1, 2, 2, 3, 0],
-    "image": "Resources\\images\\wall.png"
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "image": "Resources\\images\\greyWall.png"
 
   },
   "4": {
@@ -41,6 +41,6 @@
     "deleteOnCollison": false
   },
   "12": {
-    "health": 2
+    "health": 100000000000
   }
 }

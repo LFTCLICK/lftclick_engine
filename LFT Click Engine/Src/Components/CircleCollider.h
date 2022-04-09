@@ -24,5 +24,6 @@ public:
 
 private:
 	GameObject* parent;
+	int playerScore;
 	bool deleteOnCollison;
 };

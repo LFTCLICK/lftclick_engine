@@ -18,11 +18,13 @@
 #include "GameObjectManager.h"
 #include "Graphics.h"
 #include "Components/Transform.h"
+#include "Components/Damageable.h"
 #include "EventManager.h"
 #include "AudioManager.h"
 #include "Messages.h"
 #include "GameManager.h"
 #include "Components/Drawable.h"
+#include "EnemySpawner.h"
 using json = nlohmann::json;
 
 using namespace DirectX;
@@ -98,6 +100,7 @@ int main(int argc, char* args[])
 	GameObjectManager* gom = &GameObjectManager::getInstance();
 	EventManager::getInstance().init(gom);
 	GameObjectFactory* gof = &GameObjectFactory::getInstance();
+	EnemySpawner enemySpawner;
 
 
 	FrameRateController::getInstance().Init(144);
@@ -119,6 +122,7 @@ int main(int argc, char* args[])
 			other.close();
 			gom->Deserialize(gof, dataJson2);
 			GameObject* playerObj = gom->FindObjectOfTag("player");
+			Damageable* playerDamageable = playerObj->getComponent<Damageable>();
 			GameManager::getInstance().mainCamera = playerObj->getComponent<Camera>();
 
 			//gom->Start();
@@ -151,6 +155,48 @@ int main(int argc, char* args[])
 						Graphics::getInstance().OnResize(windowWidth, windowHeight);
 					}
 				}
+
+				if (playerDamageable->health == 0)
+				{
+					bool open = true;
+					ImGui::SetNextWindowPos({ 450,600 });
+					ImGui::Begin("mainMenu", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
+					if (ImGui::Button("Restart", { 100,50 }) || GameManager::getInstance().playerRestart)
+					{
+						isRunning = false;
+						playGame = true;
+						doMenu = false;
+						masterLoop = true;
+					}
+					if (ImGui::Button("Main Menu", { 100,50 }))
+					{
+						isRunning = false;
+						playGame = false;
+						doMenu = true;
+						masterLoop = true;
+					}
+					if (ImGui::Button("Quit", { 100,50 }))
+					{
+						isRunning = false;
+						playGame = false;
+						doMenu = false;
+						masterLoop = false;
+					}
+
+					ImGui::End();
+				}
+
+				//Checking if player dies
+				/*if (playerDamageable->health == 0)
+				{
+
+					isRunning = false;
+					playGame = false;
+					doMenu = false;
+					masterLoop = false;
+				}*/
+				
+				enemySpawner.Update();
 				AudioManager::getInstance().Update();
 				InputManager::getInstance().Update();
 				gom->Update();//update gameobjects
@@ -159,11 +205,11 @@ int main(int argc, char* args[])
 				EventManager::getInstance().Update();//process timed events
 				Graphics::getInstance().ClearBuffer(0x7CA3FF);
 
-				g_debugRenderer->DrawLine(SimpleMath::Vector2(0.0f, 0.0f), SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2));
-				g_debugRenderer->DrawLine(SimpleMath::Vector2(Graphics::getInstance().GetWidth(), 0.0f), SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2));
+				//g_debugRenderer->DrawLine(SimpleMath::Vector2(0.0f, 0.0f), SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2));
+				//g_debugRenderer->DrawLine(SimpleMath::Vector2(Graphics::getInstance().GetWidth(), 0.0f), SimpleMath::Vector2(Graphics::getInstance().GetWidth() / 2, Graphics::getInstance().GetHeight() / 2));
 
-				g_debugRenderer->DrawQuad(SimpleMath::Vector2(100.0f, 50.0f), SimpleMath::Vector2(150.0f, 50.0f),
-					SimpleMath::Vector2(150.0f, 100.0f), SimpleMath::Vector2(100.0f, 100.0f));
+				//g_debugRenderer->DrawQuad(SimpleMath::Vector2(100.0f, 50.0f), SimpleMath::Vector2(150.0f, 50.0f),
+					//SimpleMath::Vector2(150.0f, 100.0f), SimpleMath::Vector2(100.0f, 100.0f));
 
 
 				gom->Draw();
@@ -176,6 +222,7 @@ int main(int argc, char* args[])
 				ImGui::SetNextWindowPos({ 0,0 });
 				ImGui::Begin("2ndWindow", &open, ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_::ImGuiWindowFlags_NoBackground);
 				ImGui::Text("FPS: %03f", 1.0f / FrameRateController::getInstance().DeltaTime());
+				ImGui::Text("Player Health: %d", playerDamageable->health);
 				ImGui::End();
 
 

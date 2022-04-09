@@ -14,6 +14,7 @@
 #include "Drawable.h"
 #include "Camera.h"
 #include "Gun.h"
+#include "Damageable.h"
 
 using json = nlohmann::json;
 class Player : public Component

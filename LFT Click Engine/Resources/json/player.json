@@ -6,12 +6,11 @@
     "scaleY": 80,
     "rot": 0,
     "zPos": 5
-
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale" : 0.5,
-    "yScale" : 0.25,
+    "xScale": 0.5,
+    "yScale": 0.25,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -31,7 +30,7 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "image": "Resources\\images\\player_sprite_sheet.png"
+    "image": "Resources\\images\\enemy_sprite_sheet.png"
   },
   "5": {
     "speed": 0,
@@ -91,7 +90,7 @@
       {
         "name": ".\\Resources\\sounds\\walking.mp3",
         "loop": true,
-        "volume": 0,
+        "volume": 60,
         "playEvents": [
           1001
         ],
@@ -108,5 +107,8 @@
         "prefabTag": "bullet"
       }
     ]
+  },
+  "12": {
+    "health": 10
   }
 }

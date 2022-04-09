@@ -45,6 +45,20 @@ void Gun::Fire(int bulletIndex, float targetX, float targetY)
 	bulletTransform->SetPos(parentPos.x + bulletComp->direction.x * 70, parentPos.y + bulletComp->direction.y * 70);
 }
 
+void Gun::FireSine(int bulletIndex, float targetX, float targetY)
+{
+	GameObject* bullet = gom->ClonePrefabOfTag(gof, bulletTypes[bulletIndex].first);
+	Transform* bulletTransform = bullet->getComponent<Transform>();
+	Bullet* bulletComp = bullet->getComponent<Bullet>();
+	DirectX::SimpleMath::Vector2 parentPos = trans->CurrentPos();
+
+	DirectX::SimpleMath::Vector2 target(targetX, targetY);
+	bulletComp->direction.x = target.x - parentPos.x + (50 * sin(2 * 3.142 * 12 * 15 + 5));;
+	bulletComp->direction.y = target.y - parentPos.y;
+	bulletComp->direction.Normalize();
+	bulletTransform->SetPos(parentPos.x + bulletComp->direction.x * 70, parentPos.y + bulletComp->direction.y * 70);
+}
+
 Gun::Gun()
 {
 	gom = &GameObjectManager::getInstance();

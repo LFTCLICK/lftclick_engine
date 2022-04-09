@@ -21,6 +21,10 @@
       "tag": "player"
     },
     {
+      "prefab": "Resources\\json\\enemy.json",
+      "tag": "enemy"
+    },
+    {
       "prefab": "Resources\\json\\crosshairs.json",
       "tag": "crosshairs"
     }
@@ -28,34 +32,88 @@
   "Level": [
     {
       "object": "tile",
-      "overrides": []
+      "overrides": [
+        {
+          "1": {
+            "startX": -1120,
+            "startY": 0,
+            "scaleX": 100,
+            "scaleY": 2130,
+            "rot": 0,
+            "zPos": 10
+          },
+          "4": {
+            "center": [ 0.0, -0.0, 0.0 ],
+            "width": 100,
+            "height": 2500,
+            "trigger": false,
+            "deleteOnCollison": false
+          }
+        }
+      ]
     },
     {
       "object": "tile",
       "overrides": [
         {
           "1": {
-            "startX": 100,
-            "startY": 200,
-            "scaleX": 128,
-            "scaleY": 128,
+            "startX": 1120,
+            "startY": 0,
+            "scaleX": 100,
+            "scaleY": 2200,
             "rot": 0,
             "zPos": 10
+          },
+          "4": {
+            "center": [ 0.0, -0.0, 0.0 ],
+            "width": 100,
+            "height": 2500,
+            "trigger": false,
+            "deleteOnCollison": false
           }
         }
       ]
     },
     {
-      "object": "5thSprite",
+      "object": "tile",
       "overrides": [
         {
           "1": {
-            "startX": -300,
-            "startY": -300,
-            "scaleX": 128,
-            "scaleY": 128,
+            "startX": 0,
+            "startY": 1120,
+            "scaleX": 2130,
+            "scaleY": 100,
             "rot": 0,
             "zPos": 10
+          },
+          "4": {
+            "center": [ 0.0, -0.0, 0.0 ],
+            "width": 2500,
+            "height": 100,
+            "trigger": false,
+            "deleteOnCollison": false
+          }
+        }
+      ]
+    },
+    {
+      "object": "tile",
+      "overrides": [
+        {
+          "1": {
+            "startX": 0,
+            "startY": -1120,
+            "scaleX": 2130,
+            "scaleY": 100,
+            "rot": 0,
+            "zPos": 10
+          },
+          "4": {
+            "center": [ 0.0, -0.0, 0.0 ],
+            "width": 2500,
+            "height": 100,
+            "trigger": false,
+            "deleteOnCollison": false
           }
         }
       ]
@@ -69,8 +127,68 @@
       "overrides": [
         {
           "1": {
-            "startX": -300.0,
-            "startY": 300.0,
+            "startX": 0.0,
+            "startY": 0.0,
+            "scaleX": 64,
+            "scaleY": 64,
+            "rot": 0,
+            "zPos": 5
+          }
+        }
+      ]
+    },
+    {
+      "object": "enemy",
+      "overrides": [
+        {
+          "1": {
+            "startX": 1000.0,
+            "startY": 1000.0,
+            "scaleX": 64,
+            "scaleY": 64,
+            "rot": 0,
+            "zPos": 5
+          }
+        }
+      ]
+    },
+    {
+      "object": "enemy",
+      "overrides": [
+        {
+          "1": {
+            "startX": -1000.0,
+            "startY": -1000.0,
+            "scaleX": 64,
+            "scaleY": 64,
+            "rot": 0,
+            "zPos": 5
+          }
+        }
+      ]
+    },
+    {
+      "object": "enemy",
+      "overrides": [
+        {
+          "1": {
+            "startX": 1000.0,
+            "startY": -1000.0,
+            "scaleX": 64,
+            "scaleY": 64,
+            "rot": 0,
+            "zPos": 5
+          }
+        }
+      ]
+    },
+    {
+      "object": "enemy",
+      "overrides": [
+        {
+          "1": {
+            "startX": -1000.0,
+            "startY": 1000.0,
             "scaleX": 64,
             "scaleY": 64,
             "rot": 0,

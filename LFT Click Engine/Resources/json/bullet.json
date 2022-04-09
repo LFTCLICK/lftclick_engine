@@ -43,11 +43,24 @@
   "9": {
     "animationTime": 1,
     "speed": 500,
-    "keepAliveTime": 3
+    "keepAliveTime": 2
   },
   "6": {
     "spriteSheetWidth": 5,
     "spriteSheetHeight": 1,
     "frameTime": 0.05
+  },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\sounds\\clang.mp3",
+        "loop": false,
+        "volume": 3,
+        "pitchRange": [ 0.85, 1.15 ],
+        "playEvents": [
+          1000
+        ]
+      }
+    ]
   }
 }

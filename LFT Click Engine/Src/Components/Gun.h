@@ -37,6 +37,7 @@ public:
 public:
 	~Gun();
 	void Fire(int bulletIndex, float targetX, float targetY);
+	void FireSine(int bulletIndex, float targetX, float targetY);
 
 private:
 	GameObject* parent;

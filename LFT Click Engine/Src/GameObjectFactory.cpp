@@ -20,6 +20,7 @@
 #include "Components/Audible.h"
 #include "Components/SpriteAnimator.h"
 #include "Components/Player.h"
+#include "Components/Enemy.h"
 #include "Components/Bullet.h"
 #include "Components/Gun.h"
 #include "Components/FollowMouse.h"
@@ -90,6 +91,8 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new Damageable();
 	else if (compID == Component::CIRCLE_COLLIDER)
 		currentComp = new CircleCollider();
+	else if (compID == Component::ENEMY)
+		currentComp = new Enemy();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

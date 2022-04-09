@@ -57,6 +57,10 @@ void SquareCollider::CollisionCheck(GameObject* toCheck)
 	{
 		if (toCheck->getRawComponentPointer(13))
 		{
+			if (toCheck->getRawComponentPointer(7))
+			{
+				SDL_Quit();
+			}
 			return;
 		}
 		else

@@ -133,10 +133,16 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\CircleCollider.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\Collider.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Components\Enemy.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\EnemySpawner.cpp">
+      <Filter>Engine\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -252,7 +258,15 @@
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Damageable.h" />
-    <ClInclude Include="Src\Components\CircleCollider.h" />
+    <ClInclude Include="Src\Components\CircleCollider.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Enemy.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\EnemySpawner.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt">

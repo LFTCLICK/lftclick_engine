@@ -2,8 +2,8 @@
   "1": {
     "startX": 0.5,
     "startY": 0.5,
-    "scaleX": 5120,
-    "scaleY": 5120,
+    "scaleX": 2140,
+    "scaleY": 2140,
     "rot": 0,
     "zPos": 15
   },
@@ -37,9 +37,9 @@
   "8": {
     "sounds": [
       {
-        "name": ".\\Resources\\music\\background.mp3",
+        "name": ".\\Resources\\music\\intenseBackground.mp3",
         "loop": true,
-        "volume": 0,
+        "volume": 50,
         "playEvents": [
           1000
         ]

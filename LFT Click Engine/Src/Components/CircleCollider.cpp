@@ -19,6 +19,7 @@ CircleCollider::CircleCollider()
 void CircleCollider::Start()
 {
 	Transform* trans = parent->getComponent<Transform>();
+	playerScore = 0;
 	//center.x *= trans->scale.x;
 	//center.y *= trans->scale.y;
 }
