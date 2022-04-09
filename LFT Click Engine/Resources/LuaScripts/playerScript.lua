@@ -18,8 +18,8 @@ damage_cooldown_timer = 2
 
 playerSpeed = 350
 
-camSpeed = 400
-playerSpeedForSideScroller = 380
+camSpeed = 375
+playerSpeedForSideScroller = 375
 
 autopilot = false
 

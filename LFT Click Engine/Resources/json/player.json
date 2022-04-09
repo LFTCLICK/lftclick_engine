@@ -131,7 +131,7 @@
   "10": {
     "bulletTypes": [
       {
-        "fireRate": 3,
+        "fireRate": 7,
         "prefabTag": "bullet"
       }
     ],

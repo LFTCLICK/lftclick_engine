@@ -8,53 +8,27 @@ void EnemySpawner::Start()
 {
 	positiveBounds = Vector2(1280, 7680);
 	negativeBounds = Vector2(-1280, -7680);
-	spawnTimer = timeBetweenPhases;
+	spawnTimer = 0;
 	trans = componentOwner->getComponent<Transform>();
 	spawnerID = spawnAroundPlayer ? NEARPLAYER_ENEMY_SPAWNER_ID : g_GameManager->totalSpawners++;
 }
 
 void EnemySpawner::Update()
 {
-	//spawnTimer -= g_FrameRateController->DeltaTime();
+	spawnTimer -= g_FrameRateController->DeltaTime();
 
-	if (g_GameManager->IsSpawnerActivated(spawnerID)) 
+	int newVariable = 100;
+
+	if (g_GameManager->currentLevel == EGameLevel::Level0)
 	{
-		DirectX::SimpleMath::Vector2 spawnPos;
+		if (spawnTimer <= 0)
+		{
+			spawnTimer = 3;
+			DirectX::SimpleMath::Vector2 spawnPos;
 
-		if (spawnAroundPlayer && !g_GameManager->playerInsideHouse) {
-			DirectX::SimpleMath::Vector2 playerPos = g_GameManager->playerTrans->CurrentPos();
-			int halfWindowHeight = g_GameManager->windowHeight / 2, halfWindowWidth = g_GameManager->windowWidth / 2;
-
-			int randInt = Helpers::randWithinRange(0, 3);
-			int horizontalOrVertical = (randInt / 2 == 0), signMod = (randInt % 2 == 0 ? 1 : -1);
-
-			if (horizontalOrVertical) {
-				float distanceFromWindow = playerPos.x + (signMod * (halfWindowWidth + NEARPLAYER_SPAWN_DISTANCE_FROM_WINDOW));
-				spawnPos = {
-					Helpers::randWithinRange(distanceFromWindow, distanceFromWindow + signMod * NEARPLAYER_SPAWN_AREA_WIDTH),
-					Helpers::randWithinRange(playerPos.y - halfWindowHeight, playerPos.y + halfWindowHeight)
-				};
-			}
-			else {
-				float distanceFromWindow = playerPos.y + (signMod * (halfWindowHeight + NEARPLAYER_SPAWN_DISTANCE_FROM_WINDOW));
-				spawnPos = {
-					Helpers::randWithinRange(playerPos.x - halfWindowWidth, playerPos.x + halfWindowWidth),
-					Helpers::randWithinRange(distanceFromWindow, distanceFromWindow + signMod * NEARPLAYER_SPAWN_AREA_WIDTH)
-				};
-			}
-		}
-		else if (!spawnAroundPlayer) {
-			DirectX::SimpleMath::Vector2 currentPos = trans->CurrentPos();
-			float halfScaleWidth = trans->scale.x / 2, halfScaleHeight = trans->scale.y / 2;
-			spawnPos = {
-				Helpers::randWithinRange(currentPos.x - halfScaleWidth, currentPos.x + halfScaleWidth),
-				Helpers::randWithinRange(currentPos.y - halfScaleHeight, currentPos.y + halfScaleHeight)
-			};
-		}
-		else spawnPos = { 0, 0 };
-
-		if (!g_GameManager->IsPosInsideHouse(spawnPos)) {
+			spawnPos = componentOwner->trans->CurrentPos();
 			int spawnChanceRes = Helpers::randWithinRange(0, totalSpawnChance);
+
 			for (auto typeIt = enemyTypes.begin(); typeIt != enemyTypes.end(); typeIt++)
 			{
 				if (spawnChanceRes <= typeIt->first)
@@ -65,6 +39,58 @@ void EnemySpawner::Update()
 			}
 		}
 	}
+	else
+	{
+		if (g_GameManager->IsSpawnerActivated(spawnerID))
+		{
+			DirectX::SimpleMath::Vector2 spawnPos;
+
+			if (spawnAroundPlayer && !g_GameManager->playerInsideHouse) {
+				DirectX::SimpleMath::Vector2 playerPos = g_GameManager->playerTrans->CurrentPos();
+				int halfWindowHeight = g_GameManager->windowHeight / 2, halfWindowWidth = g_GameManager->windowWidth / 2;
+
+				int randInt = Helpers::randWithinRange(0, 3);
+				int horizontalOrVertical = (randInt / 2 == 0), signMod = (randInt % 2 == 0 ? 1 : -1);
+
+				if (horizontalOrVertical) {
+					float distanceFromWindow = playerPos.x + (signMod * (halfWindowWidth + NEARPLAYER_SPAWN_DISTANCE_FROM_WINDOW));
+					spawnPos = {
+						Helpers::randWithinRange(distanceFromWindow, distanceFromWindow + signMod * NEARPLAYER_SPAWN_AREA_WIDTH),
+						Helpers::randWithinRange(playerPos.y - halfWindowHeight, playerPos.y + halfWindowHeight)
+					};
+				}
+				else {
+					float distanceFromWindow = playerPos.y + (signMod * (halfWindowHeight + NEARPLAYER_SPAWN_DISTANCE_FROM_WINDOW));
+					spawnPos = {
+						Helpers::randWithinRange(playerPos.x - halfWindowWidth, playerPos.x + halfWindowWidth),
+						Helpers::randWithinRange(distanceFromWindow, distanceFromWindow + signMod * NEARPLAYER_SPAWN_AREA_WIDTH)
+					};
+				}
+			}
+			else if (!spawnAroundPlayer) {
+				DirectX::SimpleMath::Vector2 currentPos = trans->CurrentPos();
+				float halfScaleWidth = trans->scale.x / 2, halfScaleHeight = trans->scale.y / 2;
+				spawnPos = {
+					Helpers::randWithinRange(currentPos.x - halfScaleWidth, currentPos.x + halfScaleWidth),
+					Helpers::randWithinRange(currentPos.y - halfScaleHeight, currentPos.y + halfScaleHeight)
+				};
+			}
+			else spawnPos = { 0, 0 };
+
+			if (!g_GameManager->IsPosInsideHouse(spawnPos)) {
+				int spawnChanceRes = Helpers::randWithinRange(0, totalSpawnChance);
+				for (auto typeIt = enemyTypes.begin(); typeIt != enemyTypes.end(); typeIt++)
+				{
+					if (spawnChanceRes <= typeIt->first)
+					{
+						g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), typeIt->second)->getComponent<Transform>()->SetPos(spawnPos.x, spawnPos.y);
+						break;
+					}
+				}
+			}
+		}
+	}	
+	
 
 	// past this is going unused as of now
 	if (spawnTimer <= 0.0f)
@@ -141,8 +167,3 @@ Component* EnemySpawner::Clone(GameObject* newParent)
 	toReturn->componentOwner = newParent;
 	return toReturn;
 }
-
-//newObj->getComponent<Transform>()->SetPos(myPos.x + (rand() % (int)bounds.x) - (bounds.x / 2), myPos.y +
-//	(rand() % (int)bounds.y) - (bounds.y / 2));
-
-//slope* x + c

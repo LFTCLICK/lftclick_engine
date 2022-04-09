@@ -583,6 +583,12 @@
     <None Include="Resources\json\side_scroller.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\junkForSideScroller.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\water_puddle.json">
+      <Filter>JSON</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">
