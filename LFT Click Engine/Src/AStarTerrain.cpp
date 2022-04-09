@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <queue>
 #include "AStarTerrain.h"
+#include "GameManager.h"
 
 #define SQRT_2 1.41421356237
 
@@ -247,13 +248,20 @@ int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::
 
 AStarTerrain::~AStarTerrain()
 {
-    for (int i = 0; i < clientWidth; i++)
+    if (g_GameManager->currentLevel == EGameLevel::Level0)
     {
-        delete terrain[i];
-        delete nodeMap[i];
+       
     }
-    delete[] terrain;
-    delete[] nodeMap;
+    else
+    {
+        for (int i = 0; i < clientWidth; i++)
+        {
+            delete terrain[i];
+            delete nodeMap[i];
+        }
+        delete[] terrain;
+        delete[] nodeMap;
+    }
 }
 
 float AStarTerrain::Octile(GridPos* start, GridPos* end)

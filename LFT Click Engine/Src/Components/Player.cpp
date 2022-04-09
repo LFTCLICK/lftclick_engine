@@ -46,11 +46,14 @@ void Player::Start()
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\health_icon.png", nullptr, &healthSRV));
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\motorcycle_icon.png", nullptr, &bikepartsSRV));
 
-	if (autopilot) cam->SetAutopilotVelocity("right", camSpeed);
+
+	if (autopilot)
+		cam->SetAutopilotVelocity("right", camSpeed);
 }
 
 void Player::Update()
 {
+
 	player_script_update();
 
 	//Wood count HUD

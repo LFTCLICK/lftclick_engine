@@ -449,6 +449,7 @@
     <None Include="Resources\json\grassTile.json" />
     <None Include="Resources\json\invin.json" />
     <None Include="Resources\json\junk.json" />
+    <None Include="Resources\json\junkForSideScroller.json" />
     <None Include="Resources\json\menu.json" />
     <None Include="Resources\json\player.json" />
     <None Include="Resources\json\prefabs.json" />
@@ -462,6 +463,7 @@
     <None Include="Resources\json\tree.json" />
     <None Include="Resources\json\turret.json" />
     <None Include="Resources\json\wall.json" />
+    <None Include="Resources\json\water_puddle.json" />
     <None Include="Resources\json\woodpile.json" />
     <None Include="Resources\json\zombie.json" />
     <None Include="Resources\json\zombieSpawner.json" />

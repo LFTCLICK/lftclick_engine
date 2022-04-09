@@ -49,12 +49,20 @@
       "tag": "ghost"
     },
     {
-      "prefab": "Resources\\json\\junk.json",
+      "prefab": "Resources\\json\\junkForSideScroller.json",
       "tag": "junk"
     },
     {
       "prefab": "Resources\\json\\big_tree.json",
       "tag": "big_tree"
+    },
+    {
+      "prefab": "Resources\\json\\enemySpawner.json",
+      "tag": "enemy_spawner"
+    },
+    {
+      "prefab": "Resources\\json\\water_puddle.json",
+      "tag": "water_puddle"
     }
   ],
   "Map": {
@@ -63,7 +71,9 @@
       "5b3d2e": "wall",
       "f5b0cb": "junk",
       "fbbc05": "tree",
-      "a37900": "big_tree"
+      "a37900": "big_tree",
+      "fe3c3c": "enemy_spawner",
+      "0bfff": "water_puddle"
     },
     "objectSize": 60
   },
@@ -99,8 +109,40 @@
       ]
     },
     {
+      "object": "zombie",
+      "overrides": [
+        {
+          "103": {
+            "attackTimer": 3.0,
+            "damage": 15.0,
+            "speed": 325.0
+          }
+        }
+      ]
+    },
+    {
       "object": "crosshairs",
       "overrides": []
+    },
+    {
+      "object": "enemy_spawner",
+      "overrides": [
+        {
+          "101": {
+            "enemyTypes": [
+              {
+                "name": "zombie",
+                "spawnChance": 80
+              },
+              {
+                "name": "ghost",
+                "spawnChance": 0
+              }
+            ],
+            "spawnAroundPlayer": true
+          }
+        }
+      ]
     }
   ]
 }

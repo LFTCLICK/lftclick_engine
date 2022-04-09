@@ -34,7 +34,7 @@ void GameManager::Update() {
 	UpdateDanger();
 	UpdateLevel();
 	UpdateInsideHouse();
-	//UpdateSpawners();
+	UpdateSpawners();
 }
 
 void GameManager::UpdateTime()
