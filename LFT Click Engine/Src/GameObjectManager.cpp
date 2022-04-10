@@ -292,9 +292,9 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 							}
 						}
 
-						trans->SetPos(mapX, mapY);
+						myTransform->SetPos(mapX, mapY);
 						if(map["key"][colorHexString]!="rug")
-							trans->zPos = 5 + ((trans->position.y + g_GameManager->mapHeight) / zHelper);
+							myTransform->zPos = 5 + ((myTransform->position.y + g_GameManager->mapHeight) / zHelper);
 
 						// Think I basically handled this up above, but leaving this code in just in case
 

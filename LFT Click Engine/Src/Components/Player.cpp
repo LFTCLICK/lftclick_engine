@@ -58,7 +58,7 @@ void Player::Update()
 	//Bike parts count HUD
 	g_Renderer->GetSpriteBatch()->Draw(bikepartsSRV.Get(), XMVectorSet(4, 50, 0, 0), nullptr,
 		Colors::White, 0.0f, XMVectorZero(), 2.6f);
-	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), std::to_string(parts).c_str(),
+	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), (std::to_string(parts) + std::string("/8")).c_str(),
 		XMFLOAT2(50, 60), Colors::White, 0.0f, XMFLOAT2(0, 0));
 
 	//Player health HUD
@@ -80,23 +80,22 @@ void Player::Update()
 		myTransform->Move(dashVelocity.x, dashVelocity.y);
 	}
 
-	if (parts == 0 && introTimer<5.0f)
+	if (parts == 0 && introTimer <15.0f)
 	{
-
 		drawable->HUD_DrawTextCenter("I need to find 8 motorcycle parts to fix my bike.", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
 	if (parts >= 8)
 	{
 		g_GameManager->playerDead = true;
-		g_GameManager->playerWon= true;
+		g_GameManager->playerWon = true;
 	}
 	if (autopilot)
 		Sidescroll(g_FrameRateController->DeltaTime());
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
-	g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100);
-	trans->zPos = 5 + ((trans->position.y + g_GameManager->mapHeight) / zHelper);
+	g_AudioManager->SetPlayerSpatialPosition(myTransform->CurrentPos() / 100);
+	myTransform->zPos = 5 + ((myTransform->position.y + g_GameManager->mapHeight) / zHelper);
 	introTimer += g_FrameRateController->DeltaTime();
 }
 
@@ -149,5 +148,5 @@ void Player::ChangePlayerState() {
 }
 
 void Player::Sidescroll(float deltaTime) {
-	Move((playerSpeed + (cam->xPos - trans->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
+	Move((playerSpeed + (cam->xPos - myTransform->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
 }

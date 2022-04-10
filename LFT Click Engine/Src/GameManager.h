@@ -85,6 +85,7 @@ public:
 		playerDead(false), 
 		playerWon(false), 
 		darknessLevel(0),
+		displayDarknessLevel(0),
 		monsterCount(0),
 		dangerLevel(0),
 		mapHeight(10000.0f),
@@ -149,6 +150,7 @@ public:
 	bool playerWon;
 	bool playerInsideHouse;
 	float darknessLevel;
+	float displayDarknessLevel;
 	int monsterCount;
 	int harshLightOfDay;
 	int windowWidth;
@@ -160,6 +162,9 @@ public:
 	float spawnIntervalMax;
 	Camera* mainCamera;
 	Transform* playerTrans;
+
+	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(0 - 2280.0f / 2, -2280.0f / 2, 2180.0f, 2180.0f);
+
 
 	int day;
 	float time;

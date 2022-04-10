@@ -279,7 +279,7 @@ void Renderer::Draw()
 	
 		const PS_cbPerObject cbValues_PS =
 		{
-			(gameObject->tag == "player" || gameObject->tag == "zombie") ? 0.0f : g_GameManager->GetDarknessLevel()
+			(gameObject->tag == "player" || gameObject->tag == "zombie") ? 0.0f : g_GameManager->displayDarknessLevel
 		};
 	
 		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
@@ -311,7 +311,7 @@ void Renderer::Draw()
 
 	const PS_cbPerObject cbValues_PS = 
 	{
-		g_GameManager->GetDarknessLevel()
+		g_GameManager->darknessLevel
 	};
 
 

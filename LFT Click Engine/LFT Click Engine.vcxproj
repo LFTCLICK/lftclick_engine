@@ -126,7 +126,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>Src;..\Libraries\FMOD Studio API Windows\api\core\inc;..\Libraries\FMOD Studio API Windows\api\studio\inc;..\Libraries\imgui-1.82\backends;..\Libraries\LUA\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -367,6 +367,7 @@
     <ClInclude Include="..\Libraries\imgui-1.82\misc\cpp\imgui_stdlib.h" />
     <ClInclude Include="LuaManager.h" />
     <ClInclude Include="Src\AStarTerrain.h" />
+    <ClInclude Include="Src\Components\Door.h" />
     <ClInclude Include="Src\Components\Interactable.h" />
     <ClInclude Include="Src\AudioManager.h" />
     <ClInclude Include="Src\CollisionResolution.h" />
@@ -377,9 +378,6 @@
     <ClInclude Include="Src\Components\Collider.h" />
     <ClInclude Include="Src\Components\Component.h" />
     <ClInclude Include="Src\Components\Damageable.h" />
-    <ClInclude Include="Src\Components\Door.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
     <ClInclude Include="Src\Components\Drawable.h" />
     <ClInclude Include="Src\Components\Enemy.h" />
     <ClInclude Include="Src\Components\EnemySpawner.h" />

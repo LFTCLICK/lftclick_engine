@@ -99,7 +99,7 @@ void Enemy::Update()
 
 		//trans->zPos = trans->position.y / 1000.0f;
 		//trans->zPos = (trans->position.y + g_GameManager->mapHeight) / 1000.0f;
-		trans->zPos = 5+((trans->position.y + g_GameManager->mapHeight) / zHelper);
+		myTransform->zPos = 5+((myTransform->position.y + g_GameManager->mapHeight) / zHelper);
 
 	} 
 	else 
