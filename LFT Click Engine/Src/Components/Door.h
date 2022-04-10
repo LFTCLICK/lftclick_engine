@@ -41,7 +41,7 @@ public:
 	float repairTime;
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 
 	SquareCollider* squareCollider;
 	Drawable* drawable;

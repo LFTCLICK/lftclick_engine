@@ -5,7 +5,7 @@
 void SpriteAnimator::Start()
 {
 	drawable = componentOwner->getComponent<Drawable>();
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	timer = 0;
 	xOffset = 1.0f / spriteSheetWidth;
 	yOffset = 1.0f / spriteSheetHeight;
@@ -14,7 +14,7 @@ void SpriteAnimator::Start()
 void SpriteAnimator::UpdateDirection()
 {
 	oldDirection = direction;
-	auto directionVec = trans->lastMovement;
+	auto directionVec = myTransform->lastMovement;
 	if (directionVec.x != 0 || directionVec.y != 0) {
 		if (abs(directionVec.x) > abs(directionVec.y) && moveAnimationIndices["right"] > -1) {
 			if (directionVec.x > 0 && moveAnimationIndices["right"] > -1) {
@@ -37,7 +37,7 @@ void SpriteAnimator::UpdateDirection()
 void SpriteAnimator::UpdateState(bool forceUpdate)
 {
 	if (forceUpdate || 
-		trans->isMoving != wasMoving || 
+		myTransform->isMoving != wasMoving || 
 		direction != oldDirection || 
 		isDamaged != wasDamaged || 
 		isDead != wasDead || 
@@ -53,12 +53,12 @@ void SpriteAnimator::UpdateState(bool forceUpdate)
 			SwitchAnimation(interactRangeAnimationIndex);
 		}
 		else {
-			if (moveAnimationIndices["right"] > -1 && trans->isMoving)
+			if (moveAnimationIndices["right"] > -1 && myTransform->isMoving)
 				SwitchAnimation(moveAnimationIndices[moveAnimationIndices[direction] > -1 ? direction : "right"]);
-			if (idleAnimationIndices["right"] > -1 && !trans->isMoving)
+			if (idleAnimationIndices["right"] > -1 && !myTransform->isMoving)
 				SwitchAnimation(idleAnimationIndices[idleAnimationIndices[direction] > -1 ? direction : "right"]);
 		}
-		wasMoving = trans->isMoving;
+		wasMoving = myTransform->isMoving;
 		wasDamaged = isDamaged;
 		wasDead = isDead;
 		wasInRange = isInRange;

@@ -24,7 +24,7 @@ using json = nlohmann::json;
 class Enemy : public Component
 {
 public:
-	Enemy() : path(), ignoreWalls(false) {};
+	Enemy() : path(), ignoreWalls(false), wanderCircleRadius(1000.0f), targetPlayerRadius(50.0f), targetPosition() {};
 
 	// Inherited via Component
 	virtual void Start() override;
@@ -40,13 +40,17 @@ public:
 	float attackTimer, timer;
 	float damage;
 	float pathTimer=0;
+	float wanderCircleRadius;
+	float targetPlayerRadius;
 	float speed;
 	float aiSwitchDistance;
-	bool hanginWithTheHomies;
 	bool switchToPlayer;
 	bool ignoreWalls;
 	DirectX::SimpleMath::Vector2 goal;
 	DirectX::SimpleMath::Vector2 targetBeforePlayer;
+	DirectX::SimpleMath::Vector2 targetPosition;
+	DirectX::SimpleMath::Vector2 targetVector;
+
 	std::list<DirectX::SimpleMath::Vector2> path;
 	std::list<DirectX::SimpleMath::Vector2>::iterator currentPathPos;
 	bool useObstacleAvoidance;
@@ -57,7 +61,7 @@ public:
 	bool daylightDeathTriggered;
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 	Transform* playerTrans;
 	float zHelper;
 };

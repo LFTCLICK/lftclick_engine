@@ -24,7 +24,7 @@ void Audible::Start() {
 		PlaySoundsOnEvent(AUDIO_ON_START);
 	}
 
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 
 	if (generateRandomTime)
 		randomTime = ((float)rand() / RAND_MAX) * DAY_LENGTH;
@@ -61,15 +61,15 @@ void Audible::Update() {
 		}
 	}
 	else {
-		if (trans != nullptr) {
-			if (trans->isMoving != trans->wasMoving) {
-				HandleSoundsOnEvent(trans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-				if (!trans->isMoving && trans->CurrentPos().x < 10000000.f && trans->CurrentPos().x > -10000000.f)
-					am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100, { 0, 0 });
+		if (myTransform != nullptr) {
+			if (myTransform->isMoving != myTransform->wasMoving) {
+				HandleSoundsOnEvent(myTransform->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
+				if (!myTransform->isMoving && myTransform->CurrentPos().x < 10000000.f && myTransform->CurrentPos().x > -10000000.f)
+					am->SetGroupSpatialPosition(channelGroupName, myTransform->CurrentPos() / 100, { 0, 0 });
 			}
 
-			if (trans->isMoving && trans->CurrentPos().x < 10000000.f && trans->CurrentPos().x > -10000000.f)
-				am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
+			if (myTransform->isMoving && myTransform->CurrentPos().x < 10000000.f && myTransform->CurrentPos().x > -10000000.f)
+				am->SetGroupSpatialPosition(channelGroupName, myTransform->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
 	}
 

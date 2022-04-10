@@ -59,7 +59,7 @@ public:
 	sol::load_result player_script_update;
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 	Camera* cam;
 	Gun* gun;
 	Drawable* drawable;

@@ -19,6 +19,8 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
+extern SDL_Window* g_pWindow;
+
 namespace
 {
 #include "Shaders/Compiled/Compiled_PS.h"
@@ -31,8 +33,11 @@ Renderer::Renderer() :
 	depthStencilBufferFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
 	depthStencilViewFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
 	msaaQuality(0),
-	msaaSampleCount(1)
+	msaaSampleCount(1),
+	displayModes(nullptr),
+	numModes(0)
 {
+
 }
 
 Renderer::~Renderer()
@@ -40,14 +45,15 @@ Renderer::~Renderer()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+
+	delete[] displayModes;
 }
-void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
+void Renderer::Initialize(HWND hWnd)
 {
-	//setup devices
 
 	UINT flags = D3D11_CREATE_DEVICE_SINGLETHREADED;
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(_DEBUG)
 	flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
@@ -73,10 +79,6 @@ void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 
 	DXGI_SWAP_CHAIN_DESC sd;
 
-	sd.BufferDesc.Width = clientWidth;
-	sd.BufferDesc.Height = clientHeight;
-	sd.BufferDesc.RefreshRate.Numerator = 60;
-	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Format = backBufferFormat;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -94,28 +96,47 @@ void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 	sd.Flags = 0;
 
 	ComPtr<IDXGIDevice> dxgiDevice;
-	if FAILED(device.As(&dxgiDevice))
-		assert(false);
-
+	DX::ThrowIfFailed(device.As(&dxgiDevice));
 
 	ComPtr<IDXGIAdapter> dxgiAdapter;
-	if FAILED(dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf()))
-		assert(false);
-
+	DX::ThrowIfFailed(dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf()));
+	
 
 	ComPtr<IDXGIFactory1> dxgiFactory;
-	if FAILED(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), &dxgiFactory))
-		assert(false);
-
-	if FAILED(dxgiFactory->CreateSwapChain(device.Get(), &sd, swapChain.ReleaseAndGetAddressOf()))
-		assert(false);
+	DX::ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), &dxgiFactory));
 
 
-	OnResize(initWidth, initHeight);
+	//Enumerate supported resolutions
+	ComPtr<IDXGIOutput> pOutput;
+	DX::ThrowIfFailed(dxgiAdapter->EnumOutputs(0, &pOutput));
+	DX::ThrowIfFailed(pOutput->GetDisplayModeList(backBufferFormat, 0, &numModes, NULL));
+	displayModes = new DXGI_MODE_DESC[numModes];
+	DX::ThrowIfFailed(pOutput->GetDisplayModeList(backBufferFormat, 0, &numModes, displayModes));
+
+	printf_s("Querying supported resoultions:\n");
+
+	for (UINT i = 0; i < numModes; ++i)
+	{
+		printf_s("%dx%d   %.2fHz\n", displayModes[i].Width, displayModes[i].Height,
+			static_cast<float>(displayModes[i].RefreshRate.Numerator) / displayModes[i].RefreshRate.Denominator);
+	}
+
+	//Choose highest resolution/refresh rate
+	clientWidth = displayModes[numModes - 1].Width;
+	clientHeight = displayModes[numModes - 1].Height;
+
+	SDL_SetWindowSize(g_pWindow, clientWidth, clientHeight);
+
+	sd.BufferDesc.Width = clientWidth;
+	sd.BufferDesc.Height = clientHeight;
+	sd.BufferDesc.RefreshRate = displayModes[numModes - 1].RefreshRate;
+
+	DX::ThrowIfFailed(dxgiFactory->CreateSwapChain(device.Get(), &sd, swapChain.ReleaseAndGetAddressOf()));
+
+	OnResize(clientWidth, clientHeight);
 
 	//disable ALT-enter fullscreen
-	dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
-
+	//dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
 
 	CreateDeviceDependentResources();
 }

@@ -17,7 +17,7 @@ using namespace DirectX::SimpleMath;
 
 void Damageable::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	anim = componentOwner->getComponent<SpriteAnimator>();
 	audio = componentOwner->getComponent<Audible>();
 	drawable = componentOwner->getComponent<Drawable>();
@@ -33,7 +33,7 @@ void Damageable::Update()
 		componentOwner->isDeletable = true;
 	}
 	if (knockbackMod != 0 && (velocity.x != 0 || velocity.x != 0)) {
-		trans->Move(velocity.x * knockbackMod, velocity.y * knockbackMod);
+		myTransform->Move(velocity.x * knockbackMod, velocity.y * knockbackMod);
 		
 		velocity *= inertiaMod;
 	}

@@ -24,9 +24,9 @@ SquareCollider::SquareCollider()
 
 void SquareCollider::Start()
 {
-	Transform* trans = componentOwner->getComponent<Transform>();
-	center.x *= trans->scale.x;
-	center.y *= trans->scale.y;
+	Transform* myTransform = componentOwner->getComponent<Transform>();
+	center.x *= myTransform->scale.x;
+	center.y *= myTransform->scale.y;
 	points = new float[8];
 	points[0] = (.5f*clientWidth) + center.x;
 	points[1] = (.5f*clientHeight) + center.y;

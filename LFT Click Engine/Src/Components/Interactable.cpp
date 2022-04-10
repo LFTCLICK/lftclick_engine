@@ -17,7 +17,7 @@ bool Interactable::tutorialUI = true;
 
 void Interactable::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	audio = componentOwner->getComponent<Audible>();
 	anim = componentOwner->getComponent<SpriteAnimator>();
 	drawable = componentOwner->getComponent<Drawable>();
@@ -117,7 +117,7 @@ void Interactable::CompleteInteraction() {
 }
 
 bool Interactable::IsPlayerInRange() {
-	DirectX::SimpleMath::Vector2 pos = trans->CurrentPos(), playerPos = g_GameManager->playerTrans->CurrentPos();
+	DirectX::SimpleMath::Vector2 pos = myTransform->CurrentPos(), playerPos = g_GameManager->playerTrans->CurrentPos();
 
 	return (pos - playerPos).LengthSquared() < interactDistanceSq;
 }

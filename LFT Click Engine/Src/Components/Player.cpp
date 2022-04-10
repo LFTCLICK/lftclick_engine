@@ -24,7 +24,7 @@ void Player::Start()
 	sol::function dashSpeedMultiplier = lua_player_state["dashSpeedMultiplyer"];
 	dashSpeed = dashSpeedMultiplier();
 
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 
 	drawable = componentOwner->getComponent<Drawable>();
@@ -67,12 +67,12 @@ void Player::Update()
 			isDashing = false;
 			dashTimer = 0;
 		}
-		trans->Move(dashVelocity.x, dashVelocity.y);
+		myTransform->Move(dashVelocity.x, dashVelocity.y);
 	}
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
-	g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100);
+	g_AudioManager->SetPlayerSpatialPosition(myTransform->CurrentPos() / 100);
 }
 
 Component* Player::Clone(GameObject* newParent) {
@@ -111,12 +111,12 @@ void Player::HandleMessage(Message* e)
 }
 
 void Player::Move(float deltaX, float deltaY) {
-	if (!isDashing) trans->Move(deltaX, deltaY);
+	if (!isDashing) myTransform->Move(deltaX, deltaY);
 }
 
 void Player::Dash() {
 	isDashing = true;
-	dashVelocity = trans->lastMovement * dashSpeed;
+	dashVelocity = myTransform->lastMovement * dashSpeed;
 }
 
 void Player::ChangePlayerState() {

@@ -78,19 +78,25 @@ class Renderer
 
 	std::unique_ptr<DirectX::CommonStates> states;
 
+
+	DXGI_MODE_DESC* displayModes;
+	UINT numModes;
 public:
 	Renderer();
 	~Renderer();
 	Renderer(const Renderer&) = delete;
 	Renderer& operator=(const Renderer&) = delete;
 
-	void Initialize(HWND hWnd, int initWidth, int initHeight);
+	void Initialize(HWND hWnd);
 	void InitImGui(SDL_Window* pWindow);
 
 	void PrepareForRendering();
 	void Draw();
 	void PresentFrame();
 	void OnResize(int newWidth, int newHeight);
+
+	DXGI_MODE_DESC GetSupportedDisplayMode(UINT index) const { return displayModes[index]; }
+	UINT GetNumDisplayModes() const { return numModes; }
 
 	ID3D11DeviceContext* GetContext() const { return immediateContext.Get(); }
 	ID3D11Device* GetDevice() const { return device.Get(); }

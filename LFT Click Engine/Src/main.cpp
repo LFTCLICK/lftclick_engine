@@ -3,10 +3,7 @@
 // File Name		:	main.cpp
 // Author			:	Vance Howald
 // Creation Date	:	2021/10/06
-// Purpose			:	implementation of the 'play' game state
-// History			:
-// 2021/10/29		-	Added component based arch
-// 2021/12/01		-	Added messaging
+// Purpose			:	main game loop
 // ---------------------------------------------------------------------------
 #define no_init_all deprecated
 
@@ -32,8 +29,8 @@ using json = nlohmann::json;
 
 using namespace DirectX;
 
-constexpr auto INITIAL_WINDOW_WIDTH = 800;
-constexpr auto INITIAL_WINDOW_HEIGHT = 600;
+constexpr auto INITIAL_WINDOW_WIDTH = 1600;
+constexpr auto INITIAL_WINDOW_HEIGHT = 900;
 
 std::unique_ptr<DebugRenderer> g_DebugRenderer;
 std::unique_ptr<Renderer> g_Renderer;
@@ -47,6 +44,8 @@ std::unique_ptr<AudioManager> g_AudioManager;
 std::unique_ptr<LuaManager> g_LuaManager;
 std::unique_ptr<AStarTerrain> g_AStarTerrain;
 
+SDL_Window* g_pWindow;
+
 int main(int argc, char* args[])
 {
 	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
@@ -58,18 +57,18 @@ int main(int argc, char* args[])
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0)
 	{
-		std::cout << "SDL_Init failed, erorr" << std::endl;
+		MessageBox(NULL, L"SDL_Init failed, error", 0, MB_OK | MB_ICONERROR);
 		return 1;
 
 	}
 
-	SDL_Window* pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	g_pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE );
 
-	if (!pWindow)
+	if (!g_pWindow)
 		return 1;
 
 	SDL_Surface* icon = ResourceManager::getInstance().GetResource("Resources\\images\\icon.bmp");
-	SDL_SetWindowIcon(pWindow, icon);
+	SDL_SetWindowIcon(g_pWindow, icon);
 
 	g_LuaManager = std::make_unique<LuaManager>();
 	g_FrameRateController = std::make_unique<FrameRateController>();
@@ -77,15 +76,13 @@ int main(int argc, char* args[])
 	g_GameObjManager = std::make_unique<GameObjectManager>();
 	g_GameObjFactory = std::make_unique<GameObjectFactory>();
 	g_EventManager = std::make_unique<EventManager>();
-
 	g_GameManager = std::make_unique<GameManager>();
-
 	g_AudioManager = std::make_unique<AudioManager>();
 	g_AStarTerrain = std::make_unique<AStarTerrain>();
 
 	g_Renderer = std::make_unique<Renderer>();
-	g_Renderer->Initialize(GetActiveWindow(), INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT);
-	g_Renderer->InitImGui(pWindow);
+	g_Renderer->Initialize(GetActiveWindow());
+	g_Renderer->InitImGui(g_pWindow);
 
 	g_GameManager->windowHeight = g_Renderer->GetWidth();
 	g_GameManager->windowWidth = g_Renderer->GetHeight();
@@ -121,7 +118,7 @@ int main(int argc, char* args[])
 		case SDL_WINDOWEVENT:
 			if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) 
 			{
-				SDL_SetWindowSize(pWindow, e.window.data1, e.window.data2);
+				SDL_SetWindowSize(g_pWindow, e.window.data1, e.window.data2);
 				g_Renderer->OnResize(e.window.data1, e.window.data2);
 			}
 			break;
@@ -149,7 +146,7 @@ int main(int argc, char* args[])
 			{
 				g_GameManager->LoadLevel(dataJson2);
 			}
-			
+
 			if (ImGui::Button("Quit", { 100, 50 }))
 			{
 				e.type = SDL_QUIT;
@@ -225,9 +222,6 @@ int main(int argc, char* args[])
 			g_DebugRenderer->Draw(g_Renderer->GetContext(), g_Renderer->GetWidth(), g_Renderer->GetHeight());
 #endif
 			break;
-		default:
-			assert("fix ur shit");
-			break;
 		}
 
 		g_Renderer->PresentFrame();
@@ -236,11 +230,9 @@ int main(int argc, char* args[])
 	CoUninitialize();
 
 	g_GameObjManager->DeleteAll();
-
 	g_EventManager->Reset();
-	g_GameManager->playerDead = false;
 
-	SDL_DestroyWindow(pWindow);
+	SDL_DestroyWindow(g_pWindow);
 	SDL_Quit();
 
 	return 0;

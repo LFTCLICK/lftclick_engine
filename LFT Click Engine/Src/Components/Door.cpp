@@ -5,7 +5,7 @@
 
 void Door::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	squareCollider = componentOwner->getComponent<SquareCollider>();
 	drawable = componentOwner->getComponent<Drawable>();
 	player = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
