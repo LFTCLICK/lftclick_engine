@@ -20,6 +20,7 @@
 // The darkness alpha level is produced by "GetDarknessLevel()".
 
 #include <json.hpp>
+#include <Helpers.h>
 
 //#define SUN_SETTING 73.2473f		// when the light should begin getting brighter
 //#define SUN_DOWN 125.3655f		// when the light should remain at the brightest
@@ -82,6 +83,7 @@ public:
 	GameManager() : 
 		playerObj(nullptr),
 		playerDead(false), 
+		playerWon(false), 
 		darknessLevel(0),
 		monsterCount(0),
 		dangerLevel(0),
@@ -144,6 +146,7 @@ public:
 public:
 	GameObject* playerObj;
 	bool playerDead;
+	bool playerWon;
 	bool playerInsideHouse;
 	float darknessLevel;
 	int monsterCount;

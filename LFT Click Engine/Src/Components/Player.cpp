@@ -11,6 +11,8 @@ using namespace DirectX;
 
 void Player::Start()
 {
+	cam = componentOwner->getComponent<Camera>();
+
 	g_LuaManager->RegGlobals(lua_player_state);
 	g_LuaManager->RegObjectFunctions(lua_player_state, componentOwner);
 	lua_player_state.open_libraries(sol::lib::base, sol::lib::package);
@@ -23,6 +25,10 @@ void Player::Start()
 	health = returnHp();
 	sol::function dashSpeedMultiplier = lua_player_state["dashSpeedMultiplyer"];
 	dashSpeed = dashSpeedMultiplier();
+	sol::function isAutopilot = lua_player_state["isAutopilot"];
+	autopilot = isAutopilot();
+	sol::function getPlayerSpeed = lua_player_state["getPlayerSpeed"];
+	playerSpeed = getPlayerSpeed();
 
 	myTransform = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
@@ -33,6 +39,10 @@ void Player::Start()
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\wood_icon.png", nullptr, &woodSRV));
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\health_icon.png", nullptr, &healthSRV));
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\motorcycle_icon.png", nullptr, &bikepartsSRV));
+
+	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	zHelper = g_GameManager->mapHeight / 2.0f;
+	introTimer = 0;
 }
 
 void Player::Update()
@@ -70,9 +80,24 @@ void Player::Update()
 		myTransform->Move(dashVelocity.x, dashVelocity.y);
 	}
 
+	if (parts == 0 && introTimer<5.0f)
+	{
+
+		drawable->HUD_DrawTextCenter("I need to find 8 motorcycle parts to fix my bike.", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+	if (parts >= 8)
+	{
+		g_GameManager->playerDead = true;
+		g_GameManager->playerWon= true;
+	}
+	if (autopilot)
+		Sidescroll(g_FrameRateController->DeltaTime());
+
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
-	g_AudioManager->SetPlayerSpatialPosition(myTransform->CurrentPos() / 100);
+	g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100);
+	trans->zPos = 5 + ((trans->position.y + g_GameManager->mapHeight) / zHelper);
+	introTimer += g_FrameRateController->DeltaTime();
 }
 
 Component* Player::Clone(GameObject* newParent) {
@@ -95,8 +120,7 @@ void Player::HandleMessage(Message* e)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
 
-		if(e->otherObject->componentOwner->tag != "door")
-			Move(cm->deltaPos.x, cm->deltaPos.y);
+		Move(cm->deltaPos.x, cm->deltaPos.y);
 
 		if (e->otherObject->componentOwner->tag == "zombie")
 		{
@@ -122,4 +146,8 @@ void Player::Dash() {
 void Player::ChangePlayerState() {
 	health -= 15;
 	if (health <= 0) { g_GameManager->playerDead = true; }
+}
+
+void Player::Sidescroll(float deltaTime) {
+	Move((playerSpeed + (cam->xPos - trans->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
 }

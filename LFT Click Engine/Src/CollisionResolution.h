@@ -125,11 +125,8 @@ private:
 				return DirectX::SimpleMath::Vector2();
 
 			DirectX::SimpleMath::Vector2 delta = aPos-intersectionPoint;
-			delta = -distance / delta.Length() * delta;
-			if (delta.Length() > 200)
-			{
-				int a = 0;
-			}
+			if(delta.Length()!=0)
+				delta = -distance / delta.Length() * delta;
 			return (delta);
 		}
 		return DirectX::SimpleMath::Vector2();

@@ -1,0 +1,43 @@
+{
+  "1": {
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 300,
+    "scaleY": 300,
+    "rot": 0,
+    "zPos": 10
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale": 1,
+    "yScale": 1,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
+    ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "image": "Resources\\images\\big_tree.png"
+  },
+  "4": {
+    "center": [ 0.0, -0.0, 0.0 ],
+    "width": 60,
+    "height": 60,
+    "trigger": false,
+    "static": true,
+    "deleteOnCollison": false
+  }
+}

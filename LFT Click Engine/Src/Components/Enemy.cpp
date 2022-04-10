@@ -14,7 +14,7 @@ void Enemy::Start()
 	playerTrans = g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	switchToPlayer = false;
-	zHelper = g_GameManager->mapHeight * 2.0f / 4.0f;
+	zHelper = g_GameManager->mapHeight / 2.0f;
 	reEvaluateStratTimer = -2;
 	daylightDeathTime = Helpers::randWithinRange(DAYLIGHT_DEATH_TIME_MIN, DAYLIGHT_DEATH_TIME_MAX);
 	daylightDeathChance = Helpers::randFloat0to1();
@@ -99,7 +99,7 @@ void Enemy::Update()
 
 		//trans->zPos = trans->position.y / 1000.0f;
 		//trans->zPos = (trans->position.y + g_GameManager->mapHeight) / 1000.0f;
-		myTransform->zPos = (myTransform->position.y + g_GameManager->mapHeight) / zHelper;
+		trans->zPos = 5+((trans->position.y + g_GameManager->mapHeight) / zHelper);
 
 	} 
 	else 

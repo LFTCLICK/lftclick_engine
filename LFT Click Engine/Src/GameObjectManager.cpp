@@ -256,6 +256,7 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 			}
 		}
 
+		float zHelper = g_GameManager->mapHeight / 2.0f;
 		for (int y = 0; y < clientHeight; y++) {
 			for (int x = 0; x < clientWidth; x++) {
 				img.GetPixel(x, y, &currentColor);
@@ -291,7 +292,9 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 							}
 						}
 
-						myTransform->SetPos(mapX, mapY);
+						trans->SetPos(mapX, mapY);
+						if(map["key"][colorHexString]!="rug")
+							trans->zPos = 5 + ((trans->position.y + g_GameManager->mapHeight) / zHelper);
 
 						// Think I basically handled this up above, but leaving this code in just in case
 
