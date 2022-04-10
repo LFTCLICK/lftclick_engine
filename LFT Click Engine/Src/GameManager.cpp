@@ -47,17 +47,17 @@ void GameManager::UpdateTime()
 
 	float oldDarknessLevel = darknessLevel;
 
-	//if (time < SUN_RISING) darknessLevel = 1;
-	//else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
-	//else if (time < SUN_SETTING) darknessLevel = 0;
-	//else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+	if (currentLevel == EGameLevel::Level0)
+	{
 
-
-	/// Uncomment it for original game
-	/*if (time < SUN_RISING) darknessLevel = 1;
-	else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
-	else if (time < SUN_SETTING) darknessLevel = 0;
-	else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));*/
+	}
+	else
+	{
+		if (time < SUN_RISING) darknessLevel = 1;
+		else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
+		else if (time < SUN_SETTING) darknessLevel = 0;
+		else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+	}
 
 	ImGui::DragFloat("Darkness", &darknessLevel, 0.01f, 0.0f, 1.0f);
 

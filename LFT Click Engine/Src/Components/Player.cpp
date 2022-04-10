@@ -46,6 +46,7 @@ void Player::Start()
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\health_icon.png", nullptr, &healthSRV));
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\motorcycle_icon.png", nullptr, &bikepartsSRV));
 
+	playerInPuddle = false;
 
 	if (autopilot)
 		cam->SetAutopilotVelocity("right", camSpeed);
@@ -88,13 +89,18 @@ void Player::Update()
 	}
 
 	if (autopilot)
-		Sidescroll(g_FrameRateController->DeltaTime());
+	{
+		if (playerInPuddle)
+		{
+			Move((100 + (cam->xPos - trans->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * g_FrameRateController->DeltaTime(), 0);
+			playerInPuddle = false;
+		}
+		else
+			Move((playerSpeedForSideScroller + (cam->xPos - trans->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * g_FrameRateController->DeltaTime(), 0);
+	}
 
 	if (trans->CurrentPos().x < cam->xPos - 800)
-	{
-		ChangePlayerState();
-		printf("Out of screen\n");
-	}
+		g_GameManager->playerDead = true;
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
@@ -122,9 +128,6 @@ void Player::HandleMessage(Message* e)
 		if(e->otherObject->componentOwner->tag != "door")
 			Move(cm->deltaPos.x, cm->deltaPos.y);
 
-		if (e->otherObject->componentOwner->tag == "water_puddle")
-			//printf("Water Puddle\n");
-
 		if (e->otherObject->componentOwner->tag == "zombie")
 		{
 			if (damageCooldownTimer < 0)
@@ -134,6 +137,12 @@ void Player::HandleMessage(Message* e)
 				damageCooldownTimer = 2;
 			}
 		}
+	}
+
+	if (e->id == Message::TRIGGER_COLLISION)
+	{
+		if (e->otherObject->componentOwner->tag == "water_puddle")
+			playerInPuddle = true;
 	}
 }
 
@@ -149,9 +158,4 @@ void Player::Dash() {
 void Player::ChangePlayerState() {
 	health -= 15;
 	if (health <= 0) { g_GameManager->playerDead = true; }
-}
-
-void Player::Sidescroll(float deltaTime) 
-{
-	Move((playerSpeedForSideScroller + (cam->xPos - trans->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
 }

@@ -298,6 +298,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Src\Components\Vortex.cpp" />
     <ClCompile Include="Src\Components\WoodPile.cpp" />
     <ClCompile Include="Src\DebugRenderer.cpp" />
     <ClCompile Include="Src\EventManager.cpp">
@@ -391,6 +392,7 @@
     <ClInclude Include="Src\Components\SpriteAnimator.h" />
     <ClInclude Include="Src\Components\SquareCollider.h" />
     <ClInclude Include="Src\Components\Transform.h" />
+    <ClInclude Include="Src\Components\Vortex.h" />
     <ClInclude Include="Src\Components\WoodPile.h" />
     <ClInclude Include="Src\ConstantBuffer.h" />
     <ClInclude Include="Src\DebugRenderer.h" />
@@ -462,6 +464,7 @@
     <None Include="Resources\json\title.json" />
     <None Include="Resources\json\tree.json" />
     <None Include="Resources\json\turret.json" />
+    <None Include="Resources\json\vortex.json" />
     <None Include="Resources\json\wall.json" />
     <None Include="Resources\json\water_puddle.json" />
     <None Include="Resources\json\woodpile.json" />

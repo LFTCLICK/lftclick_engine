@@ -162,6 +162,9 @@
       <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="Src\Components\Vortex.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
@@ -310,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="Src\Helpers.h">
       <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Vortex.h">
+      <Filter>Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -587,6 +593,9 @@
       <Filter>JSON</Filter>
     </None>
     <None Include="Resources\json\water_puddle.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\vortex.json">
       <Filter>JSON</Filter>
     </None>
   </ItemGroup>

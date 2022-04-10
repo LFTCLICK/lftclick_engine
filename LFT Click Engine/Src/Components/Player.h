@@ -69,5 +69,5 @@ private:
 
 	DirectX::SimpleMath::Vector2 dashVelocity;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, playerSpeedForSideScroller, camSpeed;
-	bool isDashing, autopilot;
+	bool isDashing, autopilot, playerInPuddle;
 };

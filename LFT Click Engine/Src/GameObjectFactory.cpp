@@ -29,6 +29,7 @@
 #include "Components/WoodPile.h"
 #include "Components/LevelGenerator.h"
 #include "Components/Interactable.h"
+#include "Components/Vortex.h"
 
 #include <json.hpp>
 #include <string>
@@ -108,6 +109,8 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new LevelGenerator();
 	else if (compID == Component::INTERACTABLE)
 		currentComp = new Interactable();
+	else if (compID == Component::VORTEX)
+		currentComp = new Vortex();
 
 	currentComp->Deserialize(type.value(), currentObj);
 

@@ -17,8 +17,6 @@ void EnemySpawner::Update()
 {
 	spawnTimer -= g_FrameRateController->DeltaTime();
 
-	int newVariable = 100;
-
 	if (g_GameManager->currentLevel == EGameLevel::Level0)
 	{
 		if (spawnTimer <= 0)

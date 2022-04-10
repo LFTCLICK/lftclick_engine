@@ -103,7 +103,7 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicBase.mp3",
         "loop": true,
-        "volume": 30,
+        "volume": 100,
         "playEvents": [
           1000
         ],
@@ -115,7 +115,7 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicAddition.mp3",
         "loop": true,
-        "volume": 30,
+        "volume": 100,
         "playEvents": [
           1000
         ],

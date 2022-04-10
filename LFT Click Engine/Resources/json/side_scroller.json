@@ -63,6 +63,10 @@
     {
       "prefab": "Resources\\json\\water_puddle.json",
       "tag": "water_puddle"
+    },
+    {
+      "prefab": "Resources\\json\\vortex.json",
+      "tag": "vortex"
     }
   ],
   "Map": {
@@ -70,10 +74,11 @@
     "key": {
       "5b3d2e": "wall",
       "f5b0cb": "junk",
-      "fbbc05": "water_puddle",
+      "fbbc05": "tree",
       "a37900": "big_tree",
       "fe3c3c": "enemy_spawner",
-      "0bffff": "tree"
+      "0bffff": "water_puddle",
+      "c6d32f": "zombie"
     },
     "objectSize": 60
   },
@@ -86,7 +91,7 @@
             "startX": 0.0,
             "startY": 0.0,
             "scaleX": 25500,
-            "scaleY": 750,
+            "scaleY": 800,
             "rot": 0,
             "zPos": 100
           }
@@ -99,11 +104,90 @@
         {
           "1": {
             "startX": -12552.0,
-            "startY": 0.0,
-            "scaleX": 60,
-            "scaleY": 60,
+            "startY": 35.0,
+            "scaleX": 90,
+            "scaleY": 90,
             "rot": 0,
             "zPos": 15
+          },
+          "2": {
+            "onlyUVOverrides": false,
+            "xScale": 1,
+            "yScale": 1,
+            "vertices": [
+              {
+                "pos": [ -0.5, -0.5, 0 ],
+                "uv": [ 0, 1 ]
+              },
+              {
+                "pos": [ -0.5, 0.5, 0 ],
+                "uv": [ 0, 0 ]
+              },
+              {
+                "pos": [ 0.5, 0.5, 0 ],
+                "uv": [ 1, 0 ]
+              },
+              {
+                "pos": [ 0.5, -0.5, 0 ],
+                "uv": [ 1, 1 ]
+              }
+            ],
+            "indicies": [ 0, 1, 2, 2, 3, 0 ],
+            "image": "Resources\\images\\player_on_bike.png"
+          },
+          "6": {
+            "spriteSheetWidth": 1,
+            "spriteSheetHeight": 1,
+            "animations": [
+              {
+                "name": "idlePlayerRight",
+                "length": 2,
+                "frameDuration": 1,
+                "onIdle": true,
+                "direction": "right"
+              },
+              {
+                "name": "movingPlayerRight",
+                "length": 2,
+                "frameDuration": 0.25,
+                "onMove": true,
+                "direction": "right"
+              },
+              {
+                "name": "idlePlayerLeft",
+                "length": 2,
+                "frameDuration": 1,
+                "onIdle": true,
+                "direction": "left"
+              },
+              {
+                "name": "movingPlayerLeft",
+                "length": 2,
+                "frameDuration": 0.25,
+                "onMove": true,
+                "direction": "left"
+              },
+              {
+                "name": "damagedPlayer",
+                "length": 2,
+                "frameDuration": 0.125,
+                "onDamage": true
+              },
+              {
+                "name": "deadPlayer",
+                "length": 2,
+                "frameDuration": 1,
+                "onDeath": true
+              }
+            ]
+          },
+          "4": {
+            "center": [ 0.0, 0.0, 0.0 ],
+            "width": 60,
+            "height": 80,
+            "trigger": false,
+            "static": false,
+            "deleteOnCollison": false
           }
         }
       ]
