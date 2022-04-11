@@ -38,7 +38,7 @@ public:
 	float timeToCollect;
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 	//SquareCollider* sqCollider;
 	//Drawable* draw;
 	Player* player;

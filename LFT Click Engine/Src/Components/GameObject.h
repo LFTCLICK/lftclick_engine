@@ -49,7 +49,7 @@ public:
 	bool hasNonStaticCollider;
 	bool isDeletable;
 	std::vector<Collider*> colliders;
-	Transform* trans;
+	Transform* myTransform;
 	bool isOnScreen;
 	std::map<int, Component*> comps;
 private:

@@ -6,7 +6,7 @@
 
 void Door::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	squareCollider = componentOwner->getComponent<SquareCollider>();
 	drawable = componentOwner->getComponent<Drawable>();
 	player = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
@@ -37,7 +37,7 @@ void Door::Update()
 				squareCollider->clientWidth = woodPileRadius;
 				componentOwner->getComponent<CircleCollider>()->radius = woodPileRadius/2;
 				woodPileRadius = backupX/2;
-				trans->position -= woodPileOffset;
+				myTransform->position -= woodPileOffset;
 				drawable->yOffset = 0;
 				UpdateImage();
 				squareCollider->isTrigger = false;
@@ -55,7 +55,7 @@ void Door::Update()
 				squareCollider->clientWidth = woodPileRadius * 2;
 				componentOwner->getComponent<CircleCollider>()->radius = woodPileRadius;
 				woodPileRadius = backupX;
-				trans->position += woodPileOffset;
+				myTransform->position += woodPileOffset;
 				drawable->yOffset = .5;
 				drawable->xOffset = 0;
 				squareCollider->isTrigger = true;

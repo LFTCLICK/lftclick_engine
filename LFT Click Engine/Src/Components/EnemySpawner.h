@@ -45,7 +45,7 @@ public:
 	bool spawnAroundPlayer;
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 
 	int spawnerID;
 	Vector2 myPos;

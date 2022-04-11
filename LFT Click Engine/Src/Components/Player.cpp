@@ -9,6 +9,9 @@
 using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
+constexpr auto DAMAGE_FLASH_DURATION = 0.2f; //seconds
+
+
 void Player::Start()
 {
 	cam = componentOwner->getComponent<Camera>();
@@ -30,7 +33,7 @@ void Player::Start()
 	sol::function getPlayerSpeed = lua_player_state["getPlayerSpeed"];
 	playerSpeed = getPlayerSpeed();
 
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 
 	drawable = componentOwner->getComponent<Drawable>();
@@ -58,7 +61,7 @@ void Player::Update()
 	//Bike parts count HUD
 	g_Renderer->GetSpriteBatch()->Draw(bikepartsSRV.Get(), XMVectorSet(4, 50, 0, 0), nullptr,
 		Colors::White, 0.0f, XMVectorZero(), 2.6f);
-	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), std::to_string(parts).c_str(),
+	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), (std::to_string(parts) + std::string("/8")).c_str(),
 		XMFLOAT2(50, 60), Colors::White, 0.0f, XMFLOAT2(0, 0));
 
 	//Player health HUD
@@ -70,6 +73,18 @@ void Player::Update()
 	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), std::to_string(health).c_str(),
 		XMFLOAT2(50, 100), healthTextColor, 0.0f, XMFLOAT2(0, 0));
 
+	if (damageFlashing)
+	{
+		damageFlashTimer += g_FrameRateController->DeltaTime();
+
+		if (damageFlashTimer > DAMAGE_FLASH_DURATION)
+		{
+			damageFlashing = false;
+			damageFlashTimer = 0.0f;
+		}
+		
+		g_GameManager->rednessFactor = std::lerp(0.0f, 1.0f, damageFlashTimer / DAMAGE_FLASH_DURATION);
+	}
 
 	if (isDashing) {
 		dashTimer += g_FrameRateController->DeltaTime();
@@ -77,26 +92,25 @@ void Player::Update()
 			isDashing = false;
 			dashTimer = 0;
 		}
-		trans->Move(dashVelocity.x, dashVelocity.y);
+		myTransform->Move(dashVelocity.x, dashVelocity.y);
 	}
 
-	if (parts == 0 && introTimer<5.0f)
+	if (parts == 0 && introTimer <15.0f)
 	{
-
 		drawable->HUD_DrawTextCenter("I need to find 8 motorcycle parts to fix my bike.", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
 	if (parts >= 8)
 	{
 		g_GameManager->playerDead = true;
-		g_GameManager->playerWon= true;
+		g_GameManager->playerWon = true;
 	}
 	if (autopilot)
 		Sidescroll(g_FrameRateController->DeltaTime());
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
-	g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100);
-	trans->zPos = 5 + ((trans->position.y + g_GameManager->mapHeight) / zHelper);
+	g_AudioManager->SetPlayerSpatialPosition(myTransform->CurrentPos() / 100);
+	myTransform->zPos = 5 + ((myTransform->position.y + g_GameManager->mapHeight) / zHelper);
 	introTimer += g_FrameRateController->DeltaTime();
 }
 
@@ -135,19 +149,20 @@ void Player::HandleMessage(Message* e)
 }
 
 void Player::Move(float deltaX, float deltaY) {
-	if (!isDashing) trans->Move(deltaX, deltaY);
+	if (!isDashing) myTransform->Move(deltaX, deltaY);
 }
 
 void Player::Dash() {
 	isDashing = true;
-	dashVelocity = trans->lastMovement * dashSpeed;
+	dashVelocity = myTransform->lastMovement * dashSpeed;
 }
 
-void Player::ChangePlayerState() {
+void Player::DamagePlayer() {
+	damageFlashing = true;
 	health -= 15;
 	if (health <= 0) { g_GameManager->playerDead = true; }
 }
 
 void Player::Sidescroll(float deltaTime) {
-	Move((playerSpeed + (cam->xPos - trans->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
+	Move((playerSpeed + (cam->xPos - myTransform->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
 }

@@ -9,7 +9,7 @@ void EnemySpawner::Start()
 	positiveBounds = Vector2(1280, 7680);
 	negativeBounds = Vector2(-1280, -7680);
 	spawnTimer = timeBetweenPhases;
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	spawnerID = spawnAroundPlayer ? NEARPLAYER_ENEMY_SPAWNER_ID : g_GameManager->totalSpawners++;
 }
 
@@ -44,8 +44,8 @@ void EnemySpawner::Update()
 			}
 		}
 		else if (!spawnAroundPlayer) {
-			DirectX::SimpleMath::Vector2 currentPos = trans->CurrentPos();
-			float halfScaleWidth = trans->scale.x / 2, halfScaleHeight = trans->scale.y / 2;
+			DirectX::SimpleMath::Vector2 currentPos = myTransform->CurrentPos();
+			float halfScaleWidth = myTransform->scale.x / 2, halfScaleHeight = myTransform->scale.y / 2;
 			spawnPos = {
 				Helpers::randWithinRange(currentPos.x - halfScaleWidth, currentPos.x + halfScaleWidth),
 				Helpers::randWithinRange(currentPos.y - halfScaleHeight, currentPos.y + halfScaleHeight)

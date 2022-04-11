@@ -19,10 +19,13 @@
 using namespace Microsoft::WRL;
 using namespace DirectX;
 
+extern SDL_Window* g_pWindow;
+
 namespace
 {
 #include "Shaders/Compiled/Compiled_PS.h"
 #include "Shaders/Compiled/Compiled_VS.h"
+#include "Shaders/Compiled/CompiledRenderToTexture_PS.h"
 }
 
 Renderer::Renderer() :
@@ -31,8 +34,11 @@ Renderer::Renderer() :
 	depthStencilBufferFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
 	depthStencilViewFormat(DXGI_FORMAT_D24_UNORM_S8_UINT),
 	msaaQuality(0),
-	msaaSampleCount(1)
+	msaaSampleCount(1),
+	displayModes(nullptr),
+	numModes(0)
 {
+
 }
 
 Renderer::~Renderer()
@@ -40,14 +46,15 @@ Renderer::~Renderer()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+
+	delete[] displayModes;
 }
-void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
+void Renderer::Initialize(HWND hWnd)
 {
-	//setup devices
 
 	UINT flags = D3D11_CREATE_DEVICE_SINGLETHREADED;
 
-#if defined(DEBUG) || defined(_DEBUG)
+#if defined(_DEBUG)
 	flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
@@ -73,10 +80,6 @@ void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 
 	DXGI_SWAP_CHAIN_DESC sd;
 
-	sd.BufferDesc.Width = clientWidth;
-	sd.BufferDesc.Height = clientHeight;
-	sd.BufferDesc.RefreshRate.Numerator = 60;
-	sd.BufferDesc.RefreshRate.Denominator = 1;
 	sd.BufferDesc.Format = backBufferFormat;
 	sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 	sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -94,28 +97,47 @@ void Renderer::Initialize(HWND hWnd, int initWidth, int initHeight)
 	sd.Flags = 0;
 
 	ComPtr<IDXGIDevice> dxgiDevice;
-	if FAILED(device.As(&dxgiDevice))
-		assert(false);
-
+	DX::ThrowIfFailed(device.As(&dxgiDevice));
 
 	ComPtr<IDXGIAdapter> dxgiAdapter;
-	if FAILED(dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf()))
-		assert(false);
-
+	DX::ThrowIfFailed(dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf()));
+	
 
 	ComPtr<IDXGIFactory1> dxgiFactory;
-	if FAILED(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), &dxgiFactory))
-		assert(false);
-
-	if FAILED(dxgiFactory->CreateSwapChain(device.Get(), &sd, swapChain.ReleaseAndGetAddressOf()))
-		assert(false);
+	DX::ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), &dxgiFactory));
 
 
-	OnResize(initWidth, initHeight);
+	//Enumerate supported resolutions
+	ComPtr<IDXGIOutput> pOutput;
+	DX::ThrowIfFailed(dxgiAdapter->EnumOutputs(0, &pOutput));
+	DX::ThrowIfFailed(pOutput->GetDisplayModeList(backBufferFormat, 0, &numModes, NULL));
+	displayModes = new DXGI_MODE_DESC[numModes];
+	DX::ThrowIfFailed(pOutput->GetDisplayModeList(backBufferFormat, 0, &numModes, displayModes));
+
+	printf_s("Querying supported resoultions:\n");
+
+	for (UINT i = 0; i < numModes; ++i)
+	{
+		printf_s("%dx%d   %.2fHz\n", displayModes[i].Width, displayModes[i].Height,
+			static_cast<float>(displayModes[i].RefreshRate.Numerator) / displayModes[i].RefreshRate.Denominator);
+	}
+
+	//Choose highest resolution/refresh rate
+	clientWidth = displayModes[numModes - 1].Width;
+	clientHeight = displayModes[numModes - 1].Height;
+
+	SDL_SetWindowSize(g_pWindow, clientWidth, clientHeight);
+
+	sd.BufferDesc.Width = clientWidth;
+	sd.BufferDesc.Height = clientHeight;
+	sd.BufferDesc.RefreshRate = displayModes[numModes - 1].RefreshRate;
+
+	DX::ThrowIfFailed(dxgiFactory->CreateSwapChain(device.Get(), &sd, swapChain.ReleaseAndGetAddressOf()));
+
+	OnResize(clientWidth, clientHeight);
 
 	//disable ALT-enter fullscreen
-	dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
-
+	//dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
 
 	CreateDeviceDependentResources();
 }
@@ -124,10 +146,11 @@ void Renderer::CreateDeviceDependentResources()
 {
 	spriteBatch = std::make_unique<SpriteBatch>(immediateContext.Get());
 	spriteFont = std::make_unique<SpriteFont>(device.Get(), L"Resources\\fonts\\font.spritefont");
-	states = std::make_unique<CommonStates>(device.Get());
+	commonPipelineStates = std::make_unique<CommonStates>(device.Get());
 
 	VS_cbPerObjectData.Create(device.Get());
 	PS_cbPerObjectData.Create(device.Get());
+	PSRenderToTex_cbPerObjectData.Create(device.Get());
 
 	VertexType vertices[] =
 	{
@@ -143,8 +166,8 @@ void Renderer::CreateDeviceDependentResources()
 		2, 3, 0
 	};
 
-	Helpers::CreateMeshBuffer(device.Get(), vertices, sizeof(vertices) / sizeof(vertices[0]), D3D11_BIND_VERTEX_BUFFER, vertBuf.ReleaseAndGetAddressOf());
-	Helpers::CreateMeshBuffer(device.Get(), indices, sizeof(indices) / sizeof(indices[0]), D3D11_BIND_INDEX_BUFFER, indexBuf.ReleaseAndGetAddressOf());
+	Helpers::CreateMeshBuffer(device.Get(), vertices, sizeof(vertices) / sizeof(vertices[0]), D3D11_BIND_VERTEX_BUFFER, vertexBuffer.ReleaseAndGetAddressOf());
+	Helpers::CreateMeshBuffer(device.Get(), indices, sizeof(indices) / sizeof(indices[0]), D3D11_BIND_INDEX_BUFFER, indexBuffer.ReleaseAndGetAddressOf());
 
 
 	VertexType screenQuadVertices[] =
@@ -164,8 +187,9 @@ void Renderer::CreateDeviceDependentResources()
 	Helpers::CreateMeshBuffer(device.Get(), screenQuadVertices, sizeof(screenQuadVertices) / sizeof(screenQuadVertices[0]), D3D11_BIND_VERTEX_BUFFER, screenQuadVB.ReleaseAndGetAddressOf());
 	Helpers::CreateMeshBuffer(device.Get(), screenQuadIndices, sizeof(screenQuadIndices) / sizeof(screenQuadIndices[0]), D3D11_BIND_INDEX_BUFFER, screenQuadIB.ReleaseAndGetAddressOf());
 	
-	device->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
-	device->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
+	DX::ThrowIfFailed(device->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader));
+	DX::ThrowIfFailed(device->CreatePixelShader(g_CompiledRenderToTexturePS, sizeof(g_CompiledRenderToTexturePS), nullptr, &renderToTexPixelShader));
+	DX::ThrowIfFailed(device->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertexShader));
 
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
@@ -173,8 +197,8 @@ void Renderer::CreateDeviceDependentResources()
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
-	g_Renderer->GetDevice()->CreateInputLayout(ied, (UINT)std::size(ied), g_CompiledVS, sizeof(g_CompiledVS),
-		inputLayout.ReleaseAndGetAddressOf());
+	DX::ThrowIfFailed(device->CreateInputLayout(ied, (UINT)std::size(ied), g_CompiledVS, sizeof(g_CompiledVS),
+		inputLayout.ReleaseAndGetAddressOf()));
 
 	CD3D11_DEFAULT d3dDefault;
 	CD3D11_BLEND_DESC desc(d3dDefault);
@@ -217,18 +241,18 @@ void Renderer::Draw(const FLOAT* clearColor)
 	immediateContext->ClearRenderTargetView(renderToTextureRTV.Get(), clearColor);
 	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	immediateContext->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
-	immediateContext->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
+	immediateContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+	immediateContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 	immediateContext->PSSetShader(pixelShader.Get(), nullptr, 0);
-	immediateContext->VSSetShader(vertShader.Get(), nullptr, 0);
+	immediateContext->VSSetShader(vertexShader.Get(), nullptr, 0);
 	immediateContext->IASetInputLayout(inputLayout.Get());
 	immediateContext->VSSetConstantBuffers(0, 1, VS_cbPerObjectData.GetAddressOf());
 	immediateContext->PSSetConstantBuffers(0, 1, PS_cbPerObjectData.GetAddressOf());
 	
-	ID3D11SamplerState* samStates[] = { states->PointWrap() };
+	ID3D11SamplerState* samStates[] = { commonPipelineStates->PointWrap() };
 	immediateContext->PSSetSamplers(0, 1, samStates);
 	
-	immediateContext->OMSetBlendState(states->AlphaBlend(), nullptr, 0xFFFFFFFFu);
+	immediateContext->OMSetBlendState(commonPipelineStates->AlphaBlend(), nullptr, 0xFFFFFFFFu);
 	immediateContext->RSSetState(nullptr);
 	immediateContext->OMSetDepthStencilState(nullptr, 0);
 
@@ -258,15 +282,15 @@ void Renderer::Draw(const FLOAT* clearColor)
 	
 		const PS_cbPerObject cbValues_PS =
 		{
-			(gameObject->tag == "player" || gameObject->tag == "zombie") ? 0.0f : g_GameManager->GetDarknessLevel()
+			(gameObject->tag == "player" || gameObject->tag == "zombie") ? 0.0f : g_GameManager->displayDarknessLevel
 		};
 	
 		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
 		PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
 	
-		ID3D11ShaderResourceView* Srvs[] = { drawable->textureSRV.Get(), darknessSRV.Get() };
+		ID3D11ShaderResourceView* inputSRVs[] = { drawable->textureSRV.Get(), darknessSRV.Get() };
 
-		immediateContext->PSSetShaderResources(0, 2, Srvs);
+		immediateContext->PSSetShaderResources(0, 2, inputSRVs);
 	
 		immediateContext->DrawIndexed(6, 0, 0);
 	}
@@ -274,11 +298,14 @@ void Renderer::Draw(const FLOAT* clearColor)
 	//Unbind offscreen texture and draw it
 	immediateContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
 	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
-	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 	immediateContext->OMSetBlendState(alphaToCoverageBS.Get(), nullptr, 0xFFFFFFFFu);
 
 	immediateContext->IASetVertexBuffers(0, 1, screenQuadVB.GetAddressOf(), &stride, &offset);
 	immediateContext->IASetIndexBuffer(screenQuadIB.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+	immediateContext->PSSetShader(renderToTexPixelShader.Get(), nullptr, 0);
+	immediateContext->PSSetConstantBuffers(0, 1, PSRenderToTex_cbPerObjectData.GetAddressOf());
 
 	const VS_cbPerObject cbValues_VS =
 	{
@@ -288,18 +315,20 @@ void Renderer::Draw(const FLOAT* clearColor)
 		1
 	};
 
-	const PS_cbPerObject cbValues_PS = 
+
+	const PSRenderToTex_cbPerObject cbValues_PS = 
 	{
-		g_GameManager->GetDarknessLevel()
+		g_GameManager->darknessLevel,
+		g_GameManager->rednessFactor
 	};
 
 
 	VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
-	PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
+	PSRenderToTex_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
 
-	ID3D11ShaderResourceView* Srvs[] = { renderToTextureSRV.Get(), darknessSRV.Get() };
+	ID3D11ShaderResourceView* inputSRVs[] = { renderToTextureSRV.Get(), darknessSRV.Get() };
 
-	immediateContext->PSSetShaderResources(0, 2, Srvs);
+	immediateContext->PSSetShaderResources(0, 2, inputSRVs);
 	immediateContext->DrawIndexed(6, 0, 0);
 }
 

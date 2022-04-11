@@ -29,7 +29,7 @@ void Transform::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	if (j.contains("matchPlayerPos")) 
 		matchPlayerPos = j["matchPlayerPos"];
 
-	componentOwner->trans = this;
+	componentOwner->myTransform = this;
 }
 
 Component * Transform::Clone(GameObject* newParent)
@@ -47,7 +47,7 @@ Component * Transform::Clone(GameObject* newParent)
 	toReturn->isMoving = isMoving;
 	toReturn->wasMoving = wasMoving;
 	toReturn->matchPlayerPos = matchPlayerPos;
-	newParent->trans = toReturn;
+	newParent->myTransform = toReturn;
 	return (Component*)toReturn;
 }
 

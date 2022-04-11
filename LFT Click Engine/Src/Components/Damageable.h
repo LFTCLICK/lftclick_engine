@@ -49,7 +49,7 @@ public:
 	bool destroyOnDeath;
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 	SpriteAnimator* anim;
 	Audible* audio;
 	Drawable* drawable;

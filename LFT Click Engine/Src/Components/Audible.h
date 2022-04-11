@@ -92,7 +92,7 @@ public:
 protected:
 	AudioManager* am;
 	FrameRateController* frc;
-	Transform* trans;
+	Transform* myTransform;
 	std::string channelGroupName;
 
 	std::vector<SoundInfo> sounds;

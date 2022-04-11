@@ -42,7 +42,7 @@ public:
 	bool inWoodPilePhase;
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 	DirectX::SimpleMath::Vector2 woodPileOffset;
 	float woodPileRadius;
 	SquareCollider* squareCollider;
