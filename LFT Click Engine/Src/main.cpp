@@ -102,7 +102,7 @@ int main(int argc, char* args[])
 	SDL_Event e = {};
 
 	std::ifstream intro("./Resources/json/intro.json");
-	
+
 	json introJson2;
 	intro >> introJson2;
 	intro.close();
@@ -114,21 +114,21 @@ int main(int argc, char* args[])
 	while (e.type != SDL_QUIT)
 	{
 		SDL_PollEvent(&e);
-	
+
 		switch (e.type)
 		{
 		case SDL_WINDOWEVENT:
 			if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
 			{
-				SDL_SetWindowSize(pWindow, e.window.data1, e.window.data2);
+				SDL_SetWindowSize(g_pWindow, e.window.data1, e.window.data2);
 				g_Renderer->OnResize(e.window.data1, e.window.data2);
 			}
 			break;
 		}
-	
+
 		g_FrameRateController->Tick();
 		g_Renderer->PrepareForRendering();
-	
+
 		timer += g_FrameRateController->DeltaTime();
 		if (currentImage == 0 && timer >= 2.0f)
 		{
@@ -150,20 +150,20 @@ int main(int argc, char* args[])
 			g_Renderer->PresentFrame();
 			break;
 		}
-	
+
 		//g_AudioManager->Update();
 		//g_GameManager->Update();
 		g_InputManager->Update();
 		//g_GameObjManager->Update();
 		//g_EventManager->Update();
 		//g_LuaManager->Update();
-	
+
 		g_GameObjManager->Draw();
 		g_Renderer->Draw(DirectX::Colors::Black);
-	
+
 		g_Renderer->PresentFrame();
 	}
-	
+
 	g_GameObjManager->DeleteAll();
 
 	std::ifstream other("./Resources/json/survival.json");
@@ -194,7 +194,7 @@ int main(int argc, char* args[])
 		switch (e.type)
 		{
 		case SDL_WINDOWEVENT:
-			if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED) 
+			if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
 			{
 				SDL_SetWindowSize(g_pWindow, e.window.data1, e.window.data2);
 				g_Renderer->OnResize(e.window.data1, e.window.data2);
@@ -207,8 +207,8 @@ int main(int argc, char* args[])
 
 		switch (g_GameManager->currentLevel)
 		{
-		case EGameLevel::Mainmenu:
 
+		case EGameLevel::Mainmenu:
 			rect.left = rect.top = 0;
 			rect.right = g_Renderer->GetWidth();
 			rect.bottom = g_Renderer->GetHeight();
@@ -222,7 +222,8 @@ int main(int argc, char* args[])
 			if (ImGui::Button("Play", { 100,50 }))
 			{
 				g_GameManager->LoadLevel(dataJson2, EGameLevel::Level0);
-			}if (ImGui::Button("Credits", { 100,50 }))
+			}
+			if (ImGui::Button("Credits", { 100,50 }))
 			{
 				g_GameManager->prevLevel = g_GameManager->currentLevel;
 				g_GameManager->currentLevel = EGameLevel::CreditsScreen;
@@ -234,19 +235,17 @@ int main(int argc, char* args[])
 			}
 
 			ImGui::End();
-
 			break;
 		case EGameLevel::CreditsScreen:
-
 			rect.left = rect.top = 0;
 			rect.right = g_Renderer->GetWidth();
 			rect.bottom = g_Renderer->GetHeight();
 			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->creditsSRV.Get(), rect);
 
-			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth())/2 - 50, static_cast<float>(3*g_Renderer->GetHeight()) / 4));
-			ImGui::Begin("menu", nullptr, 
-				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove|ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar 
-				|ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize| ImGuiWindowFlags_NoBackground);
+			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(3 * g_Renderer->GetHeight()) / 4));
+			ImGui::Begin("menu", nullptr,
+				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
+				| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 
 			if (ImGui::Button("Back", { 100,50 }))
 			{
@@ -257,8 +256,6 @@ int main(int argc, char* args[])
 
 			g_Renderer->Draw(DirectX::Colors::Black);
 			break;
-
-
 		case EGameLevel::Level0:
 		case EGameLevel::Pausemenu:
 
@@ -277,14 +274,15 @@ int main(int argc, char* args[])
 				g_FrameRateController->zeroDeltaTime = true;
 				ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(g_Renderer->GetHeight()) / 2));
 				ImGui::Begin("pauseMenu", nullptr,
-					ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
-					| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+					ImGuiWindowFlags_::ImGuiWindowFlags_NoMove|ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
+					|ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize|ImGuiWindowFlags_NoBackground);
 
 				if (g_GameManager->playerDead)
 				{
 					if (g_GameManager->playerWon)
 					{
 						ImGui::Text("You win");
+
 						if (ImGui::Button("Restart", { 100,50 }))
 						{
 							g_GameManager->LoadLevel(dataJson2, EGameLevel::Level0);
