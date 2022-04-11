@@ -61,6 +61,14 @@ class Renderer
 	};
 	static_assert(sizeof(PS_cbPerObject) % 16 == 0, "Not 16-bytes aligned");
 
+	struct PSRenderToTex_cbPerObject
+	{
+		float darknessFactor;
+		float rednessFactor;
+		DirectX::XMFLOAT2 padding;
+	};
+	static_assert(sizeof(PSRenderToTex_cbPerObject) % 16 == 0, "Not 16-bytes aligned");
+
 	struct VertexType
 	{
 		DirectX::XMFLOAT3 Pos;
@@ -69,14 +77,18 @@ class Renderer
 
 	ConstantBuffer<VS_cbPerObject> VS_cbPerObjectData;
 	ConstantBuffer<PS_cbPerObject> PS_cbPerObjectData;
+	ConstantBuffer<PSRenderToTex_cbPerObject> PSRenderToTex_cbPerObjectData;
 
-	Microsoft::WRL::ComPtr<ID3D11Buffer> vertBuf;
-	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuf;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+	Microsoft::WRL::ComPtr<ID3D11Buffer> indexBuffer;
+	
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader;
-	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertShader;
+	Microsoft::WRL::ComPtr<ID3D11PixelShader> renderToTexPixelShader;
+
+	Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
 
-	std::unique_ptr<DirectX::CommonStates> states;
+	std::unique_ptr<DirectX::CommonStates> commonPipelineStates;
 
 
 	DXGI_MODE_DESC* displayModes;

@@ -9,6 +9,9 @@
 using namespace DirectX::SimpleMath;
 using namespace DirectX;
 
+constexpr auto DAMAGE_FLASH_DURATION = 0.2f; //seconds
+
+
 void Player::Start()
 {
 	cam = componentOwner->getComponent<Camera>();
@@ -70,6 +73,18 @@ void Player::Update()
 	g_Renderer->GetSpriteFont()->DrawString(g_Renderer->GetSpriteBatch(), std::to_string(health).c_str(),
 		XMFLOAT2(50, 100), healthTextColor, 0.0f, XMFLOAT2(0, 0));
 
+	if (damageFlashing)
+	{
+		damageFlashTimer += g_FrameRateController->DeltaTime();
+
+		if (damageFlashTimer > DAMAGE_FLASH_DURATION)
+		{
+			damageFlashing = false;
+			damageFlashTimer = 0.0f;
+		}
+		
+		g_GameManager->rednessFactor = std::lerp(0.0f, 1.0f, damageFlashTimer / DAMAGE_FLASH_DURATION);
+	}
 
 	if (isDashing) {
 		dashTimer += g_FrameRateController->DeltaTime();
@@ -142,7 +157,8 @@ void Player::Dash() {
 	dashVelocity = myTransform->lastMovement * dashSpeed;
 }
 
-void Player::ChangePlayerState() {
+void Player::DamagePlayer() {
+	damageFlashing = true;
 	health -= 15;
 	if (health <= 0) { g_GameManager->playerDead = true; }
 }

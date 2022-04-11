@@ -25,6 +25,7 @@
 
 class SquareCollider;
 
+
 using json = nlohmann::json;
 class Player : public Component
 {
@@ -37,7 +38,9 @@ public:
 	static int getStaticCompId() { return ComponentType::PLAYER; };
 
 	virtual Component* Clone(GameObject* newParent);
-	Player() : isDashing(false), autopilot(false), dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), wood(0) {};
+	Player() : isDashing(false), autopilot(false), damageFlashing(false), 
+		dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), wood(0), damageFlashTimer(0.0f) {};
+
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	void HandleMessage(Message* e);
@@ -45,8 +48,7 @@ public:
 public:
 	void Move(float deltaX, float deltaY);
 	void Dash();
-	//void Sidescroll(float deltaTime);
-	void ChangePlayerState(); 
+	void DamagePlayer(); 
 	void Sidescroll(float deltaTime);
 	bool IsAutopilot() { return autopilot; }
 
@@ -72,4 +74,7 @@ private:
 	DirectX::SimpleMath::Vector2 dashVelocity;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper;
 	bool isDashing, autopilot;
+	
+	bool damageFlashing;
+	float damageFlashTimer;
 };

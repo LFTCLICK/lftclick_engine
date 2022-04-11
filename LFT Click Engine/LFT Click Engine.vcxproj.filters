@@ -589,5 +589,8 @@
       <Filter>Engine\Rendering\Shaders</Filter>
     </FxCompile>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
+    <FxCompile Include="Src\Shaders\RenderToTexPS.hlsl">
+      <Filter>Engine\Rendering\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

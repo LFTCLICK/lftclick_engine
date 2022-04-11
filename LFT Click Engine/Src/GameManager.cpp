@@ -55,17 +55,12 @@ void GameManager::UpdateTime()
 	ImGui::DragFloat("x", &x, 10.0f, -3000, 3000.0f);
 	ImGui::DragFloat("y", &y, 10.0f, -3000, 3000.0f);
 	cabinRect = DirectX::SimpleMath::Rectangle(x, y, w, h);
-	DirectX::SimpleMath::Rectangle b = DirectX::SimpleMath::Rectangle(playerTrans->position.x, playerTrans->position.y, 
+	DirectX::SimpleMath::Rectangle playerRect = DirectX::SimpleMath::Rectangle(playerTrans->position.x, playerTrans->position.y, 
 		1, 1);
-
 
 
 	float oldDarknessLevel = darknessLevel;
 
-	//if (time < SUN_RISING) darknessLevel = 1;
-	//else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
-	//else if (time < SUN_SETTING) darknessLevel = 0;
-	//else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
 
 	if (time < SUN_RISING) darknessLevel = 1;
 	else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
@@ -75,7 +70,7 @@ void GameManager::UpdateTime()
 	static float fadeInTimer = 0.0f;
 	static float fadeOutTimer = 0.0f;
 	//player is inside cabin
-	if (cabinRect.Intersects(b))
+	if (cabinRect.Intersects(playerRect))
 	{
 		fadeOutTimer = 0.0f;
 		fadeInTimer += g_FrameRateController->DeltaTime();
@@ -86,11 +81,12 @@ void GameManager::UpdateTime()
 		fadeInTimer = 0.0f;
 		fadeOutTimer += g_FrameRateController->DeltaTime();
 
-		displayDarknessLevel = std::lerp(0.0f, darknessLevel, std::clamp(fadeOutTimer / 3.0f, 0.0f, 1.0f));
+		displayDarknessLevel = std::lerp(displayDarknessLevel, darknessLevel, std::clamp(fadeOutTimer / 3.0f, 0.0f, 1.0f));
 	}
 
 #ifdef _DEBUG
 	ImGui::DragFloat("Darkness", &darknessLevel, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Display Darkness", &displayDarknessLevel, 0.01f, 0.0f, 1.0f);
 
 #endif // DEBUG
 

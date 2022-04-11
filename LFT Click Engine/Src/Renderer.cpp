@@ -25,6 +25,7 @@ namespace
 {
 #include "Shaders/Compiled/Compiled_PS.h"
 #include "Shaders/Compiled/Compiled_VS.h"
+#include "Shaders/Compiled/CompiledRenderToTexture_PS.h"
 }
 
 Renderer::Renderer() :
@@ -145,10 +146,11 @@ void Renderer::CreateDeviceDependentResources()
 {
 	spriteBatch = std::make_unique<SpriteBatch>(immediateContext.Get());
 	spriteFont = std::make_unique<SpriteFont>(device.Get(), L"Resources\\fonts\\font.spritefont");
-	states = std::make_unique<CommonStates>(device.Get());
+	commonPipelineStates = std::make_unique<CommonStates>(device.Get());
 
 	VS_cbPerObjectData.Create(device.Get());
 	PS_cbPerObjectData.Create(device.Get());
+	PSRenderToTex_cbPerObjectData.Create(device.Get());
 
 	VertexType vertices[] =
 	{
@@ -164,8 +166,8 @@ void Renderer::CreateDeviceDependentResources()
 		2, 3, 0
 	};
 
-	Helpers::CreateMeshBuffer(device.Get(), vertices, sizeof(vertices) / sizeof(vertices[0]), D3D11_BIND_VERTEX_BUFFER, vertBuf.ReleaseAndGetAddressOf());
-	Helpers::CreateMeshBuffer(device.Get(), indices, sizeof(indices) / sizeof(indices[0]), D3D11_BIND_INDEX_BUFFER, indexBuf.ReleaseAndGetAddressOf());
+	Helpers::CreateMeshBuffer(device.Get(), vertices, sizeof(vertices) / sizeof(vertices[0]), D3D11_BIND_VERTEX_BUFFER, vertexBuffer.ReleaseAndGetAddressOf());
+	Helpers::CreateMeshBuffer(device.Get(), indices, sizeof(indices) / sizeof(indices[0]), D3D11_BIND_INDEX_BUFFER, indexBuffer.ReleaseAndGetAddressOf());
 
 
 	VertexType screenQuadVertices[] =
@@ -185,8 +187,9 @@ void Renderer::CreateDeviceDependentResources()
 	Helpers::CreateMeshBuffer(device.Get(), screenQuadVertices, sizeof(screenQuadVertices) / sizeof(screenQuadVertices[0]), D3D11_BIND_VERTEX_BUFFER, screenQuadVB.ReleaseAndGetAddressOf());
 	Helpers::CreateMeshBuffer(device.Get(), screenQuadIndices, sizeof(screenQuadIndices) / sizeof(screenQuadIndices[0]), D3D11_BIND_INDEX_BUFFER, screenQuadIB.ReleaseAndGetAddressOf());
 	
-	device->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader);
-	device->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertShader);
+	DX::ThrowIfFailed(device->CreatePixelShader(g_CompiledPS, sizeof(g_CompiledPS), nullptr, &pixelShader));
+	DX::ThrowIfFailed(device->CreatePixelShader(g_CompiledRenderToTexturePS, sizeof(g_CompiledRenderToTexturePS), nullptr, &renderToTexPixelShader));
+	DX::ThrowIfFailed(device->CreateVertexShader(g_CompiledVS, sizeof(g_CompiledVS), nullptr, &vertexShader));
 
 	const D3D11_INPUT_ELEMENT_DESC ied[] =
 	{
@@ -194,8 +197,8 @@ void Renderer::CreateDeviceDependentResources()
 		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
 	};
 
-	g_Renderer->GetDevice()->CreateInputLayout(ied, (UINT)std::size(ied), g_CompiledVS, sizeof(g_CompiledVS),
-		inputLayout.ReleaseAndGetAddressOf());
+	DX::ThrowIfFailed(device->CreateInputLayout(ied, (UINT)std::size(ied), g_CompiledVS, sizeof(g_CompiledVS),
+		inputLayout.ReleaseAndGetAddressOf()));
 
 	CD3D11_DEFAULT d3dDefault;
 	CD3D11_BLEND_DESC desc(d3dDefault);
@@ -238,18 +241,18 @@ void Renderer::Draw()
 	immediateContext->ClearRenderTargetView(renderToTextureRTV.Get(), DirectX::Colors::Green);
 	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	immediateContext->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);
-	immediateContext->IASetIndexBuffer(indexBuf.Get(), DXGI_FORMAT_R16_UINT, 0);
+	immediateContext->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+	immediateContext->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 	immediateContext->PSSetShader(pixelShader.Get(), nullptr, 0);
-	immediateContext->VSSetShader(vertShader.Get(), nullptr, 0);
+	immediateContext->VSSetShader(vertexShader.Get(), nullptr, 0);
 	immediateContext->IASetInputLayout(inputLayout.Get());
 	immediateContext->VSSetConstantBuffers(0, 1, VS_cbPerObjectData.GetAddressOf());
 	immediateContext->PSSetConstantBuffers(0, 1, PS_cbPerObjectData.GetAddressOf());
 	
-	ID3D11SamplerState* samStates[] = { states->PointWrap() };
+	ID3D11SamplerState* samStates[] = { commonPipelineStates->PointWrap() };
 	immediateContext->PSSetSamplers(0, 1, samStates);
 	
-	immediateContext->OMSetBlendState(states->AlphaBlend(), nullptr, 0xFFFFFFFFu);
+	immediateContext->OMSetBlendState(commonPipelineStates->AlphaBlend(), nullptr, 0xFFFFFFFFu);
 	immediateContext->RSSetState(nullptr);
 	immediateContext->OMSetDepthStencilState(nullptr, 0);
 
@@ -285,9 +288,9 @@ void Renderer::Draw()
 		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
 		PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
 	
-		ID3D11ShaderResourceView* Srvs[] = { drawable->textureSRV.Get(), darknessSRV.Get() };
+		ID3D11ShaderResourceView* inputSRVs[] = { drawable->textureSRV.Get(), darknessSRV.Get() };
 
-		immediateContext->PSSetShaderResources(0, 2, Srvs);
+		immediateContext->PSSetShaderResources(0, 2, inputSRVs);
 	
 		immediateContext->DrawIndexed(6, 0, 0);
 	}
@@ -295,11 +298,14 @@ void Renderer::Draw()
 	//Unbind offscreen texture and draw it
 	immediateContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
 	immediateContext->ClearRenderTargetView(renderTargetView.Get(), DirectX::Colors::Red);
-	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 	immediateContext->OMSetBlendState(alphaToCoverageBS.Get(), nullptr, 0xFFFFFFFFu);
 
 	immediateContext->IASetVertexBuffers(0, 1, screenQuadVB.GetAddressOf(), &stride, &offset);
 	immediateContext->IASetIndexBuffer(screenQuadIB.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+	immediateContext->PSSetShader(renderToTexPixelShader.Get(), nullptr, 0);
+	immediateContext->PSSetConstantBuffers(0, 1, PSRenderToTex_cbPerObjectData.GetAddressOf());
 
 	const VS_cbPerObject cbValues_VS =
 	{
@@ -309,18 +315,20 @@ void Renderer::Draw()
 		1
 	};
 
-	const PS_cbPerObject cbValues_PS = 
+
+	const PSRenderToTex_cbPerObject cbValues_PS = 
 	{
-		g_GameManager->darknessLevel
+		g_GameManager->darknessLevel,
+		g_GameManager->rednessFactor
 	};
 
 
 	VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
-	PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
+	PSRenderToTex_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
 
-	ID3D11ShaderResourceView* Srvs[] = { renderToTextureSRV.Get(), darknessSRV.Get() };
+	ID3D11ShaderResourceView* inputSRVs[] = { renderToTextureSRV.Get(), darknessSRV.Get() };
 
-	immediateContext->PSSetShaderResources(0, 2, Srvs);
+	immediateContext->PSSetShaderResources(0, 2, inputSRVs);
 	immediateContext->DrawIndexed(6, 0, 0);
 }
 
