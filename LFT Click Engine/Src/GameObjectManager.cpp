@@ -311,26 +311,28 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 				}
 			}
 		}
+		g_AStarTerrain->Init();
 	}
-	prefabsJSON = j["Level"];
-	for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
+
+	if (j.contains("Level"))
 	{
-		GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"], true);
-		std::string newObjectTag = currentObj.value()["object"];
-		json overrideList = currentObj.value()["overrides"];
-		for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
+		prefabsJSON = j["Level"];
+		for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
 		{
-			json actualOverride = c.value();
-			for (json::iterator realOverrides = actualOverride.begin(); realOverrides != actualOverride.end(); ++realOverrides)
+			GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"], true);
+			std::string newObjectTag = currentObj.value()["object"];
+			json overrideList = currentObj.value()["overrides"];
+			for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
 			{
-				int val = std::stoi(realOverrides.key());
-				newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
+				json actualOverride = c.value();
+				for (json::iterator realOverrides = actualOverride.begin(); realOverrides != actualOverride.end(); ++realOverrides)
+				{
+					int val = std::stoi(realOverrides.key());
+					newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
+				}
 			}
 		}
 	}
-
-	g_AStarTerrain->Init();
-
 	for (GameObject* g : gameObjectList) {
 		g->Start();
 	}
