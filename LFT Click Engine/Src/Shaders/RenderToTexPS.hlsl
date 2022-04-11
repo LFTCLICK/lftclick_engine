@@ -13,7 +13,8 @@ cbuffer cbPerObject
 {
 	float darknessFactor;
 	float rednessFactor;
-	float2 padding;
+	float fadFactor;
+	float padding;
 };
 
 float4 main(VSOut pin) : SV_Target
@@ -26,9 +27,11 @@ float4 main(VSOut pin) : SV_Target
 
 	float4 nightColor = textureColor * darkness;
 	float4 damagedColor = textureColor * redness;
+	float4 blackColor = float4(0, 0, 0, 1);
 
 	float4 daynightColor = lerp(textureColor, nightColor, darknessFactor);
-	float4 finalColor = lerp(daynightColor, damagedColor, rednessFactor);
+	float4 outputColor = lerp(daynightColor, damagedColor, rednessFactor);
+	float4 finalColor = lerp(outputColor, blackColor, fadFactor);
 
 	return finalColor;
 }

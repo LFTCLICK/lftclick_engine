@@ -29,6 +29,9 @@ void FollowMouse::Update()
 	while (ShowCursor(false) >= 0); // Hides cursor
 #endif
 
+	if (g_GameManager->currentLevel == EGameLevel::Pausemenu)
+		return;
+
 	float targetX = (float)(g_InputManager->mouseX() - g_Renderer->GetWidth()/2.0f) + g_GameManager->mainCamera->xPos;
 	float targetY = -1 * (float)(g_InputManager->mouseY() - g_Renderer->GetHeight() / 2.0f) + g_GameManager->mainCamera->yPos;
 

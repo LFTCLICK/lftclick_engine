@@ -62,7 +62,13 @@ int main(int argc, char* args[])
 
 	}
 
-	g_pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE );
+	UINT windowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE;
+
+#ifndef _DEBUG
+	windowFlags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
+
+	g_pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, windowFlags);
 
 	if (!g_pWindow)
 		return 1;
@@ -81,7 +87,7 @@ int main(int argc, char* args[])
 	g_AStarTerrain = std::make_unique<AStarTerrain>();
 
 	g_Renderer = std::make_unique<Renderer>();
-	g_Renderer->Initialize(GetActiveWindow());
+	g_Renderer->Initialize(GetActiveWindow(), INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT);
 	g_Renderer->InitImGui(g_pWindow);
 
 	g_GameManager->windowHeight = g_Renderer->GetWidth();

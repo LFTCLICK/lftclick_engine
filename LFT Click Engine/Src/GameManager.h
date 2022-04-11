@@ -165,7 +165,7 @@ public:
 	Camera* mainCamera;
 	Transform* playerTrans;
 
-	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(0 - 2280.0f / 2, -2280.0f / 2, 2180.0f, 2180.0f);
+	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(-1000.0f, -920.0f, 1880.0f, 1930.0f);
 
 
 	int day;

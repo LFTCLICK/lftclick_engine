@@ -46,15 +46,11 @@ void GameManager::UpdateTime()
 		day++;
 	}
 
-	static float w = 1880.0f;
-	static float h = 1930.0f;
-	static float x = -1000.0f;
-	static float y = -920.0f;
-	ImGui::DragFloat("width", &w, 10.0f, 1500, 2500.0f);
-	ImGui::DragFloat("height", &h, 10.0f, 1500, 2500.0f);
-	ImGui::DragFloat("x", &x, 10.0f, -3000, 3000.0f);
-	ImGui::DragFloat("y", &y, 10.0f, -3000, 3000.0f);
-	cabinRect = DirectX::SimpleMath::Rectangle(x, y, w, h);
+	//static float w = 1880.0f;
+	//static float h = 1930.0f;
+	//static float x = -1000.0f;
+	//static float y = -920.0f;
+	//cabinRect = DirectX::SimpleMath::Rectangle(x, y, w, h);
 	DirectX::SimpleMath::Rectangle playerRect = DirectX::SimpleMath::Rectangle(playerTrans->position.x, playerTrans->position.y, 
 		1, 1);
 

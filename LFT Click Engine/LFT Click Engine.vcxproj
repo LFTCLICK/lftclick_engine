@@ -175,7 +175,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <CompileAsManaged>
       </CompileAsManaged>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>

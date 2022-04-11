@@ -49,8 +49,10 @@ Renderer::~Renderer()
 
 	delete[] displayModes;
 }
-void Renderer::Initialize(HWND hWnd)
+void Renderer::Initialize(HWND hWnd, UINT clientWidth, UINT clientHeight)
 {
+	this->clientWidth = clientWidth;
+	this->clientHeight = clientHeight;
 
 	UINT flags = D3D11_CREATE_DEVICE_SINGLETHREADED;
 
@@ -92,7 +94,11 @@ void Renderer::Initialize(HWND hWnd)
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.BufferCount = 1;
 	sd.OutputWindow = hWnd;
+#ifdef _DEBUG
 	sd.Windowed = TRUE;
+#else
+	sd.Windowed = FALSE;
+#endif
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	sd.Flags = 0;
 
@@ -102,10 +108,8 @@ void Renderer::Initialize(HWND hWnd)
 	ComPtr<IDXGIAdapter> dxgiAdapter;
 	DX::ThrowIfFailed(dxgiDevice->GetAdapter(dxgiAdapter.GetAddressOf()));
 	
-
 	ComPtr<IDXGIFactory1> dxgiFactory;
 	DX::ThrowIfFailed(dxgiAdapter->GetParent(__uuidof(IDXGIFactory1), &dxgiFactory));
-
 
 	//Enumerate supported resolutions
 	ComPtr<IDXGIOutput> pOutput;
@@ -122,11 +126,12 @@ void Renderer::Initialize(HWND hWnd)
 			static_cast<float>(displayModes[i].RefreshRate.Numerator) / displayModes[i].RefreshRate.Denominator);
 	}
 
+#ifndef _DEBUG
 	//Choose highest resolution/refresh rate
 	clientWidth = displayModes[numModes - 1].Width;
 	clientHeight = displayModes[numModes - 1].Height;
-
 	SDL_SetWindowSize(g_pWindow, clientWidth, clientHeight);
+#endif
 
 	sd.BufferDesc.Width = clientWidth;
 	sd.BufferDesc.Height = clientHeight;
@@ -315,11 +320,14 @@ void Renderer::Draw()
 		1
 	};
 
+	static float f = 0.0f;
+	ImGui::DragFloat("Fad factor", &f, 0.01f, 0.0f, 1.0f);
 
 	const PSRenderToTex_cbPerObject cbValues_PS = 
 	{
 		g_GameManager->darknessLevel,
-		g_GameManager->rednessFactor
+		g_GameManager->rednessFactor,
+		f
 	};
 
 
@@ -361,7 +369,7 @@ void Renderer::InitImGui(SDL_Window* pWindow)
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
+	ImGui::StyleColorsClassic();
 	ImGui_ImplSDL2_InitForD3D(pWindow);
 	ImGui_ImplDX11_Init(device.Get(), immediateContext.Get());
 }
@@ -409,7 +417,6 @@ void Renderer::OnResize(int newWidth, int newHeight)
 
 	DX::ThrowIfFailed(device->CreateDepthStencilView(depthStencilBuffer.Get(), &depthStencilViewDesc, depthStencilView.ReleaseAndGetAddressOf()));
 
-	immediateContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
 
 	screenViewport.TopLeftX = 0.0f;
 	screenViewport.TopLeftY = 0.0f;
@@ -444,6 +451,9 @@ void Renderer::OnResize(int newWidth, int newHeight)
 
 	DX::ThrowIfFailed(device->CreateShaderResourceView(offscreenTex.Get(), 0, &renderToTextureSRV));
 	DX::ThrowIfFailed(device->CreateRenderTargetView(offscreenTex.Get(), 0, &renderToTextureRTV));
+
+
+	immediateContext->OMSetRenderTargets(1, renderTargetView.GetAddressOf(), depthStencilView.Get());
 
 }
 

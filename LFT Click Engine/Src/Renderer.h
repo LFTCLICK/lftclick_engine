@@ -65,7 +65,8 @@ class Renderer
 	{
 		float darknessFactor;
 		float rednessFactor;
-		DirectX::XMFLOAT2 padding;
+		float fadFactor;
+		float padding;
 	};
 	static_assert(sizeof(PSRenderToTex_cbPerObject) % 16 == 0, "Not 16-bytes aligned");
 
@@ -99,7 +100,7 @@ public:
 	Renderer(const Renderer&) = delete;
 	Renderer& operator=(const Renderer&) = delete;
 
-	void Initialize(HWND hWnd);
+	void Initialize(HWND hWnd, UINT clientWidth, UINT clientHeight);
 	void InitImGui(SDL_Window* pWindow);
 
 	void PrepareForRendering();
