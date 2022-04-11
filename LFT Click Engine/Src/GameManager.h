@@ -72,9 +72,11 @@ class GameObject;
 
 enum class EGameLevel
 {
+	Intro,
 	Mainmenu,
 	Pausemenu,
-	Level0
+	Level0,
+	CreditsScreen
 };
 
 class GameManager
@@ -144,7 +146,7 @@ public:
 
 	bool IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos);
 
-	void LoadLevel(nlohmann::json file);
+	void LoadLevel(nlohmann::json file, EGameLevel toSet);
 public:
 	GameObject* playerObj;
 	bool playerDead;
@@ -177,8 +179,10 @@ public:
 	int activatedSpawner;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> menuBackgroundSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> creditsSRV;
 
 	EGameLevel currentLevel;
+	EGameLevel prevLevel;
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

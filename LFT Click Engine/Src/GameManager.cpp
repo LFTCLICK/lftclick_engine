@@ -12,21 +12,24 @@
 #include "Renderer.h"
 #include "GameObjectManager.h"
 
-void GameManager::LoadLevel(json file)
+void GameManager::LoadLevel(json file, EGameLevel toSet)
 {
 	g_GameObjManager->DeleteAll();
 	g_GameObjManager->Deserialize(g_GameObjFactory.get(), file);
+	this->currentLevel = toSet;
+	if (toSet == EGameLevel::Level0)
+	{
+		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		this->playerObj = playerObj;
+		this->mainCamera = playerObj->getComponent<Camera>();
+		this->playerTrans = playerObj->getComponent<Transform>();
+		this->time = 0;
 
-	GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
-	this->playerObj = playerObj;
-	this->mainCamera = playerObj->getComponent<Camera>();
-	this->playerTrans = playerObj->getComponent<Transform>();
-	this->time = 0;
+		g_FrameRateController->zeroDeltaTime = false;
 
-	this->currentLevel = EGameLevel::Level0;
-	g_FrameRateController->zeroDeltaTime = false;
+		playerDead = false;
 
-	playerDead = false;
+	}
 }
 
 void GameManager::Update() {

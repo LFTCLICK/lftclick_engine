@@ -166,7 +166,7 @@ void Player::HandleMessage(Message* e)
 
 		Move(cm->deltaPos.x, cm->deltaPos.y);
 
-		if (e->otherObject->componentOwner->tag == "zombie")
+		if (e->otherObject->componentOwner->tag == "zombie" || e->otherObject->componentOwner->tag == "zombie")
 		{
 			if (damageCooldownTimer < 0)
 			{
