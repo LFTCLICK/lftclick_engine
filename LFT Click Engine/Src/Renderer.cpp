@@ -207,14 +207,14 @@ void Renderer::PrepareForRendering()
 	spriteBatch->Begin();
 }
 
-void Renderer::Draw()
+void Renderer::Draw(const FLOAT* clearColor)
 {
 	UINT stride = sizeof(VertexType);
 	UINT offset = 0;
 
 	//Bind offscreen texture
 	immediateContext->OMSetRenderTargets(1, renderToTextureRTV.GetAddressOf(), depthStencilView.Get());
-	immediateContext->ClearRenderTargetView(renderToTextureRTV.Get(), DirectX::Colors::Green);
+	immediateContext->ClearRenderTargetView(renderToTextureRTV.Get(), clearColor);
 	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
 	immediateContext->IASetVertexBuffers(0, 1, vertBuf.GetAddressOf(), &stride, &offset);

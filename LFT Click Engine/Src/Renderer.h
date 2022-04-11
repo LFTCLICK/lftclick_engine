@@ -86,9 +86,8 @@ public:
 
 	void Initialize(HWND hWnd, int initWidth, int initHeight);
 	void InitImGui(SDL_Window* pWindow);
-
 	void PrepareForRendering();
-	void Draw();
+	void Draw(const FLOAT* clearColor);
 	void PresentFrame();
 	void OnResize(int newWidth, int newHeight);
 
