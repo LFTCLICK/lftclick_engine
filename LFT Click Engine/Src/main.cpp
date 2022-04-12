@@ -114,7 +114,7 @@ int main(int argc, char* args[])
 		case SDL_WINDOWEVENT:
 			if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
 			{
-				SDL_SetWindowSize(pWindow, e.window.data1, e.window.data2);
+				SDL_SetWindowSize(g_pWindow, e.window.data1, e.window.data2);
 				g_Renderer->OnResize(e.window.data1, e.window.data2);
 			}
 			break;
