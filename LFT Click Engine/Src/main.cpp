@@ -177,7 +177,12 @@ int main(int argc, char* args[])
 			L"Resources\\images\\credits.png", 0,
 			D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr,
 			g_GameManager->creditsSRV.ReleaseAndGetAddressOf()));
-
+	DX::ThrowIfFailed(
+		DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(),
+			L"Resources\\images\\controls.png", 0,
+			D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr,
+			g_GameManager->controlsSRV.ReleaseAndGetAddressOf()));
+	
 	srand(time(NULL));
 	g_GameManager->currentLevel = EGameLevel::Mainmenu;
 	RECT rect;
@@ -220,6 +225,10 @@ int main(int argc, char* args[])
 			{
 				g_GameManager->prevLevel = g_GameManager->currentLevel;
 				g_GameManager->currentLevel = EGameLevel::CreditsScreen;
+			}if (ImGui::Button("Controls", { 100,50 }))
+			{
+				g_GameManager->prevLevel = g_GameManager->currentLevel;
+				g_GameManager->currentLevel = EGameLevel::ControlScreen;
 			}
 
 			if (ImGui::Button("Quit", { 100, 50 }))
@@ -237,10 +246,32 @@ int main(int argc, char* args[])
 			rect.bottom = g_Renderer->GetHeight();
 			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->creditsSRV.Get(), rect);
 
-			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth())/2 - 50, static_cast<float>(3*g_Renderer->GetHeight()) / 4));
-			ImGui::Begin("menu", nullptr, 
-				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove|ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar 
-				|ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize| ImGuiWindowFlags_NoBackground);
+			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(3 * g_Renderer->GetHeight()) / 4));
+			ImGui::Begin("menu", nullptr,
+				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
+				| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+
+			if (ImGui::Button("Back", { 100,50 }))
+			{
+				g_GameManager->currentLevel = g_GameManager->prevLevel;
+			}
+
+			ImGui::End();
+
+			g_Renderer->Draw(DirectX::Colors::Black);
+			break;
+
+		case EGameLevel::ControlScreen:
+
+			rect.left = rect.top = 0;
+			rect.right = g_Renderer->GetWidth();
+			rect.bottom = g_Renderer->GetHeight();
+			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->controlsSRV.Get(), rect);
+
+			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(3 * g_Renderer->GetHeight()) / 4));
+			ImGui::Begin("menu", nullptr,
+				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
+				| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 
 			if (ImGui::Button("Back", { 100,50 }))
 			{

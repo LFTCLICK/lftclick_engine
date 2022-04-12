@@ -76,7 +76,8 @@ enum class EGameLevel
 	Mainmenu,
 	Pausemenu,
 	Level0,
-	CreditsScreen
+	CreditsScreen,
+	ControlScreen
 };
 
 class GameManager
@@ -180,6 +181,7 @@ public:
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> menuBackgroundSRV;
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> creditsSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> controlsSRV;
 
 	EGameLevel currentLevel;
 	EGameLevel prevLevel;
