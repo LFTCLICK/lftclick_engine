@@ -85,6 +85,7 @@ private:
 	float introTimer;
 
 	DirectX::SimpleMath::Vector2 dashVelocity;
+	TimedMessage currentMessage;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper;
 	bool isDashing, autopilot;
 	

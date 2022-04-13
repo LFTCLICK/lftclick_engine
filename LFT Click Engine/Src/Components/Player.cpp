@@ -123,10 +123,10 @@ void Player::Update()
 		myTransform->Move(dashVelocity.x, dashVelocity.y);
 	}
 
-	if (parts == 0 && introTimer < 10.0f)
+	/*if (parts == 0 && introTimer < 10.0f)
 	{
 		drawable->HUD_DrawTextCenter("I need to find 8 motorcycle parts to fix my bike.", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-	}
+	}*/
 
 	if (parts >= 8)
 	{
@@ -136,6 +136,15 @@ void Player::Update()
 
 	if (autopilot)
 		Sidescroll(g_FrameRateController->DeltaTime());
+
+	if (currentMessage.timeout > 0) {
+		currentMessage.timeout -= g_FrameRateController->DeltaTime();
+		drawable->HUD_DrawTextCenter(currentMessage.message, { 0.0f, -50.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+	else if (!g_GameManager->messageQueue.empty()) {
+		currentMessage = g_GameManager->GetPlayerMessage();
+	}
+
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
@@ -153,7 +162,6 @@ Component* Player::Clone(GameObject* newParent) {
 
 void Player::Deserialize(nlohmann::json j, GameObject* parent) {
 	if (j.contains("script")) script = j["script"];
-
 
 	this->componentOwner = componentOwner;
 }
