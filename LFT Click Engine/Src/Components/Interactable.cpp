@@ -12,6 +12,7 @@
 
 const Audible::SoundEvent AUDIO_ON_INTERACTING = Audible::SoundEvent::AUDIO_ON_INTERACTING;
 const Audible::SoundEvent AUDIO_ON_COLLECT = Audible::SoundEvent::AUDIO_ON_COLLECT;
+const Audible::SoundEvent AUDIO_ON_COLLECT_PART = Audible::SoundEvent::AUDIO_ON_COLLECT_PART;
 
 bool Interactable::tutorialUI = true;
 
@@ -38,7 +39,7 @@ void Interactable::Update()
 			StopInteraction();
 
 		if (tutorialUI)
-			drawable->HUD_DrawTextCenter("Hold E to Destroy", { 0.0f, -100.0f}, { 1.0f, 1.0f, 1.0f, 1.0f });
+			drawable->HUD_DrawTextCenter("Hold E to Gather Materials", { 0.0f, -100.0f}, { 1.0f, 1.0f, 1.0f, 1.0f });
 
 		if (interacting) 
 		{
@@ -88,16 +89,17 @@ void Interactable::StopInteraction() {
 }
 
 void Interactable::CompleteInteraction() {
-	audio->PlaySoundsOnEvent(AUDIO_ON_COLLECT);
 
 	if (hasParts) {
 		if (Helpers::randFloat0to1() < g_GameManager->GetChanceOfFindingPart()) {
 			g_GameManager->playerObj->getComponent<Player>()->parts++;
 			g_GameManager->PartSearchSuccessful();
+			audio->PlaySoundsOnEvent(AUDIO_ON_COLLECT_PART);
 		}
 		else {
 			g_GameManager->playerObj->getComponent<Player>()->wood += woodPerCollect;
 			g_GameManager->PartSearchFailed();
+			audio->PlaySoundsOnEvent(AUDIO_ON_COLLECT);
 		}
 	}
 	else {

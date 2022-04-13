@@ -45,6 +45,7 @@ public:
 		AUDIO_ON_INTERACTING,
 		AUDIO_ON_COLLECT,
 		AUDIO_ON_RANDOM,
+		AUDIO_ON_COLLECT_PART,
 		AUDIO_ON_DELETE = 2000,
 	};
 	// Inherited via Component

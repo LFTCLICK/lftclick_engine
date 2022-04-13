@@ -11,6 +11,8 @@ using namespace DirectX;
 
 constexpr auto DAMAGE_FLASH_DURATION = 0.3f; //seconds
 
+const Audible::SoundEvent AUDIO_ON_DAMAGE = Audible::SoundEvent::AUDIO_ON_DAMAGE;
+const Audible::SoundEvent AUDIO_ON_DEATH = Audible::SoundEvent::AUDIO_ON_DEATH;
 
 void Player::Start()
 {
@@ -32,11 +34,14 @@ void Player::Start()
 	autopilot = isAutopilot();
 	sol::function getPlayerSpeed = lua_player_state["getPlayerSpeed"];
 	playerSpeed = getPlayerSpeed();
+	PlayerCollidedWithEnemy = lua_player_state["PlayerCollidedWithEnemy"];
 
 	myTransform = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 
 	drawable = componentOwner->getComponent<Drawable>();
+	audio = componentOwner->getComponent<Audible>();
+	anim = componentOwner->getComponent<SpriteAnimator>();
 	squareCollider = componentOwner->getComponent<SquareCollider>();
 
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\wood_icon.png", nullptr, &woodSRV));
@@ -111,7 +116,7 @@ void Player::Update()
 		g_GameManager->rednessFactor = std::lerp(g_GameManager->rednessFactor, 0.0f, std::clamp(flashOutTimer / DAMAGE_FLASH_DURATION, 0.0f, 1.0f));
 	}
 
-	if (isDashing) 
+	/*if (isDashing)
 	{
 		dashTimer += g_FrameRateController->DeltaTime();
 
@@ -121,7 +126,7 @@ void Player::Update()
 			dashTimer = 0;
 		}
 		myTransform->Move(dashVelocity.x, dashVelocity.y);
-	}
+	}*/
 
 	/*if (parts == 0 && introTimer < 10.0f)
 	{
@@ -137,14 +142,21 @@ void Player::Update()
 	if (autopilot)
 		Sidescroll(g_FrameRateController->DeltaTime());
 
-	if (currentMessage.timeout > 0) {
+	if (currentMessage.timeout > 0) 
+	{
 		currentMessage.timeout -= g_FrameRateController->DeltaTime();
 		drawable->HUD_DrawTextCenter(currentMessage.message, { 0.0f, -50.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
-	else if (!g_GameManager->messageQueue.empty()) {
+	else if (!g_GameManager->messageQueue.empty()) 
+	{
 		currentMessage = g_GameManager->GetPlayerMessage();
 	}
 
+	if (hitSpeed > 0) {
+		DirectX::SimpleMath::Vector2 movement = hitDirection * hitSpeed * g_FrameRateController->DeltaTime();
+		Move(movement.x, movement.y);
+		hitSpeed -= inertiaMod;
+	}
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
@@ -156,12 +168,16 @@ void Player::Update()
 Component* Player::Clone(GameObject* newParent) {
 	Player* toReturn = new Player();
 	toReturn->script = script;
+	toReturn->inertiaMod = inertiaMod;
 	toReturn->componentOwner = newParent;
 	return (Component*)toReturn;
 }
 
 void Player::Deserialize(nlohmann::json j, GameObject* parent) {
-	if (j.contains("script")) script = j["script"];
+	if (j.contains("script")) 
+		script = j["script"];
+	if (j.contains("inertiaMod")) 
+		inertiaMod = j["inertiaMod"];
 
 	this->componentOwner = componentOwner;
 }
@@ -172,22 +188,30 @@ void Player::HandleMessage(Message* e)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
 
-		Move(cm->deltaPos.x, cm->deltaPos.y);
-
-		if (e->otherObject->componentOwner->tag == "zombie" || e->otherObject->componentOwner->tag == "zombie")
+		Enemy* enemyComp = e->otherObject->componentOwner->getComponent<Enemy>();
+		if (enemyComp != nullptr) 
 		{
-			if (damageCooldownTimer < 0)
+			hitDirection = cm->deltaPos;
+			hitDirection.Normalize();
+			hitSpeed = enemyComp->speed * 10;
+			if (damageCooldownTimer < 0) 
 			{
-				sol::function PlayerCollidedWithEnemy = lua_player_state["PlayerCollidedWithEnemy"];
 				PlayerCollidedWithEnemy();
 				damageCooldownTimer = 2;
 			}
+
+			DirectX::SimpleMath::Vector2 movement = hitDirection * hitSpeed * g_FrameRateController->DeltaTime();
+			Move(movement.x, movement.y);
+		}
+		else {
+			Move(cm->deltaPos.x, cm->deltaPos.y);
 		}
 	}
 }
 
 void Player::Move(float deltaX, float deltaY) {
-	if (!isDashing) myTransform->Move(deltaX, deltaY);
+	if (!isDashing)
+		myTransform->Move(deltaX, deltaY);
 }
 
 void Player::Dash() {
@@ -198,6 +222,8 @@ void Player::Dash() {
 void Player::DamagePlayer() {
 	damageFlashing = true;
 	health -= 15;
+	anim->Damage(0.5f);
+	audio->PlaySoundsOnEvent(AUDIO_ON_DAMAGE);
 	if (health <= 0) { g_GameManager->playerDead = true; }
 }
 

@@ -70,6 +70,9 @@ private:
 	std::map<int, AnimationInfo> animations;
 	std::map<std::string, int> moveAnimationIndices;
 	std::map<std::string, int> idleAnimationIndices;
+	std::map<std::string, int> damagedIdleAnimationIndices;
+	std::map<std::string, int> damagedMoveAnimationIndices;
+	std::map<std::string, int> deathAnimationIndices;
 	int damageAnimationIndex, deathAnimationIndex, interactRangeAnimationIndex, currentPhase;
 
 	std::string oldDirection, direction;

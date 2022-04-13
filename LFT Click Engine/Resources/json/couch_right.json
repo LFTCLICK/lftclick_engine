@@ -69,7 +69,7 @@
         ]
       },
       {
-        "name": ".\\Resources\\sounds\\bwee.mp3",
+        "name": ".\\Resources\\sounds\\woodget.mp3",
         "loop": false,
         "volume": 5,
         "pitchRange": [ 0.65, 0.85 ],
