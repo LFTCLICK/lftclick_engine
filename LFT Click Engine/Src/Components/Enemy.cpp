@@ -104,7 +104,6 @@ void Enemy::Update()
 
 	if (g_GameManager->harshLightOfDay == g_GameManager->day && daylightDeathChance < DAYLIGHT_DEATH_CHANCE) {
 		float oldDaylightDeathTime = daylightDeathTime;
-		std::cout << daylightDeathTime << " " << componentOwner->isDeletable << std::endl;
 		daylightDeathTime -= g_FrameRateController->DeltaTime();
 		if (daylightDeathTime <= 0 && oldDaylightDeathTime >= 0)
 			componentOwner->getComponent<Damageable>()->health = 0;

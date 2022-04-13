@@ -69,6 +69,7 @@ private:
 	SquareCollider* squareCollider;
 
 	DirectX::SimpleMath::Vector2 dashVelocity;
+	TimedMessage currentMessage;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed;
 	bool isDashing, autopilot;
 };

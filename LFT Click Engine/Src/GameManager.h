@@ -19,6 +19,7 @@
 //
 // The darkness alpha level is produced by "GetDarknessLevel()".
 
+#include <queue>
 #include <json.hpp>
 #include <Helpers.h>
 
@@ -63,6 +64,8 @@
 
 #define NEARPLAYER_ENEMY_SPAWNER_ID 1000
 
+#define MESSAGE_POSSIBILITIES 5
+
 
 class Camera;
 class Transform;
@@ -77,13 +80,18 @@ enum class EGameLevel
 	Level0
 };
 
+struct TimedMessage {
+	std::string message;
+	float timeout;
+};
+
 class GameManager
 {
 public:
 	GameManager() : 
 		playerObj(nullptr),
 		playerDead(false), 
-		darknessLevel(0),
+		darknessLevel(1),
 		monsterCount(0),
 		dangerLevel(0),
 		mapHeight(10000.0f),
@@ -142,6 +150,10 @@ public:
 	bool IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos);
 
 	void LoadLevel(nlohmann::json file);
+
+	void PushPlayerMessage(std::string, float timeout = 3.f);
+	TimedMessage GetPlayerMessage();
+
 public:
 	GameObject* playerObj;
 	bool playerDead;
@@ -159,6 +171,7 @@ public:
 	Camera* mainCamera;
 	Transform* playerTrans;
 
+
 	int day;
 	float time;
 
@@ -170,6 +183,10 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> menuBackgroundSRV;
 
 	EGameLevel currentLevel;
+
+	std::queue<TimedMessage> messageQueue;
+
+	//std::queue<std::string> daytimeSwitchMessages[MESSAGE_POSSIBILITIES] 
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

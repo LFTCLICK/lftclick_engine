@@ -27,6 +27,21 @@ void GameManager::LoadLevel(json file)
 	g_FrameRateController->zeroDeltaTime = false;
 
 	playerDead = false;
+
+	PushPlayerMessage("Ugh, where am I?", 3.f);
+	PushPlayerMessage("This place smells terrible.", 3.f);
+}
+
+void GameManager::PushPlayerMessage(std::string message, float timeout) 
+{
+	messageQueue.push({ message, timeout });
+}
+
+TimedMessage GameManager::GetPlayerMessage()
+{
+	TimedMessage next = messageQueue.front();
+	messageQueue.pop();
+	return next;
 }
 
 void GameManager::Update() {
@@ -46,6 +61,7 @@ void GameManager::UpdateTime()
 	}
 
 	float oldDarknessLevel = darknessLevel;
+	bool wasNightTime = IsNightTime();
 
 	//if (time < SUN_RISING) darknessLevel = 1;
 	//else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
@@ -59,8 +75,51 @@ void GameManager::UpdateTime()
 
 	ImGui::DragFloat("Darkness", &darknessLevel, 0.01f, 0.0f, 1.0f);
 
-	if (oldDarknessLevel >= DAY_NIGHT_THRESHOLD && !IsNightTime() && harshLightOfDay != day) {
+	if (wasNightTime && !IsNightTime()) {
 		harshLightOfDay = day;
+		PushPlayerMessage("Daybreak! Finally!");
+		PushPlayerMessage("I saw some piles of junk outside...");
+		PushPlayerMessage("Maybe I can find some motorcycle parts?");
+		PushPlayerMessage("If I can repair my bike...");
+		PushPlayerMessage("Maybe there's a chance I get out of here alive!");
+	}
+
+	if (!wasNightTime && IsNightTime()) {
+		//Helpers::randWithinRange(0, )
+		PushPlayerMessage("Oh no, daylight's fading...");
+
+		if (playerInsideHouse) {
+			switch (day) {
+			case 1:
+				PushPlayerMessage("I hope my fortifications hold...");
+				PushPlayerMessage("If they break them down,");
+				PushPlayerMessage("I'll have to use furnture to repair them!");
+				break;
+			case 2:
+				PushPlayerMessage("Are there even more of them out there?");
+				PushPlayerMessage("I hope the wood in this furniture is strong!");
+				break;
+			default:
+				PushPlayerMessage("There's even more of them!");
+				PushPlayerMessage("Better stay inside!");
+				break;
+			}
+		} else {
+			switch (day) {
+			case 1: 
+				PushPlayerMessage("Why did I stay out for so long?!", 1.5f);
+				PushPlayerMessage("I better get back to the cabin, fast!", 1.5f); 
+				break;
+			default: 
+				PushPlayerMessage("By now, I should know better than to be out for that long!"); 
+				break;
+			}
+			PushPlayerMessage("I hope I still have time to bar the doors!", 1.5f);
+		}
+		PushPlayerMessage("I saw some piles of junk outside...");
+		PushPlayerMessage("Maybe I can find some motorcycle parts?");
+		PushPlayerMessage("If I can repair my bike,", 2.f);
+		PushPlayerMessage("maybe there's a chance I get out of here alive!");
 	}
 }
 

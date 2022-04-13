@@ -81,6 +81,15 @@ void Player::Update()
 	if (autopilot)
 		Sidescroll(g_FrameRateController->DeltaTime());
 
+	if (currentMessage.timeout > 0) {
+		currentMessage.timeout -= g_FrameRateController->DeltaTime();
+		drawable->HUD_DrawTextCenter(currentMessage.message, { 0.0f, -50.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+	}
+	else if (!g_GameManager->messageQueue.empty()) {
+		currentMessage = g_GameManager->GetPlayerMessage();
+	}
+
+
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
 	g_AudioManager->SetPlayerSpatialPosition(trans->CurrentPos() / 100);
@@ -95,7 +104,6 @@ Component* Player::Clone(GameObject* newParent) {
 
 void Player::Deserialize(nlohmann::json j, GameObject* parent) {
 	if (j.contains("script")) script = j["script"];
-
 
 	this->componentOwner = componentOwner;
 }
