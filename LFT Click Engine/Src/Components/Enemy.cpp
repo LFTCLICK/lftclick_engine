@@ -119,7 +119,7 @@ void Enemy::Update()
 #endif
 		daylightDeathTime -= g_FrameRateController->DeltaTime();
 		if (daylightDeathTime <= 0 && oldDaylightDeathTime >= 0)
-			componentOwner->getComponent<Damageable>()->health = 0;
+			componentOwner->getComponent<Damageable>()->playerHealth = 0;
 	}
 }
 
