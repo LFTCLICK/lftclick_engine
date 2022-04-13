@@ -84,7 +84,8 @@ enum class EGameLevel
 	ControlScreen
 };
 
-struct TimedMessage {
+struct TimedMessage 
+{
 	std::string message;
 	float timeout;
 };
@@ -101,6 +102,7 @@ public:
 		monsterCount(0),
 		dangerLevel(0),
 		rednessFactor(0),
+		fadFactor(0),
 		mapHeight(10000.0f),
 		mainCamera(nullptr),
 		day(1), 
@@ -168,6 +170,7 @@ public:
 	bool playerInsideHouse;
 	float darknessLevel;
 	float rednessFactor;
+	float fadFactor;
 	float displayDarknessLevel;
 	int monsterCount;
 	int harshLightOfDay;
