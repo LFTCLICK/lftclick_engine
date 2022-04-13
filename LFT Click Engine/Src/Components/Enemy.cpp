@@ -12,6 +12,7 @@ void Enemy::Start()
 {
 	myTransform = componentOwner->getComponent<Transform>();
 	playerTrans = g_GameObjManager->FindObjectOfTag("player")->getComponent<Transform>();
+	dam = componentOwner->getComponent<Damageable>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	switchToPlayer = false;
 	zHelper = g_GameManager->mapHeight / 2.0f;
@@ -119,8 +120,11 @@ void Enemy::Update()
 #endif
 		daylightDeathTime -= g_FrameRateController->DeltaTime();
 		if (daylightDeathTime <= 0 && oldDaylightDeathTime >= 0)
-			componentOwner->getComponent<Damageable>()->playerHealth = 0;
+			dam->playerHealth = 0;
 	}
+
+	if (speed > 0 && dam->playerHealth < 1)
+		speed = 0;
 }
 
 void Enemy::Deserialize(nlohmann::json j, GameObject* componentOwner)

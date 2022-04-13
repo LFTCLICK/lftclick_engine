@@ -64,6 +64,7 @@ void Damageable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	maxHealth = j["health"];
 	if (j.contains("destroyOnDeath")) destroyOnDeath = j["destroyOnDeath"];
 	if (j.contains("knockbackMod")) knockbackMod = j["knockbackMod"];
+	if (j.contains("deathTime")) deathTime = j["deathTime"];
 }
 
 Component* Damageable::Clone(GameObject* newParent)
@@ -77,13 +78,13 @@ Component* Damageable::Clone(GameObject* newParent)
 	//toReturn->trans = trans;
 	toReturn->knockbackMod = knockbackMod;
 	toReturn->destroyOnDeath = destroyOnDeath;
+	toReturn->deathTime = deathTime;
 	return toReturn;
 }
 
 void Damageable::HandleMessage(Message* e) {
-	if (e->otherObject->componentOwner->tag == "bullet") {
+	if (e->otherObject->componentOwner->tag == "bullet")
 		TakeDamage(1);
-	}
 }
 
 void Damageable::TakeDamage(int damage) {

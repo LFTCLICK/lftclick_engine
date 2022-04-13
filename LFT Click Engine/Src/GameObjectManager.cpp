@@ -32,10 +32,20 @@ void GameObjectManager::Update()
 
 	while (objIt != gameObjectList.end()) {
 		GameObject* g = *objIt;
+		bool finished = false;
 
 		if (g->isDeletable) {
+			finished = true;
+			for (auto comp : g->comps) {
+				if (comp.second != nullptr && !(comp.second->isFinishedDeleting)) {
+					finished = false;
+					break;
+				}
+			}
+		}
 
-			if (g->tag == "zombie" || g->tag == "ghost" || g->tag == "enemy") 
+		if (finished) {
+			if (g->tag == "zombie" || g->tag == "ghost" || g->tag == "enemy")
 				g_GameManager->MonsterCountMinus();
 
 			//EnemySpawner* es = g->getComponent<EnemySpawner>();
