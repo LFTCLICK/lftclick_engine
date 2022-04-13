@@ -47,7 +47,7 @@ GameObject * const GameObjectFactory::CreateObject(json currentObj)
 	GameObject* toReturn = new GameObject();
 	std::string path = currentObj["prefab"];
 
-	std::fstream prefabFile(path);
+	std::ifstream prefabFile(path);
 	json prefab;
 	prefabFile >> prefab;
 	prefabFile.close();

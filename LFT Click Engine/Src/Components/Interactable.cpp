@@ -17,7 +17,7 @@ bool Interactable::tutorialUI = true;
 
 void Interactable::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	audio = componentOwner->getComponent<Audible>();
 	anim = componentOwner->getComponent<SpriteAnimator>();
 	drawable = componentOwner->getComponent<Drawable>();
@@ -91,7 +91,7 @@ void Interactable::CompleteInteraction() {
 	audio->PlaySoundsOnEvent(AUDIO_ON_COLLECT);
 
 	if (hasParts) {
-		if (((float)rand() / RAND_MAX) < g_GameManager->GetChanceOfFindingPart()) {
+		if (Helpers::randFloat0to1() < g_GameManager->GetChanceOfFindingPart()) {
 			g_GameManager->playerObj->getComponent<Player>()->parts++;
 			g_GameManager->PartSearchSuccessful();
 		}
@@ -117,7 +117,7 @@ void Interactable::CompleteInteraction() {
 }
 
 bool Interactable::IsPlayerInRange() {
-	DirectX::SimpleMath::Vector2 pos = trans->CurrentPos(), playerPos = g_GameManager->playerTrans->CurrentPos();
+	DirectX::SimpleMath::Vector2 pos = myTransform->CurrentPos(), playerPos = g_GameManager->playerTrans->CurrentPos();
 
 	return (pos - playerPos).LengthSquared() < interactDistanceSq;
 }
@@ -143,7 +143,7 @@ void Interactable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	if (j.contains("interactDistance")) interactDistance = j["interactDistance"];
 	if (j.contains("totalPhases")) totalPhases = j["totalPhases"];
 	if (j.contains("hpPerPhase")) hpPerPhase = j["hpPerPhase"];
-	if (j.contains("hasParts")) hpPerPhase = j["hasParts"];
+	if (j.contains("hasParts")) hasParts = j["hasParts"];
 }
 
 

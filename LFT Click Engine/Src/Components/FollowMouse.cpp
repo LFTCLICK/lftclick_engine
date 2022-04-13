@@ -19,7 +19,7 @@ using namespace DirectX::SimpleMath;
 
 void FollowMouse::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 
 }
 
@@ -29,11 +29,13 @@ void FollowMouse::Update()
 
 		while (ShowCursor(false) >= 0); // Hides cursor
 
+		if (g_GameManager->currentLevel == EGameLevel::Pausemenu)
+			return;
+
 		float targetX = (float)(g_InputManager->mouseX() - g_Renderer->GetWidth()/2.0f) + g_GameManager->mainCamera->xPos;
 		float targetY = -1 * (float)(g_InputManager->mouseY() - g_Renderer->GetHeight() / 2.0f) + g_GameManager->mainCamera->yPos;
 
-
-		trans->SetPos(targetX, targetY);
+		myTransform->SetPos(targetX, targetY);
 	}
 }
 
@@ -46,7 +48,7 @@ Component* FollowMouse::Clone(GameObject* newParent)
 {
 	FollowMouse* toReturn = new FollowMouse();
 	toReturn->componentOwner = newParent;
-	toReturn->trans = trans;
+	toReturn->myTransform = myTransform;
 	toReturn->gom = gom;
 	return toReturn;
 }

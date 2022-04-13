@@ -1,0 +1,30 @@
+{
+  "Prefabs": [
+    {
+      "prefab": "Resources\\json\\digi_logo.json",
+      "tag": "digi_logo"
+    },
+    {
+      "prefab": "Resources\\json\\FMOD_logo.json",
+      "tag": "FMOD_logo"
+    },
+    {
+      "prefab": "Resources\\json\\introCamera.json",
+      "tag": "introCamera"
+    }
+  ],
+  "Level": [
+    {
+      "object": "introCamera",
+      "overrides": []
+    },
+    {
+      "object": "digi_logo",
+      "overrides": []
+    },
+    {
+      "object": "FMOD_logo",
+      "overrides": []
+    }
+  ]
+}

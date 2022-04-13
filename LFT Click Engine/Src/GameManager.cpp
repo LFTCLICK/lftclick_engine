@@ -12,21 +12,24 @@
 #include "Renderer.h"
 #include "GameObjectManager.h"
 
-void GameManager::LoadLevel(json file)
+void GameManager::LoadLevel(json file, EGameLevel toSet)
 {
 	g_GameObjManager->DeleteAll();
 	g_GameObjManager->Deserialize(g_GameObjFactory.get(), file);
+	this->currentLevel = toSet;
+	if (toSet == EGameLevel::Level0)
+	{
+		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		this->playerObj = playerObj;
+		this->mainCamera = playerObj->getComponent<Camera>();
+		this->playerTrans = playerObj->getComponent<Transform>();
+		this->time = 0;
 
-	GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
-	this->playerObj = playerObj;
-	this->mainCamera = playerObj->getComponent<Camera>();
-	this->playerTrans = playerObj->getComponent<Transform>();
-	this->time = 0;
+		g_FrameRateController->zeroDeltaTime = false;
 
-	this->currentLevel = EGameLevel::Level0;
-	g_FrameRateController->zeroDeltaTime = false;
+		playerDead = false;
 
-	playerDead = false;
+	}
 }
 
 void GameManager::Update() {
@@ -37,6 +40,7 @@ void GameManager::Update() {
 	UpdateSpawners();
 }
 
+#include <cmath>
 void GameManager::UpdateTime()
 {
 	time += g_FrameRateController->DeltaTime();
@@ -45,19 +49,47 @@ void GameManager::UpdateTime()
 		day++;
 	}
 
+	//static float w = 1880.0f;
+	//static float h = 1930.0f;
+	//static float x = -1000.0f;
+	//static float y = -920.0f;
+	//cabinRect = DirectX::SimpleMath::Rectangle(x, y, w, h);
+	DirectX::SimpleMath::Rectangle playerRect = DirectX::SimpleMath::Rectangle(playerTrans->position.x, playerTrans->position.y, 
+		1, 1);
+
+
 	float oldDarknessLevel = darknessLevel;
 
-	//if (time < SUN_RISING) darknessLevel = 1;
-	//else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
-	//else if (time < SUN_SETTING) darknessLevel = 0;
-	//else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
 
 	if (time < SUN_RISING) darknessLevel = 1;
 	else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
 	else if (time < SUN_SETTING) darknessLevel = 0;
 	else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
 
+	static float fadeInTimer = 0.0f;
+	static float fadeOutTimer = 0.0f;
+	//player is inside cabin
+	if (cabinRect.Intersects(playerRect))
+	{
+		fadeOutTimer = 0.0f;
+		fadeInTimer += g_FrameRateController->DeltaTime();
+		displayDarknessLevel = std::lerp(darknessLevel, 0.0f, std::clamp(fadeInTimer / 3.0f, 0.0f, 1.0f));
+	}
+	else
+	{
+		fadeInTimer = 0.0f;
+		fadeOutTimer += g_FrameRateController->DeltaTime();
+
+		displayDarknessLevel = std::lerp(displayDarknessLevel, darknessLevel, std::clamp(fadeOutTimer / 3.0f, 0.0f, 1.0f));
+	}
+
+#ifdef _DEBUG
 	ImGui::DragFloat("Darkness", &darknessLevel, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Display Darkness", &displayDarknessLevel, 0.01f, 0.0f, 1.0f);
+	ImGui::Text("Part chance: %f", chanceOfFindingPart);
+
+#endif // DEBUG
+
 
 	if (oldDarknessLevel >= DAY_NIGHT_THRESHOLD && !IsNightTime() && harshLightOfDay != day) {
 		harshLightOfDay = day;
@@ -142,6 +174,8 @@ bool GameManager::IsSpawnerActivated(int spawnerID)
 
 float GameManager::GetChanceOfFindingPart()
 {
+	if (chanceOfFindingPart >= INITIAL_CHANCE_TO_FIND_PART + (CHANCE_TO_FIND_PART_INCREMENT * ROLLS_TILL_PITY_PART))
+		return 1.0f;
 	return chanceOfFindingPart;
 }
 

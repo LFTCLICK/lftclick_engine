@@ -1,11 +1,12 @@
 #include "pch.h"
 #include "Door.h"
 #include "FrameRateController.h"
+#include "CircleCollider.h"
 #include "Enemy.h"
 
 void Door::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	squareCollider = componentOwner->getComponent<SquareCollider>();
 	drawable = componentOwner->getComponent<Drawable>();
 	player = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
@@ -16,6 +17,7 @@ void Door::Start()
 	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, componentOwner);
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
 	UpdateImage();
+	inWoodPilePhase = false;
 }
 
 void Door::Update()
@@ -23,50 +25,91 @@ void Door::Update()
 	
 	if (playerInRange)
 	{
-		if (!repairing && health < maxHp)
+		if (inWoodPilePhase)
 		{
-			drawable->HUD_DrawTextCenter("Press E to repair the door", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-		}
-		if (currentPhase < zeroIndexDoorPhases)
-		{
-			if (g_InputManager->isKeyPressed(SDL_SCANCODE_E))
-			{
-				if (player->wood > woodRequiredPerPhase)
-				{
-					if (health < maxHp)
-					{
-						std::string text = "Repairing Door : " + std::to_string(static_cast<int>(internalTimer / repairTime * 100)) + "%";
-						drawable->HUD_DrawTextCenter(text, { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 
-						repairing = true;
+			drawable->HUD_DrawTextCenter("Press Q to replace the door", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_Q))
+			{
+				inWoodPilePhase = false;
+				float backupX;
+				backupX = squareCollider->clientWidth;
+				squareCollider->clientWidth = woodPileRadius;
+				componentOwner->getComponent<CircleCollider>()->radius = woodPileRadius/2;
+				woodPileRadius = backupX/2;
+				myTransform->position -= woodPileOffset;
+				drawable->yOffset = 0;
+				UpdateImage();
+				squareCollider->isTrigger = false;
+			}
+
+		}
+		else
+		{
+			bool hasText = false;
+			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_Q))
+			{
+				inWoodPilePhase = true;
+				float backupX;
+				backupX = squareCollider->clientWidth;
+				squareCollider->clientWidth = woodPileRadius * 2;
+				componentOwner->getComponent<CircleCollider>()->radius = woodPileRadius;
+				woodPileRadius = backupX;
+				myTransform->position += woodPileOffset;
+				drawable->yOffset = .5;
+				drawable->xOffset = 0;
+				squareCollider->isTrigger = true;
+			}
+			if (!repairing && health < maxHp)
+			{
+				drawable->HUD_DrawTextCenter("Hold E to repair the door\nPress Q to remove", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+				hasText = true;
+			}
+			if (currentPhase < zeroIndexDoorPhases)
+			{
+				if (g_InputManager->isKeyPressed(SDL_SCANCODE_E))
+				{
+					if (player->wood > woodRequiredPerPhase)
+					{
+						if (health < maxHp)
+						{
+							std::string text = "Repairing Door : " + std::to_string(static_cast<int>(internalTimer / repairTime * 100)) + "%";
+							drawable->HUD_DrawTextCenter(text, { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+							hasText = true;
+
+							repairing = true;
+						}
+						else
+						{
+							repairing = false;
+						}
+
+						internalTimer += g_FrameRateController->DeltaTime();
 					}
 					else
 					{
-						repairing = false;
+						drawable->HUD_DrawTextCenter("Not enough wood to repair!", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+						hasText = true;
+						repairing = true;
 					}
-
-					internalTimer += g_FrameRateController->DeltaTime();
 				}
-				else
+				else /*if (g_InputManager->isKeyReleased(SDL_SCANCODE_E))*/
 				{
-					drawable->HUD_DrawTextCenter("Not enough wood to repair!", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-					repairing = true;
+					internalTimer = 0;
+					repairing = false;
 				}
-			}
-			else /*if (g_InputManager->isKeyReleased(SDL_SCANCODE_E))*/
-			{
-				internalTimer = 0;
-				repairing = false;
-			}
-			if (internalTimer >= repairTime)
-			{
-				player->wood -= woodRequiredPerPhase;
-				internalTimer = 0;
-				health += hpPerPhase;
-				currentPhase = health / hpPerPhase;
-				UpdateImage();
-				if (squareCollider->isTrigger)
-					squareCollider->isTrigger = false;
+				if (internalTimer >= repairTime)
+				{
+					player->wood -= woodRequiredPerPhase;
+					internalTimer = 0;
+					health += hpPerPhase;
+					currentPhase = health / hpPerPhase;
+					UpdateImage();
+					if (squareCollider->isTrigger)
+						squareCollider->isTrigger = false;
+				}
+				if(!hasText)
+					drawable->HUD_DrawTextCenter("Press Q to remove the door", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 			}
 		}
 	}
@@ -91,6 +134,9 @@ void Door::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	maxHp = j["hp"];
 	woodRequiredPerPhase = j["woodRequiredPerPhase"];
 	repairTime = j["repairTime"];
+	std::vector<float> woodPileOffsetHelper = j["woodPileOffset"].get<std::vector<float>>();
+	woodPileOffset = { woodPileOffsetHelper[0], woodPileOffsetHelper[1] };
+	woodPileRadius = j["woodPileRadius"];
 }
 
 Component* Door::Clone(GameObject* newParent)
@@ -99,6 +145,8 @@ Component* Door::Clone(GameObject* newParent)
 	toReturn->doorPhases = doorPhases;
 	toReturn->maxHp = maxHp;
 	toReturn->woodRequiredPerPhase = woodRequiredPerPhase;
+	toReturn->woodPileOffset = woodPileOffset;
+	toReturn->woodPileRadius = woodPileRadius;
 	toReturn->repairTime = repairTime;
 	toReturn->componentOwner = newParent;
 	return toReturn;
@@ -115,7 +163,7 @@ void Door::HandleMessage(Message* e)
 	{
 		playerInRange = true;
 	}
-	else if (e->otherObject->componentOwner->tag == "zombie" && health > 0)
+	else if (e->otherObject->componentOwner->tag == "zombie" && health > 0 && !inWoodPilePhase)
 	{
 		Enemy* currentEnemy = e->otherObject->componentOwner->getComponent<Enemy>();
 		currentEnemy->timer+= g_FrameRateController->DeltaTime();

@@ -36,7 +36,8 @@
 
 
 #define INITIAL_CHANCE_TO_FIND_PART 0.05f
-#define CHANCE_TO_FIND_PART_INCREMENT 0.05f
+#define CHANCE_TO_FIND_PART_INCREMENT 0.0125f
+#define ROLLS_TILL_PITY_PART 13
 
 #define MAX_DANGER_ENEMY_COUNT 100.f
 
@@ -72,9 +73,12 @@ class GameObject;
 
 enum class EGameLevel
 {
+	Intro,
 	Mainmenu,
 	Pausemenu,
-	Level0
+	Level0,
+	CreditsScreen,
+	ControlScreen
 };
 
 class GameManager
@@ -83,9 +87,12 @@ public:
 	GameManager() : 
 		playerObj(nullptr),
 		playerDead(false), 
+		playerWon(false), 
 		darknessLevel(0),
+		displayDarknessLevel(0),
 		monsterCount(0),
 		dangerLevel(0),
+		rednessFactor(0),
 		mapHeight(10000.0f),
 		mainCamera(nullptr),
 		day(1), 
@@ -141,12 +148,15 @@ public:
 
 	bool IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos);
 
-	void LoadLevel(nlohmann::json file);
+	void LoadLevel(nlohmann::json file, EGameLevel toSet);
 public:
 	GameObject* playerObj;
 	bool playerDead;
+	bool playerWon;
 	bool playerInsideHouse;
 	float darknessLevel;
+	float rednessFactor;
+	float displayDarknessLevel;
 	int monsterCount;
 	int harshLightOfDay;
 	int windowWidth;
@@ -159,6 +169,9 @@ public:
 	Camera* mainCamera;
 	Transform* playerTrans;
 
+	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(-1000.0f, -920.0f, 1880.0f, 1930.0f);
+
+
 	int day;
 	float time;
 
@@ -168,8 +181,11 @@ public:
 	int activatedSpawner;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> menuBackgroundSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> creditsSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> controlsSRV;
 
 	EGameLevel currentLevel;
+	EGameLevel prevLevel;
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

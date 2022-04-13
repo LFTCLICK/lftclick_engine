@@ -63,7 +63,7 @@ public:
 
 private:
 	Drawable* drawable;
-	Transform* trans;
+	Transform* myTransform;
 
 	DirectX::SimpleMath::Vector2 oldPosition, position;
 

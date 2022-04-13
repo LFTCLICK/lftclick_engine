@@ -23,7 +23,7 @@ DebugRenderer::DebugRenderer(ID3D11Device* device, ID3D11DeviceContext* context)
 		CreateInputLayoutFromEffect<VertexPositionColor>( device, basicEffect.get(), 
 			inputLayout.ReleaseAndGetAddressOf() ) );
 
-	states = std::make_unique<CommonStates>(device);
+	commonPipelineStates = std::make_unique<CommonStates>(device);
 }
 
 DebugRenderer::~DebugRenderer()
@@ -70,9 +70,9 @@ void DebugRenderer::Draw(ID3D11DeviceContext* context, int clientWidth, int clie
 
 	basicEffect->SetColorAndAlpha(DirectX::Colors::Red);
 
-	context->OMSetBlendState(states->Opaque(), nullptr, 0xFFFFFFFF);
-	context->OMSetDepthStencilState(states->DepthNone(), 0);
-	context->RSSetState(states->CullNone());
+	context->OMSetBlendState(commonPipelineStates->Opaque(), nullptr, 0xFFFFFFFF);
+	context->OMSetDepthStencilState(commonPipelineStates->DepthNone(), 0);
+	context->RSSetState(commonPipelineStates->CullNone());
 
 	basicEffect->Apply(context);
 	context->IASetInputLayout(inputLayout.Get());

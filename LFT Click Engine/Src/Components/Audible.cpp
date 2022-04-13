@@ -24,7 +24,7 @@ void Audible::Start() {
 		PlaySoundsOnEvent(AUDIO_ON_START);
 	}
 
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 
 	if (generateRandomTime)
 		randomTime = ((float)rand() / RAND_MAX) * DAY_LENGTH;
@@ -61,15 +61,15 @@ void Audible::Update() {
 		}
 	}
 	else {
-		if (trans != nullptr) {
-			if (trans->isMoving != trans->wasMoving) {
-				HandleSoundsOnEvent(trans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-				if (!trans->isMoving && trans->CurrentPos().x < 10000000.f && trans->CurrentPos().x > -10000000.f)
-					am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100, { 0, 0 });
+		if (myTransform != nullptr) {
+			if (myTransform->isMoving != myTransform->wasMoving) {
+				HandleSoundsOnEvent(myTransform->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
+				if (!myTransform->isMoving && myTransform->CurrentPos().x < 10000000.f && myTransform->CurrentPos().x > -10000000.f)
+					am->SetGroupSpatialPosition(channelGroupName, myTransform->CurrentPos() / 100, { 0, 0 });
 			}
 
-			if (trans->isMoving && trans->CurrentPos().x < 10000000.f && trans->CurrentPos().x > -10000000.f)
-				am->SetGroupSpatialPosition(channelGroupName, trans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
+			if (myTransform->isMoving && myTransform->CurrentPos().x < 10000000.f && myTransform->CurrentPos().x > -10000000.f)
+				am->SetGroupSpatialPosition(channelGroupName, myTransform->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
 	}
 
@@ -96,7 +96,7 @@ Audible::~Audible() {
 
 
 void Audible::PlaySound(SoundInfo sound) {
-	float pitch = sound.pitchRange[0] == sound.pitchRange[1] ? 0 : Helpers::randWithinRange(sound.pitchRange[0], sound.pitchRange[1]);
+	float pitch = sound.pitchRange[0] == sound.pitchRange[1] ? 1 : Helpers::randWithinRange(sound.pitchRange[0], sound.pitchRange[1]);
 	std::cout << sound.name << " " << sound.volume << " " << pitch << std::endl;
 	int channelID = am->PlaySound(sound.name, channelGroupName, sound.volume, pitch, sound.startTime);
 	channels[channelID] = sound.name;
@@ -178,7 +178,7 @@ void Audible::StopSound(std::string soundName) {
 void Audible::PlaySoundsOnEvent(SoundEvent se) {
 	for (auto sound : sounds) {
 		if (std::find(sound.playEvents.begin(), sound.playEvents.end(), (int)se) != sound.playEvents.end()) {
-			std::cout << (int)se << std::endl;
+			std::cout << "start " << (int)se << std::endl;
 			PlaySound(sound);
 		}
 	}
@@ -187,7 +187,7 @@ void Audible::PlaySoundsOnEvent(SoundEvent se) {
 void Audible::StopSoundsOnEvent(SoundEvent se) {
 	for (auto sound : sounds) {
 		if (std::find(sound.stopEvents.begin(), sound.stopEvents.end(), (int)se) != sound.stopEvents.end()) {
-			std::cout << (int)se << std::endl;
+			std::cout << "stop " << (int)se << std::endl;
 			StopSound(sound.name);
 		}
 	}

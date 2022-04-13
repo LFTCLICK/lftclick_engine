@@ -6,7 +6,7 @@
 void WoodPile::Start()
 {
 	player = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 }
 
 void WoodPile::Update()

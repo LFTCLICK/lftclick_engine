@@ -38,7 +38,7 @@ private:
 	std::unique_ptr<DirectX::PrimitiveBatch<DirectX::VertexPositionColor>> primitiveBatch;
 	std::unique_ptr<DirectX::BasicEffect> basicEffect;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout;
-	std::unique_ptr<DirectX::CommonStates> states;
+	std::unique_ptr<DirectX::CommonStates> commonPipelineStates;
 
 	std::vector<DirectX::VertexPositionColor> lineVertices;
 

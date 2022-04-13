@@ -119,15 +119,15 @@ void GameObjectManager::ProcessCollision()
 		if (firstItt)
 		{
 			(*mainListItt)->isOnScreen = false;
-			distanceFromCenter = cameraPos - (*mainListItt)->trans->position;
+			distanceFromCenter = cameraPos - (*mainListItt)->myTransform->position;
 			distanceFromCenter.x = std::fabsf(distanceFromCenter.x);
 			distanceFromCenter.y = std::fabsf(distanceFromCenter.y);
 			maxDistance = distanceFromCenter.x > distanceFromCenter.y ? distanceFromCenter.x : distanceFromCenter.y;
-			if (maxDistance - std::max((*mainListItt)->trans->scale.x, (*mainListItt)->trans->scale.y) < maxScreenSize)
+			if (maxDistance - std::max((*mainListItt)->myTransform->scale.x, (*mainListItt)->myTransform->scale.y) < maxScreenSize)
 				(*mainListItt)->isOnScreen = true;
 		}
 
-		Transform* mainTrans = (*mainListItt)->trans;
+		Transform* mainTrans = (*mainListItt)->myTransform;
 		for (int mainColliderIndex = 0; mainColliderIndex < NUMBER_OF_COLLIDERS; ++mainColliderIndex)
 		{
 			Collider* s = (Collider*)(*mainListItt)->getRawComponentPointer(COLLIDER_IDS[mainColliderIndex]);
@@ -137,7 +137,7 @@ void GameObjectManager::ProcessCollision()
 			{
 				if (!(*innerLoop)->isActive || (*innerLoop)->isDeletable)
 					continue;
-				Transform* toCheckTrans = (*innerLoop)->trans;
+				Transform* toCheckTrans = (*innerLoop)->myTransform;
 				if (firstItt)
 				{
 					(*innerLoop)->isOnScreen = false;
@@ -256,6 +256,7 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 			}
 		}
 
+		float zHelper = g_GameManager->mapHeight / 2.0f;
 		for (int y = 0; y < clientHeight; y++) {
 			for (int x = 0; x < clientWidth; x++) {
 				img.GetPixel(x, y, &currentColor);
@@ -268,10 +269,10 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 					if (map["key"].contains(colorHexString)) {
 						GameObject* obj = ClonePrefabOfTag(gof, map["key"][colorHexString], true);
 
-						Transform* trans = obj->getComponent<Transform>();
+						Transform* myTransform = obj->getComponent<Transform>();
 						SquareCollider* collider = obj->getComponent<SquareCollider>();
 
-						int mapX = (x - (clientWidth / 2)) * objectSize, mapY = (y - (clientHeight / 2)) * objectSize * -1, scaleX = trans->scale.x;
+						int mapX = (x - (clientWidth / 2)) * objectSize, mapY = (y - (clientHeight / 2)) * objectSize * -1, scaleX = myTransform->scale.x;
 
 						if (collider && !collider->isTrigger)
 						{
@@ -291,7 +292,9 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 							}
 						}
 
-						trans->SetPos(mapX, mapY);
+						myTransform->SetPos(mapX, mapY);
+						if(map["key"][colorHexString]!="rug")
+							myTransform->zPos = 5 + ((myTransform->position.y + g_GameManager->mapHeight) / zHelper);
 
 						// Think I basically handled this up above, but leaving this code in just in case
 
@@ -308,26 +311,28 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 				}
 			}
 		}
+		g_AStarTerrain->Init();
 	}
-	prefabsJSON = j["Level"];
-	for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
+
+	if (j.contains("Level"))
 	{
-		GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"], true);
-		std::string newObjectTag = currentObj.value()["object"];
-		json overrideList = currentObj.value()["overrides"];
-		for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
+		prefabsJSON = j["Level"];
+		for (json::iterator currentObj = prefabsJSON.begin(); currentObj != prefabsJSON.end(); ++currentObj)
 		{
-			json actualOverride = c.value();
-			for (json::iterator realOverrides = actualOverride.begin(); realOverrides != actualOverride.end(); ++realOverrides)
+			GameObject* newOne = ClonePrefabOfTag(gof, currentObj.value()["object"], true);
+			std::string newObjectTag = currentObj.value()["object"];
+			json overrideList = currentObj.value()["overrides"];
+			for (json::iterator c = overrideList.begin(); c != overrideList.end(); ++c)
 			{
-				int val = std::stoi(realOverrides.key());
-				newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
+				json actualOverride = c.value();
+				for (json::iterator realOverrides = actualOverride.begin(); realOverrides != actualOverride.end(); ++realOverrides)
+				{
+					int val = std::stoi(realOverrides.key());
+					newOne->getRawComponentPointer(std::stoi(realOverrides.key()))->Deserialize(realOverrides.value(), newOne);
+				}
 			}
 		}
 	}
-
-	g_AStarTerrain->Init();
-
 	for (GameObject* g : gameObjectList) {
 		g->Start();
 	}
@@ -374,8 +379,8 @@ GameObject* GameObjectManager::ClonePrefabOfTag(GameObjectFactory* gof, std::str
 			float furthestDistance = 0;
 			for (GameObject* g : gameObjectList) {
 				if (g->tag == "zombie" || g->tag == "ghost" || g->tag == "enemy") {
-					Transform* trans = g->getComponent<Transform>();
-					float distance = DirectX::SimpleMath::Vector2::DistanceSquared(playerPos, trans->CurrentPos());
+					Transform* myTransform = g->getComponent<Transform>();
+					float distance = DirectX::SimpleMath::Vector2::DistanceSquared(playerPos, myTransform->CurrentPos());
 					if (furthestDistance < distance) {
 						furthestDistance = distance;
 						furthestEnemy = g;
