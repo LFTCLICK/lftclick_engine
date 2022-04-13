@@ -86,6 +86,7 @@ void GameManager::UpdateTime()
 #ifdef _DEBUG
 	ImGui::DragFloat("Darkness", &darknessLevel, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat("Display Darkness", &displayDarknessLevel, 0.01f, 0.0f, 1.0f);
+	ImGui::Text("Part chance: %f", chanceOfFindingPart);
 
 #endif // DEBUG
 
@@ -173,6 +174,8 @@ bool GameManager::IsSpawnerActivated(int spawnerID)
 
 float GameManager::GetChanceOfFindingPart()
 {
+	if (chanceOfFindingPart >= INITIAL_CHANCE_TO_FIND_PART + (CHANCE_TO_FIND_PART_INCREMENT * ROLLS_TILL_PITY_PART))
+		return 1.0f;
 	return chanceOfFindingPart;
 }
 

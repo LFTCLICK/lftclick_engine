@@ -340,6 +340,15 @@ int main(int argc, char* args[])
 				{
 					g_GameManager->currentLevel = EGameLevel::Mainmenu;
 				}
+				if (ImGui::Button("Credits", { 100,50 }))
+				{
+					g_GameManager->prevLevel = g_GameManager->currentLevel;
+					g_GameManager->currentLevel = EGameLevel::CreditsScreen;
+				}if (ImGui::Button("Controls", { 100,50 }))
+				{
+					g_GameManager->prevLevel = g_GameManager->currentLevel;
+					g_GameManager->currentLevel = EGameLevel::ControlScreen;
+				}
 
 				if (ImGui::Button("Quit", { 100, 50 }))
 				{
