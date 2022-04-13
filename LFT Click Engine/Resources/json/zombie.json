@@ -192,7 +192,7 @@
       {
         "name": ".\\Resources\\sounds\\zombiedamage.mp3",
         "loop": false,
-        "volume": 13,
+        "volume": 7,
         "pitchRange": [ 0.85, 1.15 ],
         "playEvents": [
           1003
@@ -201,7 +201,7 @@
       {
         "name": ".\\Resources\\sounds\\zombiedeathrattle.mp3",
         "loop": false,
-        "volume": 20,
+        "volume": 15,
         "pitchRange": [ 0.85, 1.15 ],
         "playEvents": [
           1004

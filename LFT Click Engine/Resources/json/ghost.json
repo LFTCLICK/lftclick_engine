@@ -134,7 +134,7 @@
       {
         "name": ".\\Resources\\sounds\\zombiedamage.mp3",
         "loop": false,
-        "volume": 13,
+        "volume": 10,
         "pitchRange": [ 1.35, 1.65 ],
         "playEvents": [
           1003

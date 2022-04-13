@@ -37,7 +37,7 @@
       {
         "name": ".\\Resources\\sounds\\woodchop.mp3",
         "loop": true,
-        "volume": 15,
+        "volume": 10,
         "pitchRange": [ 0.9, 1.1 ],
         "playEvents": [
           1005
@@ -50,7 +50,7 @@
       {
         "name": ".\\Resources\\sounds\\woodget.mp3",
         "loop": false,
-        "volume": 5,
+        "volume": 10,
         "pitchRange": [ 0.65, 0.85 ],
         "playEvents": [
           1006

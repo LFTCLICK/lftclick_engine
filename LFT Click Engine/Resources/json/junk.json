@@ -65,7 +65,7 @@
       {
         "name": ".\\Resources\\sounds\\searching.mp3",
         "loop": true,
-        "volume": 15,
+        "volume": 6,
         "pitchRange": [ 0.9, 1.1 ],
         "playEvents": [
           1005
@@ -78,16 +78,16 @@
       {
         "name": ".\\Resources\\sounds\\woodget.mp3",
         "loop": false,
-        "volume": 5,
+        "volume": 10,
         "pitchRange": [ 0.9, 1.1 ],
         "playEvents": [
           1006
         ]
       },
       {
-        "name": ".\\Resources\\sounds\\woodget.mp3",
+        "name": ".\\Resources\\sounds\\partget.mp3",
         "loop": false,
-        "volume": 5,
+        "volume": 10,
         "pitchRange": [ 0.9, 1.1 ],
         "playEvents": [
           1008

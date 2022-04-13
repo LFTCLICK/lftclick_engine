@@ -103,7 +103,7 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicBase.mp3",
         "loop": true,
-        "volume": 40,
+        "volume": 33,
         "playEvents": [
           1000
         ],
@@ -115,7 +115,7 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicAddition.mp3",
         "loop": true,
-        "volume": 40,
+        "volume": 33,
         "playEvents": [
           1000
         ],
@@ -128,7 +128,8 @@
       {
         "name": ".\\Resources\\sounds\\hit.mp3",
         "loop": false,
-        "volume": 30,
+        "volume": 20,
+        "pitchRange": [ 0.3, 0.5 ],
         "playEvents": [
           1003
         ]
