@@ -25,7 +25,7 @@ void WoodPile::Update()
 		}
 		if (internalTimer >= timeToCollect)
 		{
-			player->wood += woodPerCollect;
+			player->collectibleWood += woodPerCollect;
 			internalTimer = 0;
 			currentPhase++;
 		}
