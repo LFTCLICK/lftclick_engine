@@ -27,7 +27,7 @@ void Damageable::Start()
 
 void Damageable::Update()
 {
-	if (destroyOnDeath && health < 1 && !componentOwner->isDeletable) {
+	if (destroyOnDeath && playerHealth < 1 && !componentOwner->isDeletable) {
 		if (anim != nullptr) anim->Die(deathTime);
 		if (audio != nullptr) audio->PlaySoundsOnEvent(AUDIO_ON_DEATH);
 		componentOwner->isDeletable = true;
@@ -39,7 +39,7 @@ void Damageable::Update()
 	}
 
 
-	if (drawable != nullptr && healthPreview && health >= 0)
+	if (drawable != nullptr && healthPreview && playerHealth >= 0)
 	{
 		healthPreviewTime -= g_FrameRateController->DeltaTime();
 
@@ -50,9 +50,9 @@ void Damageable::Update()
 		}
 		
 		Color healthTextColor = Color::Lerp(Color(1, 0, 0, 1), Color(0, 1, 0, 1), 
-			static_cast<float>(health) / maxHealth);
+			static_cast<float>(playerHealth) / maxHealth);
 		
-		drawable->HUD_DrawTextCenter(std::to_string(health), {0.0f, -50.0f}, healthTextColor);
+		drawable->HUD_DrawTextCenter(std::to_string(playerHealth), {0.0f, -50.0f}, healthTextColor);
 	}
 
 }
@@ -60,7 +60,7 @@ void Damageable::Update()
 void Damageable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
 	this->componentOwner = componentOwner;
-	health = j["health"];
+	playerHealth = j["health"];
 	maxHealth = j["health"];
 	if (j.contains("destroyOnDeath")) destroyOnDeath = j["destroyOnDeath"];
 	if (j.contains("knockbackMod")) knockbackMod = j["knockbackMod"];
@@ -71,7 +71,7 @@ Component* Damageable::Clone(GameObject* newParent)
 {
 	Damageable* toReturn = new Damageable();
 	toReturn->componentOwner = newParent;
-	toReturn->health = health;
+	toReturn->playerHealth = playerHealth;
 	toReturn->maxHealth = maxHealth;
 	toReturn->inertiaMod = inertiaMod;
 	toReturn->velocity = velocity;
@@ -88,7 +88,7 @@ void Damageable::HandleMessage(Message* e) {
 }
 
 void Damageable::TakeDamage(int damage) {
-	health -= damage;
+	playerHealth -= damage;
 	if (anim != nullptr) anim->Damage(damageTime);
 	if (audio != nullptr) audio->PlaySoundsOnEvent(AUDIO_ON_DAMAGE);
 

@@ -27,7 +27,7 @@ void Player::Start()
 	// setting variables from LUA
 	player_script_update();
 	sol::function returnHp = lua_player_state["returnPlayerHp"];
-	health = returnHp();
+	playerHealth = returnHp();
 	sol::function dashSpeedMultiplier = lua_player_state["dashSpeedMultiplyer"];
 	dashSpeed = dashSpeedMultiplier();
 	sol::function isAutopilot = lua_player_state["isAutopilot"];
@@ -67,33 +67,81 @@ void Player::Update()
 #ifdef _DEBUG
 	ImGui::DragFloat2("Wood HUD Pos", reinterpret_cast<float*>(&woodHUDPos), 1.0f, -50.0f, 200.0f);
 	ImGui::DragFloat2("Wood HUD Text Pos", reinterpret_cast<float*>(&woodTextPos), 1.0f, -50.0f, 200.0f);
-	ImGui::DragFloat2("Wood HUD Scale", reinterpret_cast<float*>(&woodHUDScale), 1.0f, -50.0f, 200.0f);
+	ImGui::DragFloat("Wood HUD Scale", &woodHUDScale, 1.0f, -50.0f, 200.0f);
 
 	ImGui::DragFloat2("Bike HUD Pos", reinterpret_cast<float*>(&bikeHUDPos), 1.0f, -50.0f, 200.0f);
 	ImGui::DragFloat2("Bike HUD Text Pos", reinterpret_cast<float*>(&bikeTextPos), 1.0f, -50.0f, 200.0f);
-	ImGui::DragFloat2("Bike HUD Scale", reinterpret_cast<float*>(&bikeHUDScale), 1.0f, -50.0f, 200.0f);
+	ImGui::DragFloat("Bike HUD Scale", &bikeHUDScale, 1.0f, -50.0f, 200.0f);
 
 	ImGui::DragFloat2("Health HUD Pos", reinterpret_cast<float*>(&healthHUDPos), 1.0f, -50.0f, 200.0f);
 	ImGui::DragFloat2("Health HUD Text Pos", reinterpret_cast<float*>(&healthTextPos), 1.0f, -50.0f, 200.0f);
-	ImGui::DragFloat2("Health HUD Scale", reinterpret_cast<float*>(&healthHUDScale), 1.0f, -50.0f, 200.0f);
+	ImGui::DragFloat("Health HUD Scale", &healthHUDScale, 1.0f, -50.0f, 200.0f);
 #endif
 
+	constexpr auto HUD_ANIM_LENGTH = 0.3f; //seconds
+
+
 	//Wood count HUD
-	spriteBatch->Draw(woodSRV.Get(), woodHUDPos, nullptr, Colors::White, 0.0f, origin, woodHUDScale);
-	spriteFont->DrawString(spriteBatch, std::to_string(wood).c_str(), woodTextPos);
+	static float woodInAnimTimer = 0.0f;
+	static float woodOutAnimTimer = 0.0f;
+	if (playCollectedAnimWood)
+	{
+		woodOutAnimTimer = 0.0f;
+		woodInAnimTimer += g_FrameRateController->DeltaTime();
+
+		if (woodInAnimTimer > HUD_ANIM_LENGTH)
+			playCollectedAnimWood = false;
+
+		currentWoodHUDScale = std::lerp(woodHUDScale, woodHUDScale * 2.0f, woodInAnimTimer / HUD_ANIM_LENGTH);
+		currentWoodHUDTextScale = std::lerp(woodHUDTextScale, woodHUDTextScale * 3.0f, woodInAnimTimer / HUD_ANIM_LENGTH);
+	}
+	else
+	{
+		woodInAnimTimer = 0.0f;
+		woodOutAnimTimer += g_FrameRateController->DeltaTime();
+
+		currentWoodHUDScale = std::lerp(currentWoodHUDScale, woodHUDScale, std::clamp(woodOutAnimTimer / HUD_ANIM_LENGTH, 0.0f, 1.0f));
+		currentWoodHUDTextScale = std::lerp(currentWoodHUDTextScale, woodHUDTextScale, std::clamp(woodOutAnimTimer / HUD_ANIM_LENGTH, 0.0f, 1.0f));
+	}
+
+	spriteBatch->Draw(woodSRV.Get(), woodHUDPos, nullptr, Colors::White, 0.0f, origin, currentWoodHUDScale);
+	spriteFont->DrawString(spriteBatch, std::to_string(collectibleWood).c_str(), woodTextPos, Colors::White, 0.0f, origin, currentWoodHUDTextScale);
 
 	//Bike parts count HUD
+	static float bikeInAnimTimer = 0.0f;
+	static float bikeOutAnimTimer = 0.0f;
+	if (playCollectedAnimParts)
+	{
+		bikeOutAnimTimer = 0.0f;
+		bikeInAnimTimer += g_FrameRateController->DeltaTime();
+
+		if (bikeInAnimTimer > HUD_ANIM_LENGTH)
+			playCollectedAnimParts = false;
+
+		currentBikeHUDScale = std::lerp(bikeHUDScale, bikeHUDScale * 2.0f, bikeInAnimTimer / HUD_ANIM_LENGTH);
+		currentBikeHUDTextScale = std::lerp(bikeHUDTextScale, bikeHUDTextScale * 3.0f, bikeInAnimTimer / HUD_ANIM_LENGTH);
+	}
+	else
+	{
+		bikeInAnimTimer = 0.0f;
+		bikeOutAnimTimer += g_FrameRateController->DeltaTime();
+
+		currentBikeHUDScale = std::lerp(currentBikeHUDScale, bikeHUDScale, std::clamp(bikeOutAnimTimer / HUD_ANIM_LENGTH, 0.0f, 1.0f));
+		currentBikeHUDTextScale = std::lerp(currentBikeHUDTextScale, bikeHUDTextScale, std::clamp(bikeOutAnimTimer / HUD_ANIM_LENGTH, 0.0f, 1.0f));
+	}
 	spriteBatch->Draw(bikepartsSRV.Get(), bikeHUDPos, nullptr, Colors::White, 0.0f, origin, bikeHUDScale);
-	spriteFont->DrawString(spriteBatch, (std::to_string(parts) + "/8").c_str(), bikeTextPos);
+	spriteFont->DrawString(spriteBatch, (std::to_string(collectibleparts) + "/8").c_str(), bikeTextPos, Colors::White, 0.0f, origin, currentBikeHUDTextScale);
 
 	//Player health HUD
-	Color healthTextColor = Color::Lerp(red, green, static_cast<float>(health) / 100);
+	Color healthTextColor = Color::Lerp(red, green, static_cast<float>(playerHealth) / 100);
 	float healthTextScale = std::lerp(1.0f, 3.0f, g_GameManager->rednessFactor);
-	Vector2 healthSpriteScale = Vector2::Lerp(healthHUDScale, healthHUDScale * 2.0f, g_GameManager->rednessFactor);
+	float healthSpriteScale = std::lerp(healthHUDScale, healthHUDScale * 2.0f, g_GameManager->rednessFactor);
 
 	spriteBatch->Draw(healthSRV.Get(), healthHUDPos, nullptr, Colors::White, 0.0f, origin, healthSpriteScale);
-	spriteFont->DrawString(spriteBatch, std::to_string(health).c_str(), healthTextPos, healthTextColor, 0.0f, origin, healthTextScale);
+	spriteFont->DrawString(spriteBatch, std::to_string(playerHealth).c_str(), healthTextPos, healthTextColor, 0.0f, origin, healthTextScale);
 
+
+	//Flashing redscreen when player gets damaged
 	static float flashOutTimer = 0.0f;
 	static float flashInTimer = 0.0f;
 	if (damageFlashing)
@@ -133,7 +181,7 @@ void Player::Update()
 		drawable->HUD_DrawTextCenter("I need to find 8 motorcycle parts to fix my bike.", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}*/
 
-	if (parts >= 8)
+	if (collectibleparts >= 8)
 	{
 		g_GameManager->playerDead = true;
 		g_GameManager->playerWon = true;
@@ -165,7 +213,8 @@ void Player::Update()
 	introTimer += g_FrameRateController->DeltaTime();
 }
 
-Component* Player::Clone(GameObject* newParent) {
+Component* Player::Clone(GameObject* newParent) 
+{
 	Player* toReturn = new Player();
 	toReturn->script = script;
 	toReturn->inertiaMod = inertiaMod;
@@ -209,24 +258,31 @@ void Player::HandleMessage(Message* e)
 	}
 }
 
-void Player::Move(float deltaX, float deltaY) {
-	if (!isDashing)
+void Player::Move(float deltaX, float deltaY) 
+{
+	if (!isDashing) 
 		myTransform->Move(deltaX, deltaY);
 }
 
-void Player::Dash() {
+void Player::Dash() 
+{
 	isDashing = true;
 	dashVelocity = myTransform->lastMovement * dashSpeed;
 }
 
-void Player::DamagePlayer() {
+void Player::DamagePlayer() 
+{
 	damageFlashing = true;
-	health -= 15;
+
+	playerHealth -= 15;
 	anim->Damage(0.5f);
 	audio->PlaySoundsOnEvent(AUDIO_ON_DAMAGE);
-	if (health <= 0) { g_GameManager->playerDead = true; }
+
+	if (playerHealth <= 0) 
+		g_GameManager->playerDead = true; 
 }
 
-void Player::Sidescroll(float deltaTime) {
+void Player::Sidescroll(float deltaTime) 
+{
 	Move((playerSpeed + (cam->xPos - myTransform->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * deltaTime, 0);
 }

@@ -32,7 +32,8 @@ void Interactable::Update()
 {
 	playerIsInRange = IsPlayerInRange();
 
-	if (playerIsInRange) {
+	if (playerIsInRange) 
+	{
 		if (g_InputManager->isKeyTriggered(SDL_SCANCODE_E))
 			StartInteraction();
 		else if (g_InputManager->isKeyReleased(SDL_SCANCODE_E))
@@ -43,10 +44,6 @@ void Interactable::Update()
 
 		if (interacting) 
 		{
-#ifdef _DEBUG
-			ImGui::Text("Interacting...");
-#endif		
-			
 			int destroyedProgress = static_cast<int>(internalTimer / timeToCollect * 100);
 			std::string progressText = "Collecting: " + std::to_string(destroyedProgress) + "%";
 
@@ -88,28 +85,37 @@ void Interactable::StopInteraction() {
 	}
 }
 
-void Interactable::CompleteInteraction() {
-
-	if (hasParts) {
-		if (Helpers::randFloat0to1() < g_GameManager->GetChanceOfFindingPart()) {
-			g_GameManager->playerObj->getComponent<Player>()->parts++;
+void Interactable::CompleteInteraction() 
+{
+	if (hasParts) 
+	{
+		if (Helpers::randFloat0to1() < g_GameManager->GetChanceOfFindingPart()) 
+		{
+			g_GameManager->playerObj->getComponent<Player>()->collectibleparts++;
+			g_GameManager->playerObj->getComponent<Player>()->playCollectedAnimParts = true;
 			g_GameManager->PartSearchSuccessful();
 			audio->PlaySoundsOnEvent(AUDIO_ON_COLLECT_PART);
 		}
-		else {
-			g_GameManager->playerObj->getComponent<Player>()->wood += woodPerCollect;
+		else 
+		{
+			g_GameManager->playerObj->getComponent<Player>()->collectibleWood += woodPerCollect;
+			g_GameManager->playerObj->getComponent<Player>()->playCollectedAnimWood = true;
 			g_GameManager->PartSearchFailed();
 			audio->PlaySoundsOnEvent(AUDIO_ON_COLLECT);
 		}
 	}
-	else {
-		g_GameManager->playerObj->getComponent<Player>()->wood += woodPerCollect;
+	else 
+	{
+		g_GameManager->playerObj->getComponent<Player>()->collectibleWood += woodPerCollect;
+		g_GameManager->playerObj->getComponent<Player>()->playCollectedAnimWood = true;
 	}
 
 	internalTimer = 0;
-	if (--currentHp < 1) {
+	if (--currentHp < 1) 
+	{
 		++currentPhase;
-		if (currentPhase < totalPhases) {
+		if (currentPhase < totalPhases) 
+		{
 			currentHp = hpPerPhase;
 			anim->SwitchPhase(currentPhase);
 		}
@@ -118,7 +124,8 @@ void Interactable::CompleteInteraction() {
 	}
 }
 
-bool Interactable::IsPlayerInRange() {
+bool Interactable::IsPlayerInRange() 
+{
 	DirectX::SimpleMath::Vector2 pos = myTransform->CurrentPos(), playerPos = g_GameManager->playerTrans->CurrentPos();
 
 	return (pos - playerPos).LengthSquared() < interactDistanceSq;

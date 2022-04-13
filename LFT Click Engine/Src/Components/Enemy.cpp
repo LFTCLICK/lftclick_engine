@@ -120,10 +120,10 @@ void Enemy::Update()
 #endif
 		daylightDeathTime -= g_FrameRateController->DeltaTime();
 		if (daylightDeathTime <= 0 && oldDaylightDeathTime >= 0)
-			dam->health = 0;
+			dam->playerHealth = 0;
 	}
 
-	if (speed > 0 && dam->health < 1)
+	if (speed > 0 && dam->playerHealth < 1)
 		speed = 0;
 }
 

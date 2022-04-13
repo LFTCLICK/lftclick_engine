@@ -12,7 +12,7 @@ void Door::Start()
 	player = g_GameObjManager->FindObjectOfTag("player")->getComponent<Player>();
 	zeroIndexDoorPhases = doorPhases-1;
 	currentPhase = zeroIndexDoorPhases;
-	health = maxHp;
+	playerHealth = maxHp;
 	hpPerPhase = maxHp / zeroIndexDoorPhases;
 	g_EventManager->Subscribe(Message::TRIGGER_COLLISION, componentOwner);
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
@@ -60,7 +60,7 @@ void Door::Update()
 				drawable->xOffset = 0;
 				squareCollider->isTrigger = true;
 			}
-			if (!repairing && health < maxHp)
+			if (!repairing && playerHealth < maxHp)
 			{
 				drawable->HUD_DrawTextCenter("Hold E to repair the door\nPress Q to remove", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 				hasText = true;
@@ -69,9 +69,9 @@ void Door::Update()
 			{
 				if (g_InputManager->isKeyPressed(SDL_SCANCODE_E))
 				{
-					if (player->wood > woodRequiredPerPhase)
+					if (player->collectibleWood > woodRequiredPerPhase)
 					{
-						if (health < maxHp)
+						if (playerHealth < maxHp)
 						{
 							std::string text = "Repairing Door : " + std::to_string(static_cast<int>(internalTimer / repairTime * 100)) + "%";
 							drawable->HUD_DrawTextCenter(text, { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -100,10 +100,12 @@ void Door::Update()
 				}
 				if (internalTimer >= repairTime)
 				{
-					player->wood -= woodRequiredPerPhase;
+					player->collectibleWood -= woodRequiredPerPhase;
+					player->playCollectedAnimWood = true;
+
 					internalTimer = 0;
-					health += hpPerPhase;
-					currentPhase = health / hpPerPhase;
+					playerHealth += hpPerPhase;
+					currentPhase = playerHealth / hpPerPhase;
 					UpdateImage();
 					if (squareCollider->isTrigger)
 						squareCollider->isTrigger = false;
@@ -120,7 +122,7 @@ void Door::Update()
 	}
 
 	playerInRange = false;
-	if (health <= 0 && !squareCollider->isTrigger)
+	if (playerHealth <= 0 && !squareCollider->isTrigger)
 	{
 		UpdateImage();
 		squareCollider->isTrigger = true;
@@ -163,22 +165,22 @@ void Door::HandleMessage(Message* e)
 	{
 		playerInRange = true;
 	}
-	else if (e->otherObject->componentOwner->tag == "zombie" && health > 0 && !inWoodPilePhase)
+	else if (e->otherObject->componentOwner->tag == "zombie" && playerHealth > 0 && !inWoodPilePhase)
 	{
 		Enemy* currentEnemy = e->otherObject->componentOwner->getComponent<Enemy>();
 		currentEnemy->timer+= g_FrameRateController->DeltaTime();
 		if (currentEnemy->timer > currentEnemy->attackTimer)
 		{
 			currentEnemy->timer = 0;
-			health -= currentEnemy->damage;
-			if (health <= 0)
+			playerHealth -= currentEnemy->damage;
+			if (playerHealth <= 0)
 			{
-				health = 0;
+				playerHealth = 0;
 				currentPhase = 0;
 			}
 			else
 			{
-				currentPhase = health / hpPerPhase;
+				currentPhase = playerHealth / hpPerPhase;
 				currentPhase++;
 			}
 			UpdateImage();
