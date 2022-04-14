@@ -86,7 +86,8 @@ void GameManager::UpdateTime()
 	static float fadeInTimer = 0.0f;
 	static float fadeOutTimer = 0.0f;
 	//player is inside cabin
-	if (cabinRect.Intersects(playerRect))
+	isPlayerInsideCabin = cabinRect.Intersects(playerRect);
+	if (isPlayerInsideCabin)
 	{
 		fadeOutTimer = 0.0f;
 		fadeInTimer += g_FrameRateController->DeltaTime();

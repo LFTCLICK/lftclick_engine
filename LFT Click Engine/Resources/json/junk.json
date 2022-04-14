@@ -96,8 +96,8 @@
     ]
   },
   "14": {
-    "timeToCollect": 1,
-    "woodPerCollect": 3,
+    "timeToCollect": 4,
+    "woodPerCollect": 1,
     "interactDistance": 200,
     "hasParts": true
   }

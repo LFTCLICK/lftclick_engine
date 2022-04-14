@@ -132,7 +132,7 @@ void Player::Update()
 		currentBikeHUDScale = std::lerp(currentBikeHUDScale, bikeHUDScale, std::clamp(bikeOutAnimTimer / HUD_ANIM_LENGTH, 0.0f, 1.0f));
 		currentBikeHUDTextScale = std::lerp(currentBikeHUDTextScale, bikeHUDTextScale, std::clamp(bikeOutAnimTimer / HUD_ANIM_LENGTH, 0.0f, 1.0f));
 	}
-	spriteBatch->Draw(bikepartsSRV.Get(), bikeHUDPos, nullptr, Colors::White, 0.0f, origin, bikeHUDScale);
+	spriteBatch->Draw(bikepartsSRV.Get(), bikeHUDPos, nullptr, Colors::White, 0.0f, origin, currentBikeHUDScale);
 	spriteFont->DrawString(spriteBatch, (std::to_string(collectibleparts) + "/8").c_str(), bikeTextPos, Colors::White, 0.0f, origin, currentBikeHUDTextScale);
 
 	//Player health HUD

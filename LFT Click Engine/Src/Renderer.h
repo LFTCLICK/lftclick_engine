@@ -29,6 +29,7 @@ class Renderer
 	Microsoft::WRL::ComPtr<ID3D11Buffer> screenQuadIB;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> darknessSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> darkness2SRV;
 
 	DXGI_FORMAT backBufferFormat;
 	DXGI_FORMAT depthStencilBufferFormat;
@@ -65,8 +66,8 @@ class Renderer
 	{
 		float darknessFactor;
 		float rednessFactor;
-		float fadFactor;
-		float padding;
+		float fadeFactor;
+		float darknessTextureSwitchFactor;
 	};
 	static_assert(sizeof(PSRenderToTex_cbPerObject) % 16 == 0, "Not 16-bytes aligned");
 
