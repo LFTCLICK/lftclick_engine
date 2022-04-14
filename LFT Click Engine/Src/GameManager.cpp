@@ -19,16 +19,37 @@ void GameManager::LoadLevel(json file, EGameLevel toSet)
 	g_GameObjManager->DeleteAll();
 	g_GameObjManager->Deserialize(g_GameObjFactory.get(), file);
 	this->currentLevel = toSet;
-	if (toSet == EGameLevel::SurvivalLevel)
+	this->prevLevel = toSet;
+
+	if (toSet == EGameLevel::SideScrollerLevel)
 	{
 		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		Player* playerComp = playerObj->getComponent<Player>();
+
+		playerComp->collectibleparts = playerComp->collectibleWood = 0;
+		playerComp->autopilot = true;
+
 		this->playerObj = playerObj;
 		this->mainCamera = playerObj->getComponent<Camera>();
 		this->playerTrans = playerObj->getComponent<Transform>();
+		
 		this->time = 0;
 
 		g_FrameRateController->zeroDeltaTime = false;
+		playerDead = false;
+	}
+	if (toSet == EGameLevel::SurvivalLevel)
+	{
+		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		Player* playerComp = playerObj->getComponent<Player>();
 
+		this->playerObj = playerObj;
+		this->mainCamera = playerObj->getComponent<Camera>();
+		this->playerTrans = playerObj->getComponent<Transform>();
+		playerComp->collectibleparts = playerComp->collectibleWood = 8;
+		this->time = 0;
+
+		g_FrameRateController->zeroDeltaTime = false;
 		playerDead = false;
 
 		PushPlayerMessage("Ugh, where am I?", 3.f);
@@ -88,7 +109,7 @@ void GameManager::UpdateTime()
 	}
 	else
 	{
-		
+		darknessLevel = 0;
 	}
 
 	static float fadeInTimer = 0.0f;

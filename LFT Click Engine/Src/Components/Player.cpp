@@ -57,6 +57,8 @@ void Player::Start()
 	if (autopilot) cam->SetAutopilotVelocity("right", camSpeed);
 	zHelper = g_GameManager->mapHeight / 2.0f;
 	introTimer = 0;
+
+	collectibleparts = 8;
 }
 
 void Player::Update()
