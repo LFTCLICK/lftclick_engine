@@ -36,7 +36,8 @@ Renderer::Renderer() :
 	msaaQuality(0),
 	msaaSampleCount(1),
 	displayModes(nullptr),
-	numModes(0)
+	numModes(0),
+	disableDarkness(false)
 {
 
 }
@@ -278,7 +279,7 @@ void Renderer::Draw(const FLOAT* clearColor)
 
 		DirectX::XMMATRIX mat = gameObject->getComponent<Transform>()->GetXMMatrix();
 	
-		const VS_cbPerObject cbValues_VS =
+		VS_cbPerObject cbValues_VS =
 		{
 			{
 				mat * projectionMat
@@ -288,11 +289,14 @@ void Renderer::Draw(const FLOAT* clearColor)
 			drawable->xFlip
 		};
 	
-		const PS_cbPerObject cbValues_PS =
+		PS_cbPerObject cbValues_PS =
 		{
 			(gameObject->tag == "player" || gameObject->tag == "zombie"
 			|| gameObject->tag == "crosshairs") ? 0.0f : g_GameManager->displayDarknessLevel
 		};
+
+		if (disableDarkness)
+			cbValues_PS.darknessFactor = 0.0f;
 	
 		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
 		PS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
@@ -324,7 +328,7 @@ void Renderer::Draw(const FLOAT* clearColor)
 		1
 	};
 
-	const PSRenderToTex_cbPerObject cbValues_PS = 
+	PSRenderToTex_cbPerObject cbValues_PS = 
 	{
 		g_GameManager->darknessLevel,
 		g_GameManager->rednessFactor,
@@ -332,6 +336,8 @@ void Renderer::Draw(const FLOAT* clearColor)
 		g_GameManager->displayDarknessLevel
 	};
 
+	if (disableDarkness)
+		cbValues_PS.darknessFactor = 0;
 
 	VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
 	PSRenderToTex_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
@@ -345,13 +351,14 @@ void Renderer::Draw(const FLOAT* clearColor)
 void Renderer::PresentFrame()
 {
 	static bool VSync = true;
+#ifdef _DEBUG
 	if (ImGui::BeginMainMenuBar())
 	{
 		ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Checkbox("VSync", &VSync);
 		ImGui::EndMainMenuBar();
 	}
-
+#endif
 	spriteBatch->End();
 	
 	ImGui::Render();

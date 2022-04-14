@@ -206,6 +206,14 @@ int main(int argc, char* args[])
 				SDL_SetWindowSize(g_pWindow, e.window.data1, e.window.data2);
 				g_Renderer->OnResize(e.window.data1, e.window.data2);
 			}
+			if (e.window.event == SDL_WINDOWEVENT_MINIMIZED || e.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
+			{
+				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu))
+				{
+					g_GameManager->prevLevel = g_GameManager->currentLevel;
+					g_GameManager->currentLevel = EGameLevel::Pausemenu;
+				}
+			}
 			break;
 		}
 
@@ -247,6 +255,8 @@ int main(int argc, char* args[])
 			ImGui::End();
 			break;
 		case EGameLevel::CreditsScreen:
+			g_Renderer->disableDarkness = true;
+
 			while (ShowCursor(true) < 0); // Shows cursor
 			g_GameObjManager->HideAllObjects();
 			g_GameObjManager->FindObjectOfTag("credits")->isActive = true;
@@ -271,7 +281,6 @@ int main(int argc, char* args[])
 			ImGui::End();
 
 			g_GameObjManager->FindObjectOfTag("credits")->Update();
-			g_GameManager->darknessLevel = g_GameManager->displayDarknessLevel = 0;
 			g_AudioManager->Update();
 			//g_GameManager->Update();
 			//g_InputManager->Update();
@@ -311,6 +320,7 @@ int main(int argc, char* args[])
 		case EGameLevel::Level0:
 		case EGameLevel::Pausemenu:
 			g_GameManager->fadeFactor = 0.0f;
+			g_Renderer->disableDarkness = false;
 
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE))
 			{
