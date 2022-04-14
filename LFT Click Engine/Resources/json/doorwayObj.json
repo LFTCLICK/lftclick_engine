@@ -52,7 +52,7 @@
     "woodPileOffset": [ -128.0, -64.0],
     "woodPileRadius": 500.0,
     "doorPhases": 5,
-    "hp": 200,
+    "hp": 500,
     "woodRequiredPerPhase": 5,
     "repairTime": 2.2
   }
