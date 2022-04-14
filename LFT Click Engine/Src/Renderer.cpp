@@ -219,9 +219,14 @@ void Renderer::CreateDeviceDependentResources()
 	DX::ThrowIfFailed(
 		DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(),
 			L"Resources\\images\\shade.jpg", nullptr,
-			darknessSRV.ReleaseAndGetAddressOf() ) 
+			darkness2SRV.ReleaseAndGetAddressOf() ) 
 	);
 
+	DX::ThrowIfFailed(
+		DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(),
+			L"Resources\\images\\23465-shade.jpg", nullptr,
+			darknessSRV.ReleaseAndGetAddressOf())
+	);
 }
 
 void Renderer::PrepareForRendering()
@@ -326,16 +331,17 @@ void Renderer::Draw(const FLOAT* clearColor)
 	{
 		g_GameManager->darknessLevel,
 		g_GameManager->rednessFactor,
-		f
+		f,
+		g_GameManager->displayDarknessLevel
 	};
 
 
 	VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);
 	PSRenderToTex_cbPerObjectData.SetData(immediateContext.Get(), cbValues_PS);
 
-	ID3D11ShaderResourceView* inputSRVs[] = { renderToTextureSRV.Get(), darknessSRV.Get() };
+	ID3D11ShaderResourceView* inputSRVs[] =  { renderToTextureSRV.Get(), darknessSRV.Get(), darkness2SRV.Get() };
 
-	immediateContext->PSSetShaderResources(0, 2, inputSRVs);
+	immediateContext->PSSetShaderResources(0, 3, inputSRVs);
 	immediateContext->DrawIndexed(6, 0, 0);
 }
 
