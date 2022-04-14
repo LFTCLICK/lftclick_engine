@@ -25,18 +25,18 @@ void FollowMouse::Start()
 
 void FollowMouse::Update()
 {
-#ifndef _DEBUG
-	while (ShowCursor(false) >= 0); // Hides cursor
-#endif
+	if (!g_FrameRateController->zeroDeltaTime) {
 
-	if (g_GameManager->currentLevel == EGameLevel::Pausemenu)
-		return;
+		while (ShowCursor(false) >= 0); // Hides cursor
 
-	float targetX = (float)(g_InputManager->mouseX() - g_Renderer->GetWidth()/2.0f) + g_GameManager->mainCamera->xPos;
-	float targetY = -1 * (float)(g_InputManager->mouseY() - g_Renderer->GetHeight() / 2.0f) + g_GameManager->mainCamera->yPos;
+		if (g_GameManager->currentLevel == EGameLevel::Pausemenu)
+			return;
 
+		float targetX = (float)(g_InputManager->mouseX() - g_Renderer->GetWidth()/2.0f) + g_GameManager->mainCamera->xPos;
+		float targetY = -1 * (float)(g_InputManager->mouseY() - g_Renderer->GetHeight() / 2.0f) + g_GameManager->mainCamera->yPos;
 
-	myTransform->SetPos(targetX, targetY);
+		myTransform->SetPos(targetX, targetY);
+	}
 }
 
 void FollowMouse::Deserialize(nlohmann::json j, GameObject* componentOwner)
@@ -55,5 +55,5 @@ Component* FollowMouse::Clone(GameObject* newParent)
 
 FollowMouse::~FollowMouse()
 {
-
+	while (ShowCursor(true) < 0); // Shows cursor
 }

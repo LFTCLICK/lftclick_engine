@@ -12,8 +12,10 @@
 #include "Component.h"
 #include <json.hpp>
 #include "Drawable.h"
+#include "Audible.h"
 #include "Camera.h"
 #include "Gun.h"
+#include "Enemy.h"
 #include "AudioManager.h"
 #include "GameManager.h"
 #include "FrameRateController.h"
@@ -39,12 +41,12 @@ public:
 
 	virtual Component* Clone(GameObject* newParent);
 	Player() : isDashing(false), autopilot(false), damageFlashing(false), 
-		dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), wood(0) {};
+		dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), collectibleWood(0),
+		inertiaMod(100), hitDirection{0, 0}, hitSpeed(0) {};
 
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
 	void HandleMessage(Message* e);
-
 public:
 	void Move(float deltaX, float deltaY);
 	void Dash();
@@ -52,15 +54,28 @@ public:
 	void Sidescroll(float deltaTime);
 	bool IsAutopilot() { return autopilot; }
 
-	int wood, health, parts;
+	int collectibleWood, playerHealth, collectibleparts;
+	
+	//HUD animations
+	bool playCollectedAnimWood = false;
+	bool playCollectedAnimParts = false;
 
 	DirectX::SimpleMath::Vector2 woodHUDPos = { 4, 20 };
 	DirectX::SimpleMath::Vector2 bikeHUDPos = { 4, 50 };
 	DirectX::SimpleMath::Vector2 healthHUDPos = { 4, 90 };
 
-	DirectX::SimpleMath::Vector2 woodHUDScale = { 2.6f, 2.6f };
-	DirectX::SimpleMath::Vector2 bikeHUDScale = { 2.6f, 2.6f };
-	DirectX::SimpleMath::Vector2 healthHUDScale = { 2.6f, 2.6f };
+	float woodHUDScale = 2.6f; //Initial
+	float currentWoodHUDScale = woodHUDScale; //changes as per animation
+	float woodHUDTextScale = 1.0f; //Initial
+	float currentWoodHUDTextScale = woodHUDTextScale; //changes as per animation
+
+	float bikeHUDScale = 2.6f; //Initial
+	float currentBikeHUDScale = bikeHUDScale; //changes as per animation
+	float bikeHUDTextScale = 1.0f; //Initial
+	float currentBikeHUDTextScale = bikeHUDTextScale; //changes as per animation
+ 	
+	float healthHUDScale = 2.6f;
+
 
 	DirectX::SimpleMath::Vector2 woodTextPos = { 50, 25 };
 	DirectX::SimpleMath::Vector2 bikeTextPos = { 50, 60 };
@@ -81,10 +96,14 @@ private:
 	Camera* cam;
 	Gun* gun;
 	Drawable* drawable;
+	Audible* audio;
+	SpriteAnimator* anim;
 	SquareCollider* squareCollider;
-	float introTimer;
+	float introTimer, inertiaMod, hitSpeed;
 
-	DirectX::SimpleMath::Vector2 dashVelocity;
+	DirectX::SimpleMath::Vector2 dashVelocity, hitDirection;
+	sol::function PlayerCollidedWithEnemy;
+	TimedMessage currentMessage;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper;
 	bool isDashing, autopilot;
 	

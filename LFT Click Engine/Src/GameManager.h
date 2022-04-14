@@ -19,6 +19,7 @@
 //
 // The darkness alpha level is produced by "GetDarknessLevel()".
 
+#include <queue>
 #include <json.hpp>
 #include <Helpers.h>
 
@@ -64,6 +65,8 @@
 
 #define NEARPLAYER_ENEMY_SPAWNER_ID 1000
 
+#define MESSAGE_POSSIBILITIES 5
+
 
 class Camera;
 class Transform;
@@ -81,6 +84,12 @@ enum class EGameLevel
 	ControlScreen
 };
 
+struct TimedMessage 
+{
+	std::string message;
+	float timeout;
+};
+
 class GameManager
 {
 public:
@@ -88,11 +97,12 @@ public:
 		playerObj(nullptr),
 		playerDead(false), 
 		playerWon(false), 
-		darknessLevel(0),
 		displayDarknessLevel(0),
+		darknessLevel(1),
 		monsterCount(0),
 		dangerLevel(0),
 		rednessFactor(0),
+		fadFactor(0),
 		mapHeight(10000.0f),
 		mainCamera(nullptr),
 		day(1), 
@@ -149,6 +159,10 @@ public:
 	bool IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos);
 
 	void LoadLevel(nlohmann::json file, EGameLevel toSet);
+
+	void PushPlayerMessage(std::string, float timeout = 3.f);
+	TimedMessage GetPlayerMessage();
+
 public:
 	GameObject* playerObj;
 	bool playerDead;
@@ -156,6 +170,7 @@ public:
 	bool playerInsideHouse;
 	float darknessLevel;
 	float rednessFactor;
+	float fadFactor;
 	float displayDarknessLevel;
 	int monsterCount;
 	int harshLightOfDay;
@@ -171,7 +186,6 @@ public:
 
 	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(-1000.0f, -920.0f, 1880.0f, 1930.0f);
 
-
 	int day;
 	float time;
 
@@ -186,6 +200,10 @@ public:
 
 	EGameLevel currentLevel;
 	EGameLevel prevLevel;
+
+	std::queue<TimedMessage> messageQueue;
+
+	//std::queue<std::string> daytimeSwitchMessages[MESSAGE_POSSIBILITIES] 
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

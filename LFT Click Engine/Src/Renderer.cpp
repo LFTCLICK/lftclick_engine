@@ -218,7 +218,7 @@ void Renderer::CreateDeviceDependentResources()
 
 	DX::ThrowIfFailed(
 		DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(),
-			L"Resources\\images\\23465-shade.jpg", 0,
+			L"Resources\\images\\shade.jpg", 0,
 			D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr,
 			darknessSRV.ReleaseAndGetAddressOf() ) 
 	);

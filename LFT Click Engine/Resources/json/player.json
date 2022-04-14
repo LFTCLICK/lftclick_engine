@@ -103,7 +103,7 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicBase.mp3",
         "loop": true,
-        "volume": 30,
+        "volume": 33,
         "playEvents": [
           1000
         ],
@@ -115,7 +115,7 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicAddition.mp3",
         "loop": true,
-        "volume": 30,
+        "volume": 33,
         "playEvents": [
           1000
         ],
@@ -124,13 +124,22 @@
         ],
         "scaleVolumeWithDanger": true,
         "startTime": 73.525
+      },
+      {
+        "name": ".\\Resources\\sounds\\hit.mp3",
+        "loop": false,
+        "volume": 20,
+        "pitchRange": [ 0.3, 0.5 ],
+        "playEvents": [
+          1003
+        ]
       }
     ]
   },
   "10": {
     "bulletTypes": [
       {
-        "fireRate": 10,
+        "fireRate": 4,
         "prefabTag": "bullet"
       }
     ],

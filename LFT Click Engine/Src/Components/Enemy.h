@@ -63,6 +63,7 @@ public:
 private:
 	Transform* myTransform;
 	Transform* playerTrans;
+	Damageable* dam;
 	float zHelper;
 };
 extern std::unique_ptr<AStarTerrain> g_AStarTerrain;

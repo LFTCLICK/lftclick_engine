@@ -213,7 +213,10 @@ int main(int argc, char* args[])
 		switch (g_GameManager->currentLevel)
 		{
 
+			
 		case EGameLevel::Mainmenu:
+			while (ShowCursor(true) < 0); // Shows cursor
+
 			rect.left = rect.top = 0;
 			rect.right = g_Renderer->GetWidth();
 			rect.bottom = g_Renderer->GetHeight();
@@ -246,6 +249,8 @@ int main(int argc, char* args[])
 			ImGui::End();
 			break;
 		case EGameLevel::CreditsScreen:
+			while (ShowCursor(true) < 0); // Shows cursor
+
 			rect.left = rect.top = 0;
 			rect.right = g_Renderer->GetWidth();
 			rect.bottom = g_Renderer->GetHeight();
@@ -267,6 +272,7 @@ int main(int argc, char* args[])
 			break;
 
 		case EGameLevel::ControlScreen:
+			while (ShowCursor(true) < 0); // Shows cursor
 
 			rect.left = rect.top = 0;
 			rect.right = g_Renderer->GetWidth();
@@ -302,6 +308,8 @@ int main(int argc, char* args[])
 			}
 			if (g_GameManager->currentLevel == EGameLevel::Pausemenu)
 			{
+				while (ShowCursor(true) < 0); // Shows cursor
+
 				g_FrameRateController->zeroDeltaTime = true;
 				ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(g_Renderer->GetHeight()) / 2));
 				ImGui::Begin("pauseMenu", nullptr,
