@@ -15,18 +15,40 @@ void EnemySpawner::Start()
 
 void EnemySpawner::Update()
 {
-	//spawnTimer -= g_FrameRateController->DeltaTime();
+	spawnTimer -= g_FrameRateController->DeltaTime();
 
-	if (g_GameManager->IsSpawnerActivated(spawnerID)) 
+	if (g_GameManager->currentLevel == EGameLevel::SideScrollerLevel)
 	{
-		DirectX::SimpleMath::Vector2 spawnPos;
+		if (spawnTimer <= 0)
+		{
+			spawnTimer = 3;
+			DirectX::SimpleMath::Vector2 spawnPos;
 
-		if (spawnAroundPlayer && !g_GameManager->playerInsideHouse) {
-			DirectX::SimpleMath::Vector2 playerPos = g_GameManager->playerTrans->CurrentPos();
-			int halfWindowHeight = g_GameManager->windowHeight / 2, halfWindowWidth = g_GameManager->windowWidth / 2;
+			spawnPos = componentOwner->myTransform->CurrentPos();
+			int spawnChanceRes = Helpers::randWithinRange(0, totalSpawnChance);
 
-			int randInt = Helpers::randWithinRange(0, 3);
-			int horizontalOrVertical = (randInt / 2 == 0), signMod = (randInt % 2 == 0 ? 1 : -1);
+			for (auto typeIt = enemyTypes.begin(); typeIt != enemyTypes.end(); typeIt++)
+			{
+				if (spawnChanceRes <= typeIt->first)
+				{
+					g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), typeIt->second)->getComponent<Transform>()->SetPos(spawnPos.x, spawnPos.y);
+					break;
+				}
+			}
+		}
+	}
+	else
+	{
+		if (g_GameManager->IsSpawnerActivated(spawnerID))
+		{
+			DirectX::SimpleMath::Vector2 spawnPos;
+
+			if (spawnAroundPlayer && !g_GameManager->playerInsideHouse) {
+				DirectX::SimpleMath::Vector2 playerPos = g_GameManager->playerTrans->CurrentPos();
+				int halfWindowHeight = g_GameManager->windowHeight / 2, halfWindowWidth = g_GameManager->windowWidth / 2;
+
+				int randInt = Helpers::randWithinRange(0, 3);
+				int horizontalOrVertical = (randInt / 2 == 0), signMod = (randInt % 2 == 0 ? 1 : -1);
 
 			if (horizontalOrVertical) {
 				float distanceFromWindow = playerPos.x + (signMod * (halfWindowWidth + NEARPLAYER_SPAWN_DISTANCE_FROM_WINDOW));
@@ -53,52 +75,59 @@ void EnemySpawner::Update()
 		}
 		else spawnPos = { 0, 0 };
 
-		if (!g_GameManager->IsPosInsideHouse(spawnPos)) {
-			int spawnChanceRes = Helpers::randWithinRange(0, totalSpawnChance);
-			for (auto typeIt = enemyTypes.begin(); typeIt != enemyTypes.end(); typeIt++)
-			{
-				if (spawnChanceRes <= typeIt->first)
+			if (!g_GameManager->IsPosInsideHouse(spawnPos)) {
+				int spawnChanceRes = Helpers::randWithinRange(0, totalSpawnChance);
+				for (auto typeIt = enemyTypes.begin(); typeIt != enemyTypes.end(); typeIt++)
 				{
-					g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), typeIt->second)->getComponent<Transform>()->SetPos(spawnPos.x, spawnPos.y);
-					break;
+					if (spawnChanceRes <= typeIt->first)
+					{
+						g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), typeIt->second)->getComponent<Transform>()->SetPos(spawnPos.x, spawnPos.y);
+						break;
+					}
 				}
 			}
 		}
-	}
+	}	
+	
 
 	// past this is going unused as of now
-	if (spawnTimer <= 0.0f)
+	/*if (spawnTimer <= 0.0f)
 	{
-		spawnTimer = timeBetweenPhases;
+		spawnTimer = timeBetweenPhases;*/
 
-		if (objectSpawnName == "zombie")
-		{
-			int toSpawn;
-			// checking if its morning time
-			if (g_GameManager->IsNightTime())
-				toSpawn = 30.0f;
-			else
-				toSpawn = 10.0f;
+	//// past this is going unused as of now
+	//if (spawnTimer <= 0.0f)
+	//{
+	//	spawnTimer = timeBetweenPhases;
 
-			totalZombiesOnMap += toSpawn;
-			for (int i = 0; i < toSpawn; i++)
-			{
-				GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
-				newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
-			}
-			printf("Total zombies on map are %d\n", totalZombiesOnMap);
-		}
-		
-		if (objectSpawnName == "enemy")
-		{
-			ghostsOnMap += 1;
-			GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
-			newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
-			printf("Total ghosts on map are %d\n", ghostsOnMap);
-		}
+	//	if (objectSpawnName == "zombie")
+	//	{
+	//		int toSpawn;
+	//		// checking if its morning time
+	//		if (g_GameManager->IsNightTime())
+	//			toSpawn = 30.0f;
+	//		else
+	//			toSpawn = 10.0f;
 
-		++x;
-	}
+	//		totalZombiesOnMap += toSpawn;
+	//		for (int i = 0; i < toSpawn; i++)
+	//		{
+	//			GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
+	//			newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
+	//		}
+	//		printf("Total zombies on map are %d\n", totalZombiesOnMap);
+	//	}
+	//	
+	//	if (objectSpawnName == "enemy")
+	//	{
+	//		ghostsOnMap += 1;
+	//		GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
+	//		newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
+	//		printf("Total ghosts on map are %d\n", ghostsOnMap);
+	//	}
+
+	//	++x;
+	//}
 }
 
 void EnemySpawner::Deserialize(nlohmann::json j, GameObject* componentOwner)
@@ -141,8 +170,3 @@ Component* EnemySpawner::Clone(GameObject* newParent)
 	toReturn->componentOwner = newParent;
 	return toReturn;
 }
-
-//newObj->getComponent<Transform>()->SetPos(myPos.x + (rand() % (int)bounds.x) - (bounds.x / 2), myPos.y +
-//	(rand() % (int)bounds.y) - (bounds.y / 2));
-
-//slope* x + c

@@ -66,7 +66,6 @@ public:
 
 private:
 	GameObjectFactory* gof;
-
 	// Gdiplus startup nonsense
 	ULONG_PTR gdiplusToken;
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;

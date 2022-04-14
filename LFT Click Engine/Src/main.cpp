@@ -231,7 +231,7 @@ int main(int argc, char* args[])
 
 			if (ImGui::Button("Play", { 100,50 }))
 			{
-				g_GameManager->LoadLevel(dataJson2, EGameLevel::Level0);
+				g_GameManager->LoadLevel(dataJson2, EGameLevel::SurvivalLevel);
 			}
 			if (ImGui::Button("Credits", { 100,50 }))
 			{
@@ -295,7 +295,8 @@ int main(int argc, char* args[])
 
 			g_Renderer->Draw(DirectX::Colors::Black);
 			break;
-		case EGameLevel::Level0:
+		case EGameLevel::SurvivalLevel:
+		case EGameLevel::SideScrollerLevel:
 		case EGameLevel::Pausemenu:
 
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE))
@@ -306,7 +307,7 @@ int main(int argc, char* args[])
 				}
 				else
 				{
-					g_GameManager->currentLevel = EGameLevel::Level0;
+					g_GameManager->currentLevel = EGameLevel::SurvivalLevel;
 					g_FrameRateController->zeroDeltaTime = false;
 				}
 			}
@@ -327,14 +328,14 @@ int main(int argc, char* args[])
 
 						if (ImGui::Button("Restart", { 100,50 }))
 						{
-							g_GameManager->LoadLevel(dataJson2, EGameLevel::Level0);
+							g_GameManager->LoadLevel(dataJson2, EGameLevel::SurvivalLevel);
 						}
 					}
 					else
 					{
 						if (ImGui::Button("Restart", { 100,50 }))
 						{
-							g_GameManager->LoadLevel(dataJson2, EGameLevel::Level0);
+							g_GameManager->LoadLevel(dataJson2, EGameLevel::SurvivalLevel);
 						}
 					}
 				}
@@ -342,7 +343,7 @@ int main(int argc, char* args[])
 				{
 					if (ImGui::Button("Continue", { 100, 50 }))
 					{
-						g_GameManager->currentLevel = EGameLevel::Level0;
+						g_GameManager->currentLevel = EGameLevel::SurvivalLevel;
 						g_FrameRateController->zeroDeltaTime = false;
 					}
 				}

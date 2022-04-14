@@ -21,6 +21,9 @@ moveY = 0
 
 playerSpeed = 350
 
+camSpeed = 375
+playerSpeedForSideScroller = 375
+
 autopilot = false
 
 -- returns player Hp
@@ -43,9 +46,19 @@ function getPlayerSpeed()
 	return playerSpeed
 end
 
--- d pressed moving right
-if is_pressed(d_pressed) then
-	moveX = deltaTime()
+-- returns player's speed for level 2
+function getPlayerSpeedForSideScroller()
+	return playerSpeedForSideScroller
+end
+
+-- returns camera''s speed for level 2
+function getCamerSpeed()
+	return camSpeed
+end
+
+if (current_level() == 2) then
+elseif is_pressed(d_pressed) then
+	move(playerSpeed * deltaTime(), 0)
 end
 
 -- w pressed moving up

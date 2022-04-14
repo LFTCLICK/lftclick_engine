@@ -34,7 +34,13 @@ void Player::Start()
 	autopilot = isAutopilot();
 	sol::function getPlayerSpeed = lua_player_state["getPlayerSpeed"];
 	playerSpeed = getPlayerSpeed();
+	sol::function getPlayerSpeedForSideScroller = lua_player_state["getPlayerSpeedForSideScroller"];
+	playerSpeedForSideScroller = getPlayerSpeedForSideScroller();
+	sol::function getCamSpeed = lua_player_state["getCamerSpeed"];
+	camSpeed = getCamSpeed();
 	PlayerCollidedWithEnemy = lua_player_state["PlayerCollidedWithEnemy"];
+
+	playerInPuddle = false;
 
 	myTransform = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
@@ -48,7 +54,7 @@ void Player::Start()
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\health_icon.png", nullptr, &healthSRV));
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\motorcycle_icon.png", nullptr, &bikepartsSRV));
 
-	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	if (autopilot) cam->SetAutopilotVelocity("right", camSpeed);
 	zHelper = g_GameManager->mapHeight / 2.0f;
 	introTimer = 0;
 
@@ -58,6 +64,7 @@ void Player::Start()
 
 void Player::Update()
 {
+
 	player_script_update();
 
 	XMFLOAT2 origin = XMFLOAT2(0, 0);
@@ -191,7 +198,18 @@ void Player::Update()
 	}
 
 	if (autopilot)
-		Sidescroll(g_FrameRateController->DeltaTime());
+	{
+		if (playerInPuddle)
+		{
+			Move((100 + (cam->xPos - myTransform->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * g_FrameRateController->DeltaTime(), 0);
+			playerInPuddle = false;
+		}
+		else
+			Move((playerSpeedForSideScroller + (cam->xPos - myTransform->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * g_FrameRateController->DeltaTime(), 0);
+	}
+
+	if (myTransform->CurrentPos().x < cam->xPos - 800)
+		g_GameManager->playerDead = true;
 
 	if (currentMessage.timeout > 0) 
 	{
@@ -252,6 +270,12 @@ void Player::HandleMessage(Message* e)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
 
+		if (g_GameManager->currentLevel == EGameLevel::SideScrollerLevel)
+		{
+			if (e->otherObject->componentOwner->tag == "couch")
+				g_GameManager->playerDead = true;
+		}
+
 		Enemy* enemyComp = e->otherObject->componentOwner->getComponent<Enemy>();
 		if (enemyComp != nullptr) 
 		{
@@ -271,6 +295,12 @@ void Player::HandleMessage(Message* e)
 		else {
 			Move(cm->deltaPos.x, cm->deltaPos.y);
 		}
+	}
+
+	if (e->id == Message::TRIGGER_COLLISION)
+	{
+		if (e->otherObject->componentOwner->tag == "water_puddle")
+			playerInPuddle = true;
 	}
 }
 

@@ -1,0 +1,65 @@
+{
+  "1": {
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 240,
+    "scaleY": 180,
+    "rot": 0,
+    "zPos": 25
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale": 0.3,
+    "yScale": 0.3,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
+    ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "image": "Resources\\images\\vortex.png"
+  },
+  "13": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "radius": 10,
+    "trigger": true,
+    "static": false,
+    "deleteOnCollison": false
+  },
+  "6": {
+    "spriteSheetWidth": 3,
+    "spriteSheetHeight": 1,
+    "animations": [
+      {
+        "name": "bulletIdleRight",
+        "length": 4,
+        "frameDuration": 0.05,
+        "onMove": true,
+        "row": 0
+      },
+      {
+        "name": "bulletMoveRight",
+        "length": 4,
+        "frameDuration": 0.05,
+        "onMove": true,
+        "row": 0
+      }
+    ]
+  },
+  "105": {
+    "PullingRadius": 225
+  }
+}

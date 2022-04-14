@@ -109,8 +109,8 @@ private:
 	DirectX::SimpleMath::Vector2 dashVelocity, hitDirection, positiveBound, negativeBound;
 	sol::function PlayerCollidedWithEnemy;
 	TimedMessage currentMessage;
-	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper;
-	bool isDashing, autopilot;
+	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper, playerSpeedForSideScroller, camSpeed;
+	bool isDashing, autopilot, playerInPuddle;
 	
 	bool damageFlashing;
 };

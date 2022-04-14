@@ -11,13 +11,15 @@
 #include "FrameRateController.h"
 #include "Renderer.h"
 #include "GameObjectManager.h"
+#include "EventManager.h"
+#include "Components/Player.h"
 
 void GameManager::LoadLevel(json file, EGameLevel toSet)
 {
 	g_GameObjManager->DeleteAll();
 	g_GameObjManager->Deserialize(g_GameObjFactory.get(), file);
 	this->currentLevel = toSet;
-	if (toSet == EGameLevel::Level0)
+	if (toSet == EGameLevel::SurvivalLevel)
 	{
 		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
 		this->playerObj = playerObj;
@@ -54,6 +56,8 @@ void GameManager::Update() {
 	UpdateLevel();
 	UpdateInsideHouse();
 	UpdateSpawners();
+	if (currentLevel == EGameLevel::SideScrollerLevel)
+		SideScrollerObjectDestroyer();
 }
 
 #include <cmath>
@@ -77,11 +81,17 @@ void GameManager::UpdateTime()
 	float oldDarknessLevel = darknessLevel;
 	bool wasNightTime = IsNightTime();
 
-
-	if (time < SUN_RISING) darknessLevel = 1;
-	else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
-	else if (time < SUN_SETTING) darknessLevel = 0;
-	else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+	if (currentLevel == EGameLevel::SurvivalLevel)
+	{
+		if (time < SUN_RISING) darknessLevel = 1;
+		else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
+		else if (time < SUN_SETTING) darknessLevel = 0;
+		else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+	}
+	else
+	{
+		
+	}
 
 	static float fadeInTimer = 0.0f;
 	static float fadeOutTimer = 0.0f;
@@ -212,6 +222,35 @@ void GameManager::UpdateSpawners()
 
 		if (spawnTimer < MIN_TIME_BETWEEN_SPAWNS) 
 			spawnTimer = MIN_TIME_BETWEEN_SPAWNS;
+	}
+}
+
+void GameManager::SideScrollerObjectDestroyer()
+{
+	auto objIt = g_GameObjManager->gameObjectList.begin();
+
+	while (objIt != g_GameObjManager->gameObjectList.end())
+	{
+		GameObject* toCheckObject = *objIt;
+		Transform* toCheckObjectTransform = toCheckObject->getComponent<Transform>();
+
+		if (toCheckObject->tag == "wall" || toCheckObject->tag == "bullet")
+		{
+			break;
+		}
+		else
+		{
+			if (playerObj == nullptr)
+			{
+				return;
+			}
+			else if (toCheckObjectTransform->position.x < playerObj->getComponent<Transform>()->position.x - 800)
+			{
+				toCheckObject->isDeletable = true;
+			}
+		}
+		
+		objIt++;
 	}
 }
 
