@@ -598,6 +598,10 @@
     <None Include="Resources\json\vortex.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\LuaScripts\playerScriptSidescroller.lua">
+      <Filter>Lua Scripts</Filter>
+    </None>
+    <None Include="Resources\json\road.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

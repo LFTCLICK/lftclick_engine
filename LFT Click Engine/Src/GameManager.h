@@ -106,10 +106,10 @@ struct TimedMessage
 class GameManager
 {
 public:
-	GameManager() : 
+	GameManager() :
 		playerObj(nullptr),
-		playerDead(false), 
-		playerWon(false), 
+		playerDead(false),
+		playerWon(false),
 		displayDarknessLevel(0),
 		darknessLevel(1),
 		monsterCount(0),
@@ -118,18 +118,19 @@ public:
 		fadeFactor(0),
 		mapHeight(10000.0f),
 		mainCamera(nullptr),
-		day(1), 
+		day(1),
 		time(0),
 		chanceOfFindingPart(INITIAL_CHANCE_TO_FIND_PART),
 		currentLevel(EGameLevel::Mainmenu),
 		prevFrameLevel(currentLevel),
-		harshLightOfDay(day-1),
+		harshLightOfDay(day - 1),
 		totalSpawners(0),
 		activatedSpawner(-1),
 		spawnTimer(0),
 		spawnIntervalMin(NIGHTTIME_SPAWN_INTERVAL_MIN),
 		spawnIntervalMax(NIGHTTIME_SPAWN_INTERVAL_MAX),
-		menuMusicName("")
+		menuMusicName(""),
+		outdoorScaryMessagePlayed(false)
 	{}
 	~GameManager() = default;
 
@@ -192,6 +193,7 @@ public:
 	bool playerWon;
 	bool playerInsideHouse;
 	bool isPlayerInsideCabin;
+	bool outdoorScaryMessagePlayed;
 	float darknessLevel;
 	float rednessFactor;
 	float fadeFactor;

@@ -34,6 +34,8 @@ void GameManager::LoadLevel(json file, EGameLevel toSet)
 		PushPlayerMessage("Ugh, where am I?", 3.f);
 		PushPlayerMessage("This place smells terrible.", 3.f);
 		PushPlayerMessage("Who the heck would build a cabin this far out?", 3.f);
+
+		outdoorScaryMessagePlayed = false;
 	}
 }
 
@@ -160,6 +162,12 @@ void GameManager::UpdateTime()
 			}
 			PushPlayerMessage("I hope I still have time to bar the doors!", 1.5f);
 		}
+	}
+
+	if (!outdoorScaryMessagePlayed && IsNightTime() && !playerInsideHouse && messageQueue.empty()) {
+		PushPlayerMessage("They seem to flock to me if I go out at night!", 1.5f);
+		PushPlayerMessage("I think I should stay inside right now!", 1.5f);
+		outdoorScaryMessagePlayed = true;
 	}
 }
 

@@ -453,6 +453,7 @@
     <None Include="Resources\json\menu.json" />
     <None Include="Resources\json\player.json" />
     <None Include="Resources\json\prefabs.json" />
+    <None Include="Resources\json\road.json" />
     <None Include="Resources\json\side_scroller.json" />
     <None Include="Resources\json\sign.json" />
     <None Include="Resources\json\slow.json" />
@@ -472,6 +473,7 @@
     <None Include="Resources\LuaScripts\playerScript.lua" />
     <None Include="Resources\json\rug.json" />
     <None Include="Resources\json\table.json" />
+    <None Include="Resources\LuaScripts\playerScriptSidescroller.lua" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

@@ -166,7 +166,7 @@ int main(int argc, char* args[])
 
 	g_GameObjManager->DeleteAll();
 
-	std::ifstream other("./Resources/json/survival.json");
+	std::ifstream other("./Resources/json/side_scroller.json");
 
 	json dataJson2;
 	other >> dataJson2;

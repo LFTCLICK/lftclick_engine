@@ -71,6 +71,10 @@
     {
       "prefab": "Resources\\json\\couch.json",
       "tag": "couch"
+    },
+    {
+      "prefab": "Resources\\json\\road.json",
+      "tag": "road"
     }
   ],
   "Map": {
@@ -90,7 +94,7 @@
   },
   "Level": [
     {
-      "object": "grass",
+      "object": "road",
       "overrides": [
         {
           "1": {
@@ -194,6 +198,44 @@
             "trigger": false,
             "static": false,
             "deleteOnCollison": false
+          },
+          "7": {
+            "script": "Resources\\LuaScripts\\playerScriptSidescroller.lua"
+          },
+          "8": {
+            "sounds": [
+              {
+                "name": ".\\Resources\\music\\background.mp3",
+                "loop": true,
+                "volume": 25,
+                "playEvents": [
+                  1000
+                ],
+                "stopEvents": [
+                  2000
+                ],
+                "startTime": 0,
+                "isMusic": true
+              },
+              {
+                "name": ".\\Resources\\sounds\\hit.mp3",
+                "loop": false,
+                "volume": 20,
+                "pitchRange": [ 0.7, 1.1 ],
+                "playEvents": [
+                  1003
+                ]
+              },
+              {
+                "name": ".\\Resources\\sounds\\oof.mp3",
+                "loop": false,
+                "volume": 40,
+                "pitchRange": [ 0.7, 1.1 ],
+                "playEvents": [
+                  1003
+                ]
+              }
+            ]
           }
         }
       ]
@@ -213,6 +255,51 @@
     {
       "object": "crosshairs",
       "overrides": []
+    },
+    {
+      "object": "grass",
+      "overrides": [
+        {
+          "1": {
+            "startX": -30750.0,
+            "startY": 30.0,
+            "scaleX": 15360,
+            "scaleY": 15360,
+            "rot": 0,
+            "zPos": 100
+          }
+        }
+      ]
+    },
+    {
+      "object": "grass",
+      "overrides": [
+        {
+          "1": {
+            "startX": -15390.0,
+            "startY": 30.0,
+            "scaleX": 15360,
+            "scaleY": 15360,
+            "rot": 0,
+            "zPos": 100
+          }
+        }
+      ]
+    },
+    {
+      "object": "grass",
+      "overrides": [
+        {
+          "1": {
+            "startX": -30.0,
+            "startY": 30.0,
+            "scaleX": 15360,
+            "scaleY": 15360,
+            "rot": 0,
+            "zPos": 100
+          }
+        }
+      ]
     },
     {
       "object": "enemy_spawner",

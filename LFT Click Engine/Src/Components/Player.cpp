@@ -244,6 +244,9 @@ void Player::Update()
 		myTransform->Move(0, positiveBound.y - pos.y);
 	else if (pos.y < negativeBound.y)
 		myTransform->Move(0, negativeBound.y - pos.y);
+
+
+	std::cout << pos.x << " " << pos.y << std::endl;
 }
 
 Component* Player::Clone(GameObject* newParent) 
