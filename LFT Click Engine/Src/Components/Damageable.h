@@ -33,14 +33,14 @@ public:
 	virtual void HandleMessage(Message* e) override;
 
 	virtual Component* Clone(GameObject* newParent);
-	Damageable() : destroyOnDeath(true), health(1), maxHealth(1), damageTime(1.f), 
+	Damageable() : destroyOnDeath(true), playerHealth(1), maxHealth(1), damageTime(1.f), 
 		deathTime(0.75f), timer(0), knockbackMod(0), inertiaMod(0.95), healthPreview(false),
 		healthPreviewTime(2.0f) {};
 
 public:
 	void TakeDamage(int damage);
 
-	int health;
+	int playerHealth;
 	int maxHealth;
 
 	// For knockback (not working yet)
@@ -49,7 +49,7 @@ public:
 	bool destroyOnDeath;
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 	SpriteAnimator* anim;
 	Audible* audio;
 	Drawable* drawable;

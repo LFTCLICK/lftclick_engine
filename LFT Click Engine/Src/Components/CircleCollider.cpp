@@ -21,7 +21,7 @@ CircleCollider::CircleCollider()
 
 void CircleCollider::Start()
 {
-	Transform* trans = componentOwner->getComponent<Transform>();
+	Transform* myTransform = componentOwner->getComponent<Transform>();
 	maxBounds = radius;
 	componentOwner->colliders.push_back(this);
 }

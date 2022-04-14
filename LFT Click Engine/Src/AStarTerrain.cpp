@@ -248,7 +248,7 @@ int AStarTerrain::ComputePath(GridPos* start, GridPos* goal, std::list<DirectX::
 
 AStarTerrain::~AStarTerrain()
 {
-    if (g_GameManager->currentLevel == EGameLevel::Level0 || g_GameManager->currentLevel == EGameLevel::Mainmenu 
+    if (g_GameManager->currentLevel == EGameLevel::SideScrollerLevel || g_GameManager->currentLevel == EGameLevel::Mainmenu 
         || g_GameManager->currentLevel == EGameLevel::Pausemenu)
     {
        

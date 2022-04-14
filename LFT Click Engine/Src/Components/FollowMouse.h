@@ -37,5 +37,5 @@ public:
 
 private:
 	GameObjectManager* gom;
-	Transform* trans;
+	Transform* myTransform;
 };

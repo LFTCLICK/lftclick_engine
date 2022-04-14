@@ -14,13 +14,13 @@
 
 void Bullet::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	timer = 0;
 }
 
 void Bullet::Update()
 {
-	trans->Move(
+	myTransform->Move(
 		direction.x * speed * g_FrameRateController->DeltaTime(),
 		direction.y * speed * g_FrameRateController->DeltaTime()
 	);
@@ -55,6 +55,6 @@ Component* Bullet::Clone(GameObject* newParent)
 	toReturn->direction = direction;
 	toReturn->timer = 0;
 	toReturn->keepAliveTime = keepAliveTime;
-	toReturn->trans = trans;
+	toReturn->myTransform = myTransform;
 	return toReturn;
 }

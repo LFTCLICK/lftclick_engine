@@ -12,35 +12,53 @@
 #include "Renderer.h"
 #include "GameObjectManager.h"
 #include "EventManager.h"
+#include "Components/Player.h"
 
-void GameManager::LoadLevel(json file)
+void GameManager::LoadLevel(json file, EGameLevel toSet)
 {
 	g_GameObjManager->DeleteAll();
 	g_GameObjManager->Deserialize(g_GameObjFactory.get(), file);
+	this->currentLevel = toSet;
+	if (toSet == EGameLevel::SurvivalLevel)
+	{
+		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		this->playerObj = playerObj;
+		this->mainCamera = playerObj->getComponent<Camera>();
+		this->playerTrans = playerObj->getComponent<Transform>();
+		this->time = 0;
 
-	GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
-	this->playerObj = playerObj;
-	this->mainCamera = playerObj->getComponent<Camera>();
-	this->playerTrans = playerObj->getComponent<Transform>();
-	this->time = 0;
+		g_FrameRateController->zeroDeltaTime = false;
 
-	this->currentLevel = EGameLevel::Level0;
-	g_FrameRateController->zeroDeltaTime = false;
+		playerDead = false;
 
-	playerDead = false;
+		PushPlayerMessage("Ugh, where am I?", 3.f);
+		PushPlayerMessage("This place smells terrible.", 3.f);
+	}
 }
 
-void GameManager::Update() 
+void GameManager::PushPlayerMessage(std::string message, float timeout) 
 {
+	messageQueue.push({ message, timeout });
+}
+
+TimedMessage GameManager::GetPlayerMessage()
+{
+	TimedMessage next = messageQueue.front();
+	messageQueue.pop();
+	return next;
+}
+
+void GameManager::Update() {
 	UpdateTime();
 	UpdateDanger();
 	UpdateLevel();
 	UpdateInsideHouse();
 	UpdateSpawners();
-	if (currentLevel == EGameLevel::Level0)
+	if (currentLevel == EGameLevel::SideScrollerLevel)
 		SideScrollerObjectDestroyer();
 }
 
+#include <cmath>
 void GameManager::UpdateTime()
 {
 	time += g_FrameRateController->DeltaTime();
@@ -49,24 +67,100 @@ void GameManager::UpdateTime()
 		day++;
 	}
 
+	//static float w = 1880.0f;
+	//static float h = 1930.0f;
+	//static float x = -1000.0f;
+	//static float y = -920.0f;
+	//cabinRect = DirectX::SimpleMath::Rectangle(x, y, w, h);
+	DirectX::SimpleMath::Rectangle playerRect = DirectX::SimpleMath::Rectangle(playerTrans->position.x, playerTrans->position.y, 
+		1, 1);
+
+
 	float oldDarknessLevel = darknessLevel;
+	bool wasNightTime = IsNightTime();
 
-	if (currentLevel == EGameLevel::Level0)
-	{
-
-	}
-	else
+	if (currentLevel == EGameLevel::SurvivalLevel)
 	{
 		if (time < SUN_RISING) darknessLevel = 1;
 		else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
 		else if (time < SUN_SETTING) darknessLevel = 0;
 		else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
 	}
+	else
+	{
+		
+	}
 
+	static float fadeInTimer = 0.0f;
+	static float fadeOutTimer = 0.0f;
+	//player is inside cabin
+	if (cabinRect.Intersects(playerRect))
+	{
+		fadeOutTimer = 0.0f;
+		fadeInTimer += g_FrameRateController->DeltaTime();
+		displayDarknessLevel = std::lerp(darknessLevel, 0.0f, std::clamp(fadeInTimer / 3.0f, 0.0f, 1.0f));
+	}
+	else
+	{
+		fadeInTimer = 0.0f;
+		fadeOutTimer += g_FrameRateController->DeltaTime();
+
+		displayDarknessLevel = std::lerp(displayDarknessLevel, darknessLevel, std::clamp(fadeOutTimer / 3.0f, 0.0f, 1.0f));
+	}
+
+#ifdef _DEBUG
 	ImGui::DragFloat("Darkness", &darknessLevel, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Display Darkness", &displayDarknessLevel, 0.01f, 0.0f, 1.0f);
+	ImGui::Text("Part chance: %f", chanceOfFindingPart);
 
-	if (oldDarknessLevel >= DAY_NIGHT_THRESHOLD && !IsNightTime() && harshLightOfDay != day) {
+#endif // DEBUG
+
+
+	if (wasNightTime && !IsNightTime()) {
 		harshLightOfDay = day;
+		PushPlayerMessage("Daybreak! Finally!");
+		PushPlayerMessage("I saw some piles of junk outside...");
+		PushPlayerMessage("Maybe I can find some motorcycle parts?");
+		PushPlayerMessage("If I can repair my bike...");
+		PushPlayerMessage("Maybe there's a chance I get out of here alive!");
+	}
+
+	if (!wasNightTime && IsNightTime()) {
+		//Helpers::randWithinRange(0, )
+		PushPlayerMessage("Oh no, daylight's fading...");
+
+		if (playerInsideHouse) {
+			switch (day) {
+			case 1:
+				PushPlayerMessage("I hope my fortifications hold...");
+				PushPlayerMessage("If they break them down,");
+				PushPlayerMessage("I'll have to use furnture to repair them!");
+				break;
+			case 2:
+				PushPlayerMessage("Are there even more of them out there?");
+				PushPlayerMessage("I hope the wood in this furniture is strong!");
+				break;
+			default:
+				PushPlayerMessage("There's even more of them!");
+				PushPlayerMessage("Better stay inside!");
+				break;
+			}
+		} else {
+			switch (day) {
+			case 1: 
+				PushPlayerMessage("Why did I stay out for so long?!", 1.5f);
+				PushPlayerMessage("I better get back to the cabin, fast!", 1.5f); 
+				break;
+			default: 
+				PushPlayerMessage("By now, I should know better than to be out for that long!"); 
+				break;
+			}
+			PushPlayerMessage("I hope I still have time to bar the doors!", 1.5f);
+		}
+		PushPlayerMessage("I saw some piles of junk outside...");
+		PushPlayerMessage("Maybe I can find some motorcycle parts?");
+		PushPlayerMessage("If I can repair my bike,", 2.f);
+		PushPlayerMessage("maybe there's a chance I get out of here alive!");
 	}
 }
 
@@ -90,23 +184,31 @@ void GameManager::UpdateSpawners()
 {
 	spawnTimer -= g_FrameRateController->DeltaTime();
 	if (spawnTimer < 0) {
+		bool nightTime = IsNightTime();
+
+		int randInt = rand();
+		float randFloat = (float)randInt / RAND_MAX;
+		float minSpawnInterval = 0, maxSpawnInterval = 0;
+
+		float spawnMod = (nightTime ? NIGHTTIME_SPAWN_MOD_PER_DAY : DAYTIME_SPAWN_MOD_PER_DAY) * (day - 1);;
+
 		if (playerInsideHouse) {
-			int randInt = rand();
-			float randFloat = (float)randInt / RAND_MAX;
 			activatedSpawner = randInt % totalSpawners;
-			spawnTimer = IsNightTime() ?
-				NIGHTTIME_SPAWN_INTERVAL_MIN + ((NIGHTTIME_SPAWN_INTERVAL_MAX - NIGHTTIME_SPAWN_INTERVAL_MIN) * randFloat) + (NIGHTTIME_SPAWN_MOD_PER_DAY * (day - 1)) :
-				DAYTIME_SPAWN_INTERVAL_MIN + ((DAYTIME_SPAWN_INTERVAL_MAX - DAYTIME_SPAWN_INTERVAL_MIN) * randFloat) + (DAYTIME_SPAWN_MOD_PER_DAY * (day - 1));
+
+			minSpawnInterval = nightTime ? NIGHTTIME_SPAWN_INTERVAL_MIN : DAYTIME_SPAWN_INTERVAL_MIN;
+			maxSpawnInterval = nightTime ? NIGHTTIME_SPAWN_INTERVAL_MAX : DAYTIME_SPAWN_INTERVAL_MAX;
 		}
 		else {
-			float randFloat = (float)rand() / RAND_MAX;
 			activatedSpawner = NEARPLAYER_ENEMY_SPAWNER_ID;
-			spawnTimer = IsNightTime() ?
-				NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN + ((NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MAX - NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN) * randFloat) + (NIGHTTIME_SPAWN_MOD_PER_DAY * (day - 1)) :
-				DAYTIME_SPAWN_INTERVAL_MIN + ((DAYTIME_SPAWN_INTERVAL_MAX - DAYTIME_SPAWN_INTERVAL_MIN) * randFloat) + (DAYTIME_SPAWN_MOD_PER_DAY * (day - 1));
+
+			minSpawnInterval = nightTime ? NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN : DAYTIME_SPAWN_INTERVAL_MIN;
+			maxSpawnInterval = nightTime ? NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MAX : DAYTIME_SPAWN_INTERVAL_MAX;
 		}
 
-		if (spawnTimer < 0) spawnTimer = MIN_TIME_BETWEEN_SPAWNS;
+		spawnTimer = Helpers::randWithinRange(minSpawnInterval, maxSpawnInterval) + spawnMod;
+
+		if (spawnTimer < MIN_TIME_BETWEEN_SPAWNS) 
+			spawnTimer = MIN_TIME_BETWEEN_SPAWNS;
 	}
 }
 
@@ -125,7 +227,11 @@ void GameManager::SideScrollerObjectDestroyer()
 		}
 		else
 		{
-			if (toCheckObjectTransform->position.x < playerObj->getComponent<Transform>()->position.x - 800)
+			if (playerObj == nullptr)
+			{
+				return;
+			}
+			else if (toCheckObjectTransform->position.x < playerObj->getComponent<Transform>()->position.x - 800)
 			{
 				toCheckObject->isDeletable = true;
 			}
@@ -165,6 +271,8 @@ bool GameManager::IsSpawnerActivated(int spawnerID)
 
 float GameManager::GetChanceOfFindingPart()
 {
+	if (chanceOfFindingPart >= INITIAL_CHANCE_TO_FIND_PART + (CHANCE_TO_FIND_PART_INCREMENT * ROLLS_TILL_PITY_PART))
+		return 1.0f;
 	return chanceOfFindingPart;
 }
 

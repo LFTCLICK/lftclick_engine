@@ -120,9 +120,17 @@
             "startX": -30.0,
             "startY": 960.0,
             "scaleX": 240,
-            "scaleY": 60,
+            "scaleY": 33,
             "rot": 0,
             "zPos": 9
+          },
+          "102":{
+            "woodPileOffset": [ -160.0, -55.0],
+            "woodPileRadius": 25.0,
+            "doorPhases": 5,
+            "hp": 450,
+            "woodRequiredPerPhase": 5,
+            "repairTime": 2.2
           }
         }
       ]
@@ -135,9 +143,17 @@
             "startX": -810.0,
             "startY": -900.0,
             "scaleX": 240,
-            "scaleY": 60,
+            "scaleY": 33,
             "rot": 0,
             "zPos": 9
+          },
+          "102":{
+            "woodPileOffset": [ 128.0, 64.0],
+            "woodPileRadius": 25.0,
+            "doorPhases": 5,
+            "hp": 450,
+            "woodRequiredPerPhase": 5,
+            "repairTime": 2.2
           }
         }
       ]

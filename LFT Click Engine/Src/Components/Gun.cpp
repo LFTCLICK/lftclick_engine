@@ -14,7 +14,7 @@ using json = nlohmann::json;
 
 void Gun::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	fireRateTimer = 0;
 }
 
@@ -39,16 +39,16 @@ bool Gun::ReadyToFire()
 
 void Gun::Fire(float targetX, float targetY)
 {
-	if (trans == nullptr) return;
+	if (myTransform == nullptr) return;
 
 	GameObject* bullet = gom->ClonePrefabOfTag(gof, bulletTypes[currentBulletIndex].first);
 	Transform* bulletTransform = bullet->getComponent<Transform>();
 	Bullet* bulletComp = bullet->getComponent<Bullet>();
-	DirectX::SimpleMath::Vector2 playerPos = trans->CurrentPos();
-
+	DirectX::SimpleMath::Vector2 playerPos = myTransform->CurrentPos();
 	DirectX::SimpleMath::Vector2 target(targetX, targetY);
 	bulletComp->direction = target - playerPos;
 	bulletComp->direction.Normalize();
+	//bulletComp->direction = DirectX::XMVector2Transform(bulletComp->direction, DirectX::XMMatrixRotationZ(180));
 	bulletTransform->SetPos(playerPos.x + bulletComp->direction.x * 70, playerPos.y + bulletComp->direction.y * 70);
 
 	fireRateTimer = 0;
