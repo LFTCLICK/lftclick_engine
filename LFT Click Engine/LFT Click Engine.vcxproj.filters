@@ -163,7 +163,7 @@
     </ClCompile>
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\Components\Vortex.cpp">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,7 +315,7 @@
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Vortex.h">
-      <Filter>Engine</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

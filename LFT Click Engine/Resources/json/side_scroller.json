@@ -67,6 +67,10 @@
     {
       "prefab": "Resources\\json\\vortex.json",
       "tag": "vortex"
+    },
+    {
+      "prefab": "Resources\\json\\couch.json",
+      "tag": "couch"
     }
   ],
   "Map": {
@@ -78,7 +82,9 @@
       "a37900": "big_tree",
       "fe3c3c": "enemy_spawner",
       "0bffff": "water_puddle",
-      "c6d32f": "zombie"
+      "c6d32f": "zombie",
+      "4285f4": "vortex",
+      "3c2e5b": "couch"
     },
     "objectSize": 60
   },

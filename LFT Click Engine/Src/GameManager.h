@@ -108,6 +108,7 @@ public:
 	void UpdateLevel();
 	void UpdateInsideHouse();
 	void UpdateSpawners();
+	void SideScrollerObjectDestroyer();
 
 	// Returns value between 0 and 1, 1 being night time and 0 being day time.
 	// Used for darkness overlay alpha.

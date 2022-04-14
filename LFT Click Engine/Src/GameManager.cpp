@@ -11,6 +11,7 @@
 #include "FrameRateController.h"
 #include "Renderer.h"
 #include "GameObjectManager.h"
+#include "EventManager.h"
 
 void GameManager::LoadLevel(json file)
 {
@@ -29,12 +30,15 @@ void GameManager::LoadLevel(json file)
 	playerDead = false;
 }
 
-void GameManager::Update() {
+void GameManager::Update() 
+{
 	UpdateTime();
 	UpdateDanger();
 	UpdateLevel();
 	UpdateInsideHouse();
 	UpdateSpawners();
+	if (currentLevel == EGameLevel::Level0)
+		SideScrollerObjectDestroyer();
 }
 
 void GameManager::UpdateTime()
@@ -103,6 +107,31 @@ void GameManager::UpdateSpawners()
 		}
 
 		if (spawnTimer < 0) spawnTimer = MIN_TIME_BETWEEN_SPAWNS;
+	}
+}
+
+void GameManager::SideScrollerObjectDestroyer()
+{
+	auto objIt = g_GameObjManager->gameObjectList.begin();
+
+	while (objIt != g_GameObjManager->gameObjectList.end())
+	{
+		GameObject* toCheckObject = *objIt;
+		Transform* toCheckObjectTransform = toCheckObject->getComponent<Transform>();
+
+		if (toCheckObject->tag == "wall" || toCheckObject->tag == "bullet")
+		{
+			break;
+		}
+		else
+		{
+			if (toCheckObjectTransform->position.x < playerObj->getComponent<Transform>()->position.x - 800)
+			{
+				toCheckObject->isDeletable = true;
+			}
+		}
+		
+		objIt++;
 	}
 }
 

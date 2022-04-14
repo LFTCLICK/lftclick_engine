@@ -128,6 +128,9 @@ void Player::HandleMessage(Message* e)
 		if(e->otherObject->componentOwner->tag != "door")
 			Move(cm->deltaPos.x, cm->deltaPos.y);
 
+		if (e->otherObject->componentOwner->tag == "couch")
+			g_GameManager->playerDead = true;
+
 		if (e->otherObject->componentOwner->tag == "zombie")
 		{
 			if (damageCooldownTimer < 0)

@@ -9,8 +9,8 @@
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale": 1,
-    "yScale": 1,
+    "xScale": 0.3,
+    "yScale": 0.3,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -30,17 +30,36 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "image": "Resources\\images\\water_puddle.png"
+    "image": "Resources\\images\\vortex.png"
   },
-  "4": {
+  "13": {
     "center": [ 0.0, 0.0, 0.0 ],
-    "width": 200,
-    "height": 80,
+    "radius": 10,
     "trigger": true,
     "static": false,
     "deleteOnCollison": false
   },
+  "6": {
+    "spriteSheetWidth": 3,
+    "spriteSheetHeight": 1,
+    "animations": [
+      {
+        "name": "bulletIdleRight",
+        "length": 4,
+        "frameDuration": 0.05,
+        "onMove": true,
+        "row": 0
+      },
+      {
+        "name": "bulletMoveRight",
+        "length": 4,
+        "frameDuration": 0.05,
+        "onMove": true,
+        "row": 0
+      }
+    ]
+  },
   "105": {
-    "PullingRadius": 200
+    "PullingRadius": 225
   }
 }
