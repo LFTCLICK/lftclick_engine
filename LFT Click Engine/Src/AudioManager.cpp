@@ -15,8 +15,26 @@
 // FMOD Engine constructor.
 FMODEngine::FMODEngine() : system(nullptr) {
 	FMOD::System_Create(&system);
+	FMOD::ChannelGroup *musicMasterChannelGroup, *menuMusicMasterChannelGroup, *sfxMasterChannelGroup, *masterChannelGroup;
+
 	void* extraDriverData = nullptr;
 	system->init(2047, FMOD_INIT_NORMAL, extraDriverData);
+	system->getMasterChannelGroup(&masterChannelGroup);
+
+	system->set3DSettings(1.f, 1000000.f, 1.f);
+
+	system->createChannelGroup(MUSIC_MASTER_CHANNEL_GROUP.c_str(), &musicMasterChannelGroup);
+	musicMasterChannelGroup->setMode(FMOD_3D | FMOD_CREATESAMPLE | FMOD_LOOP_NORMAL);
+	channelGroups[MUSIC_MASTER_CHANNEL_GROUP] = musicMasterChannelGroup;
+
+	system->createChannelGroup(MENU_MUSIC_MASTER_CHANNEL_GROUP.c_str(), &menuMusicMasterChannelGroup);
+	menuMusicMasterChannelGroup->setMode(FMOD_3D | FMOD_CREATESAMPLE | FMOD_LOOP_NORMAL);
+	channelGroups[MENU_MUSIC_MASTER_CHANNEL_GROUP] = menuMusicMasterChannelGroup;
+
+	system->createChannelGroup(SFX_MASTER_CHANNEL_GROUP.c_str(), &sfxMasterChannelGroup);
+	sfxMasterChannelGroup->setMode(FMOD_3D | FMOD_CREATECOMPRESSEDSAMPLE | FMOD_LOOP_OFF);
+	channelGroups[SFX_MASTER_CHANNEL_GROUP] = sfxMasterChannelGroup;
+	sfxMasterChannelGroup->set3DAttributes({ 0 }, { 0 });
 }
 
 // FMOD Engine destructor.
@@ -30,7 +48,6 @@ FMOD_RESULT FMODEngine::Update() {
 	//for (auto current = channels.begin(), end = channels.end(); current != end; ++current)
 		//if (ChannelIsPlaying(current->second)) current++;
 		//else current = channels.erase(current);
-
 	return system->update();
 }
 
@@ -60,6 +77,12 @@ void AudioManager::Init() {
 // Updates the manager and FMOD engine. Should run every frame.
 void AudioManager::Update() {
 	CheckResult(__func__, engine->Update());
+	/*for (auto channel : engine->channels) {
+		float aud;
+		channel.second->getAudibility(&aud);
+		std::cout << aud << " ";
+	}
+	std::cout << std::endl;*/
 }
 
 //// Terminates the manager and FMOD engine. Should run only on game termination.
@@ -73,10 +96,10 @@ AudioManager::~AudioManager()
 }
 
 // Loads a sound into FMOD's memory and into the internal sounds map.
-void AudioManager::LoadSound(std::string name, bool loop, bool compressed) {
+void AudioManager::LoadSound(std::string name, bool loop, bool compressed, bool is3D) {
 	if (engine->sounds.find(name) == engine->sounds.end()) {
-		FMOD_MODE fmod_mode =
-			FMOD_3D |
+		FMOD_MODE fmod_mode = 
+			(is3D ? FMOD_3D : FMOD_2D) |
 			(compressed ? FMOD_CREATECOMPRESSEDSAMPLE : FMOD_CREATESAMPLE) |
 			(loop ? FMOD_LOOP_NORMAL : FMOD_LOOP_OFF);
 		FMOD::Sound* sound = nullptr;
@@ -109,11 +132,14 @@ int AudioManager::PlaySound(std::string name, std::string channelGroupName, floa
 
 	if (sound != engine->sounds.end()) {
 		FMOD::Channel* channel = nullptr;
+
 		auto channelGroupIt = engine->channelGroups.find(channelGroupName);
 		FMOD::ChannelGroup* channelGroup = (channelGroupIt == engine->channelGroups.end() ? nullptr : channelGroupIt->second);
 		CheckResult(__func__, engine->system->playSound(sound->second, channelGroup, true, &channel));
 
+		float vol;
 		CheckResult(__func__, channel->setVolume(volume / VOLUME_DIV));
+
 		if (pitch != 1.f) CheckResult(__func__, channel->setPitch(pitch));
 		if (startTime != 0) CheckResult(__func__, channel->setPosition((int)(startTime * 1000), FMOD_TIMEUNIT_MS));
 		CheckResult(__func__, channel->setPaused(startPaused));
@@ -133,9 +159,18 @@ int AudioManager::PlaySound(std::string name, float volume, float pitch, float s
 
 // Sets the position of orientation for spatial sounds.
 void AudioManager::SetPlayerSpatialPosition(DirectX::SimpleMath::Vector2 _position, DirectX::SimpleMath::Vector2 _velocity) {
-	FMOD_VECTOR position = { _position.x / POSITION_DIV, _position.y / POSITION_DIV, 0 };
-	FMOD_VECTOR velocity = { _velocity.x / POSITION_DIV, _velocity.y / POSITION_DIV, 0 };
-	engine->system->set3DListenerAttributes(0, &position, &velocity, { 0 }, { 0 });
+	DirectX::SimpleMath::Vector2 pos = _position, vel = _velocity;
+	FMOD_VECTOR position = { pos.x / POSITION_DIV, pos.y / POSITION_DIV, 0 };
+	FMOD_VECTOR velocity = { vel.x / POSITION_DIV, vel.y / POSITION_DIV, 0 };
+	FMOD_VECTOR forward = { 0, 0, 1 };
+	FMOD_VECTOR up = { 0, 1, 0 };
+	//FMOD_VECTOR x1, x2, x3, x4;
+	engine->system->set3DListenerAttributes(0, &position, &velocity, &forward, &up);
+	//engine->system->get3DListenerAttributes(0, &x1, &x2, &x3, &x4);
+
+	//std::cout << "player: " << x1.x << " " << x1.y << " " << x1.z << "    " << x2.x << " " << x2.y << " " << x2.z << "    " << x3.x << " " << x3.y << " " << x3.z << "    " << x4.x << " " << x4.y << " " << x4.z << "    " << std::endl;
+	
+	SetGroupSpatialPosition(MUSIC_MASTER_CHANNEL_GROUP, _position, _velocity);
 }
 
 // Pauses a channel.
@@ -190,14 +225,22 @@ DirectX::SimpleMath::Vector2 AudioManager::GetSpatialPosition(int channelID) {
 	if (channel != engine->channels.end()) {
 		CheckResult(__func__, channel->second->get3DAttributes(&position, &velocity));
 	}
-	return DirectX::SimpleMath::Vector2(position.x, position.y);
+	return DirectX::SimpleMath::Vector2(position.x * POSITION_DIV, position.y * POSITION_DIV);
 }
 
 // Sets the channel's world position.
 void AudioManager::SetSpatialPosition(int channelID, float posX, float posY, float velX, float velY) {
 	auto channel = engine->channels.find(channelID);
 	if (channel != engine->channels.end()) {
-		FMOD_VECTOR position = { posX / POSITION_DIV, posY / POSITION_DIV, 0 }; 
+		/*
+		FMOD::ChannelGroup *channelGroup;
+		int length = 50;
+		char* name = new char[50];
+		channel->second->getChannelGroup(&channelGroup);
+		channelGroup->getName(name, length);
+		*/
+
+		FMOD_VECTOR position = { posX / POSITION_DIV, posY / POSITION_DIV, 0 };
 		FMOD_VECTOR velocity = { velX / POSITION_DIV, velY / POSITION_DIV, 0 };
 		CheckResult(__func__, channel->second->set3DAttributes(&position, &velocity));
 	}
@@ -263,7 +306,7 @@ void AudioManager::Stop(int channelID) {
 
 // Pauses a channel group
 void AudioManager::PauseGroup(std::string channelGroupName) {
-	AudioManager::SetGroupPaused(channelGroupName, false);
+	AudioManager::SetGroupPaused(channelGroupName, true);
 }
 
 // Unpauses a channel group
@@ -313,7 +356,7 @@ DirectX::SimpleMath::Vector2 AudioManager::GetGroupSpatialPosition(std::string c
 	if (channelGroup != engine->channelGroups.end()) {
 		CheckResult(__func__, channelGroup->second->get3DAttributes(&position, &velocity));
 	}
-	return DirectX::SimpleMath::Vector2(position.x, position.y);
+	return DirectX::SimpleMath::Vector2(position.x * POSITION_DIV, position.y * POSITION_DIV);
 }
 
 // Sets the channel group's world position.
@@ -321,8 +364,18 @@ void AudioManager::SetGroupSpatialPosition(std::string channelGroupName, float p
 	auto channelGroup = engine->channelGroups.find(channelGroupName);
 	if (channelGroup != engine->channelGroups.end()) {
 		FMOD_VECTOR position = { posX / POSITION_DIV, posY / POSITION_DIV, 0 };
+		//if (channelGroupName != MUSIC_MASTER_CHANNEL_GROUP)
+			//position = { position.x * 0.9f, position.y * 0.9f };
 		FMOD_VECTOR velocity = { velX / POSITION_DIV, velY / POSITION_DIV, 0 };
 		CheckResult(__func__, channelGroup->second->set3DAttributes(&position, &velocity));
+
+		int numChannels;
+		FMOD::Channel* currentChannel;
+		CheckResult(__func__, channelGroup->second->getNumChannels(&numChannels));
+		for (int i = 0; i < numChannels; i++) {
+			CheckResult(__func__, channelGroup->second->getChannel(i, &currentChannel));
+			CheckResult(__func__, currentChannel->set3DAttributes(&position, &velocity));
+		}
 	}
 }
 void AudioManager::SetGroupSpatialPosition(std::string channelGroupName, DirectX::SimpleMath::Vector2 position, DirectX::SimpleMath::Vector2 velocity) {
@@ -365,12 +418,15 @@ void AudioManager::StopGroup(std::string channelGroupName) {
 
 
 
-void AudioManager::LoadChannelGroup(std::string name, FMOD_MODE mode) {
+void AudioManager::LoadChannelGroup(std::string name, FMOD_MODE mode, std::string masterChannelGroup) {
 	if (engine->channelGroups.find(name) == engine->channelGroups.end()) {
 		FMOD::ChannelGroup* channelGroup;
 		CheckResult(__func__, engine->system->createChannelGroup(name.c_str(), &channelGroup));
 		channelGroup->setMode(mode);
+
+		//engine->channelGroups[masterChannelGroup]->addGroup(channelGroup);
 		engine->channelGroups[name] = channelGroup;
+
 	}
 }
 

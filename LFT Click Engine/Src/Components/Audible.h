@@ -16,6 +16,7 @@
 #include "EventManager.h"
 #include "FrameRateController.h"
 #include "Helpers.h"
+#include "GameManager.h"
 #include <string>
 #include <iostream>
 #include <vector>
@@ -25,6 +26,7 @@ struct SoundInfo {
 	std::string name;
 	bool loop = false;
 	bool compressed = true;
+	bool isMusic = false;
 	bool scaleVolumeWithDanger = false;
 	float pitchRange[2] = { 1.f, 1.f };
 	float volume = 100.f;
@@ -46,6 +48,8 @@ public:
 		AUDIO_ON_COLLECT,
 		AUDIO_ON_RANDOM,
 		AUDIO_ON_COLLECT_PART,
+		AUDIO_ON_DOOR_BASH,
+		AUDIO_ON_DOOR_BREAK,
 		AUDIO_ON_DELETE = 2000,
 	};
 	// Inherited via Component

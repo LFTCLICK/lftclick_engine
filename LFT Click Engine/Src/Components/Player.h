@@ -25,6 +25,11 @@
 #include <cassert>
 #include "AStarTerrain.h"
 
+#define POSITIVE_BOUND_X 6630.f
+#define POSITIVE_BOUND_Y 6630.f
+#define NEGATIVE_BOUND_X -6630.f
+#define NEGATIVE_BOUND_Y -6630.f
+
 class SquareCollider;
 
 
@@ -101,7 +106,7 @@ private:
 	SquareCollider* squareCollider;
 	float introTimer, inertiaMod, hitSpeed;
 
-	DirectX::SimpleMath::Vector2 dashVelocity, hitDirection;
+	DirectX::SimpleMath::Vector2 dashVelocity, hitDirection, positiveBound, negativeBound;
 	sol::function PlayerCollidedWithEnemy;
 	TimedMessage currentMessage;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper;

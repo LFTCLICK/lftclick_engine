@@ -4,6 +4,8 @@
 #include "CircleCollider.h"
 #include "Enemy.h"
 
+const Audible::SoundEvent AUDIO_ON_DOOR_BASH = Audible::SoundEvent::AUDIO_ON_DOOR_BASH;
+
 void Door::Start()
 {
 	myTransform = componentOwner->getComponent<Transform>();
@@ -27,7 +29,6 @@ void Door::Update()
 	{
 		if (inWoodPilePhase)
 		{
-
 			drawable->HUD_DrawTextCenter("Press Q to replace the door", { 0.0f, -70.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_Q))
 			{
@@ -171,6 +172,7 @@ void Door::HandleMessage(Message* e)
 		currentEnemy->timer+= g_FrameRateController->DeltaTime();
 		if (currentEnemy->timer > currentEnemy->attackTimer)
 		{
+			e->otherObject->componentOwner->getComponent<Audible>()->PlaySoundsOnEvent(AUDIO_ON_DOOR_BASH);
 			currentEnemy->timer = 0;
 			playerHealth -= currentEnemy->damage;
 			if (playerHealth <= 0)

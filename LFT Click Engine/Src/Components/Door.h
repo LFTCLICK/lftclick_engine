@@ -14,6 +14,7 @@
 #include "GameObjectManager.h"
 #include "SquareCollider.h"
 #include "Drawable.h"
+#include "Audible.h"
 #include "Player.h"
 #include <json.hpp>
 

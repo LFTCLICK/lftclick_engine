@@ -103,19 +103,20 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicBase.mp3",
         "loop": true,
-        "volume": 33,
+        "volume": 50,
         "playEvents": [
           1000
         ],
         "stopEvents": [
           2000
         ],
-        "startTime": 73.525
+        "startTime": 0,
+        "isMusic": true
       },
       {
         "name": ".\\Resources\\music\\BackgroundMusicAddition.mp3",
         "loop": true,
-        "volume": 33,
+        "volume": 0,
         "playEvents": [
           1000
         ],
@@ -123,13 +124,23 @@
           2000
         ],
         "scaleVolumeWithDanger": true,
-        "startTime": 73.525
+        "startTime": 50,
+        "isMusic": true
       },
       {
         "name": ".\\Resources\\sounds\\hit.mp3",
         "loop": false,
         "volume": 20,
-        "pitchRange": [ 0.3, 0.5 ],
+        "pitchRange": [ 0.7, 1.1 ],
+        "playEvents": [
+          1003
+        ]
+      },
+      {
+        "name": ".\\Resources\\sounds\\oof.mp3",
+        "loop": false,
+        "volume": 40,
+        "pitchRange": [ 0.7, 1.1 ],
         "playEvents": [
           1003
         ]

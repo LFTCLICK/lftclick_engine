@@ -298,8 +298,10 @@ int main(int argc, char* args[])
 
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE))
 			{
-				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu))
+				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu)) {
 					g_GameManager->currentLevel = EGameLevel::Pausemenu;
+					g_FrameRateController->zeroDeltaTime = true;
+				}
 				else
 				{
 					g_GameManager->currentLevel = EGameLevel::Level0;
@@ -310,7 +312,6 @@ int main(int argc, char* args[])
 			{
 				while (ShowCursor(true) < 0); // Shows cursor
 
-				g_FrameRateController->zeroDeltaTime = true;
 				ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(g_Renderer->GetHeight()) / 2));
 				ImGui::Begin("pauseMenu", nullptr,
 					ImGuiWindowFlags_::ImGuiWindowFlags_NoMove|ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar

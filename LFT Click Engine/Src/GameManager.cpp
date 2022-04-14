@@ -31,6 +31,7 @@ void GameManager::LoadLevel(json file, EGameLevel toSet)
 
 		PushPlayerMessage("Ugh, where am I?", 3.f);
 		PushPlayerMessage("This place smells terrible.", 3.f);
+		PushPlayerMessage("Who the heck would build a cabin this far out?", 3.f);
 	}
 }
 
@@ -47,6 +48,7 @@ TimedMessage GameManager::GetPlayerMessage()
 }
 
 void GameManager::Update() {
+	//std::cout << g_AudioManager->GetGroupVolume(MUSIC_MASTER_CHANNEL_GROUP) << std::endl;
 	UpdateTime();
 	UpdateDanger();
 	UpdateLevel();
@@ -147,10 +149,6 @@ void GameManager::UpdateTime()
 			}
 			PushPlayerMessage("I hope I still have time to bar the doors!", 1.5f);
 		}
-		PushPlayerMessage("I saw some piles of junk outside...");
-		PushPlayerMessage("Maybe I can find some motorcycle parts?");
-		PushPlayerMessage("If I can repair my bike,", 2.f);
-		PushPlayerMessage("maybe there's a chance I get out of here alive!");
 	}
 }
 
@@ -161,8 +159,22 @@ void GameManager::UpdateDanger()
 
 void GameManager::UpdateLevel() 
 {
-	if (playerDead && currentLevel != EGameLevel::Mainmenu)
+	if (playerDead && currentLevel != EGameLevel::Mainmenu) {
 		currentLevel = EGameLevel::Pausemenu;
+	}
+
+	if (prevFrameLevel != currentLevel) {
+		if (currentLevel == EGameLevel::Pausemenu) {
+			PauseLevelAudio();
+			PlayMenuMusic();
+		}
+		if (prevFrameLevel == EGameLevel::Pausemenu) {
+			UnpauseLevelAudio();
+			StopMenuMusic();
+		}
+	}
+
+	prevFrameLevel = currentLevel;
 }
 
 void GameManager::UpdateInsideHouse()
@@ -265,4 +277,25 @@ bool GameManager::IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos)
 		pos.x > HOUSE_POS.x - halfHouseScale.x &&
 		pos.y < HOUSE_POS.y + halfHouseScale.y &&
 		pos.y > HOUSE_POS.y - halfHouseScale.y;
+}
+
+void GameManager::SetMenuMusic(std::string name, float volume) {
+	menuMusicName = name;
+	g_AudioManager->SetGroupVolume(MENU_MUSIC_MASTER_CHANNEL_GROUP, volume);
+	g_AudioManager->LoadSound(menuMusicName, true, false, false);
+}
+
+void GameManager::PauseLevelAudio() {
+	g_AudioManager->PauseGroup(MUSIC_MASTER_CHANNEL_GROUP);
+	g_AudioManager->PauseGroup(SFX_MASTER_CHANNEL_GROUP);
+}
+void GameManager::UnpauseLevelAudio() {
+	g_AudioManager->UnpauseGroup(MUSIC_MASTER_CHANNEL_GROUP);
+	g_AudioManager->UnpauseGroup(SFX_MASTER_CHANNEL_GROUP);
+}
+void GameManager::PlayMenuMusic() {
+	g_AudioManager->PlaySound(menuMusicName, MENU_MUSIC_MASTER_CHANNEL_GROUP);
+}
+void GameManager::StopMenuMusic() {
+	g_AudioManager->StopGroup(MENU_MUSIC_MASTER_CHANNEL_GROUP);
 }

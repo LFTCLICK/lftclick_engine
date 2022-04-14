@@ -79,7 +79,6 @@ void SpriteAnimator::UpdateFrame()
 {
 	if (timer >= animations[currentAnimationIndex].frameDuration && !(isDead && (currentFrame == animations[currentAnimationIndex].length - 1))) {
 		timer = 0;
-		// don't continue cycling if at end of death animation
 		++currentFrame;
 
 		if (currentFrame < animations[currentAnimationIndex].length) {
@@ -210,6 +209,7 @@ void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* componentOwner)
 void SpriteAnimator::SwitchAnimation(int index) {
 	currentAnimationIndex = index;
 	drawable->yOffset = (animations[index].row + currentPhase) * yOffset;
+	drawable->xOffset = 0;
 	currentFrame = 0;
 	timer = 0;
 }

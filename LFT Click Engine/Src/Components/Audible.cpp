@@ -31,8 +31,9 @@ void Audible::Start() {
 }
 
 void Audible::LoadSounds(std::vector<SoundInfo> newSounds) {
-	for (auto sound : newSounds)
+	for (auto sound : newSounds) {
 		am->LoadSound(sound.name, sound.loop, sound.compressed);
+	}
 }
 
 void Audible::Update() {
@@ -42,34 +43,26 @@ void Audible::Update() {
 		} else {
 			++channel;
 		}
-
 		if (dangerScaleChannel > -1) {
 			am->SetVolume(dangerScaleChannel, g_GameManager->GetDangerLevel() * dangerScaleChannelVolumeMax);
 		}
+
+		//if (channel->second.find("Background") != std::string::npos) std::cout << "========== backgroundpos: " << am->GetSpatialPosition(channel->first).x << std::endl;
 	}
 
-	if (positionless) {
-		auto playerTrans = g_GameManager->playerTrans;
-		
-		if (playerTrans != nullptr) {
-			if (playerTrans->isMoving != playerTrans->wasMoving) {
-				HandleSoundsOnEvent(playerTrans->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-			}
+	if (myTransform != nullptr && g_GameManager->playerTrans != nullptr) {
+		auto pos = myTransform->CurrentPos();
+		auto playerPos = g_GameManager->playerTrans->CurrentPos();
 
-			if (playerTrans->CurrentPos().x < 10000000.f && playerTrans->CurrentPos().x > -10000000.f)
-				am->SetGroupSpatialPosition(channelGroupName, playerTrans->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
+		if (myTransform->isMoving != myTransform->wasMoving || g_GameManager->playerTrans->isMoving != g_GameManager->playerTrans->wasMoving) {
+			HandleSoundsOnEvent(myTransform->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
+			if (!myTransform->isMoving && pos.x < 10000000.f && pos.x > -10000000.f) {
+				am->SetGroupSpatialPosition(channelGroupName, pos, { 0, 0 });
+			}
 		}
-	}
-	else {
-		if (myTransform != nullptr) {
-			if (myTransform->isMoving != myTransform->wasMoving) {
-				HandleSoundsOnEvent(myTransform->isMoving ? AUDIO_ON_MOVE : AUDIO_ON_HALT);
-				if (!myTransform->isMoving && myTransform->CurrentPos().x < 10000000.f && myTransform->CurrentPos().x > -10000000.f)
-					am->SetGroupSpatialPosition(channelGroupName, myTransform->CurrentPos() / 100, { 0, 0 });
-			}
 
-			if (myTransform->isMoving && myTransform->CurrentPos().x < 10000000.f && myTransform->CurrentPos().x > -10000000.f)
-				am->SetGroupSpatialPosition(channelGroupName, myTransform->CurrentPos() / 100 /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
+		if ((myTransform->isMoving || myTransform->wasMoving || g_GameManager->playerTrans->isMoving || g_GameManager->playerTrans->wasMoving) && pos.x < 10000000.f && pos.x > -10000000.f) {
+			am->SetGroupSpatialPosition(channelGroupName, pos /*, trans->lastMovement / (1000 / frc->DeltaTime())*/);
 		}
 	}
 
@@ -88,7 +81,6 @@ Component* Audible::Clone(GameObject* newParent) {
 }
 
 Audible::~Audible() {
-	//Stop();
 	StopSoundsOnEvent(AUDIO_ON_DELETE);
 }
 
@@ -97,12 +89,17 @@ Audible::~Audible() {
 
 void Audible::PlaySound(SoundInfo sound) {
 	float pitch = sound.pitchRange[0] == sound.pitchRange[1] ? 1 : Helpers::randWithinRange(sound.pitchRange[0], sound.pitchRange[1]);
-	int channelID = am->PlaySound(sound.name, channelGroupName, sound.volume, pitch, sound.startTime);
+	int channelID = am->PlaySound(sound.name, sound.isMusic ? MUSIC_MASTER_CHANNEL_GROUP : channelGroupName, sound.volume, pitch, sound.startTime);
 	channels[channelID] = sound.name;
+
+	float vol;
+
 	if (sound.scaleVolumeWithDanger) {
 		dangerScaleChannel = channelID;
 		dangerScaleChannelVolumeMax = sound.volume;
 	}
+	if (sound.isMusic)
+		am->SetVolume(channelID, sound.volume);
 }
 
 void Audible::Unpause() {
@@ -218,6 +215,8 @@ void Audible::Deserialize(nlohmann::json j, GameObject* componentOwner)
 				soundInfo.loop = sound["loop"];
 			if (sound.contains("compressed")) 
 				soundInfo.compressed = sound["compressed"];
+			if (sound.contains("isMusic"))
+				soundInfo.isMusic = sound["isMusic"];
 			if (sound.contains("volume")) 
 				soundInfo.volume = sound["volume"];
 			if (sound.contains("scaleVolumeWithDanger")) 

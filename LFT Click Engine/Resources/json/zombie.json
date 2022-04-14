@@ -213,10 +213,23 @@
         "volume": 40,
         "pitchRange": [ 0.85, 1.15 ],
         "playEvents": [
-          1007
+          1007,
+          1010
         ],
         "stopEvents": [
           1004
+        ]
+      },
+      {
+        "name": ".\\Resources\\sounds\\zombieatdoor.mp3",
+        "loop": false,
+        "volume": 15,
+        "pitchRange": [ 0.25, 0.55 ],
+        "playEvents": [
+          1009
+        ],
+        "stopEvents": [
+          2000
         ]
       }
     ]

@@ -51,6 +51,9 @@ void Player::Start()
 	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
 	zHelper = g_GameManager->mapHeight / 2.0f;
 	introTimer = 0;
+
+	positiveBound = { POSITIVE_BOUND_X, POSITIVE_BOUND_Y };
+	negativeBound = { NEGATIVE_BOUND_X, NEGATIVE_BOUND_Y };
 }
 
 void Player::Update()
@@ -208,9 +211,21 @@ void Player::Update()
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
-	g_AudioManager->SetPlayerSpatialPosition(myTransform->CurrentPos() / 100);
+	g_AudioManager->SetPlayerSpatialPosition(myTransform->CurrentPos());
+	audio->SetPosition(myTransform->CurrentPos());
 	myTransform->zPos = 5 + ((myTransform->position.y + g_GameManager->mapHeight) / zHelper);
 	introTimer += g_FrameRateController->DeltaTime();
+
+	// Keep player within bounds of map.
+	auto pos = myTransform->CurrentPos();
+	if (pos.x > positiveBound.x)
+		myTransform->Move(positiveBound.x - pos.x, 0);
+	else if (pos.x < negativeBound.x)
+		myTransform->Move(negativeBound.x - pos.x, 0);
+	if (pos.y > positiveBound.y)
+		myTransform->Move(0, positiveBound.y - pos.y);
+	else if (pos.y < negativeBound.y)
+		myTransform->Move(0, negativeBound.y - pos.y);
 }
 
 Component* Player::Clone(GameObject* newParent) 

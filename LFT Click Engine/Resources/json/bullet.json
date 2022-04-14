@@ -67,7 +67,7 @@
       {
         "name": ".\\Resources\\sounds\\clang.mp3",
         "loop": false,
-        "volume": 1.5,
+        "volume": 3,
         "pitchRange": [ 0.85, 1.15 ],
         "playEvents": [
           1000

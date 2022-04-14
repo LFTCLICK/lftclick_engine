@@ -92,6 +92,7 @@
   "Map": {
     "path": "Resources\\images\\map3.png",
     "key": {
+      "000000": "player",
       "5b3d2e": "wall",
       "133832": "junk",
       "a06524": "tree",
@@ -107,10 +108,25 @@
     },
     "objectSize": 60
   },
+  "MenuMusic": {
+    "name": ".\\Resources\\music\\Menu.mp3",
+    "volume": 10
+  },
   "Level": [
     {
       "object": "player",
-      "overrides": []
+      "overrides": [
+        {
+          "1": {
+            "startX": -180,
+            "startY": -2200,
+            "scaleX": 60,
+            "scaleY": 60,
+            "rot": 0,
+            "zPos": 15
+          }
+        }
+      ]
     },
     {
       "object": "door",

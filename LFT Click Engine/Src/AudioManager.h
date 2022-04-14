@@ -21,12 +21,17 @@
 #include "FMODResultStrings.h"
 #include "SimpleMath.h"
 
+#define MUSIC_MASTER_CHANNEL_GROUP std::string("musicMasterChannelGroup")
+#define MENU_MUSIC_MASTER_CHANNEL_GROUP std::string("menuMusicMasterChannelGroup")
+#define SFX_MASTER_CHANNEL_GROUP std::string("sfxMasterChannelGroup")
+
 #define VOLUME_DIV 100.f
-#define POSITION_DIV 50.f
+#define POSITION_DIV 250.f
 
 #endif
 
 struct FMODEngine {
+
     FMODEngine();
     ~FMODEngine();
     FMOD_RESULT Update();
@@ -60,7 +65,7 @@ public:
     // Functions for loading/unloading sounds and playing them.
     // Playing a sound creates a channel, and passing a group name will add the channel to the channel group.
 
-    void LoadSound(std::string name, bool loop = false, bool compressed = true);
+    void LoadSound(std::string name, bool loop = false, bool compressed = true, bool is3D = true);
     void UnloadSound(std::string name);
     int PlaySound(std::string name, std::string channelGroupName, float volume = 100.f, float pitch = 1.f, float startTime = 0, bool startPaused = false);
     int PlaySound(std::string name, float volume = 100.f, float pitch = 1.f, float startTime = 0, bool startPaused = false);
@@ -90,7 +95,7 @@ public:
     // Functions for loading/unloading channel groups and adding to them.
     // Currently only one level of channel groups is planned for.
 
-    void LoadChannelGroup(std::string name, FMOD_MODE mode = FMOD_3D);
+    void LoadChannelGroup(std::string name, FMOD_MODE mode = FMOD_3D, std::string masterChannelGroup = SFX_MASTER_CHANNEL_GROUP);
     void UnloadChannelGroup(std::string name);
     void AddToChannelGroup(std::string channelGroupName, int channelID);
     void AddToChannelGroup(std::string channelGroupName, FMOD::Channel* channel);
