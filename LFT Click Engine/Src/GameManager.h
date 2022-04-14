@@ -102,7 +102,7 @@ public:
 		monsterCount(0),
 		dangerLevel(0),
 		rednessFactor(0),
-		fadFactor(0),
+		fadeFactor(0),
 		mapHeight(10000.0f),
 		mainCamera(nullptr),
 		day(1), 
@@ -168,9 +168,10 @@ public:
 	bool playerDead;
 	bool playerWon;
 	bool playerInsideHouse;
+	bool isPlayerInsideCabin;
 	float darknessLevel;
 	float rednessFactor;
-	float fadFactor;
+	float fadeFactor;
 	float displayDarknessLevel;
 	int monsterCount;
 	int harshLightOfDay;
