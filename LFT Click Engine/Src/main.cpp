@@ -208,7 +208,7 @@ int main(int argc, char* args[])
 			}
 			if (e.window.event == SDL_WINDOWEVENT_MINIMIZED || e.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
 			{
-				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu))
+				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu || g_GameManager->currentLevel == EGameLevel::Mainmenu))
 				{
 					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::Pausemenu;

@@ -378,7 +378,7 @@ void Renderer::InitImGui(SDL_Window* pWindow)
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsClassic();
+	ImGui::StyleColorsDark();
 	ImGui_ImplSDL2_InitForD3D(pWindow);
 	ImGui_ImplDX11_Init(device.Get(), immediateContext.Get());
 }
