@@ -188,6 +188,8 @@ int main(int argc, char* args[])
 			L"Resources\\images\\controls.png", 0,
 			D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr,
 			g_GameManager->controlsSRV.ReleaseAndGetAddressOf()));
+
+
 	
 	srand(time(NULL));
 	g_GameManager->currentLevel = EGameLevel::Mainmenu;

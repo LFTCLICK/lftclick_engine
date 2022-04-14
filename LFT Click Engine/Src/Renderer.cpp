@@ -217,9 +217,8 @@ void Renderer::CreateDeviceDependentResources()
 	DX::ThrowIfFailed(device->CreateBlendState(&desc, alphaToCoverageBS.ReleaseAndGetAddressOf()));
 
 	DX::ThrowIfFailed(
-		DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(),
-			L"Resources\\images\\shade.jpg", 0,
-			D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr,
+		DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(),
+			L"Resources\\images\\shade.jpg", nullptr,
 			darknessSRV.ReleaseAndGetAddressOf() ) 
 	);
 
@@ -262,7 +261,6 @@ void Renderer::Draw(const FLOAT* clearColor)
 	immediateContext->OMSetDepthStencilState(nullptr, 0);
 
 	DirectX::XMMATRIX projectionMat = g_GameManager->mainCamera->GetProjectionMatrix();
-
 	auto gameObjectIt = g_GameObjManager->gameObjectList.end();
 	while (gameObjectIt != g_GameObjManager->gameObjectList.begin())
 	{
@@ -287,7 +285,8 @@ void Renderer::Draw(const FLOAT* clearColor)
 	
 		const PS_cbPerObject cbValues_PS =
 		{
-			(gameObject->tag == "player" || gameObject->tag == "zombie") ? 0.0f : g_GameManager->displayDarknessLevel
+			(gameObject->tag == "player" || gameObject->tag == "zombie"
+			|| gameObject->tag == "crosshairs") ? 0.0f : g_GameManager->displayDarknessLevel
 		};
 	
 		VS_cbPerObjectData.SetData(immediateContext.Get(), cbValues_VS);

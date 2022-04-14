@@ -61,8 +61,8 @@ void Drawable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 
 	std::wstring sprite = utf8_decode(j["image"]);
 	//force DTK to not load the texture as srgb
-	DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, &textureSRV);
-	//	DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), sprite.c_str(), &texture, &shaderResourceView);
+	//DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(), sprite.c_str(), 0, D3D11_USAGE_DEFAULT, D3D11_BIND_SHADER_RESOURCE, 0, 0, DirectX::WIC_LOADER_IGNORE_SRGB, nullptr, &textureSRV);
+		DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), sprite.c_str(), nullptr, &textureSRV);
 
 
 	transformComp = componentOwner->getComponent<Transform>();

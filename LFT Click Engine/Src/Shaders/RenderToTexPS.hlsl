@@ -33,5 +33,10 @@ float4 main(VSOut pin) : SV_Target
 	float4 outputColor = lerp(daynightColor, damagedColor, rednessFactor);
 	float4 finalColor = lerp(outputColor, blackColor, fadFactor);
 
+	float gamma = 2.2f;
+	finalColor.r = pow(finalColor.r, 1.0f / gamma);
+	finalColor.g = pow(finalColor.g, 1.0f / gamma);
+	finalColor.b = pow(finalColor.b, 1.0f / gamma);
+
 	return finalColor;
 }
