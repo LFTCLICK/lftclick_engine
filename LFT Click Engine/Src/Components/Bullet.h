@@ -35,5 +35,5 @@ public:
 	float animationTime, speed, timer, keepAliveTime;
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 };

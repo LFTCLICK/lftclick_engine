@@ -5,7 +5,7 @@
 void SpriteAnimator::Start()
 {
 	drawable = componentOwner->getComponent<Drawable>();
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	timer = 0;
 	xOffset = 1.0f / spriteSheetWidth;
 	yOffset = 1.0f / spriteSheetHeight;
@@ -14,7 +14,7 @@ void SpriteAnimator::Start()
 void SpriteAnimator::UpdateDirection()
 {
 	oldDirection = direction;
-	auto directionVec = trans->lastMovement;
+	auto directionVec = myTransform->lastMovement;
 	if (directionVec.x != 0 || directionVec.y != 0) {
 		if (abs(directionVec.x) > abs(directionVec.y) && moveAnimationIndices["right"] > -1) {
 			if (directionVec.x > 0 && moveAnimationIndices["right"] > -1) {
@@ -37,28 +37,39 @@ void SpriteAnimator::UpdateDirection()
 void SpriteAnimator::UpdateState(bool forceUpdate)
 {
 	if (forceUpdate || 
-		trans->isMoving != wasMoving || 
+		myTransform->isMoving != wasMoving || 
 		direction != oldDirection || 
 		isDamaged != wasDamaged || 
 		isDead != wasDead || 
 		isInRange != wasInRange) 
 	{
 		if (isDead) {
-			SwitchAnimation(deathAnimationIndex);
+			if (deathAnimationIndices.empty())
+				SwitchAnimation(deathAnimationIndex);
+			else
+				SwitchAnimation(deathAnimationIndices[direction]);
 		}
 		else if (isDamaged) {
-			SwitchAnimation(damageAnimationIndex);
+			if (damagedIdleAnimationIndices.empty()) {
+				SwitchAnimation(damageAnimationIndex);
+			}
+			else {
+				if (myTransform->isMoving && !damagedMoveAnimationIndices.empty())
+					SwitchAnimation(damagedMoveAnimationIndices[damagedMoveAnimationIndices[direction] > -1 ? direction : "right"]);
+				else
+					SwitchAnimation(damagedIdleAnimationIndices[damagedIdleAnimationIndices[direction] > -1 ? direction : "right"]);
+			}
 		}
 		else if (isInRange) {
 			SwitchAnimation(interactRangeAnimationIndex);
 		}
 		else {
-			if (moveAnimationIndices["right"] > -1 && trans->isMoving)
+			if (moveAnimationIndices["right"] > -1 && myTransform->isMoving)
 				SwitchAnimation(moveAnimationIndices[moveAnimationIndices[direction] > -1 ? direction : "right"]);
-			if (idleAnimationIndices["right"] > -1 && !trans->isMoving)
+			if (idleAnimationIndices["right"] > -1 && !myTransform->isMoving)
 				SwitchAnimation(idleAnimationIndices[idleAnimationIndices[direction] > -1 ? direction : "right"]);
 		}
-		wasMoving = trans->isMoving;
+		wasMoving = myTransform->isMoving;
 		wasDamaged = isDamaged;
 		wasDead = isDead;
 		wasInRange = isInRange;
@@ -116,6 +127,9 @@ Component* SpriteAnimator::Clone(GameObject* newParent)
 	toReturn->damageAnimationIndex = damageAnimationIndex;
 	toReturn->deathAnimationIndex = deathAnimationIndex;
 	toReturn->interactRangeAnimationIndex = interactRangeAnimationIndex;
+	toReturn->damagedIdleAnimationIndices = damagedIdleAnimationIndices;
+	toReturn->damagedMoveAnimationIndices = damagedMoveAnimationIndices;
+	toReturn->deathAnimationIndices = deathAnimationIndices;
 	toReturn->xOffset = xOffset;
 	toReturn->yOffset = yOffset;
 	toReturn->timer = timer;
@@ -160,15 +174,31 @@ void SpriteAnimator::Deserialize(nlohmann::json j, GameObject* componentOwner)
 				animationInfo.row = index;
 
 			animations[index] = animationInfo;
-
-			if (animation.contains("onIdle") && animation["onIdle"])
-				idleAnimationIndices[animation.contains("direction") ? animation["direction"] : "right"] = index;
-			else if (animation.contains("onMove") && animation["onMove"])
-				moveAnimationIndices[animation.contains("direction") ? animation["direction"] : "right"] = index;
-			else if (animation.contains("onDamage") && animation["onDamage"])
-				damageAnimationIndex = index;
-			else if (animation.contains("onDeath") && animation["onDeath"])
-				deathAnimationIndex = index;
+			
+			if (animation.contains("onIdle") && animation["onIdle"]) {
+				if (animation.contains("onDamage") && animation["onDamage"])
+					damagedIdleAnimationIndices[animation.contains("direction") ? animation["direction"] : "right"] = index;
+				else
+					idleAnimationIndices[animation.contains("direction") ? animation["direction"] : "right"] = index;
+			}
+			else if (animation.contains("onMove") && animation["onMove"]) {
+				if (animation.contains("onDamage") && animation["onDamage"])
+					damagedMoveAnimationIndices[animation.contains("direction") ? animation["direction"] : "right"] = index;
+				else
+					moveAnimationIndices[animation.contains("direction") ? animation["direction"] : "right"] = index;
+			}
+			else if (animation.contains("onDamage") && animation["onDamage"]) {
+				if (animation.contains("direction"))
+					damagedIdleAnimationIndices[animation["direction"]] = index;
+				else
+					damageAnimationIndex = index;
+			}
+			else if (animation.contains("onDeath") && animation["onDeath"]) {
+				if (animation.contains("direction"))
+					deathAnimationIndices[animation["direction"]] = index;
+				else
+					deathAnimationIndex = index;
+			}
 			else if (animation.contains("onInteractRange") && animation["onInteractRange"])
 				interactRangeAnimationIndex = index;
 		}
@@ -192,7 +222,7 @@ void SpriteAnimator::SwitchAnimation(std::string name) {
 }
 
 void SpriteAnimator::Damage(float time) {
-	if (damageAnimationIndex > -1) {
+	if (damageAnimationIndex > -1 || !damagedIdleAnimationIndices.empty()) {
 		isDamaged = true;
 		damageTimeout = time;
 		damageTimer = 0;
@@ -200,7 +230,7 @@ void SpriteAnimator::Damage(float time) {
 }
 
 void SpriteAnimator::Die(float time) {
-	if (deathAnimationIndex > -1) {
+	if (deathAnimationIndex > -1 || !deathAnimationIndices.empty()) {
 		isFinishedDeleting = false;
 		isDead = true;
 		deathTimeout = time;

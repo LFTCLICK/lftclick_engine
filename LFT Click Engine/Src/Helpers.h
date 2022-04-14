@@ -103,5 +103,25 @@ namespace Helpers
 	inline T randWithinRange(T rangeMin, T rangeMax) {
 		return rangeMin + (rangeMax - rangeMin) * randFloat0to1();
 	}
+
+	inline float RandomGenerator(float lowest, float highest)
+	{
+		return lowest + static_cast <float> (std::rand() / (static_cast <float> (RAND_MAX / (highest - lowest))));
+	}
+
+	inline DirectX::SimpleMath::Vector2 RandomPointInCircle(const DirectX::SimpleMath::Vector2& center, float radius)
+	{
+		//generate a random point within a circle of radius "radius" parameter centered at (0,0)
+		DirectX::SimpleMath::Vector2 randPoint;
+		do
+		{
+			randPoint.x = RandomGenerator(-radius + center.x, radius + center.x);
+			randPoint.y = RandomGenerator(-radius + center.x, radius + center.x);
+
+		} while ((center - randPoint).LengthSquared() < 10.0f * 10.0f); //make sure they are far enough
+
+
+		return randPoint;
+	}
 };
 

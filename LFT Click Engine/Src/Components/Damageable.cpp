@@ -17,7 +17,7 @@ using namespace DirectX::SimpleMath;
 
 void Damageable::Start()
 {
-	trans = componentOwner->getComponent<Transform>();
+	myTransform = componentOwner->getComponent<Transform>();
 	anim = componentOwner->getComponent<SpriteAnimator>();
 	audio = componentOwner->getComponent<Audible>();
 	drawable = componentOwner->getComponent<Drawable>();
@@ -27,19 +27,19 @@ void Damageable::Start()
 
 void Damageable::Update()
 {
-	if (destroyOnDeath && health < 1 && !componentOwner->isDeletable) {
+	if (destroyOnDeath && playerHealth < 1 && !componentOwner->isDeletable) {
 		if (anim != nullptr) anim->Die(deathTime);
 		if (audio != nullptr) audio->PlaySoundsOnEvent(AUDIO_ON_DEATH);
 		componentOwner->isDeletable = true;
 	}
 	if (knockbackMod != 0 && (velocity.x != 0 || velocity.x != 0)) {
-		trans->Move(velocity.x * knockbackMod, velocity.y * knockbackMod);
+		myTransform->Move(velocity.x * knockbackMod, velocity.y * knockbackMod);
 		
 		velocity *= inertiaMod;
 	}
 
 
-	if (drawable != nullptr && healthPreview && health >= 0)
+	if (drawable != nullptr && healthPreview && playerHealth >= 0)
 	{
 		healthPreviewTime -= g_FrameRateController->DeltaTime();
 
@@ -50,9 +50,9 @@ void Damageable::Update()
 		}
 		
 		Color healthTextColor = Color::Lerp(Color(1, 0, 0, 1), Color(0, 1, 0, 1), 
-			static_cast<float>(health) / maxHealth);
+			static_cast<float>(playerHealth) / maxHealth);
 		
-		drawable->HUD_DrawTextCenter(std::to_string(health), {0.0f, -50.0f}, healthTextColor);
+		drawable->HUD_DrawTextCenter(std::to_string(playerHealth), {0.0f, -50.0f}, healthTextColor);
 	}
 
 }
@@ -60,34 +60,35 @@ void Damageable::Update()
 void Damageable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 {
 	this->componentOwner = componentOwner;
-	health = j["health"];
+	playerHealth = j["health"];
 	maxHealth = j["health"];
 	if (j.contains("destroyOnDeath")) destroyOnDeath = j["destroyOnDeath"];
 	if (j.contains("knockbackMod")) knockbackMod = j["knockbackMod"];
+	if (j.contains("deathTime")) deathTime = j["deathTime"];
 }
 
 Component* Damageable::Clone(GameObject* newParent)
 {
 	Damageable* toReturn = new Damageable();
 	toReturn->componentOwner = newParent;
-	toReturn->health = health;
+	toReturn->playerHealth = playerHealth;
 	toReturn->maxHealth = maxHealth;
 	toReturn->inertiaMod = inertiaMod;
 	toReturn->velocity = velocity;
 	//toReturn->trans = trans;
 	toReturn->knockbackMod = knockbackMod;
 	toReturn->destroyOnDeath = destroyOnDeath;
+	toReturn->deathTime = deathTime;
 	return toReturn;
 }
 
 void Damageable::HandleMessage(Message* e) {
-	if (e->otherObject->componentOwner->tag == "bullet") {
+	if (e->otherObject->componentOwner->tag == "bullet")
 		TakeDamage(1);
-	}
 }
 
 void Damageable::TakeDamage(int damage) {
-	health -= damage;
+	playerHealth -= damage;
 	if (anim != nullptr) anim->Damage(damageTime);
 	if (audio != nullptr) audio->PlaySoundsOnEvent(AUDIO_ON_DAMAGE);
 

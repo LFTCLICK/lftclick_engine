@@ -36,13 +36,15 @@ public:
 	void HandleMessage(Message* e);
 public:
 	int doorPhases, zeroIndexDoorPhases;
-	float maxHp, health;
+	float maxHp, playerHealth;
 	int woodRequiredPerPhase;
 	float repairTime;
+	bool inWoodPilePhase;
 
 private:
-	Transform* trans;
-
+	Transform* myTransform;
+	DirectX::SimpleMath::Vector2 woodPileOffset;
+	float woodPileRadius;
 	SquareCollider* squareCollider;
 	Drawable* drawable;
 	Player* player;

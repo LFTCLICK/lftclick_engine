@@ -1,0 +1,59 @@
+{
+  "1": {
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 144,
+    "scaleY": 20,
+    "rot": 0,
+    "zPos": 15
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale" : 0.2,
+    "yScale" : 0.5,
+    "vertices" : [
+    {
+        "pos": [-0.5,-0.5,0],
+        "uv": [0,1]
+    },
+    {
+        "pos": [-0.5,0.5,0],
+        "uv": [0,0]
+    },
+    {
+        "pos": [0.5,0.5,0],
+        "uv": [1,0]
+    },
+    {
+        "pos": [0.5,-0.5,0],
+        "uv": [1,1]
+    }
+    ],
+    "indicies": [0, 1, 2, 2, 3, 0],
+    "image": "Resources\\images\\doorway.png"
+
+  },
+  "4": {
+    "center": [0.0, -0.0, 0.0],
+    "width": 240,
+    "height": 20,
+    "trigger": false,
+    "static": true,
+    "deleteOnCollison": false
+  },
+  "13": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "radius": 120,
+    "trigger": true,
+    "static": true,
+    "deleteOnCollison": false
+  },
+  "102":{
+    "woodPileOffset": [ -128.0, -64.0],
+    "woodPileRadius": 25.0,
+    "doorPhases": 5,
+    "hp": 100,
+    "woodRequiredPerPhase": 5,
+    "repairTime": 3
+  }
+}

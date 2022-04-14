@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "FrameRateController.h"
 #include "Collider.h"
+#include "Helpers.h"
 #include <json.hpp>
 
 
@@ -49,7 +50,7 @@ private:
 	bool IsPlayerInRange();
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 	Audible* audio;
 	SpriteAnimator* anim;
 	Drawable* drawable;

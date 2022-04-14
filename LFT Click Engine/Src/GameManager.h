@@ -19,7 +19,9 @@
 //
 // The darkness alpha level is produced by "GetDarknessLevel()".
 
+#include <queue>
 #include <json.hpp>
+#include <Helpers.h>
 
 //#define SUN_SETTING 73.2473f		// when the light should begin getting brighter
 //#define SUN_DOWN 125.3655f		// when the light should remain at the brightest
@@ -35,7 +37,8 @@
 
 
 #define INITIAL_CHANCE_TO_FIND_PART 0.05f
-#define CHANCE_TO_FIND_PART_INCREMENT 0.05f
+#define CHANCE_TO_FIND_PART_INCREMENT 0.0125f
+#define ROLLS_TILL_PITY_PART 13
 
 #define MAX_DANGER_ENEMY_COUNT 100.f
 
@@ -62,6 +65,8 @@
 
 #define NEARPLAYER_ENEMY_SPAWNER_ID 1000
 
+#define MESSAGE_POSSIBILITIES 5
+
 
 class Camera;
 class Transform;
@@ -71,9 +76,19 @@ class GameObject;
 
 enum class EGameLevel
 {
+	Intro,
 	Mainmenu,
 	Pausemenu,
-	Level0
+	SurvivalLevel,
+	SideScrollerLevel,
+	CreditsScreen,
+	ControlScreen
+};
+
+struct TimedMessage 
+{
+	std::string message;
+	float timeout;
 };
 
 class GameManager
@@ -82,9 +97,13 @@ public:
 	GameManager() : 
 		playerObj(nullptr),
 		playerDead(false), 
-		darknessLevel(0),
+		playerWon(false), 
+		displayDarknessLevel(0),
+		darknessLevel(1),
 		monsterCount(0),
 		dangerLevel(0),
+		rednessFactor(0),
+		fadFactor(0),
 		mapHeight(10000.0f),
 		mainCamera(nullptr),
 		day(1), 
@@ -141,12 +160,20 @@ public:
 
 	bool IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos);
 
-	void LoadLevel(nlohmann::json file);
+	void LoadLevel(nlohmann::json file, EGameLevel toSet);
+
+	void PushPlayerMessage(std::string, float timeout = 3.f);
+	TimedMessage GetPlayerMessage();
+
 public:
 	GameObject* playerObj;
 	bool playerDead;
+	bool playerWon;
 	bool playerInsideHouse;
 	float darknessLevel;
+	float rednessFactor;
+	float fadFactor;
+	float displayDarknessLevel;
 	int monsterCount;
 	int harshLightOfDay;
 	int windowWidth;
@@ -159,6 +186,8 @@ public:
 	Camera* mainCamera;
 	Transform* playerTrans;
 
+	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(-1000.0f, -920.0f, 1880.0f, 1930.0f);
+
 	int day;
 	float time;
 
@@ -168,8 +197,15 @@ public:
 	int activatedSpawner;
 
 	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> menuBackgroundSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> creditsSRV;
+	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> controlsSRV;
 
 	EGameLevel currentLevel;
+	EGameLevel prevLevel;
+
+	std::queue<TimedMessage> messageQueue;
+
+	//std::queue<std::string> daytimeSwitchMessages[MESSAGE_POSSIBILITIES] 
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

@@ -36,7 +36,7 @@ void LuaManager::RegObjectFunctions(sol::state& state, GameObject* obj)
 
 		state.set_function("move", &Player::Move, playerComponent);
 		state.set_function("dash", &Player::Dash, playerComponent);
-		state.set_function("player_is_dead", &Player::ChangePlayerState, playerComponent);
+		state.set_function("player_is_dead", &Player::DamagePlayer, playerComponent);
 
 		state.set_function("fire", &Gun::Fire, gunComponent);
 		state.set_function("fire_rate_timer", &Gun::ReadyToFire, gunComponent);

@@ -42,7 +42,7 @@ public:
 	void SwitchBulletIndex(int bulletIndex);
 
 private:
-	Transform* trans;
+	Transform* myTransform;
 
 	GameObjectManager* gom;
 	GameObjectFactory* gof;

@@ -269,9 +269,6 @@
     <ClInclude Include="Src\DebugRenderer.h">
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Components\Door.h">
-      <Filter>Engine\Components</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Components\EnemySpawner.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
@@ -315,6 +312,9 @@
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Vortex.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Door.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -607,5 +607,8 @@
       <Filter>Engine\Rendering\Shaders</Filter>
     </FxCompile>
     <Text Include="..\Libraries\imgui-1.82\LICENSE.txt" />
+    <FxCompile Include="Src\Shaders\RenderToTexPS.hlsl">
+      <Filter>Engine\Rendering\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

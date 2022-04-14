@@ -1,0 +1,96 @@
+{
+  "1": {
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 180,
+    "scaleY": 180,
+    "rot": 0,
+    "zPos": 10
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale": 1,
+    "yScale": 0.25,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
+    ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "image": "Resources\\images\\chair_sprite_sheet_left.png"
+  },
+  "6": {
+    "spriteSheetWidth": 1,
+    "spriteSheetHeight": 4,
+    "interactable": true,
+    "animations": [
+      {
+        "name": "outOfRangeChairLeft",
+        "length": 1,
+        "frameDuration": 1000,
+        "row": 0,
+        "onIdle": true
+      },
+      {
+        "name": "inRangeChairLeft",
+        "length": 1,
+        "frameDuration": 1000,
+        "row": 2,
+        "onInteractRange": true
+      }
+    ]
+  },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\sounds\\woodchop.mp3",
+        "loop": true,
+        "volume": 15,
+        "pitchRange": [ 0.9, 1.1 ],
+        "playEvents": [
+          1005
+        ],
+        "stopEvents": [
+          1005,
+          2000
+        ]
+      },
+      {
+        "name": ".\\Resources\\sounds\\bwee.mp3",
+        "loop": false,
+        "volume": 5,
+        "pitchRange": [ 0.65, 0.85 ],
+        "playEvents": [
+          1006
+        ]
+      }
+    ]
+  },
+  "13": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "radius": 30,
+    "trigger": false,
+    "static": true,
+    "deleteOnCollison": false
+  },
+  "14": {
+    "timeToCollect": 1,
+    "woodPerCollect": 3,
+    "interactDistance": 100,
+    "hpPerPhase": 2,
+    "totalPhases": 2
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "1": {
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 80,
+    "scaleY": 80,
+    "rot": 0,
+    "zPos": 15
+  },
+  "2": {
+    "onlyUVOverrides": false,
+    "xScale": 0.25,
+    "yScale": 0.125,
+    "vertices": [
+      {
+        "pos": [ -0.5, -0.5, 0 ],
+        "uv": [ 0, 1 ]
+      },
+      {
+        "pos": [ -0.5, 0.5, 0 ],
+        "uv": [ 0, 0 ]
+      },
+      {
+        "pos": [ 0.5, 0.5, 0 ],
+        "uv": [ 1, 0 ]
+      },
+      {
+        "pos": [ 0.5, -0.5, 0 ],
+        "uv": [ 1, 1 ]
+      }
+    ],
+    "indicies": [ 0, 1, 2, 2, 3, 0 ],
+    "image": "Resources\\images\\zombie_sprite_sheet.png"
+
+  },
+  "6": {
+    "spriteSheetWidth": 4,
+    "spriteSheetHeight": 8,
+    "animations": [
+      {
+        "name": "idleZombieDown",
+        "length": 4,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "down"
+      },
+      {
+        "name": "movingZombieDown",
+        "length": 4,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "down"
+      },
+      {
+        "name": "idleZombieUp",
+        "length": 4,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "up"
+      },
+      {
+        "name": "movingZombieUp",
+        "length": 4,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "up"
+      },
+      {
+        "name": "idleZombieLeft",
+        "length": 4,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "left"
+      },
+      {
+        "name": "movingZombieLeft",
+        "length": 4,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "left"
+      },
+      {
+        "name": "idleZombieRight",
+        "length": 4,
+        "frameDuration": 1,
+        "onIdle": true,
+        "direction": "right"
+      },
+      {
+        "name": "movingZombieRight",
+        "length": 4,
+        "frameDuration": 0.25,
+        "onMove": true,
+        "direction": "right"
+      }
+    ]
+  },
+  "8": {
+    "sounds": [
+      {
+        "name": ".\\Resources\\sounds\\zombiedamage.mp3",
+        "loop": false,
+        "volume": 30,
+        "pitchRange": [ 0.85, 1.15 ],
+        "playEvents": [
+          1003
+        ]
+      },
+      {
+        "name": ".\\Resources\\sounds\\zombiedeathrattle.mp3",
+        "loop": false,
+        "volume": 40,
+        "pitchRange": [ 0.85, 1.15 ],
+        "playEvents": [
+          1004
+        ]
+      },
+      {
+        "name": ".\\Resources\\sounds\\hauntedbreath.mp3",
+        "loop": false,
+        "volume": 40,
+        "pitchRange": [ 0.85, 1.15 ],
+        "playEvents": [
+          1007
+        ],
+        "stopEvents": [
+          1004
+        ]
+      }
+    ]
+  },
+  "12": {
+    "health": 3
+  },
+  "13": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "radius": 25,
+    "trigger": false,
+    "static": false,
+    "deleteOnCollison": false
+  },
+  "103": {
+    "attackTimer": 3.0,
+    "damage": 15.0,
+    "speed": 100.0
+  }
+}
