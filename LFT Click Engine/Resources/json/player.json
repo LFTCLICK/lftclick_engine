@@ -116,7 +116,7 @@
       {
         "name": ".\\Resources\\music\\BackgroundMusicAddition.mp3",
         "loop": true,
-        "volume": 0,
+        "volume": 60,
         "playEvents": [
           1000
         ],
@@ -124,7 +124,7 @@
           2000
         ],
         "scaleVolumeWithDanger": true,
-        "startTime": 50,
+        "startTime": 0,
         "isMusic": true
       },
       {

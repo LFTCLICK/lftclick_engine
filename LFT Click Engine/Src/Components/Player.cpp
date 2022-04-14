@@ -255,17 +255,18 @@ void Player::HandleMessage(Message* e)
 		Enemy* enemyComp = e->otherObject->componentOwner->getComponent<Enemy>();
 		if (enemyComp != nullptr) 
 		{
-			hitDirection = cm->deltaPos;
-			hitDirection.Normalize();
-			hitSpeed = enemyComp->speed * 10;
 			if (damageCooldownTimer < 0) 
 			{
+				hitDirection = cm->deltaPos;
+				hitDirection.Normalize();
+				hitSpeed = enemyComp->speed * 6;
+
 				PlayerCollidedWithEnemy();
 				damageCooldownTimer = 2;
-			}
 
-			DirectX::SimpleMath::Vector2 movement = hitDirection * hitSpeed * g_FrameRateController->DeltaTime();
-			Move(movement.x, movement.y);
+				DirectX::SimpleMath::Vector2 movement = hitDirection * hitSpeed * g_FrameRateController->DeltaTime();
+				Move(movement.x, movement.y);
+			}
 		}
 		else {
 			Move(cm->deltaPos.x, cm->deltaPos.y);

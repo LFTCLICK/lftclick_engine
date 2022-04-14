@@ -47,7 +47,7 @@ public:
 	virtual Component* Clone(GameObject* newParent);
 	Player() : isDashing(false), autopilot(false), damageFlashing(false), 
 		dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), collectibleWood(0),
-		inertiaMod(100), hitDirection{0, 0}, hitSpeed(0) {};
+		inertiaMod(60), hitDirection{0, 0}, hitSpeed(0) {};
 
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 

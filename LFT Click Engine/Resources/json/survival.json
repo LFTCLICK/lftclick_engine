@@ -110,7 +110,7 @@
   },
   "MenuMusic": {
     "name": ".\\Resources\\music\\Menu.mp3",
-    "volume": 10
+    "volume": 50
   },
   "Level": [
     {

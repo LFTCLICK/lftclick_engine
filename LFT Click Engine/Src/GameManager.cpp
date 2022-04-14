@@ -296,6 +296,7 @@ void GameManager::UnpauseLevelAudio() {
 }
 void GameManager::PlayMenuMusic() {
 	g_AudioManager->PlaySound(menuMusicName, MENU_MUSIC_MASTER_CHANNEL_GROUP);
+	g_AudioManager->SetGroupSpatialPosition(MENU_MUSIC_MASTER_CHANNEL_GROUP, playerTrans->CurrentPos());
 }
 void GameManager::StopMenuMusic() {
 	g_AudioManager->StopGroup(MENU_MUSIC_MASTER_CHANNEL_GROUP);
