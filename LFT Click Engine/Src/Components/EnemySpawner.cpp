@@ -91,38 +91,43 @@ void EnemySpawner::Update()
 	
 
 	// past this is going unused as of now
-	if (spawnTimer <= 0.0f)
+	/*if (spawnTimer <= 0.0f)
 	{
-		spawnTimer = timeBetweenPhases;
+		spawnTimer = timeBetweenPhases;*/
 
-		if (objectSpawnName == "zombie")
-		{
-			int toSpawn;
-			// checking if its morning time
-			if (g_GameManager->IsNightTime())
-				toSpawn = 30.0f;
-			else
-				toSpawn = 10.0f;
+	//// past this is going unused as of now
+	//if (spawnTimer <= 0.0f)
+	//{
+	//	spawnTimer = timeBetweenPhases;
 
-			totalZombiesOnMap += toSpawn;
-			for (int i = 0; i < toSpawn; i++)
-			{
-				GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
-				newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
-			}
-			printf("Total zombies on map are %d\n", totalZombiesOnMap);
-		}
-		
-		if (objectSpawnName == "enemy")
-		{
-			ghostsOnMap += 1;
-			GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
-			newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
-			printf("Total ghosts on map are %d\n", ghostsOnMap);
-		}
+	//	if (objectSpawnName == "zombie")
+	//	{
+	//		int toSpawn;
+	//		// checking if its morning time
+	//		if (g_GameManager->IsNightTime())
+	//			toSpawn = 30.0f;
+	//		else
+	//			toSpawn = 10.0f;
 
-		++x;
-	}
+	//		totalZombiesOnMap += toSpawn;
+	//		for (int i = 0; i < toSpawn; i++)
+	//		{
+	//			GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
+	//			newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
+	//		}
+	//		printf("Total zombies on map are %d\n", totalZombiesOnMap);
+	//	}
+	//	
+	//	if (objectSpawnName == "enemy")
+	//	{
+	//		ghostsOnMap += 1;
+	//		GameObject* newObj = g_GameObjManager->ClonePrefabOfTag(g_GameObjFactory.get(), objectSpawnName);
+	//		newObj->getComponent<Transform>()->SetPos(randomNumberGetter(), randomNumberGetter());
+	//		printf("Total ghosts on map are %d\n", ghostsOnMap);
+	//	}
+
+	//	++x;
+	//}
 }
 
 void EnemySpawner::Deserialize(nlohmann::json j, GameObject* componentOwner)
