@@ -44,6 +44,7 @@ public:
 	void Update();
 	void Start();
 	void Draw();
+	void HideAllObjects();
 	void ProcessCollision();
 	void DoCollision(GameObject* toCheckWith);
 	void Deserialize(GameObjectFactory* gof, json j, bool isPrefab = false);

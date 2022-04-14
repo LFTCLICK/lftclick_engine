@@ -107,6 +107,16 @@ void GameObjectManager::Draw()
 	}
 }
 
+void GameObjectManager::HideAllObjects()
+{
+	auto gameObjectListEnd = gameObjectList.end();
+	for (auto mainListItt = gameObjectList.begin(); mainListItt != gameObjectListEnd; ++mainListItt)
+	{
+		(*mainListItt)->isOnScreen = false;
+	}
+
+}
+
 void GameObjectManager::ProcessCollision()
 {
 	TriggerCollisionMessage* toPassTrigger = new TriggerCollisionMessage();

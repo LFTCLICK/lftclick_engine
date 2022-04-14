@@ -280,6 +280,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Src\Components\ScrollingCredits.cpp" />
     <ClCompile Include="Src\Components\SpriteAnimator.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
@@ -386,6 +387,7 @@
     <ClInclude Include="Src\Components\Gun.h" />
     <ClInclude Include="Src\Components\LevelGenerator.h" />
     <ClInclude Include="Src\Components\Player.h" />
+    <ClInclude Include="Src\Components\ScrollingCredits.h" />
     <ClInclude Include="Src\Components\SpriteAnimator.h" />
     <ClInclude Include="Src\Components\SquareCollider.h" />
     <ClInclude Include="Src\Components\Transform.h" />

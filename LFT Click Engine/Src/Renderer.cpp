@@ -270,7 +270,7 @@ void Renderer::Draw(const FLOAT* clearColor)
 		GameObject* gameObject = *gameObjectIt;
 		Drawable* drawable = gameObject->getComponent<Drawable>();
 	
-		if (drawable == nullptr || !gameObject->isOnScreen)
+		if (drawable == nullptr || !gameObject->isOnScreen || !gameObject->isActive)
 			continue;
 
 		DirectX::XMMATRIX mat = gameObject->getComponent<Transform>()->GetXMMatrix();

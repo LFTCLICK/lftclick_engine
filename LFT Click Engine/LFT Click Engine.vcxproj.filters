@@ -162,6 +162,9 @@
       <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="Src\Components\ScrollingCredits.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Libraries\imgui-1.82\imgui.h">
@@ -309,6 +312,9 @@
       <Filter>Engine\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Door.h">
+      <Filter>Engine\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\ScrollingCredits.h">
       <Filter>Engine\Components</Filter>
     </ClInclude>
   </ItemGroup>

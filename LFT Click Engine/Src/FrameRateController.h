@@ -22,6 +22,8 @@ public:
 	void Reset();
 	float DeltaTime();
 
+	float TrueDeltaTime();
+
 public:
 	bool zeroDeltaTime;
 private:

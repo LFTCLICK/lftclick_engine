@@ -73,4 +73,9 @@ float FrameRateController::DeltaTime()
 	return zeroDeltaTime ? 0.0f : static_cast<float>(m_DeltaTime);
 }
 
+float FrameRateController::TrueDeltaTime()
+{
+	return static_cast<float>(m_DeltaTime);
+}
+
 

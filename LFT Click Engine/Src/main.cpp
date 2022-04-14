@@ -231,11 +231,7 @@ int main(int argc, char* args[])
 			{
 				g_GameManager->LoadLevel(dataJson2, EGameLevel::Level0);
 			}
-			if (ImGui::Button("Credits", { 100,50 }))
-			{
-				g_GameManager->prevLevel = g_GameManager->currentLevel;
-				g_GameManager->currentLevel = EGameLevel::CreditsScreen;
-			}if (ImGui::Button("Controls", { 100,50 }))
+			if (ImGui::Button("Controls", { 100,50 }))
 			{
 				g_GameManager->prevLevel = g_GameManager->currentLevel;
 				g_GameManager->currentLevel = EGameLevel::ControlScreen;
@@ -250,23 +246,37 @@ int main(int argc, char* args[])
 			break;
 		case EGameLevel::CreditsScreen:
 			while (ShowCursor(true) < 0); // Shows cursor
-
+			g_GameObjManager->HideAllObjects();
+			g_GameObjManager->FindObjectOfTag("credits")->isActive = true;
+			g_GameObjManager->FindObjectOfTag("credits")->isOnScreen = true;
+			g_GameManager->mainCamera->SetPos(0, 0, 0);
 			rect.left = rect.top = 0;
 			rect.right = g_Renderer->GetWidth();
 			rect.bottom = g_Renderer->GetHeight();
-			g_Renderer->GetSpriteBatch()->Draw(g_GameManager->creditsSRV.Get(), rect);
+			//g_Renderer->GetSpriteBatch()->Draw(g_GameManager->creditsSRV.Get(), rect);
 
 			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(3 * g_Renderer->GetHeight()) / 4));
 			ImGui::Begin("menu", nullptr,
 				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
 				| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
-
+			
 			if (ImGui::Button("Back", { 100,50 }))
 			{
 				g_GameManager->currentLevel = g_GameManager->prevLevel;
+				g_GameObjManager->FindObjectOfTag("credits")->isActive = false;
 			}
 
 			ImGui::End();
+
+			g_GameObjManager->FindObjectOfTag("credits")->Update();
+			g_AudioManager->Update();
+			//g_GameManager->Update();
+			//g_InputManager->Update();
+			//g_GameObjManager->Update();
+			//g_EventManager->Update();
+			//g_LuaManager->Update();
+
+			g_GameObjManager->Draw();
 
 			g_Renderer->Draw(DirectX::Colors::Black);
 			break;

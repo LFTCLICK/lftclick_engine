@@ -87,6 +87,10 @@
     {
       "prefab": "Resources\\json\\chair_right.json",
       "tag": "chair_right"
+    },
+    {
+      "prefab": "Resources\\json\\credits.json",
+      "tag": "credits"
     }
   ],
   "Map": {
@@ -168,6 +172,10 @@
     },
     {
       "object": "floor",
+      "overrides": []
+    },
+    {
+      "object": "credits",
       "overrides": []
     },
     {
