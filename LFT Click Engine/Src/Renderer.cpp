@@ -324,14 +324,11 @@ void Renderer::Draw(const FLOAT* clearColor)
 		1
 	};
 
-	static float f = 0.0f;
-	ImGui::DragFloat("Fad factor", &f, 0.01f, 0.0f, 1.0f);
-
 	const PSRenderToTex_cbPerObject cbValues_PS = 
 	{
 		g_GameManager->darknessLevel,
 		g_GameManager->rednessFactor,
-		f,
+		g_GameManager->fadeFactor,
 		g_GameManager->displayDarknessLevel
 	};
 

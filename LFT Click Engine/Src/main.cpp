@@ -271,6 +271,7 @@ int main(int argc, char* args[])
 			ImGui::End();
 
 			g_GameObjManager->FindObjectOfTag("credits")->Update();
+			g_GameManager->darknessLevel = g_GameManager->displayDarknessLevel = 0;
 			g_AudioManager->Update();
 			//g_GameManager->Update();
 			//g_InputManager->Update();
@@ -285,6 +286,8 @@ int main(int argc, char* args[])
 
 		case EGameLevel::ControlScreen:
 			while (ShowCursor(true) < 0); // Shows cursor
+
+			g_GameManager->fadeFactor = 1.0f;
 
 			rect.left = rect.top = 0;
 			rect.right = g_Renderer->GetWidth();
@@ -307,6 +310,7 @@ int main(int argc, char* args[])
 			break;
 		case EGameLevel::Level0:
 		case EGameLevel::Pausemenu:
+			g_GameManager->fadeFactor = 0.0f;
 
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE))
 			{
