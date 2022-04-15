@@ -123,6 +123,7 @@ public:
 	DirectX::SpriteFont* GetSpriteFont() const { return spriteFont.get(); }
 	int GetWidth() const { return clientWidth; }
 	int GetHeight() const { return clientHeight; }
+	bool IsFullScreen() const { return fullScreenMode; }
 private:
 	void UpdateClientSizeVars();
 	void CreateDeviceDependentResources();

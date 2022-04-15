@@ -110,6 +110,7 @@ int main(int argc, char* args[])
 	int currentImage = 0;
 	float timer = 0;
 	bool muteToggle;
+	bool fullscreenToggle;
 	g_GameObjManager->FindObjectOfTag("FMOD_logo")->isOnScreen = false;
 	g_GameObjManager->FindObjectOfTag("digi_logo")->isOnScreen = true;
 	g_FrameRateController->Tick();
@@ -341,11 +342,11 @@ int main(int argc, char* args[])
 			{
 				g_AudioManager->SetMasterMute(muteToggle);
 			}
-			muteToggle = false;
-			ImGui::Checkbox("Fullscreen Toggle", &muteToggle);
-			if (muteToggle != false)
+			fullscreenToggle = g_Renderer->IsFullScreen();
+			ImGui::Checkbox("Fullscreen Toggle", &fullscreenToggle);
+			if (fullscreenToggle != g_Renderer->IsFullScreen())
 			{
-				//change the thingy
+				g_Renderer->ToggleFullScreen(g_pWindow);
 			}
 
 			if (ImGui::Button("Back", { 100,50 }))
