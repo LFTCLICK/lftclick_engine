@@ -57,8 +57,6 @@ void Player::Start()
 	if (autopilot) cam->SetAutopilotVelocity("right", camSpeed);
 	zHelper = g_GameManager->mapHeight / 2.0f;
 	introTimer = 0;
-
-	collectibleparts = 8;
 }
 
 void Player::Update()
@@ -261,6 +259,12 @@ void Player::HandleMessage(Message* e)
 		{
 			if (e->otherObject->componentOwner->tag == "couch")
 				g_GameManager->playerDead = true;
+
+			if (e->otherObject->componentOwner->tag == "vortex")
+			{
+				PlayerCollidedWithEnemy();
+				damageCooldownTimer = 2;
+			}
 		}
 
 		Enemy* enemyComp = e->otherObject->componentOwner->getComponent<Enemy>();

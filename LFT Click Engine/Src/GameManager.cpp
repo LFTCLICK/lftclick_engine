@@ -69,7 +69,8 @@ TimedMessage GameManager::GetPlayerMessage()
 	return next;
 }
 
-void GameManager::Update() {
+void GameManager::Update() 
+{
 	UpdateTime();
 	UpdateDanger();
 	UpdateLevel();
@@ -136,52 +137,55 @@ void GameManager::UpdateTime()
 
 #endif // DEBUG
 
-
-	if (wasNightTime && !IsNightTime()) {
-		harshLightOfDay = day;
-		PushPlayerMessage("Daybreak! Finally!");
-		PushPlayerMessage("I saw some piles of junk outside...");
-		PushPlayerMessage("Maybe I can find some motorcycle parts?");
-		PushPlayerMessage("If I can repair my bike...");
-		PushPlayerMessage("Maybe there's a chance I get out of here alive!");
-	}
-
-	if (!wasNightTime && IsNightTime()) {
-		//Helpers::randWithinRange(0, )
-		PushPlayerMessage("Oh no, daylight's fading...");
-
-		if (playerInsideHouse) {
-			switch (day) {
-			case 1:
-				PushPlayerMessage("I hope my fortifications hold...");
-				PushPlayerMessage("If they break them down,");
-				PushPlayerMessage("I'll have to use furnture to repair them!");
-				break;
-			case 2:
-				PushPlayerMessage("Are there even more of them out there?");
-				PushPlayerMessage("I hope the wood in this furniture is strong!");
-				break;
-			default:
-				PushPlayerMessage("There's even more of them!");
-				PushPlayerMessage("Better stay inside!");
-				break;
-			}
-		} else {
-			switch (day) {
-			case 1: 
-				PushPlayerMessage("Why did I stay out for so long?!", 1.5f);
-				PushPlayerMessage("I better get back to the cabin, fast!", 1.5f); 
-				break;
-			default: 
-				PushPlayerMessage("By now, I should know better than to be out for that long!"); 
-				break;
-			}
-			PushPlayerMessage("I hope I still have time to bar the doors!", 1.5f);
+	if (currentLevel == EGameLevel::SurvivalLevel)
+	{
+		if (wasNightTime && !IsNightTime()) {
+			harshLightOfDay = day;
+			PushPlayerMessage("Daybreak! Finally!");
+			PushPlayerMessage("I saw some piles of junk outside...");
+			PushPlayerMessage("Maybe I can find some motorcycle parts?");
+			PushPlayerMessage("If I can repair my bike...");
+			PushPlayerMessage("Maybe there's a chance I get out of here alive!");
 		}
-		PushPlayerMessage("I saw some piles of junk outside...");
-		PushPlayerMessage("Maybe I can find some motorcycle parts?");
-		PushPlayerMessage("If I can repair my bike,", 2.f);
-		PushPlayerMessage("maybe there's a chance I get out of here alive!");
+
+		if (!wasNightTime && IsNightTime()) {
+			//Helpers::randWithinRange(0, )
+			PushPlayerMessage("Oh no, daylight's fading...");
+
+			if (playerInsideHouse) {
+				switch (day) {
+				case 1:
+					PushPlayerMessage("I hope my fortifications hold...");
+					PushPlayerMessage("If they break them down,");
+					PushPlayerMessage("I'll have to use furnture to repair them!");
+					break;
+				case 2:
+					PushPlayerMessage("Are there even more of them out there?");
+					PushPlayerMessage("I hope the wood in this furniture is strong!");
+					break;
+				default:
+					PushPlayerMessage("There's even more of them!");
+					PushPlayerMessage("Better stay inside!");
+					break;
+				}
+			}
+			else {
+				switch (day) {
+				case 1:
+					PushPlayerMessage("Why did I stay out for so long?!", 1.5f);
+					PushPlayerMessage("I better get back to the cabin, fast!", 1.5f);
+					break;
+				default:
+					PushPlayerMessage("By now, I should know better than to be out for that long!");
+					break;
+				}
+				PushPlayerMessage("I hope I still have time to bar the doors!", 1.5f);
+			}
+			PushPlayerMessage("I saw some piles of junk outside...");
+			PushPlayerMessage("Maybe I can find some motorcycle parts?");
+			PushPlayerMessage("If I can repair my bike,", 2.f);
+			PushPlayerMessage("maybe there's a chance I get out of here alive!");
+		}
 	}
 }
 

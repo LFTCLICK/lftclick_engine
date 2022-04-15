@@ -56,7 +56,7 @@ function getCamerSpeed()
 	return camSpeed
 end
 
-if (current_level() == 2) then
+if (current_level() == 4) then
 elseif is_pressed(d_pressed) then
 	move(playerSpeed * deltaTime(), 0)
 end
