@@ -68,7 +68,7 @@ int main(int argc, char* args[])
 	windowFlags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
 
-	g_pWindow = SDL_CreateWindow("LFT Click Engine Demo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, windowFlags);
+	g_pWindow = SDL_CreateWindow("The Bear Grylls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, windowFlags);
 
 	if (!g_pWindow)
 		return 1;
@@ -236,6 +236,7 @@ int main(int argc, char* args[])
 				{
 					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::Pausemenu;
+					g_FrameRateController->zeroDeltaTime = true;
 				}
 			}
 			break;
