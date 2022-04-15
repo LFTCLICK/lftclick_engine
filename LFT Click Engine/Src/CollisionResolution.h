@@ -3,7 +3,7 @@
 // File Name		:	CollisionResoultion.h
 // Author			:	Vance Howald
 // Creation Date	:	2021/03/02
-// Purpose			:	Gets vec2 for collisions
+// Purpose			:	Processes collisions between objects and return push back vectors so objects don't clip into each other
 // History			: 
 // ---------------------------------------------------------------------------
 #pragma once

@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	WoodPile.cpp
+// Author			:	Vance Howald
+// Creation Date	:	2021/03/09
+// Purpose			:	Wood collection zones for repairing the doors
+// History			:
+// ---------------------------------------------------------------------------
 #include "pch.h"
 #include "WoodPile.h"
 #include "FrameRateController.h"

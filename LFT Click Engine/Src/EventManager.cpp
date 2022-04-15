@@ -85,23 +85,5 @@ void EventManager::Reset()
 
 void EventManager::ProcessCollision()
 {
-	//__int64 currentTime;
-	//QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
 	gom->ProcessCollision();
-	//for (auto outerLoop = subscriptions.begin(); outerLoop != subscriptions.end(); outerLoop++)
-	//{
-	//	for (auto innerLoop = outerLoop->second.begin(); innerLoop != outerLoop->second.end(); innerLoop++)
-	//	{
-	//		gom->DoCollision(*innerLoop);
-	//
-	//
-	//		//Last option fix
-	//		//if ((*innerLoop)->isActive)
-	//		//	gom->DoCollision(*innerLoop);
-	//	}
-	//}
-	
-	//__int64 endTime;
-	//QueryPerformanceCounter((LARGE_INTEGER*)&endTime);
-	//std::cout << endTime - currentTime << std::endl;
 }

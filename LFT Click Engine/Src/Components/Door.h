@@ -1,11 +1,11 @@
 #pragma once
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	AnimationHelper.h
+// File Name		:	Door.h
 // Author			:	Vance Howald
 // Creation Date	:	2021/12/10
-// Purpose			:	Animates grabables
-// History			: 
+// Purpose			:	Door object to keep zombies out
+// History			:
 // ---------------------------------------------------------------------------
 
 #include "GameObject.h"

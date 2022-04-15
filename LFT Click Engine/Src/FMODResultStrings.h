@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	FMODResultStrings.h
+// Author			:	Christian Fitch
+// Creation Date	:	2022/02/20
+// Purpose			:	Event Handling 
+// History			:
+// ---------------------------------------------------------------------------
 #pragma once
 
 #include <map>

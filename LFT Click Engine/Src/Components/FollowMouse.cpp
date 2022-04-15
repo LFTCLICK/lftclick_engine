@@ -1,9 +1,9 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	Gun.cpp
+// File Name		:	FollowMouse.cpp
 // Author			:	Chris Fitch
-// Creation Date	:	2022/02/24
-// Purpose			:	Contains functions for firing bullets
+// Creation Date	:	2022/02/20
+// Purpose			:	Camera mouse following script
 // History			: 
 // ---------------------------------------------------------------------------
 #include "pch.h"

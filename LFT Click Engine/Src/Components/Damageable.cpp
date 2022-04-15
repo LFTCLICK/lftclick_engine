@@ -1,9 +1,9 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	AnimationHelper.cpp
-// Author			:	Vance Howald
+// File Name		:	Damageable.cpp
+// Author			:	Christian Fitch
 // Creation Date	:	2021/12/10
-// Purpose			:	Animates grabables
+// Purpose			:	Comp for handling damage
 // History			:
 // ---------------------------------------------------------------------------
 #include "pch.h"
