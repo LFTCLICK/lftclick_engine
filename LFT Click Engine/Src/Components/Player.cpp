@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	Player.cpp
+// Author			:	Vance Howald
+// Creation Date	:	2021/2/13
+// Purpose			:	Main player
+// History			:
+// ---------------------------------------------------------------------------
 #include "pch.h"
 #include "Player.h"
 #include "GameManager.h"

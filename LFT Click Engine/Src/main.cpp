@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
 // File Name		:	main.cpp
-// Author			:	Vance Howald
+// Author			:	Vance Howald, Christian Fitch, Rohit Punjabi, and Abhijit Zala
 // Creation Date	:	2021/10/06
 // Purpose			:	main game loop
 // ---------------------------------------------------------------------------

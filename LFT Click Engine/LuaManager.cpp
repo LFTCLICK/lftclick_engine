@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	LuaManager.cpp
+// Author			:	Rohit Punjabi
+// Creation Date	:	03/13/2022
+// Purpose			:	Takes care of binding LUA functions
+// History			: 
+// ---------------------------------------------------------------------------
 #include "pch.h"
 #include "LuaManager.h"
 

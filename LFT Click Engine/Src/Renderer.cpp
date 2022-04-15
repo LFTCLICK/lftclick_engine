@@ -1,8 +1,8 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
 // File Name		:	Renderer.cpp
-// Author			:	Abhijit Zala
-// Creation Date	:	
+// Author			:	Abhijit Zala 
+// Creation Date	:	2022/03/14
 // Purpose			:	DX11 Rendering stuff
 // ---------------------------------------------------------------------------
 #include "pch.h"

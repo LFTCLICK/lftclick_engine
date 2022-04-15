@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	SpriteAnimator.cpp
+// Author			:	Vance Howald
+// Creation Date	:	2021/2/13
+// Purpose			:	Animator
+// History			: 
+// ---------------------------------------------------------------------------
 #include "pch.h"
 #include "SpriteAnimator.h"
 #include "FrameRateController.h"

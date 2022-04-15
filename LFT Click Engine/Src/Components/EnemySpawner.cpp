@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	Enemy.h
+// Author			:	Vance Howald
+// Creation Date	:	2022/03/09
+// Purpose			:	Zombie/ghost script
+// History			:
+// ---------------------------------------------------------------------------
 #include "pch.h"
 #include "EnemySpawner.h"
 #include "./FrameRateController.h"

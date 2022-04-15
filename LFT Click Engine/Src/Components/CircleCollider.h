@@ -1,7 +1,15 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	CircleCollider.h
+// Author			:	Rohit Punjabi and Vance Howald
+// Creation Date	:	2022/02/25
+// Purpose			:	Circle collider handling
+// History			:
+// ---------------------------------------------------------------------------
 #pragma once
 #include "Collider.h"
 #include "GameObject.h"
-#include "Camera.h"
+#include "Camera.h" 
 #include <json.hpp>
 #include <DirectXMath.h>
 #include <vector>

@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	Door.cpp
+// Author			:	Vance Howald
+// Creation Date	:	2021/12/10
+// Purpose			:	Door object to keep zombies out
+// History			:
+// ---------------------------------------------------------------------------
 #include "pch.h"
 #include "Door.h"
 #include "FrameRateController.h"
