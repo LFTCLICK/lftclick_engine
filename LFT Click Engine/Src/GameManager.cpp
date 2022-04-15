@@ -127,7 +127,7 @@ void GameManager::UpdateTime()
 	}
 	else
 	{
-		darknessLevel = 0;
+
 	}
 
 	static float fadeInTimer = 0.0f;

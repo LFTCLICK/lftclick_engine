@@ -247,6 +247,9 @@ void Renderer::Draw(const FLOAT* clearColor)
 	UINT offset = 0;
 
 	//Bind offscreen texture
+	ID3D11ShaderResourceView* nullSRV = nullptr;
+	immediateContext->PSSetShaderResources(0, 1, &nullSRV);
+
 	immediateContext->OMSetRenderTargets(1, renderToTextureRTV.GetAddressOf(), depthStencilView.Get());
 	immediateContext->ClearRenderTargetView(renderToTextureRTV.Get(), clearColor);
 	immediateContext->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
