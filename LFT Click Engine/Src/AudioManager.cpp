@@ -218,6 +218,33 @@ void AudioManager::SetVolume(int channelID, float volume) {
 		CheckResult(__func__, channel->second->setVolume(volume / VOLUME_DIV));
 }
 
+// Sets whether a channel group is muted.
+void AudioManager::SetMute(int channelID, bool muted) {
+	auto channel = engine->channels.find(channelID);
+	if (channel != engine->channels.end())
+		CheckResult(__func__, channel->second->setMute(muted));
+}
+
+// Mutes a channel group.
+void AudioManager::Mute(int channelID) {
+	SetMute(channelID, true);
+}
+
+// Unmutes a channel group.
+void AudioManager::Unmute(int channelID) {
+	SetMute(channelID, false);
+}
+
+// Returns whether a channel group is muted.
+bool AudioManager::IsMuted(int channelID) {
+	auto channel = engine->channels.find(channelID);
+	bool muted = false;
+	if (channel != engine->channels.end())
+		CheckResult(__func__, channel->second->getMute(&muted));
+
+	return muted;
+}
+
 // Gets the channel's world position.
 DirectX::SimpleMath::Vector2 AudioManager::GetSpatialPosition(int channelID) {
 	FMOD_VECTOR position = { 0, 0, 0 }, velocity = { 0, 0, 0 };
@@ -347,6 +374,59 @@ void AudioManager::SetGroupVolume(std::string channelGroupName, float volume) {
 	auto channelGroup = engine->channelGroups.find(channelGroupName);
 	if (channelGroup != engine->channelGroups.end())
 		CheckResult(__func__, channelGroup->second->setVolume(volume / VOLUME_DIV));
+}
+
+// Sets whether a channel group is muted.
+void AudioManager::SetGroupMute(std::string channelGroupName, bool muted) {
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	if (channelGroup != engine->channelGroups.end())
+		CheckResult(__func__, channelGroup->second->setMute(muted));
+}
+
+// Mutes a channel group.
+void AudioManager::MuteGroup(std::string channelGroupName) {
+	SetGroupMute(channelGroupName, true);
+}
+
+// Unmutes a channel group.
+void AudioManager::UnmuteGroup(std::string channelGroupName) {
+	SetGroupMute(channelGroupName, false);
+}
+
+// Returns whether a channel group is muted.
+bool AudioManager::IsGroupMuted(std::string channelGroupName) {
+	auto channelGroup = engine->channelGroups.find(channelGroupName);
+	bool muted = false;
+	if (channelGroup != engine->channelGroups.end())
+		CheckResult(__func__, channelGroup->second->getMute(&muted));
+
+	return muted;
+}
+
+// Sets whether a channel group is muted.
+void AudioManager::SetMasterMute(bool muted) {
+	FMOD::ChannelGroup *masterChannelGroup;
+	engine->system->getMasterChannelGroup(&masterChannelGroup);
+	CheckResult(__func__, masterChannelGroup->setMute(muted));
+}
+
+// Mutes a channel group.
+void AudioManager::MuteMaster() {
+	SetMasterMute(true);
+}
+
+// Unmutes a channel group.
+void AudioManager::UnmuteMaster() {
+	SetMasterMute(false);
+}
+
+// Returns whether a channel group is muted.
+bool AudioManager::IsMasterMuted() {
+	FMOD::ChannelGroup* masterChannelGroup;
+	bool muted = false;
+	engine->system->getMasterChannelGroup(&masterChannelGroup);
+	CheckResult(__func__, masterChannelGroup->getMute(&muted));
+	return muted;
 }
 
 // Returns the channel group's world position.

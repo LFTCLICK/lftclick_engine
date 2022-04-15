@@ -80,7 +80,10 @@ public:
     bool IsPaused(int channelID);
     float GetVolume(int channelID);
     void SetVolume(int channelID, float volume);
-    void Mute(int channelID) { SetVolume(channelID, 0); }
+    void SetMute(int channelID, bool muted);
+    void Mute(int channelID);
+    void Unmute(int channelID);
+    bool IsMuted(int channelID);
     DirectX::SimpleMath::Vector2 GetSpatialPosition(int channelID);
     void SetSpatialPosition(int channelID, float posX, float posY, float velX = 0, float velY = 0);
     void SetSpatialPosition(int channelID, DirectX::SimpleMath::Vector2 position, DirectX::SimpleMath::Vector2 velocity = { 0, 0 });
@@ -110,7 +113,14 @@ public:
     bool IsGroupPaused(std::string channelGroupName);
     float GetGroupVolume(std::string channelGroupName);
     void SetGroupVolume(std::string channelGroupName, float volume);
-    void MuteGroup(std::string channelGroupName) { SetGroupVolume(channelGroupName, 0); }
+    void SetGroupMute(std::string channelGroupName, bool muted);
+    void MuteGroup(std::string channelGroupName);
+    void UnmuteGroup(std::string channelGroupName);
+    bool IsGroupMuted(std::string channelGroupName);
+    void SetMasterMute(bool muted);
+    void MuteMaster();
+    void UnmuteMaster();
+    bool IsMasterMuted();
     DirectX::SimpleMath::Vector2 GetGroupSpatialPosition(std::string channelGroupName);
     void SetGroupSpatialPosition(std::string channelGroupName, float posX, float posY, float velX = 0, float velY = 0);
     void SetGroupSpatialPosition(std::string channelGroupName, DirectX::SimpleMath::Vector2 position, DirectX::SimpleMath::Vector2 velocity = { 0, 0 });
