@@ -110,7 +110,7 @@
         "stopEvents": [
           2000
         ],
-        "startTime": 0,
+        "startTime": 56.5,
         "isMusic": true
       },
       {
@@ -124,7 +124,7 @@
           2000
         ],
         "scaleVolumeWithDanger": true,
-        "startTime": 0,
+        "startTime": 56.5,
         "isMusic": true
       },
       {

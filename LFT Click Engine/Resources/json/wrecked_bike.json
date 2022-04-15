@@ -3,9 +3,9 @@
     "startX": 60.0,
     "startY": 120.0,
     "scaleX": 120,
-    "scaleY": 120,
+    "scaleY": 240,
     "rot": 0,
-    "zPos": 10
+    "zPos": 90
   },
   "2": {
     "onlyUVOverrides": false,
@@ -30,6 +30,6 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "image": "Resources\\images\\junk_sprite_sheet.png"
+    "image": "Resources\\images\\wrecked_bike.png"
   }
 }

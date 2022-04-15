@@ -378,6 +378,7 @@ int main(int argc, char* args[])
 		case EGameLevel::SurvivalLevel:
 		case EGameLevel::SideScrollerLevel:
 		case EGameLevel::Pausemenu:
+
 			g_GameManager->fadeFactor = 0.0f;
 			g_Renderer->disableDarkness = false;
 
