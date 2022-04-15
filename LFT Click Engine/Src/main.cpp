@@ -109,6 +109,7 @@ int main(int argc, char* args[])
 	g_GameManager->LoadLevel(introJson2, EGameLevel::Intro);
 	int currentImage = 0;
 	float timer = 0;
+	bool muteToggle;
 	g_GameObjManager->FindObjectOfTag("FMOD_logo")->isOnScreen = false;
 	g_GameObjManager->FindObjectOfTag("digi_logo")->isOnScreen = true;
 	while (e.type != SDL_QUIT)
@@ -301,6 +302,40 @@ int main(int argc, char* args[])
 			g_Renderer->Draw(DirectX::Colors::Black);
 			break;
 
+
+		case EGameLevel::OptionsScreen:
+			while (ShowCursor(true) < 0); // Shows cursor
+
+			g_GameManager->fadeFactor = 1.0f;
+			
+			ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(g_Renderer->GetHeight()) / 2));
+			ImGui::Begin("menu", nullptr,
+				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
+				| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
+
+
+			muteToggle = g_AudioManager->IsMasterMuted();
+			ImGui::Checkbox("Mute audio", &muteToggle);
+			if (muteToggle != g_AudioManager->IsMasterMuted())
+			{
+				g_AudioManager->SetMasterMute(muteToggle);
+			}
+			muteToggle = false;
+			ImGui::Checkbox("Fullscreen Toggle", &muteToggle);
+			if (muteToggle != false)
+			{
+				//change the thingy
+			}
+
+			if (ImGui::Button("Back", { 100,50 }))
+			{
+				g_GameManager->currentLevel = g_GameManager->prevLevel;
+			}
+
+			ImGui::End();
+
+			g_Renderer->Draw(DirectX::Colors::Black);
+			break;
 		case EGameLevel::ControlScreen:
 			while (ShowCursor(true) < 0); // Shows cursor
 
@@ -394,6 +429,12 @@ int main(int argc, char* args[])
 				{
 					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::Mainmenu;
+				}
+
+				if (ImGui::Button("Options", { 100,50 }))
+				{
+					g_GameManager->prevLevel = g_GameManager->currentLevel;
+					g_GameManager->currentLevel = EGameLevel::OptionsScreen;
 				}
 
 				if (ImGui::Button("Credits", { 100,50 }))

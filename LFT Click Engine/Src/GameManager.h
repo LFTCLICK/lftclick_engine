@@ -94,7 +94,8 @@ enum class EGameLevel
 	SurvivalLevel,
 	SideScrollerLevel,
 	CreditsScreen,
-	ControlScreen
+	ControlScreen,
+	OptionsScreen
 };
 
 struct TimedMessage 
