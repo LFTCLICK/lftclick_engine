@@ -131,7 +131,10 @@ public:
 		spawnIntervalMin(NIGHTTIME_SPAWN_INTERVAL_MIN),
 		spawnIntervalMax(NIGHTTIME_SPAWN_INTERVAL_MAX),
 		menuMusicName(""),
-		outdoorScaryMessagePlayed(true)
+		outdoorScaryMessagePlayed(true),
+		buttonClickSoundName("none"),
+		godMode(false),
+		playerPos{0, 0}
 	{}
 	~GameManager() = default;
 
@@ -183,11 +186,13 @@ public:
 	TimedMessage GetPlayerMessage();
 
 	void SetMenuMusic(std::string name, float volume);
+	void SetButtonClickSound(std::string name, float volume);
 
 	void PauseLevelAudio();
 	void UnpauseLevelAudio();
 	void PlayMenuMusic();
-	void StopMenuMusic();
+	void StopMenuMusic(); 
+	void PlayButtonClick();
 
 public:
 	GameObject* playerObj;
@@ -196,6 +201,7 @@ public:
 	bool playerInsideHouse;
 	bool isPlayerInsideCabin;
 	bool outdoorScaryMessagePlayed;
+	bool godMode;
 	float darknessLevel;
 	float rednessFactor;
 	float fadeFactor;
@@ -212,6 +218,7 @@ public:
 	Camera* mainCamera;
 	Transform* playerTrans;
 
+	DirectX::SimpleMath::Vector2 playerPos;
 	DirectX::SimpleMath::Rectangle cabinRect = DirectX::SimpleMath::Rectangle(-1000.0f, -920.0f, 1880.0f, 1930.0f);
 
 	int day;
@@ -236,6 +243,7 @@ public:
 	//std::queue<std::string> daytimeSwitchMessages[MESSAGE_POSSIBILITIES]
 
 	std::string menuMusicName;
+	std::string buttonClickSoundName;
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

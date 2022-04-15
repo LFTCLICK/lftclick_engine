@@ -263,16 +263,20 @@ int main(int argc, char* args[])
 
 			if (ImGui::Button("Play", { 100,50 }))
 			{
+
+				g_GameManager->PlayButtonClick();
 				g_GameManager->LoadLevel(dataJsonSurvival, EGameLevel::SurvivalLevel);
 			}
 			if (ImGui::Button("Controls", { 100,50 }))
 			{
+				g_GameManager->PlayButtonClick();
 				g_GameManager->prevLevel = g_GameManager->currentLevel;
 				g_GameManager->currentLevel = EGameLevel::ControlScreen;
 			}
 
 			if (ImGui::Button("Quit", { 100, 50 }))
 			{
+				g_GameManager->PlayButtonClick();
 				e.type = SDL_QUIT;
 			}
 
@@ -298,6 +302,7 @@ int main(int argc, char* args[])
 			
 			if (ImGui::Button("Back", { 100,50 }))
 			{
+				g_GameManager->PlayButtonClick();
 				g_GameManager->currentLevel = g_GameManager->prevLevel;
 				g_GameObjManager->FindObjectOfTag("credits")->isActive = false;
 			}
@@ -344,6 +349,7 @@ int main(int argc, char* args[])
 
 			if (ImGui::Button("Back", { 100,50 }))
 			{
+				g_GameManager->PlayButtonClick();
 				g_GameManager->currentLevel = g_GameManager->prevLevel;
 			}
 
@@ -368,6 +374,7 @@ int main(int argc, char* args[])
 
 			if (ImGui::Button("Back", { 100,50 }))
 			{
+				g_GameManager->PlayButtonClick();
 				g_GameManager->currentLevel = g_GameManager->prevLevel;
 			}
 
@@ -418,6 +425,7 @@ int main(int argc, char* args[])
 		
 						if (ImGui::Button("Proceed!", { 100, 50 }))
 						{
+							g_GameManager->PlayButtonClick();
 							g_FrameRateController->zeroDeltaTime = false;
 							g_GameManager->LoadLevel(dataJsonSideScroller, EGameLevel::SideScrollerLevel);
 						}
@@ -426,6 +434,7 @@ int main(int argc, char* args[])
 					{
 						if (ImGui::Button("Restart", { 100,50 }))
 						{
+							g_GameManager->PlayButtonClick();
 							g_FrameRateController->zeroDeltaTime = false;
 							g_GameManager->LoadLevel(dataJsonSurvival, g_GameManager->prevLevel); //current level is the pause menu
 						}
@@ -435,6 +444,7 @@ int main(int argc, char* args[])
 				{
 					if (ImGui::Button("Continue", { 100, 50 }))
 					{
+						g_GameManager->PlayButtonClick();
 						g_GameManager->prevLevel = g_GameManager->currentLevel;
 						g_GameManager->currentLevel = EGameLevel::SurvivalLevel;
 						g_FrameRateController->zeroDeltaTime = false;
@@ -443,18 +453,21 @@ int main(int argc, char* args[])
 
 				if (ImGui::Button("Main Menu", { 100,50 }))
 				{
+					g_GameManager->PlayButtonClick();
 					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::Mainmenu;
 				}
 
 				if (ImGui::Button("Options", { 100,50 }))
 				{
+					g_GameManager->PlayButtonClick();
 					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::OptionsScreen;
 				}
 
 				if (ImGui::Button("Credits", { 100,50 }))
 				{
+					g_GameManager->PlayButtonClick();
 					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::CreditsScreen;
 
@@ -462,12 +475,14 @@ int main(int argc, char* args[])
 				
 				if (ImGui::Button("Controls", { 100,50 }))
 				{
+					g_GameManager->PlayButtonClick();
 					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::ControlScreen;
 				}
 
 				if (ImGui::Button("Quit", { 100, 50 }))
 				{
+					g_GameManager->PlayButtonClick();
 					e.type = SDL_QUIT;
 				}
 

@@ -15,11 +15,10 @@
 // FMOD Engine constructor.
 FMODEngine::FMODEngine() : system(nullptr) {
 	FMOD::System_Create(&system);
-	FMOD::ChannelGroup *musicMasterChannelGroup, *menuMusicMasterChannelGroup, *sfxMasterChannelGroup, *masterChannelGroup;
+	FMOD::ChannelGroup *musicMasterChannelGroup, *menuMusicMasterChannelGroup, *sfxMasterChannelGroup, *buttonClickMasterChannelGroup;
 
 	void* extraDriverData = nullptr;
 	system->init(2047, FMOD_INIT_NORMAL, extraDriverData);
-	system->getMasterChannelGroup(&masterChannelGroup);
 
 	system->set3DSettings(1.f, 1000000.f, 1.f);
 
@@ -35,6 +34,10 @@ FMODEngine::FMODEngine() : system(nullptr) {
 	sfxMasterChannelGroup->setMode(FMOD_3D | FMOD_CREATECOMPRESSEDSAMPLE | FMOD_LOOP_OFF);
 	channelGroups[SFX_MASTER_CHANNEL_GROUP] = sfxMasterChannelGroup;
 	sfxMasterChannelGroup->set3DAttributes({ 0 }, { 0 });
+
+	system->createChannelGroup(BUTTON_CLICK_MASTER_CHANNEL_GROUP.c_str(), &buttonClickMasterChannelGroup);
+	buttonClickMasterChannelGroup->setMode(FMOD_3D | FMOD_CREATESAMPLE | FMOD_LOOP_OFF);
+	channelGroups[BUTTON_CLICK_MASTER_CHANNEL_GROUP] = buttonClickMasterChannelGroup;
 }
 
 // FMOD Engine destructor.
@@ -403,24 +406,30 @@ bool AudioManager::IsGroupMuted(std::string channelGroupName) {
 	return muted;
 }
 
-// Sets whether a channel group is muted.
+// Mutes/Unmutes the music channel groups.
+void AudioManager::ToggleMuteMusic() {
+	SetGroupMute(MUSIC_MASTER_CHANNEL_GROUP, !IsGroupMuted(MUSIC_MASTER_CHANNEL_GROUP));
+	SetGroupMute(MENU_MUSIC_MASTER_CHANNEL_GROUP, !IsGroupMuted(MENU_MUSIC_MASTER_CHANNEL_GROUP));
+}
+
+// Sets whether the master channel group is muted.
 void AudioManager::SetMasterMute(bool muted) {
 	FMOD::ChannelGroup *masterChannelGroup;
 	engine->system->getMasterChannelGroup(&masterChannelGroup);
 	CheckResult(__func__, masterChannelGroup->setMute(muted));
 }
 
-// Mutes a channel group.
+// Mutes the master channel group.
 void AudioManager::MuteMaster() {
 	SetMasterMute(true);
 }
 
-// Unmutes a channel group.
+// Unmutes the master channel group.
 void AudioManager::UnmuteMaster() {
 	SetMasterMute(false);
 }
 
-// Returns whether a channel group is muted.
+// Returns whether the master channel group is muted.
 bool AudioManager::IsMasterMuted() {
 	FMOD::ChannelGroup* masterChannelGroup;
 	bool muted = false;

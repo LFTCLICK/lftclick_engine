@@ -84,7 +84,7 @@ Component* Damageable::Clone(GameObject* newParent)
 
 void Damageable::HandleMessage(Message* e) {
 	if (e->otherObject->componentOwner->tag == "bullet")
-		TakeDamage(1);
+		TakeDamage(g_GameManager->godMode ? 2 : 1);
 }
 
 void Damageable::TakeDamage(int damage) {

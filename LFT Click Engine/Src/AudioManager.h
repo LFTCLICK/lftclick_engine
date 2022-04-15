@@ -24,6 +24,7 @@
 #define MUSIC_MASTER_CHANNEL_GROUP std::string("musicMasterChannelGroup")
 #define MENU_MUSIC_MASTER_CHANNEL_GROUP std::string("menuMusicMasterChannelGroup")
 #define SFX_MASTER_CHANNEL_GROUP std::string("sfxMasterChannelGroup")
+#define BUTTON_CLICK_MASTER_CHANNEL_GROUP std::string("buttonClickMasterChannelGroup")
 
 #define VOLUME_DIV 100.f
 #define POSITION_DIV 250.f
@@ -118,6 +119,7 @@ public:
     void UnmuteGroup(std::string channelGroupName);
     bool IsGroupMuted(std::string channelGroupName);
     void SetMasterMute(bool muted);
+    void ToggleMuteMusic();
     void MuteMaster();
     void UnmuteMaster();
     bool IsMasterMuted();
