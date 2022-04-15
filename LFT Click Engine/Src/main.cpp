@@ -112,6 +112,8 @@ int main(int argc, char* args[])
 	bool muteToggle;
 	g_GameObjManager->FindObjectOfTag("FMOD_logo")->isOnScreen = false;
 	g_GameObjManager->FindObjectOfTag("digi_logo")->isOnScreen = true;
+	g_FrameRateController->Tick();
+	g_FrameRateController->Tick();
 	while (e.type != SDL_QUIT)
 	{
 		SDL_PollEvent(&e);
@@ -131,14 +133,14 @@ int main(int argc, char* args[])
 		g_Renderer->PrepareForRendering();
 
 		timer += g_FrameRateController->DeltaTime();
-		if (currentImage == 0 && timer >= 2.0f)
+		if (currentImage == 0 && timer >= 3.0f)
 		{
 			currentImage++;
 			g_GameObjManager->FindObjectOfTag("FMOD_logo")->isOnScreen = true;
 			g_GameObjManager->FindObjectOfTag("digi_logo")->isOnScreen = false;
 			//switch
 		}
-		if (currentImage == 1 && timer >= 4.0f)
+		if (currentImage == 1 && timer >= 5.0f)
 		{
 			g_InputManager->Update();
 			//g_GameObjManager->Update();
@@ -155,6 +157,19 @@ int main(int argc, char* args[])
 		//g_AudioManager->Update();
 		//g_GameManager->Update();
 		g_InputManager->Update();
+		if (g_InputManager->isKeyTriggered(SDL_SCANCODE_SPACE) || g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE) || g_InputManager->isKeyTriggered(SDL_SCANCODE_KP_ENTER) || g_InputManager->isKeyTriggered(SDL_SCANCODE_RETURN) || g_InputManager->isMouseButtonTriggered(0) || g_InputManager->isMouseButtonTriggered(1))
+		{
+			g_InputManager->Update();
+			//g_GameObjManager->Update();
+			//g_EventManager->Update();
+			//g_LuaManager->Update();
+
+			g_GameObjManager->Draw();
+			g_Renderer->Draw(DirectX::Colors::Black);
+
+			g_Renderer->PresentFrame();
+			break;
+		}
 		//g_GameObjManager->Update();
 		//g_EventManager->Update();
 		//g_LuaManager->Update();
