@@ -141,6 +141,7 @@ Component* Interactable::Clone(GameObject* newParent)
 	toReturn->totalPhases = totalPhases;
 	toReturn->hpPerPhase = hpPerPhase;
 	toReturn->hasParts = hasParts;
+	toReturn->isMotorcycle = isMotorcycle;
 	return (Component*)toReturn;
 }
 
@@ -153,6 +154,7 @@ void Interactable::Deserialize(nlohmann::json j, GameObject* componentOwner)
 	if (j.contains("totalPhases")) totalPhases = j["totalPhases"];
 	if (j.contains("hpPerPhase")) hpPerPhase = j["hpPerPhase"];
 	if (j.contains("hasParts")) hasParts = j["hasParts"];
+	if (j.contains("isMotorcycle")) isMotorcycle = j["isMotorcycle"];
 }
 
 

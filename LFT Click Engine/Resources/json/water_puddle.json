@@ -2,10 +2,10 @@
   "1": {
     "startX": 0.0,
     "startY": 0.0,
-    "scaleX": 1000,
-    "scaleY": 1000,
+    "scaleX": 240,
+    "scaleY": 180,
     "rot": 0,
-    "zPos": 10
+    "zPos": 25
   },
   "2": {
     "onlyUVOverrides": false,
@@ -30,11 +30,14 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "image": "Resources\\images\\credits.png"
+    "image": "Resources\\images\\water_puddle.png"
   },
-  "106": {
-    "startingPos": [0.0, -300.0],
-    "scrollSpeed": 60.0,
-    "endingY": 500
+  "4": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "width": 200,
+    "height": 80,
+    "trigger": true,
+    "static": false,
+    "deleteOnCollison": false
   }
 }

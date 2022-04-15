@@ -11,26 +11,52 @@
 #include "FrameRateController.h"
 #include "Renderer.h"
 #include "GameObjectManager.h"
+#include "EventManager.h"
+#include "Components/Player.h"
 
 void GameManager::LoadLevel(json file, EGameLevel toSet)
 {
 	g_GameObjManager->DeleteAll();
 	g_GameObjManager->Deserialize(g_GameObjFactory.get(), file);
 	this->currentLevel = toSet;
-	if (toSet == EGameLevel::Level0)
+	this->prevLevel = toSet;
+
+	if (toSet == EGameLevel::SideScrollerLevel)
 	{
 		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		Player* playerComp = playerObj->getComponent<Player>();
+
+		playerComp->collectibleparts = playerComp->collectibleWood = 0;
+		playerComp->autopilot = true;
+
 		this->playerObj = playerObj;
 		this->mainCamera = playerObj->getComponent<Camera>();
 		this->playerTrans = playerObj->getComponent<Transform>();
+		
 		this->time = 0;
 
 		g_FrameRateController->zeroDeltaTime = false;
+		playerDead = false;
+	}
+	if (toSet == EGameLevel::SurvivalLevel)
+	{
+		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		Player* playerComp = playerObj->getComponent<Player>();
 
+		this->playerObj = playerObj;
+		this->mainCamera = playerObj->getComponent<Camera>();
+		this->playerTrans = playerObj->getComponent<Transform>();
+		playerComp->collectibleparts = playerComp->collectibleWood = 0;
+		this->time = 0;
+
+		g_FrameRateController->zeroDeltaTime = false;
 		playerDead = false;
 
-		PushPlayerMessage("Ugh, where am I?", 3.f);
-		PushPlayerMessage("This place smells terrible.", 3.f);
+		PushPlayerMessage("Ugh, where am I?", 2.f);
+		PushPlayerMessage("This place smells terrible.", 2.f);
+		PushPlayerMessage("Who the heck would build a cabin this far out?", 2.f);
+
+		outdoorScaryMessagePlayed = false;
 	}
 }
 
@@ -47,11 +73,28 @@ TimedMessage GameManager::GetPlayerMessage()
 }
 
 void GameManager::Update() {
+	//std::cout << g_AudioManager->GetGroupVolume(MUSIC_MASTER_CHANNEL_GROUP) << std::endl;
+	UpdateCheats();
 	UpdateTime();
 	UpdateDanger();
 	UpdateLevel();
 	UpdateInsideHouse();
 	UpdateSpawners();
+	if (currentLevel == EGameLevel::SideScrollerLevel)
+		SideScrollerObjectDestroyer();
+}
+
+
+void GameManager::UpdateCheats()
+{
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F3)) {
+		if (time < SUN_DOWN)
+			time = SUN_DOWN;
+		else if (time < SUN_UP)
+			time = SUN_UP;
+		else
+			time = DAY_LENGTH;
+	}
 }
 
 #include <cmath>
@@ -75,11 +118,17 @@ void GameManager::UpdateTime()
 	float oldDarknessLevel = darknessLevel;
 	bool wasNightTime = IsNightTime();
 
-
-	if (time < SUN_RISING) darknessLevel = 1;
-	else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
-	else if (time < SUN_SETTING) darknessLevel = 0;
-	else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+	if (currentLevel == EGameLevel::SurvivalLevel)
+	{
+		if (time < SUN_DOWN) darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+		else if (time < SUN_RISING) darknessLevel = 1;
+		else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
+		else  darknessLevel = 0;
+	}
+	else
+	{
+		darknessLevel = 0;
+	}
 
 	static float fadeInTimer = 0.0f;
 	static float fadeOutTimer = 0.0f;
@@ -117,7 +166,6 @@ void GameManager::UpdateTime()
 	}
 
 	if (!wasNightTime && IsNightTime()) {
-		//Helpers::randWithinRange(0, )
 		PushPlayerMessage("Oh no, daylight's fading...");
 
 		if (playerInsideHouse) {
@@ -148,10 +196,12 @@ void GameManager::UpdateTime()
 			}
 			PushPlayerMessage("I hope I still have time to bar the doors!", 1.5f);
 		}
-		PushPlayerMessage("I saw some piles of junk outside...");
-		PushPlayerMessage("Maybe I can find some motorcycle parts?");
-		PushPlayerMessage("If I can repair my bike,", 2.f);
-		PushPlayerMessage("maybe there's a chance I get out of here alive!");
+	}
+
+	if (!outdoorScaryMessagePlayed && IsNightTime() && !playerInsideHouse && messageQueue.empty()) {
+		PushPlayerMessage("They seem to flock to me if I go out at night!", 1.5f);
+		PushPlayerMessage("I think I should stay inside right now!", 1.5f);
+		outdoorScaryMessagePlayed = true;
 	}
 }
 
@@ -162,8 +212,22 @@ void GameManager::UpdateDanger()
 
 void GameManager::UpdateLevel() 
 {
-	if (playerDead && currentLevel != EGameLevel::Mainmenu)
+	if (playerDead && currentLevel != EGameLevel::Mainmenu) {
 		currentLevel = EGameLevel::Pausemenu;
+	}
+
+	if (prevFrameLevel != currentLevel) {
+		if (currentLevel == EGameLevel::Pausemenu) {
+			PauseLevelAudio();
+			PlayMenuMusic();
+		}
+		if (prevFrameLevel == EGameLevel::Pausemenu) {
+			UnpauseLevelAudio();
+			StopMenuMusic();
+		}
+	}
+
+	prevFrameLevel = currentLevel;
 }
 
 void GameManager::UpdateInsideHouse()
@@ -200,6 +264,35 @@ void GameManager::UpdateSpawners()
 
 		if (spawnTimer < MIN_TIME_BETWEEN_SPAWNS) 
 			spawnTimer = MIN_TIME_BETWEEN_SPAWNS;
+	}
+}
+
+void GameManager::SideScrollerObjectDestroyer()
+{
+	auto objIt = g_GameObjManager->gameObjectList.begin();
+
+	while (objIt != g_GameObjManager->gameObjectList.end())
+	{
+		GameObject* toCheckObject = *objIt;
+		Transform* toCheckObjectTransform = toCheckObject->getComponent<Transform>();
+
+		if (toCheckObject->tag == "wall" || toCheckObject->tag == "bullet")
+		{
+			break;
+		}
+		else
+		{
+			if (playerObj == nullptr)
+			{
+				return;
+			}
+			else if (toCheckObjectTransform->position.x < playerObj->getComponent<Transform>()->position.x - 800)
+			{
+				toCheckObject->isDeletable = true;
+			}
+		}
+		
+		objIt++;
 	}
 }
 
@@ -266,4 +359,26 @@ bool GameManager::IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos)
 		pos.x > HOUSE_POS.x - halfHouseScale.x &&
 		pos.y < HOUSE_POS.y + halfHouseScale.y &&
 		pos.y > HOUSE_POS.y - halfHouseScale.y;
+}
+
+void GameManager::SetMenuMusic(std::string name, float volume) {
+	menuMusicName = name;
+	g_AudioManager->SetGroupVolume(MENU_MUSIC_MASTER_CHANNEL_GROUP, volume);
+	g_AudioManager->LoadSound(menuMusicName, true, false, false);
+}
+
+void GameManager::PauseLevelAudio() {
+	g_AudioManager->PauseGroup(MUSIC_MASTER_CHANNEL_GROUP);
+	g_AudioManager->PauseGroup(SFX_MASTER_CHANNEL_GROUP);
+}
+void GameManager::UnpauseLevelAudio() {
+	g_AudioManager->UnpauseGroup(MUSIC_MASTER_CHANNEL_GROUP);
+	g_AudioManager->UnpauseGroup(SFX_MASTER_CHANNEL_GROUP);
+}
+void GameManager::PlayMenuMusic() {
+	g_AudioManager->PlaySound(menuMusicName, MENU_MUSIC_MASTER_CHANNEL_GROUP);
+	g_AudioManager->SetGroupSpatialPosition(MENU_MUSIC_MASTER_CHANNEL_GROUP, playerTrans->CurrentPos());
+}
+void GameManager::StopMenuMusic() {
+	g_AudioManager->StopGroup(MENU_MUSIC_MASTER_CHANNEL_GROUP);
 }

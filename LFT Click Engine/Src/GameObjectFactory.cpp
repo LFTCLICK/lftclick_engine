@@ -29,6 +29,7 @@
 #include "Components/WoodPile.h"
 #include "Components/LevelGenerator.h"
 #include "Components/Interactable.h"
+#include "Components/Vortex.h"
 #include "Components/ScrollingCredits.h"
 
 #include <json.hpp>
@@ -109,6 +110,8 @@ Component * const GameObjectFactory::CreateComp(json::iterator type, GameObject*
 		currentComp = new LevelGenerator();
 	else if (compID == Component::INTERACTABLE)
 		currentComp = new Interactable();
+	else if (compID == Component::VORTEX)
+		currentComp = new Vortex();
 	else if (compID == Component::CREDITS)
 		currentComp = new ScrollingCredits();
 

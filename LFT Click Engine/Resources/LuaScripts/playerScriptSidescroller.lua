@@ -24,7 +24,7 @@ playerSpeed = 350
 camSpeed = 375
 playerSpeedForSideScroller = 375
 
-autopilot = false
+autopilot = true
 
 -- returns player Hp
 function returnPlayerHp()

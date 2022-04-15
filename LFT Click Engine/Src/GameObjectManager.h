@@ -49,6 +49,7 @@ public:
 	void DoCollision(GameObject* toCheckWith);
 	void Deserialize(GameObjectFactory* gof, json j, bool isPrefab = false);
 	void AddGameObject(GameObject* go);
+	void PauseAllAudio();
 	void DeleteAll();
 	void DeleteObjectOfTag(std::string tag);
 	GameObject* ClonePrefabOfTag(GameObjectFactory* gof, std::string tag, bool skipStart = false);
@@ -66,7 +67,6 @@ public:
 
 private:
 	GameObjectFactory* gof;
-
 	// Gdiplus startup nonsense
 	ULONG_PTR gdiplusToken;
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;

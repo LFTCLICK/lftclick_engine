@@ -245,6 +245,8 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 		prefabList.push_back(returned);
 	}
 
+	if (j.contains("MenuMusic"))
+		g_GameManager->SetMenuMusic(j["MenuMusic"]["name"], j["MenuMusic"]["volume"]);
 
 	if (j.contains("Map"))
 	{

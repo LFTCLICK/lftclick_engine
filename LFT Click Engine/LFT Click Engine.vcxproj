@@ -299,6 +299,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Src\Components\Vortex.cpp" />
     <ClCompile Include="Src\Components\WoodPile.cpp" />
     <ClCompile Include="Src\DebugRenderer.cpp" />
     <ClCompile Include="Src\EventManager.cpp">
@@ -391,6 +392,7 @@
     <ClInclude Include="Src\Components\SpriteAnimator.h" />
     <ClInclude Include="Src\Components\SquareCollider.h" />
     <ClInclude Include="Src\Components\Transform.h" />
+    <ClInclude Include="Src\Components\Vortex.h" />
     <ClInclude Include="Src\Components\WoodPile.h" />
     <ClInclude Include="Src\ConstantBuffer.h" />
     <ClInclude Include="Src\DebugRenderer.h" />
@@ -449,9 +451,12 @@
     <None Include="Resources\json\grassTile.json" />
     <None Include="Resources\json\invin.json" />
     <None Include="Resources\json\junk.json" />
+    <None Include="Resources\json\junkForSideScroller.json" />
     <None Include="Resources\json\menu.json" />
     <None Include="Resources\json\player.json" />
     <None Include="Resources\json\prefabs.json" />
+    <None Include="Resources\json\road.json" />
+    <None Include="Resources\json\side_scroller.json" />
     <None Include="Resources\json\sign.json" />
     <None Include="Resources\json\slow.json" />
     <None Include="Resources\json\spike.json" />
@@ -460,14 +465,18 @@
     <None Include="Resources\json\title.json" />
     <None Include="Resources\json\tree.json" />
     <None Include="Resources\json\turret.json" />
+    <None Include="Resources\json\vortex.json" />
     <None Include="Resources\json\wall.json" />
+    <None Include="Resources\json\water_puddle.json" />
     <None Include="Resources\json\woodpile.json" />
+    <None Include="Resources\json\wrecked_bike.json" />
     <None Include="Resources\json\zombie.json" />
     <None Include="Resources\json\zombieSpawner.json" />
     <None Include="Resources\LuaScripts\ConfigurationScript.lua" />
     <None Include="Resources\LuaScripts\playerScript.lua" />
     <None Include="Resources\json\rug.json" />
     <None Include="Resources\json\table.json" />
+    <None Include="Resources\LuaScripts\playerScriptSidescroller.lua" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

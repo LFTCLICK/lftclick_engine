@@ -25,6 +25,11 @@
 #include <cassert>
 #include "AStarTerrain.h"
 
+#define POSITIVE_BOUND_X 6630.f
+#define POSITIVE_BOUND_Y 6630.f
+#define NEGATIVE_BOUND_X -6630.f
+#define NEGATIVE_BOUND_Y -6630.f
+
 class SquareCollider;
 
 
@@ -42,7 +47,7 @@ public:
 	virtual Component* Clone(GameObject* newParent);
 	Player() : isDashing(false), autopilot(false), damageFlashing(false), 
 		dashTime(0.2), damageCooldownTimer(2.f), dashTimer(0.0f), collectibleWood(0),
-		inertiaMod(100), hitDirection{0, 0}, hitSpeed(0) {};
+		inertiaMod(60), hitDirection{0, 0}, hitSpeed(0) {};
 
 	virtual void Deserialize(nlohmann::json j, GameObject* parent) override;
 
@@ -54,6 +59,7 @@ public:
 	void Sidescroll(float deltaTime);
 	bool IsAutopilot() { return autopilot; }
 
+	bool autopilot;
 	int collectibleWood, playerHealth, collectibleparts;
 	
 	//HUD animations
@@ -101,11 +107,11 @@ private:
 	SquareCollider* squareCollider;
 	float introTimer, inertiaMod, hitSpeed;
 
-	DirectX::SimpleMath::Vector2 dashVelocity, hitDirection;
+	DirectX::SimpleMath::Vector2 dashVelocity, hitDirection, positiveBound, negativeBound;
 	sol::function PlayerCollidedWithEnemy;
 	TimedMessage currentMessage;
-	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper;
-	bool isDashing, autopilot;
+	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper, playerSpeedForSideScroller, camSpeed;
+	bool isDashing, playerInPuddle;
 	
 	bool damageFlashing;
 };

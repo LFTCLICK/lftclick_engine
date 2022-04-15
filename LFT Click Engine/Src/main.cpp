@@ -168,9 +168,17 @@ int main(int argc, char* args[])
 
 	std::ifstream other("./Resources/json/survival.json");
 
-	json dataJson2;
-	other >> dataJson2;
+	json dataJsonSurvival;
+	other >> dataJsonSurvival;
 	other.close();
+
+	std::ifstream other2("./Resources/json/side_scroller.json");
+
+	json dataJsonSideScroller;
+	other2 >> dataJsonSideScroller;
+	other2.close();
+
+
 	//g_GameManager->LoadLevel(dataJson2, EGameLevel::Intro);
 
 	DX::ThrowIfFailed(
@@ -239,7 +247,7 @@ int main(int argc, char* args[])
 
 			if (ImGui::Button("Play", { 100,50 }))
 			{
-				g_GameManager->LoadLevel(dataJson2, EGameLevel::Level0);
+				g_GameManager->LoadLevel(dataJsonSurvival, EGameLevel::SurvivalLevel);
 			}
 			if (ImGui::Button("Controls", { 100,50 }))
 			{
@@ -317,18 +325,21 @@ int main(int argc, char* args[])
 
 			g_Renderer->Draw(DirectX::Colors::Black);
 			break;
-		case EGameLevel::Level0:
+		case EGameLevel::SurvivalLevel:
+		case EGameLevel::SideScrollerLevel:
 		case EGameLevel::Pausemenu:
 			g_GameManager->fadeFactor = 0.0f;
 			g_Renderer->disableDarkness = false;
 
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE))
 			{
-				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu))
+				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu)) {
 					g_GameManager->currentLevel = EGameLevel::Pausemenu;
+					g_FrameRateController->zeroDeltaTime = true;
+				}
 				else
 				{
-					g_GameManager->currentLevel = EGameLevel::Level0;
+					g_GameManager->currentLevel = g_GameManager->prevLevel;
 					g_FrameRateController->zeroDeltaTime = false;
 				}
 			}
@@ -336,7 +347,6 @@ int main(int argc, char* args[])
 			{
 				while (ShowCursor(true) < 0); // Shows cursor
 
-				g_FrameRateController->zeroDeltaTime = true;
 				ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(g_Renderer->GetHeight()) / 2));
 				ImGui::Begin("pauseMenu", nullptr,
 					ImGuiWindowFlags_::ImGuiWindowFlags_NoMove|ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
@@ -344,20 +354,29 @@ int main(int argc, char* args[])
 
 				if (g_GameManager->playerDead)
 				{
+					g_FrameRateController->zeroDeltaTime = true;
 					if (g_GameManager->playerWon)
 					{
-						ImGui::Text("You win");
+						ImGui::Text("You Win!");
 
-						if (ImGui::Button("Restart", { 100,50 }))
+						/*if (ImGui::Button("Restart", {100,50}))
 						{
-							g_GameManager->LoadLevel(dataJson2, EGameLevel::Level0);
+							g_GameManager->LoadLevel(dataJson2, EGameLevel::SurvivalLevel);
+						}*/
+
+		
+						if (ImGui::Button("Proceed!", { 100, 50 }))
+						{
+							g_FrameRateController->zeroDeltaTime = false;
+							g_GameManager->LoadLevel(dataJsonSideScroller, EGameLevel::SideScrollerLevel);
 						}
 					}
 					else
 					{
 						if (ImGui::Button("Restart", { 100,50 }))
 						{
-							g_GameManager->LoadLevel(dataJson2, EGameLevel::Level0);
+							g_FrameRateController->zeroDeltaTime = false;
+							g_GameManager->LoadLevel(dataJsonSurvival, g_GameManager->prevLevel); //current level is the pause menu
 						}
 					}
 				}
@@ -365,20 +384,26 @@ int main(int argc, char* args[])
 				{
 					if (ImGui::Button("Continue", { 100, 50 }))
 					{
-						g_GameManager->currentLevel = EGameLevel::Level0;
+						g_GameManager->prevLevel = g_GameManager->currentLevel;
+						g_GameManager->currentLevel = EGameLevel::SurvivalLevel;
 						g_FrameRateController->zeroDeltaTime = false;
 					}
 				}
 
 				if (ImGui::Button("Main Menu", { 100,50 }))
 				{
+					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::Mainmenu;
 				}
+
 				if (ImGui::Button("Credits", { 100,50 }))
 				{
 					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::CreditsScreen;
-				}if (ImGui::Button("Controls", { 100,50 }))
+
+				}
+				
+				if (ImGui::Button("Controls", { 100,50 }))
 				{
 					g_GameManager->prevLevel = g_GameManager->currentLevel;
 					g_GameManager->currentLevel = EGameLevel::ControlScreen;

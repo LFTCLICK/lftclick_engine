@@ -57,7 +57,7 @@ private:
 
 	static bool tutorialUI;
 
-	bool playerIsInRange, playerWasInRange, interacting, hasParts;
+	bool playerIsInRange, playerWasInRange, interacting, hasParts, isMotorcycle;
 	float internalTimer, interactDistance, interactDistanceSq;
 	int currentPhase, totalPhases, currentHp, hpPerPhase;
 };

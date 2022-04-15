@@ -21,6 +21,8 @@ void LuaManager::RegGlobals(sol::state& state)
 
 	state.set_function("screen_width", &Renderer::GetWidth, g_Renderer.get());
 	state.set_function("screen_height", &Renderer::GetHeight, g_Renderer.get());
+
+	state.set_function("current_level", &GameManager::currentLevel, g_GameManager.get());
 }
 
 void LuaManager::RegObjectFunctions(sol::state& state, GameObject* obj)

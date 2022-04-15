@@ -34,7 +34,13 @@ void Player::Start()
 	autopilot = isAutopilot();
 	sol::function getPlayerSpeed = lua_player_state["getPlayerSpeed"];
 	playerSpeed = getPlayerSpeed();
+	sol::function getPlayerSpeedForSideScroller = lua_player_state["getPlayerSpeedForSideScroller"];
+	playerSpeedForSideScroller = getPlayerSpeedForSideScroller();
+	sol::function getCamSpeed = lua_player_state["getCamerSpeed"];
+	camSpeed = getCamSpeed();
 	PlayerCollidedWithEnemy = lua_player_state["PlayerCollidedWithEnemy"];
+
+	playerInPuddle = false;
 
 	myTransform = componentOwner->getComponent<Transform>();
 	g_EventManager->Subscribe(Message::COLLISION, componentOwner);
@@ -48,13 +54,18 @@ void Player::Start()
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\health_icon.png", nullptr, &healthSRV));
 	DX::ThrowIfFailed(DirectX::CreateWICTextureFromFile(g_Renderer->GetDevice(), L"Resources\\images\\motorcycle_icon.png", nullptr, &bikepartsSRV));
 
-	if (autopilot) cam->SetAutopilotVelocity("right", playerSpeed);
+	if (autopilot) cam->SetAutopilotVelocity("right", camSpeed);
 	zHelper = g_GameManager->mapHeight / 2.0f;
 	introTimer = 0;
+
+	positiveBound = { POSITIVE_BOUND_X, POSITIVE_BOUND_Y };
+	negativeBound = { NEGATIVE_BOUND_X, NEGATIVE_BOUND_Y };
+
 }
 
 void Player::Update()
 {
+
 	player_script_update();
 
 	XMFLOAT2 origin = XMFLOAT2(0, 0);
@@ -188,16 +199,29 @@ void Player::Update()
 	}
 
 	if (autopilot)
-		Sidescroll(g_FrameRateController->DeltaTime());
-
-	if (currentMessage.timeout > 0) 
 	{
-		currentMessage.timeout -= g_FrameRateController->DeltaTime();
-		drawable->HUD_DrawTextCenter(currentMessage.message, { 0.0f, -50.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		if (playerInPuddle)
+		{
+			Move((100 + (cam->xPos - myTransform->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * g_FrameRateController->DeltaTime(), 0);
+			playerInPuddle = false;
+		}
+		else
+			Move((playerSpeedForSideScroller + (cam->xPos - myTransform->CurrentPos().x > AUTOPILOT_START_DISTANCE ? 60 : 0)) * g_FrameRateController->DeltaTime(), 0);
 	}
-	else if (!g_GameManager->messageQueue.empty()) 
-	{
-		currentMessage = g_GameManager->GetPlayerMessage();
+
+	if (myTransform->CurrentPos().x < cam->xPos - 800)
+		g_GameManager->playerDead = true;
+
+	if (!autopilot) {
+		if (currentMessage.timeout > 0)
+		{
+			currentMessage.timeout -= g_FrameRateController->DeltaTime();
+			drawable->HUD_DrawTextCenter(currentMessage.message, { 0.0f, -50.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		}
+		else if (!g_GameManager->messageQueue.empty())
+		{
+			currentMessage = g_GameManager->GetPlayerMessage();
+		}
 	}
 
 	if (hitSpeed > 0) {
@@ -208,9 +232,31 @@ void Player::Update()
 
 	damageCooldownTimer -= g_FrameRateController->DeltaTime();
 
-	g_AudioManager->SetPlayerSpatialPosition(myTransform->CurrentPos() / 100);
+	g_AudioManager->SetPlayerSpatialPosition(myTransform->CurrentPos());
+	audio->SetPosition(myTransform->CurrentPos());
 	myTransform->zPos = 5 + ((myTransform->position.y + g_GameManager->mapHeight) / zHelper);
 	introTimer += g_FrameRateController->DeltaTime();
+
+	// Keep player within bounds of map.
+	if (!autopilot) {
+		auto pos = myTransform->CurrentPos();
+		if (pos.x > positiveBound.x)
+			myTransform->Move(positiveBound.x - pos.x, 0);
+		else if (pos.x < negativeBound.x)
+			myTransform->Move(negativeBound.x - pos.x, 0);
+		if (pos.y > positiveBound.y)
+			myTransform->Move(0, positiveBound.y - pos.y);
+		else if (pos.y < negativeBound.y)
+			myTransform->Move(0, negativeBound.y - pos.y);
+	}
+
+
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F1)) {
+		collectibleparts++;
+	}
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F2)) {
+		collectibleWood++;
+	}
 }
 
 Component* Player::Clone(GameObject* newParent) 
@@ -237,24 +283,37 @@ void Player::HandleMessage(Message* e)
 	{
 		CollisionMessage* cm = (CollisionMessage*)e;
 
+		if (g_GameManager->currentLevel == EGameLevel::SideScrollerLevel)
+		{
+			if (e->otherObject->componentOwner->tag == "couch")
+				g_GameManager->playerDead = true;
+		}
+
 		Enemy* enemyComp = e->otherObject->componentOwner->getComponent<Enemy>();
 		if (enemyComp != nullptr) 
 		{
-			hitDirection = cm->deltaPos;
-			hitDirection.Normalize();
-			hitSpeed = enemyComp->speed * 10;
 			if (damageCooldownTimer < 0) 
 			{
+				hitDirection = cm->deltaPos;
+				hitDirection.Normalize();
+				hitSpeed = enemyComp->speed * 6;
+
 				PlayerCollidedWithEnemy();
 				damageCooldownTimer = 2;
-			}
 
-			DirectX::SimpleMath::Vector2 movement = hitDirection * hitSpeed * g_FrameRateController->DeltaTime();
-			Move(movement.x, movement.y);
+				DirectX::SimpleMath::Vector2 movement = hitDirection * hitSpeed * g_FrameRateController->DeltaTime();
+				Move(movement.x, movement.y);
+			}
 		}
 		else {
 			Move(cm->deltaPos.x, cm->deltaPos.y);
 		}
+	}
+
+	if (e->id == Message::TRIGGER_COLLISION)
+	{
+		if (e->otherObject->componentOwner->tag == "water_puddle")
+			playerInPuddle = true;
 	}
 }
 

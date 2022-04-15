@@ -1,9 +1,9 @@
 {
   "1": {
-    "startX": 0.0,
-    "startY": 0.0,
-    "scaleX": 1000,
-    "scaleY": 1000,
+    "startX": 60.0,
+    "startY": 120.0,
+    "scaleX": 120,
+    "scaleY": 120,
     "rot": 0,
     "zPos": 10
   },
@@ -30,11 +30,6 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "image": "Resources\\images\\credits.png"
-  },
-  "106": {
-    "startingPos": [0.0, -300.0],
-    "scrollSpeed": 60.0,
-    "endingY": 500
+    "image": "Resources\\images\\junk_sprite_sheet.png"
   }
 }

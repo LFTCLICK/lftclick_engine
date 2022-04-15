@@ -162,6 +162,9 @@
       <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Src\main.cpp" />
+    <ClCompile Include="Src\Components\Vortex.cpp">
+      <Filter>Engine\Components</Filter>
+    </ClCompile>
     <ClCompile Include="Src\Components\ScrollingCredits.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
@@ -310,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="Src\Helpers.h">
       <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Components\Vortex.h">
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Src\Components\Door.h">
       <Filter>Engine\Components</Filter>
@@ -586,6 +592,23 @@
     <None Include="Resources\json\ghost.json">
       <Filter>JSON</Filter>
     </None>
+    <None Include="Resources\json\side_scroller.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\junkForSideScroller.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\water_puddle.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\json\vortex.json">
+      <Filter>JSON</Filter>
+    </None>
+    <None Include="Resources\LuaScripts\playerScriptSidescroller.lua">
+      <Filter>Lua Scripts</Filter>
+    </None>
+    <None Include="Resources\json\road.json" />
+    <None Include="Resources\json\wrecked_bike.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">

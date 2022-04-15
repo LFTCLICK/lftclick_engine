@@ -22,16 +22,22 @@
 #include <queue>
 #include <json.hpp>
 #include <Helpers.h>
+#include <AudioManager.h>
 
-//#define SUN_SETTING 73.2473f		// when the light should begin getting brighter
-//#define SUN_DOWN 125.3655f		// when the light should remain at the brightest
-//#define SUN_RISING 177.4838f		// when the light should begin lowering
-//#define SUN_UP 262.f				// when the light should remain at the lowest
+//#define SUN_DOWN 73.2473f		// when the light should begin lowering
+//#define SUN_RISING 125.3655f		// when the light should remain at the the lowest
+//#define SUN_UP 199.792f		// when the light should begin getting brighter
+//#define SUN_SETTING 262.f				// when the light should remain at brightest
 
-#define SUN_RISING 156.965f			// when the light should begin getting brighter (230.49 on audio track)
-#define SUN_UP 172.525f				// total length of a day (246.05 on audio track)
-#define SUN_SETTING 199.792f		// when the light should begin lowering
-#define SUN_DOWN 262.595f			// when the light should remain at the lowest
+//#define SUN_RISING 156.965f			// when the light should begin getting brighter (230.49 on audio track)
+//#define SUN_UP 172.525f				// total length of a day (246.05 on audio track)
+//#define SUN_SETTING 199.792f		// when the light should begin lowering
+//#define SUN_DOWN 262.595f			// when the light should remain at the lowest
+
+#define SUN_DOWN 156.965f			// when the light should begin getting brighter (230.49 on audio track)
+#define SUN_RISING 172.525f			// total length of a day (246.05 on audio track)
+#define SUN_UP 199.792f				// when the light should begin lowering
+#define SUN_SETTING 262.595f		// when the light should remain at the lowest
 
 #define DAY_LENGTH 262.595f			// when the counter will flip back to zero
 
@@ -49,12 +55,18 @@
 
 // How frequently (roughly) enemies will spawn during the two different times of day, in seconds.
 // The min/max is for randomization of how long the spawn takes to go off.
+#define DAYTIME_OUTDOOR_SPAWN_MOD 1
 #define DAYTIME_SPAWN_INTERVAL_MIN 4.0f
 #define DAYTIME_SPAWN_INTERVAL_MAX 6.0f
+#define DAYTIME_SPAWN_INTERVAL_OUTSIDE_MIN  DAYTIME_SPAWN_INTERVAL_MIN / DAYTIME_OUTDOOR_SPAWN_MOD
+#define DAYTIME_SPAWN_INTERVAL_OUTSIDE_MAX  DAYTIME_SPAWN_INTERVAL_MAX / DAYTIME_OUTDOOR_SPAWN_MOD
+
+#define NIGHTTIME_OUTDOOR_SPAWN_MOD 5
 #define NIGHTTIME_SPAWN_INTERVAL_MIN 2.0f
 #define NIGHTTIME_SPAWN_INTERVAL_MAX 4.0f
-#define NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN  NIGHTTIME_SPAWN_INTERVAL_MIN / 4
-#define NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MAX  NIGHTTIME_SPAWN_INTERVAL_MAX / 4
+#define NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MIN  NIGHTTIME_SPAWN_INTERVAL_MIN / NIGHTTIME_OUTDOOR_SPAWN_MOD
+#define NIGHTTIME_SPAWN_INTERVAL_OUTSIDE_MAX  NIGHTTIME_SPAWN_INTERVAL_MAX / NIGHTTIME_OUTDOOR_SPAWN_MOD
+
 
 // The mod-per-day values are added to the intervals, and are multiplied by how many days have gone by.
 #define DAYTIME_SPAWN_MOD_PER_DAY -0.5f
@@ -79,7 +91,8 @@ enum class EGameLevel
 	Intro,
 	Mainmenu,
 	Pausemenu,
-	Level0,
+	SurvivalLevel,
+	SideScrollerLevel,
 	CreditsScreen,
 	ControlScreen
 };
@@ -93,39 +106,44 @@ struct TimedMessage
 class GameManager
 {
 public:
-	GameManager() : 
+	GameManager() :
 		playerObj(nullptr),
-		playerDead(false), 
-		playerWon(false), 
+		playerDead(false),
+		playerWon(false),
 		displayDarknessLevel(0),
-		darknessLevel(1),
+		darknessLevel(0),
 		monsterCount(0),
 		dangerLevel(0),
 		rednessFactor(0),
 		fadeFactor(0),
 		mapHeight(10000.0f),
 		mainCamera(nullptr),
-		day(1), 
+		day(1),
 		time(0),
 		chanceOfFindingPart(INITIAL_CHANCE_TO_FIND_PART),
 		currentLevel(EGameLevel::Mainmenu),
-		harshLightOfDay(day-1),
+		prevFrameLevel(currentLevel),
+		harshLightOfDay(day - 1),
 		totalSpawners(0),
 		activatedSpawner(-1),
 		spawnTimer(0),
 		spawnIntervalMin(NIGHTTIME_SPAWN_INTERVAL_MIN),
-		spawnIntervalMax(NIGHTTIME_SPAWN_INTERVAL_MAX)
+		spawnIntervalMax(NIGHTTIME_SPAWN_INTERVAL_MAX),
+		menuMusicName(""),
+		outdoorScaryMessagePlayed(true)
 	{}
 	~GameManager() = default;
 
 	// Update calls all Update functions.
 	void Update();
 
+	void UpdateCheats();
 	void UpdateTime();
 	void UpdateDanger();
 	void UpdateLevel();
 	void UpdateInsideHouse();
 	void UpdateSpawners();
+	void SideScrollerObjectDestroyer();
 
 	// Returns value between 0 and 1, 1 being night time and 0 being day time.
 	// Used for darkness overlay alpha.
@@ -160,8 +178,15 @@ public:
 
 	void LoadLevel(nlohmann::json file, EGameLevel toSet);
 
-	void PushPlayerMessage(std::string, float timeout = 3.f);
+	void PushPlayerMessage(std::string message, float timeout = 3.f);
 	TimedMessage GetPlayerMessage();
+
+	void SetMenuMusic(std::string name, float volume);
+
+	void PauseLevelAudio();
+	void UnpauseLevelAudio();
+	void PlayMenuMusic();
+	void StopMenuMusic();
 
 public:
 	GameObject* playerObj;
@@ -169,6 +194,7 @@ public:
 	bool playerWon;
 	bool playerInsideHouse;
 	bool isPlayerInsideCabin;
+	bool outdoorScaryMessagePlayed;
 	float darknessLevel;
 	float rednessFactor;
 	float fadeFactor;
@@ -202,9 +228,13 @@ public:
 	EGameLevel currentLevel;
 	EGameLevel prevLevel;
 
+	EGameLevel prevFrameLevel;
+
 	std::queue<TimedMessage> messageQueue;
 
-	//std::queue<std::string> daytimeSwitchMessages[MESSAGE_POSSIBILITIES] 
+	//std::queue<std::string> daytimeSwitchMessages[MESSAGE_POSSIBILITIES]
+
+	std::string menuMusicName;
 };
 
 extern std::unique_ptr<GameManager> g_GameManager;

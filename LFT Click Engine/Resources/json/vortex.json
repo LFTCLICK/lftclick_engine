@@ -1,16 +1,15 @@
 {
   "1": {
-    "startX": 0.5,
-    "startY": 0.5,
-    "scaleX": 30,
-    "scaleY": 30,
+    "startX": 0.0,
+    "startY": 0.0,
+    "scaleX": 240,
+    "scaleY": 240,
     "rot": 0,
-    "zPos": 4
-
+    "zPos": 25
   },
   "2": {
     "onlyUVOverrides": false,
-    "xScale": 0.25,
+    "xScale": 0.3,
     "yScale": 1,
     "vertices": [
       {
@@ -31,11 +30,17 @@
       }
     ],
     "indicies": [ 0, 1, 2, 2, 3, 0 ],
-    "scale": 1,
-    "image": "Resources\\images\\bullet_sprite_sheet.png"
+    "image": "Resources\\images\\vortex.png"
+  },
+  "13": {
+    "center": [ 0.0, 0.0, 0.0 ],
+    "radius": 10,
+    "trigger": true,
+    "static": false,
+    "deleteOnCollison": false
   },
   "6": {
-    "spriteSheetWidth": 4,
+    "spriteSheetWidth": 3,
     "spriteSheetHeight": 1,
     "animations": [
       {
@@ -54,36 +59,7 @@
       }
     ]
   },
-  "4": {
-    "center": [ 0.0, -0.0, 0.0 ],
-    "width": 15,
-    "height": 15,
-    "trigger": true,
-    "static": false,
-    "deleteOnCollison": true
-  },
-  "8": {
-    "sounds": [
-      {
-        "name": ".\\Resources\\sounds\\clang.mp3",
-        "loop": false,
-        "volume": 3,
-        "pitchRange": [ 0.85, 1.15 ],
-        "playEvents": [
-          1000
-        ]
-      }
-    ]
-  },
-  "9": {
-    "animationTime": 1,
-    "speed": 500,
-    "keepAliveTime": 3
-  },
-  "13": {
-    "center": [ 0.0, 0.0, 0.0 ],
-    "radius": 10,
-    "trigger": true,
-    "deleteOnCollison": true
+  "105": {
+    "PullingRadius": 225
   }
 }
