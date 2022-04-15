@@ -3,14 +3,14 @@
     "startX": 0.0,
     "startY": 0.0,
     "scaleX": 240,
-    "scaleY": 180,
+    "scaleY": 240,
     "rot": 0,
     "zPos": 25
   },
   "2": {
     "onlyUVOverrides": false,
     "xScale": 0.3,
-    "yScale": 0.3,
+    "yScale": 1,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],

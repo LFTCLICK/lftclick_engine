@@ -467,6 +467,7 @@
     <None Include="Resources\json\wall.json" />
     <None Include="Resources\json\water_puddle.json" />
     <None Include="Resources\json\woodpile.json" />
+    <None Include="Resources\json\wrecked_bike.json" />
     <None Include="Resources\json\zombie.json" />
     <None Include="Resources\json\zombieSpawner.json" />
     <None Include="Resources\LuaScripts\ConfigurationScript.lua" />

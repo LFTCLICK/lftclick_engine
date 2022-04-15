@@ -118,8 +118,8 @@
       "overrides": [
         {
           "1": {
-            "startX": -180,
-            "startY": -2200,
+            "startX": 0,
+            "startY": 0,
             "scaleX": 60,
             "scaleY": 60,
             "rot": 0,

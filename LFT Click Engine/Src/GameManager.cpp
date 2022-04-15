@@ -19,21 +19,42 @@ void GameManager::LoadLevel(json file, EGameLevel toSet)
 	g_GameObjManager->DeleteAll();
 	g_GameObjManager->Deserialize(g_GameObjFactory.get(), file);
 	this->currentLevel = toSet;
-	if (toSet == EGameLevel::SurvivalLevel)
+	this->prevLevel = toSet;
+
+	if (toSet == EGameLevel::SideScrollerLevel)
 	{
 		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		Player* playerComp = playerObj->getComponent<Player>();
+
+		playerComp->collectibleparts = playerComp->collectibleWood = 0;
+		playerComp->autopilot = true;
+
 		this->playerObj = playerObj;
 		this->mainCamera = playerObj->getComponent<Camera>();
 		this->playerTrans = playerObj->getComponent<Transform>();
+		
 		this->time = 0;
 
 		g_FrameRateController->zeroDeltaTime = false;
+		playerDead = false;
+	}
+	if (toSet == EGameLevel::SurvivalLevel)
+	{
+		GameObject* playerObj = g_GameObjManager->FindObjectOfTag("player");
+		Player* playerComp = playerObj->getComponent<Player>();
 
+		this->playerObj = playerObj;
+		this->mainCamera = playerObj->getComponent<Camera>();
+		this->playerTrans = playerObj->getComponent<Transform>();
+		playerComp->collectibleparts = playerComp->collectibleWood = 0;
+		this->time = 0;
+
+		g_FrameRateController->zeroDeltaTime = false;
 		playerDead = false;
 
-		PushPlayerMessage("Ugh, where am I?", 3.f);
-		PushPlayerMessage("This place smells terrible.", 3.f);
-		PushPlayerMessage("Who the heck would build a cabin this far out?", 3.f);
+		PushPlayerMessage("Ugh, where am I?", 2.f);
+		PushPlayerMessage("This place smells terrible.", 2.f);
+		PushPlayerMessage("Who the heck would build a cabin this far out?", 2.f);
 
 		outdoorScaryMessagePlayed = false;
 	}
@@ -53,6 +74,7 @@ TimedMessage GameManager::GetPlayerMessage()
 
 void GameManager::Update() {
 	//std::cout << g_AudioManager->GetGroupVolume(MUSIC_MASTER_CHANNEL_GROUP) << std::endl;
+	UpdateCheats();
 	UpdateTime();
 	UpdateDanger();
 	UpdateLevel();
@@ -60,6 +82,19 @@ void GameManager::Update() {
 	UpdateSpawners();
 	if (currentLevel == EGameLevel::SideScrollerLevel)
 		SideScrollerObjectDestroyer();
+}
+
+
+void GameManager::UpdateCheats()
+{
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F3)) {
+		if (time < SUN_DOWN)
+			time = SUN_DOWN;
+		else if (time < SUN_UP)
+			time = SUN_UP;
+		else
+			time = DAY_LENGTH;
+	}
 }
 
 #include <cmath>
@@ -85,14 +120,14 @@ void GameManager::UpdateTime()
 
 	if (currentLevel == EGameLevel::SurvivalLevel)
 	{
-		if (time < SUN_RISING) darknessLevel = 1;
+		if (time < SUN_DOWN) darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+		else if (time < SUN_RISING) darknessLevel = 1;
 		else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
-		else if (time < SUN_SETTING) darknessLevel = 0;
-		else darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+		else  darknessLevel = 0;
 	}
 	else
 	{
-		
+		darknessLevel = 0;
 	}
 
 	static float fadeInTimer = 0.0f;
@@ -131,7 +166,6 @@ void GameManager::UpdateTime()
 	}
 
 	if (!wasNightTime && IsNightTime()) {
-		//Helpers::randWithinRange(0, )
 		PushPlayerMessage("Oh no, daylight's fading...");
 
 		if (playerInsideHouse) {

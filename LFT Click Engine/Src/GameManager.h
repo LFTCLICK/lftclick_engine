@@ -24,20 +24,20 @@
 #include <Helpers.h>
 #include <AudioManager.h>
 
-#define SUN_SETTING 73.2473f		// when the light should begin getting brighter
-#define SUN_DOWN 125.3655f		// when the light should remain at the brightest
-#define SUN_RISING 177.4838f		// when the light should begin lowering
-#define SUN_UP 262.f				// when the light should remain at the lowest
+//#define SUN_DOWN 73.2473f		// when the light should begin lowering
+//#define SUN_RISING 125.3655f		// when the light should remain at the the lowest
+//#define SUN_UP 199.792f		// when the light should begin getting brighter
+//#define SUN_SETTING 262.f				// when the light should remain at brightest
 
 //#define SUN_RISING 156.965f			// when the light should begin getting brighter (230.49 on audio track)
 //#define SUN_UP 172.525f				// total length of a day (246.05 on audio track)
 //#define SUN_SETTING 199.792f		// when the light should begin lowering
 //#define SUN_DOWN 262.595f			// when the light should remain at the lowest
 
-//#define SUN_DOWN 156.965f			// when the light should begin getting brighter (230.49 on audio track)
-//#define SUN_RISING 172.525f			// total length of a day (246.05 on audio track)
-//#define SUN_UP 199.792f				// when the light should begin lowering
-//#define SUN_SETTING 262.595f		// when the light should remain at the lowest
+#define SUN_DOWN 156.965f			// when the light should begin getting brighter (230.49 on audio track)
+#define SUN_RISING 172.525f			// total length of a day (246.05 on audio track)
+#define SUN_UP 199.792f				// when the light should begin lowering
+#define SUN_SETTING 262.595f		// when the light should remain at the lowest
 
 #define DAY_LENGTH 262.595f			// when the counter will flip back to zero
 
@@ -111,7 +111,7 @@ public:
 		playerDead(false),
 		playerWon(false),
 		displayDarknessLevel(0),
-		darknessLevel(1),
+		darknessLevel(0),
 		monsterCount(0),
 		dangerLevel(0),
 		rednessFactor(0),
@@ -130,13 +130,14 @@ public:
 		spawnIntervalMin(NIGHTTIME_SPAWN_INTERVAL_MIN),
 		spawnIntervalMax(NIGHTTIME_SPAWN_INTERVAL_MAX),
 		menuMusicName(""),
-		outdoorScaryMessagePlayed(false)
+		outdoorScaryMessagePlayed(true)
 	{}
 	~GameManager() = default;
 
 	// Update calls all Update functions.
 	void Update();
 
+	void UpdateCheats();
 	void UpdateTime();
 	void UpdateDanger();
 	void UpdateLevel();

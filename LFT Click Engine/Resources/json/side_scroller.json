@@ -92,6 +92,10 @@
     },
     "objectSize": 60
   },
+  "MenuMusic": {
+    "name": ".\\Resources\\music\\Menu.mp3",
+    "volume": 50
+  },
   "Level": [
     {
       "object": "road",
@@ -103,7 +107,7 @@
             "scaleX": 25500,
             "scaleY": 800,
             "rot": 0,
-            "zPos": 100
+            "zPos": 98
           }
         }
       ]
@@ -113,7 +117,7 @@
       "overrides": [
         {
           "1": {
-            "startX": -12552.0,
+            "startX": -12300.0,
             "startY": 35.0,
             "scaleX": 90,
             "scaleY": 90,
@@ -207,7 +211,7 @@
               {
                 "name": ".\\Resources\\music\\background.mp3",
                 "loop": true,
-                "volume": 25,
+                "volume": 15,
                 "playEvents": [
                   1000
                 ],
@@ -267,6 +271,31 @@
             "scaleY": 15360,
             "rot": 0,
             "zPos": 100
+          },
+          "2": {
+            "onlyUVOverrides": false,
+            "xScale": 1,
+            "yScale": 1,
+            "vertices": [
+              {
+                "pos": [ -0.5, -0.5, 0 ],
+                "uv": [ 0, 1 ]
+              },
+              {
+                "pos": [ -0.5, 0.5, 0 ],
+                "uv": [ 0, 0 ]
+              },
+              {
+                "pos": [ 0.5, 0.5, 0 ],
+                "uv": [ 1, 0 ]
+              },
+              {
+                "pos": [ 0.5, -0.5, 0 ],
+                "uv": [ 1, 1 ]
+              }
+            ],
+            "indicies": [ 0, 1, 2, 2, 3, 0 ],
+            "image": "Resources\\images\\grass_large_sidescroll.png"
           }
         }
       ]
@@ -282,6 +311,31 @@
             "scaleY": 15360,
             "rot": 0,
             "zPos": 100
+          },
+          "2": {
+            "onlyUVOverrides": false,
+            "xScale": 1,
+            "yScale": 1,
+            "vertices": [
+              {
+                "pos": [ -0.5, -0.5, 0 ],
+                "uv": [ 0, 1 ]
+              },
+              {
+                "pos": [ -0.5, 0.5, 0 ],
+                "uv": [ 0, 0 ]
+              },
+              {
+                "pos": [ 0.5, 0.5, 0 ],
+                "uv": [ 1, 0 ]
+              },
+              {
+                "pos": [ 0.5, -0.5, 0 ],
+                "uv": [ 1, 1 ]
+              }
+            ],
+            "indicies": [ 0, 1, 2, 2, 3, 0 ],
+            "image": "Resources\\images\\grass_large_sidescroll.png"
           }
         }
       ]
@@ -297,6 +351,31 @@
             "scaleY": 15360,
             "rot": 0,
             "zPos": 100
+          },
+          "2": {
+            "onlyUVOverrides": false,
+            "xScale": 1,
+            "yScale": 1,
+            "vertices": [
+              {
+                "pos": [ -0.5, -0.5, 0 ],
+                "uv": [ 0, 1 ]
+              },
+              {
+                "pos": [ -0.5, 0.5, 0 ],
+                "uv": [ 0, 0 ]
+              },
+              {
+                "pos": [ 0.5, 0.5, 0 ],
+                "uv": [ 1, 0 ]
+              },
+              {
+                "pos": [ 0.5, -0.5, 0 ],
+                "uv": [ 1, 1 ]
+              }
+            ],
+            "indicies": [ 0, 1, 2, 2, 3, 0 ],
+            "image": "Resources\\images\\grass_large_sidescroll.png"
           }
         }
       ]

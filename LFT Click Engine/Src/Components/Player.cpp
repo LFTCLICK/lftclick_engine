@@ -60,6 +60,7 @@ void Player::Start()
 
 	positiveBound = { POSITIVE_BOUND_X, POSITIVE_BOUND_Y };
 	negativeBound = { NEGATIVE_BOUND_X, NEGATIVE_BOUND_Y };
+
 }
 
 void Player::Update()
@@ -211,14 +212,16 @@ void Player::Update()
 	if (myTransform->CurrentPos().x < cam->xPos - 800)
 		g_GameManager->playerDead = true;
 
-	if (currentMessage.timeout > 0) 
-	{
-		currentMessage.timeout -= g_FrameRateController->DeltaTime();
-		drawable->HUD_DrawTextCenter(currentMessage.message, { 0.0f, -50.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
-	}
-	else if (!g_GameManager->messageQueue.empty()) 
-	{
-		currentMessage = g_GameManager->GetPlayerMessage();
+	if (!autopilot) {
+		if (currentMessage.timeout > 0)
+		{
+			currentMessage.timeout -= g_FrameRateController->DeltaTime();
+			drawable->HUD_DrawTextCenter(currentMessage.message, { 0.0f, -50.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });
+		}
+		else if (!g_GameManager->messageQueue.empty())
+		{
+			currentMessage = g_GameManager->GetPlayerMessage();
+		}
 	}
 
 	if (hitSpeed > 0) {
@@ -235,18 +238,25 @@ void Player::Update()
 	introTimer += g_FrameRateController->DeltaTime();
 
 	// Keep player within bounds of map.
-	auto pos = myTransform->CurrentPos();
-	if (pos.x > positiveBound.x)
-		myTransform->Move(positiveBound.x - pos.x, 0);
-	else if (pos.x < negativeBound.x)
-		myTransform->Move(negativeBound.x - pos.x, 0);
-	if (pos.y > positiveBound.y)
-		myTransform->Move(0, positiveBound.y - pos.y);
-	else if (pos.y < negativeBound.y)
-		myTransform->Move(0, negativeBound.y - pos.y);
+	if (!autopilot) {
+		auto pos = myTransform->CurrentPos();
+		if (pos.x > positiveBound.x)
+			myTransform->Move(positiveBound.x - pos.x, 0);
+		else if (pos.x < negativeBound.x)
+			myTransform->Move(negativeBound.x - pos.x, 0);
+		if (pos.y > positiveBound.y)
+			myTransform->Move(0, positiveBound.y - pos.y);
+		else if (pos.y < negativeBound.y)
+			myTransform->Move(0, negativeBound.y - pos.y);
+	}
 
 
-	std::cout << pos.x << " " << pos.y << std::endl;
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F1)) {
+		collectibleparts++;
+	}
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F2)) {
+		collectibleWood++;
+	}
 }
 
 Component* Player::Clone(GameObject* newParent) 

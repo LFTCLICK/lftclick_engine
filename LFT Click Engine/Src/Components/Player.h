@@ -59,6 +59,7 @@ public:
 	void Sidescroll(float deltaTime);
 	bool IsAutopilot() { return autopilot; }
 
+	bool autopilot;
 	int collectibleWood, playerHealth, collectibleparts;
 	
 	//HUD animations
@@ -110,7 +111,7 @@ private:
 	sol::function PlayerCollidedWithEnemy;
 	TimedMessage currentMessage;
 	float damageCooldownTimer, dashSpeed, dashTime, dashTimer, playerSpeed, zHelper, playerSpeedForSideScroller, camSpeed;
-	bool isDashing, autopilot, playerInPuddle;
+	bool isDashing, playerInPuddle;
 	
 	bool damageFlashing;
 };

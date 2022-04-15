@@ -602,6 +602,7 @@
       <Filter>Lua Scripts</Filter>
     </None>
     <None Include="Resources\json\road.json" />
+    <None Include="Resources\json\wrecked_bike.json" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Src\Shaders\PixelShader.hlsl">
