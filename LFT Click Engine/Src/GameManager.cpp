@@ -120,7 +120,7 @@ void GameManager::UpdateTime()
 
 	if (currentLevel == EGameLevel::SurvivalLevel)
 	{
-		if (time < SUN_DOWN) darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+		if (time < SUN_DOWN) darknessLevel = 1 - ((SUN_DOWN - time) / SUN_DOWN);
 		else if (time < SUN_RISING) darknessLevel = 1;
 		else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
 		else  darknessLevel = 0;

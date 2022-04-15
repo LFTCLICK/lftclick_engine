@@ -198,11 +198,7 @@
               },
               {
                 "name": "ghost",
-                "spawnChance": 15
-              },
-              {
-                "name": "ghost",
-                "spawnChance": 5
+                "spawnChance": 20
               }
             ],
             "spawnAroundPlayer": true

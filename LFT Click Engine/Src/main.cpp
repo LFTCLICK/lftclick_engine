@@ -306,7 +306,7 @@ int main(int argc, char* args[])
 		case EGameLevel::SurvivalLevel:
 		case EGameLevel::SideScrollerLevel:
 		case EGameLevel::Pausemenu:
-
+			std::cout << "dark: " << g_GameManager->darknessLevel << std::endl;
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE))
 			{
 				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu)) {

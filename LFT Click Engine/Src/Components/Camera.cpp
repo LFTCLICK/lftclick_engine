@@ -69,7 +69,6 @@ void Camera::Update()
 		xPos = pos.x;
 		yPos = pos.y;
 	}
-	std::cout << "cam: " << xPos << " " << yPos << std::endl;
 }
 
 void Camera::SetPos(float x, float y, float z)
