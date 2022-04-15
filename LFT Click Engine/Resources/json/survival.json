@@ -87,6 +87,10 @@
     {
       "prefab": "Resources\\json\\chair_right.json",
       "tag": "chair_right"
+    },
+    {
+      "prefab": "Resources\\json\\wrecked_bike.json",
+      "tag": "wrecked_bike"
     }
   ],
   "Map": {
@@ -104,7 +108,8 @@
       "2817ba": "couch_right",
       "845786": "chair_left",
       "974582": "chair_right",
-      "00ffd6": "enemy_spawner"
+      "00ffd6": "enemy_spawner",
+      "861010": "wrecked_bike"
     },
     "objectSize": 60
   },
@@ -118,8 +123,8 @@
       "overrides": [
         {
           "1": {
-            "startX": 0,
-            "startY": 0,
+            "startX": -180.0,
+            "startY": -2200.0,
             "scaleX": 60,
             "scaleY": 60,
             "rot": 0,
