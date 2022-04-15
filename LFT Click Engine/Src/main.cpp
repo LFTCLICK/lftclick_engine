@@ -179,8 +179,6 @@ int main(int argc, char* args[])
 	other2.close();
 
 
-	//g_GameManager->LoadLevel(dataJson2, EGameLevel::Intro);
-
 	DX::ThrowIfFailed(
 		DirectX::CreateWICTextureFromFileEx(g_Renderer->GetDevice(),
 			L"Resources\\images\\mainMenu_background.png", 0,
@@ -198,7 +196,8 @@ int main(int argc, char* args[])
 			g_GameManager->controlsSRV.ReleaseAndGetAddressOf()));
 
 
-	
+	//========================== MAIN GAME LOOP ================================================//
+
 	srand(time(NULL));
 	g_GameManager->currentLevel = EGameLevel::Mainmenu;
 	RECT rect;
@@ -225,14 +224,20 @@ int main(int argc, char* args[])
 			break;
 		}
 
+
+
 		g_FrameRateController->Tick();
 		g_Renderer->PrepareForRendering();
 
+		if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F11))
+			g_Renderer->ToggleFullScreen(g_pWindow);
+
 		switch (g_GameManager->currentLevel)
 		{
-
 			
 		case EGameLevel::Mainmenu:
+			g_InputManager->Update();
+
 			while (ShowCursor(true) < 0); // Shows cursor
 
 			rect.left = rect.top = 0;
@@ -279,7 +284,7 @@ int main(int argc, char* args[])
 			ImGui::Begin("menu", nullptr,
 				ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
 				| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
-			
+
 			if (ImGui::Button("Back", { 100,50 }))
 			{
 				g_GameManager->currentLevel = g_GameManager->prevLevel;
@@ -349,8 +354,8 @@ int main(int argc, char* args[])
 
 				ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(g_Renderer->GetHeight()) / 2));
 				ImGui::Begin("pauseMenu", nullptr,
-					ImGuiWindowFlags_::ImGuiWindowFlags_NoMove|ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
-					|ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize|ImGuiWindowFlags_NoBackground);
+					ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
+					| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoBackground);
 
 				if (g_GameManager->playerDead)
 				{
@@ -364,7 +369,7 @@ int main(int argc, char* args[])
 							g_GameManager->LoadLevel(dataJson2, EGameLevel::SurvivalLevel);
 						}*/
 
-		
+
 						if (ImGui::Button("Proceed!", { 100, 50 }))
 						{
 							g_FrameRateController->zeroDeltaTime = false;
@@ -402,7 +407,7 @@ int main(int argc, char* args[])
 					g_GameManager->currentLevel = EGameLevel::CreditsScreen;
 
 				}
-				
+
 				if (ImGui::Button("Controls", { 100,50 }))
 				{
 					g_GameManager->prevLevel = g_GameManager->currentLevel;

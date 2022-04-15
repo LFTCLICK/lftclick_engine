@@ -17,6 +17,8 @@ class Renderer
 public:
 	bool disableDarkness;
 private:
+	bool fullScreenMode;
+
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> immediateContext;
@@ -103,7 +105,8 @@ public:
 	~Renderer();
 	Renderer(const Renderer&) = delete;
 	Renderer& operator=(const Renderer&) = delete;
-
+	
+	void ToggleFullScreen(SDL_Window* pWindow);
 	void Initialize(HWND hWnd, UINT clientWidth, UINT clientHeight);
 	void InitImGui(SDL_Window* pWindow);
 	void PrepareForRendering();

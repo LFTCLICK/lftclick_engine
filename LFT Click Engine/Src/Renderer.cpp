@@ -38,6 +38,11 @@ Renderer::Renderer() :
 	displayModes(nullptr),
 	numModes(0),
 	disableDarkness(false)
+#ifdef _DEBUG
+	,fullScreenMode(false)
+#else
+	,fullScreenMode(true)
+#endif
 {
 
 }
@@ -47,8 +52,18 @@ Renderer::~Renderer()
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
+	DX::ThrowIfFailed(swapChain->SetFullscreenState(FALSE, nullptr));
 
 	delete[] displayModes;
+}
+void Renderer::ToggleFullScreen(SDL_Window* pWindow)
+{
+	fullScreenMode = !fullScreenMode;
+
+	SDL_SetWindowFullscreen(pWindow, 
+		fullScreenMode ? SDL_WINDOW_SHOWN|SDL_WINDOW_RESIZABLE|SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+
+	DX::ThrowIfFailed(swapChain->SetFullscreenState(fullScreenMode, nullptr));
 }
 void Renderer::Initialize(HWND hWnd, UINT clientWidth, UINT clientHeight)
 {
@@ -95,13 +110,9 @@ void Renderer::Initialize(HWND hWnd, UINT clientWidth, UINT clientHeight)
 	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	sd.BufferCount = 1;
 	sd.OutputWindow = hWnd;
-#ifdef _DEBUG
-	sd.Windowed = TRUE;
-#else
-	sd.Windowed = FALSE;
-#endif
+	sd.Windowed = !fullScreenMode;
 	sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	sd.Flags = 0;
+	sd.Flags = 0; // DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	ComPtr<IDXGIDevice> dxgiDevice;
 	DX::ThrowIfFailed(device.As(&dxgiDevice));
@@ -127,7 +138,7 @@ void Renderer::Initialize(HWND hWnd, UINT clientWidth, UINT clientHeight)
 			static_cast<float>(displayModes[i].RefreshRate.Numerator) / displayModes[i].RefreshRate.Denominator);
 	}
 
-#ifndef _DEBUG
+#ifdef _AUTO_SELECT_HIGHEST_RESOLUTION_
 	//Choose highest resolution/refresh rate
 	clientWidth = displayModes[numModes - 1].Width;
 	clientHeight = displayModes[numModes - 1].Height;
@@ -143,7 +154,7 @@ void Renderer::Initialize(HWND hWnd, UINT clientWidth, UINT clientHeight)
 	OnResize(clientWidth, clientHeight);
 
 	//disable ALT-enter fullscreen
-	//dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
+	dxgiFactory->MakeWindowAssociation(hWnd, DXGI_MWA_NO_WINDOW_CHANGES);
 
 	CreateDeviceDependentResources();
 }
