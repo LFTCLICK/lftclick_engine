@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	Helpers.h
+// Author			:	Abhijit Zala
+// Creation Date	:	2022/03/16
+// Purpose			:	DirectX helper functions
+// History			:
+// ---------------------------------------------------------------------------
 #pragma once
 
 #include <DirectXMath.h>

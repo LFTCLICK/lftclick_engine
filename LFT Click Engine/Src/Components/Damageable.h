@@ -1,10 +1,10 @@
 #pragma once
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	AnimationHelper.h
-// Author			:	Vance Howald
+// File Name		:	Damageable.h
+// Author			:	Christian Fitch
 // Creation Date	:	2021/12/10
-// Purpose			:	Animates grabables
+// Purpose			:	Comp for handling damage
 // History			: 
 // ---------------------------------------------------------------------------
 

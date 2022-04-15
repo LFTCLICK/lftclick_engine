@@ -2,9 +2,9 @@
 // Project Name		:	LFTClick Engine
 // File Name		:	WoodPile.h
 // Author			:	Vance Howald
-// Creation Date	:	2021/11/14
-// Purpose			:	Pickups for door repairs
-// History			: 
+// Creation Date	:	2021/03/09
+// Purpose			:	Wood collection zones for repairing the doors
+// History			:
 // ---------------------------------------------------------------------------
 #pragma once
 

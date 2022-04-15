@@ -1,10 +1,10 @@
 #pragma once
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	Gun.h
+// File Name		:	FollowMouse.h
 // Author			:	Chris Fitch
-// Creation Date	:	2022/12/10
-// Purpose			:	Contains functions for firing bullets
+// Creation Date	:	2022/02/24
+// Purpose			:	Camera mouse following script
 // History			: 
 // ---------------------------------------------------------------------------
 

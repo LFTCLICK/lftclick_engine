@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
 // File Name		:	CircleCollider.cpp
-// Author			:	Rohit Punjabi
+// Author			:	Rohit Punjabi and Vance Howald
 // Creation Date	:	2022/02/25
 // Purpose			:	Circle collider handling
 // History			:

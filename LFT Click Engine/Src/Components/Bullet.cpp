@@ -1,9 +1,9 @@
 // ---------------------------------------------------------------------------
 // Project Name		:	LFTClick Engine
-// File Name		:	AnimationHelper.cpp
+// File Name		:	Bullet.cpp
 // Author			:	Vance Howald
 // Creation Date	:	2021/12/10
-// Purpose			:	Animates grabables
+// Purpose			:	Bullet header for player
 // History			:
 // ---------------------------------------------------------------------------
 #include "pch.h"

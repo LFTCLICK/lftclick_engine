@@ -65,9 +65,6 @@
     <ClCompile Include="Src\Components\Camera.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Components\Component.cpp">
-      <Filter>Engine\Components</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Components\Damageable.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
@@ -147,9 +144,6 @@
       <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\CircleCollider.cpp">
-      <Filter>Engine\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Components\Collider.cpp">
       <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Src\Components\FollowMouse.cpp">

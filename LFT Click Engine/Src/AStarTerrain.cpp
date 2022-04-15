@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Project Name		:	LFTClick Engine
+// File Name		:	AStarTerrain.cpp
+// Author			:	Vance Howald
+// Creation Date	:	2021/03/23
+// Purpose			:	Terrain data for A* 
+// History			:
+// ---------------------------------------------------------------------------
 #include "pch.h"
 #include <queue>
 #include "AStarTerrain.h"
