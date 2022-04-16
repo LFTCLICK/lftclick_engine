@@ -6,9 +6,9 @@
 // Purpose			:	main game loop
 // ---------------------------------------------------------------------------
 #define no_init_all deprecated
-//#ifndef _DEBUG
-//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") 
-//#endif
+#ifndef _DEBUG
+	#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup") 
+#endif
 
 #include "pch.h"
 #include "InputManager.h"
@@ -72,9 +72,9 @@ bool DoesPlayerReallyWantToLeave(bool &quitPopup)
 int main(int argc, char* args[])
 {
 
-//#ifndef _DEBUG
-//	ShowWindow(GetConsoleWindow(), SW_HIDE);
-//#endif
+#ifndef _DEBUG
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+#endif
 
 	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
 	if (FAILED(hr))
