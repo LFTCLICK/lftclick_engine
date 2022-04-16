@@ -16,7 +16,13 @@ dash_speed_multiplyer = 4
 player_collided_with_enemy = false
 damage_cooldown_timer = 2
 
+moveX = 0
+moveY = 0
+
 playerSpeed = 350
+
+camSpeed = 375
+playerSpeedForSideScroller = 375
 
 autopilot = false
 
@@ -40,29 +46,44 @@ function getPlayerSpeed()
 	return playerSpeed
 end
 
--- d pressed moving right
-if is_pressed(d_pressed) then
+-- returns player's speed for level 2
+function getPlayerSpeedForSideScroller()
+	return playerSpeedForSideScroller
+end
+
+-- returns camera''s speed for level 2
+function getCamerSpeed()
+	return camSpeed
+end
+
+if (current_level() == 2) then
+elseif is_pressed(d_pressed) then
 	move(playerSpeed * deltaTime(), 0)
 end
 
 -- w pressed moving up
 if is_pressed(w_pressed) then
-	move(0, playerSpeed * deltaTime())
+	moveY = deltaTime()
 end
 
 -- a pressed moving left
 if is_pressed(a_pressed) then
-	move(-playerSpeed * deltaTime(), 0)
+	moveX = -deltaTime()
 end
 
 -- s pressed moving down
 if is_pressed(s_pressed) then
-	move(0, -playerSpeed * deltaTime())
+	moveY = -deltaTime()
+end
+
+if moveX ~= 0 or moveY ~= 0 then
+	speed = playerSpeed * ((moveX ~= 0 and moveY ~= 0) and 0.785 or 1)
+	move(speed * moveX, speed * moveY)
 end
 
 -- space pressed then dash
 if is_triggered(space_pressed) then
-	dash()
+	-- dash()
 end
 
 -- mouse left button clicked then shoot bullet

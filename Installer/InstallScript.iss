@@ -23,7 +23,7 @@
 
 #define ApplicationName 'The Bear Grylls Game'
 #define ApplicationVersion '0.9.0'
-#define CPlusPlusYearVersion '2017'
+#define CPlusPlusYearVersion '2019'
 
 DisableWelcomePage=no
 WizardImageFile=INSTALLERFILES\panel_image_100.bmp
@@ -99,7 +99,7 @@ Source: ".\INSTALLERFILES\panel_image_*.bmp"; Flags: dontcopy
 Source: .\GAMEDIRECTORY\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ;Chris Onorati: You need to place any redists you want to install here under files, and then install them under the RUN section
-Source: ".\REDIST\vcredist_x86.exe"; DestDir: {tmp}; Flags: deleteafterinstall
+Source: ".\REDIST\VC_redist.x86.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 Source: ".\REDIST\dxwebsetup.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 ; This is the list of shortcuts that the installer will setup for you.

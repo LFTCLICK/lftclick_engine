@@ -1,0 +1,67 @@
+Nathan-
+Couch to bar
+Walls are holes?
+Moving right when collecting is difficult
+No point in not collecting
+Spam shooting
+Wood = chocolate
+Doesn't understand doors, maybe put doors closer
+Door wording vauge
+Junk pile gives sunglasses
+Repaired the door outside, couldn't see remove message
+Got lost outside (noob)
+Zombie was out of the bounds
+Map is maybe too big
+No damage notification
+Not sure where the parts where
+Tree density on edges
+Enemies are overlooked
+Icons are not interpretable
+No idea of attacks
+Bullets marshmallow
+Light inside of house
+No reason to not shoot
+Meant to be scary but enemies aren't threatening
+Only remember gun shots
+Get motorcycle part soon to help you understand
+
+Xingyun-
+Spam clicking constantly, never half
+Didn't move for a while
+Maybe start with enough wood to fix one phase
+Ran around to the corner
+Just ran away
+Make junk piles more motorcycle like?
+Zombies disappearing on screen?
+Just ran in circles
+But getting mogged
+Smashing dash out of boredom
+Didn't identify motorcycle parts, knew they were in the junk pile
+Ghost doesn't deal damage
+Cool down for damage should be per zombie
+Doesn't see usefulness in door
+Going outside isn't restraining
+If it's darker zombies can be spawned closer
+Flashlight for outdoors
+Room by room like RE or Don't Starve survival based
+
+
+Dylan
+
+Adam
+Only noticed top entrance
+Non normalized movement makes you too fast?
+Don't get anything from shooting enemies
+Enimes have more health at night?
+Doesn't know what the second resource is
+Had played cod zombies before
+Is it day again?
+Second door floor is too dark
+"Took some damage, I did not notice it"
+Shooting and moving is fun
+Boss zombies at night
+Better trash piles if they're far away
+Junk piles are just fast ways to get wood, thought it after 2.
+
+
+Some other things that got brought up that I'm not entirely sure how to fix. Someone mentioned that since you can move and collect at the same time there's no point in not constantly collecting. Another person mentioned that he liked the fact that you could move and collect so maybe this isn't an issue. Similarly since there's no penalty for shooting people were constantly firing the gun. Adding spread could help, but since tap fire is currently faster that holding shoot down tap fire would get around this fix.

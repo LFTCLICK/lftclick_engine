@@ -16,8 +16,8 @@ class Renderer
 {
 public:
 	bool disableDarkness;
-private:
 	bool fullScreenMode;
+private:
 
 	Microsoft::WRL::ComPtr<ID3D11Device> device;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
