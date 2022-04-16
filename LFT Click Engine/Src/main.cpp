@@ -341,16 +341,18 @@ int main(int argc, char* args[])
 			{
 				g_AudioManager->SetMasterMute(muteToggle);
 			}
-			muteToggle = false;
+			muteToggle = g_Renderer->fullScreenMode;
 			ImGui::Checkbox("Fullscreen Toggle", &muteToggle);
-			if (muteToggle != false)
+			if (muteToggle != g_Renderer->fullScreenMode)
 			{
-				//change the thingy
+				g_Renderer->ToggleFullScreen(g_pWindow);
 			}
-
 			if (ImGui::Button("Back", { 100,50 }))
 			{
-				g_GameManager->currentLevel = g_GameManager->prevLevel;
+				if (g_GameManager->prevLevel != EGameLevel::Mainmenu)
+					g_GameManager->currentLevel = EGameLevel::Pausemenu;
+				else
+					g_GameManager->currentLevel = g_GameManager->prevLevel;
 			}
 
 			ImGui::End();
