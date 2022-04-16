@@ -20,6 +20,7 @@ void GameManager::LoadLevel(json file, EGameLevel toSet)
 	g_GameObjManager->Deserialize(g_GameObjFactory.get(), file);
 	this->currentLevel = toSet;
 	this->prevLevel = toSet;
+	this->actualRunningLevel = toSet;
 
 	if (toSet == EGameLevel::SideScrollerLevel)
 	{
@@ -382,6 +383,12 @@ void GameManager::SetButtonClickSound(std::string name, float volume) {
 	buttonClickSoundName = name;
 	g_AudioManager->SetGroupVolume(BUTTON_CLICK_MASTER_CHANNEL_GROUP, volume);
 	g_AudioManager->LoadSound(buttonClickSoundName);
+}
+
+void GameManager::SetGameLevel(EGameLevel level)
+{
+	prevLevel = currentLevel;
+	currentLevel = level;
 }
 
 void GameManager::PauseLevelAudio() {

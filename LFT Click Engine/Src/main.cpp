@@ -216,7 +216,7 @@ int main(int argc, char* args[])
 	//========================== MAIN GAME LOOP ================================================//
 
 	srand(time(NULL));
-	g_GameManager->currentLevel = EGameLevel::Mainmenu;
+	g_GameManager->SetGameLevel(EGameLevel::Mainmenu);
 	RECT rect;
 	while (e.type != SDL_QUIT)
 	{
@@ -232,10 +232,12 @@ int main(int argc, char* args[])
 			}
 			if (e.window.event == SDL_WINDOWEVENT_MINIMIZED || e.window.event == SDL_WINDOWEVENT_FOCUS_LOST)
 			{
-				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu || g_GameManager->currentLevel == EGameLevel::Mainmenu))
+				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu 
+					|| g_GameManager->currentLevel == EGameLevel::Mainmenu || 
+					g_GameManager->currentLevel == EGameLevel::ControlScreen || g_GameManager->currentLevel == EGameLevel::CreditsScreen ||
+					g_GameManager->currentLevel == EGameLevel::GameOverScreen || g_GameManager->currentLevel == EGameLevel::OptionsScreen))
 				{
-					g_GameManager->prevLevel = g_GameManager->currentLevel;
-					g_GameManager->currentLevel = EGameLevel::Pausemenu;
+					g_GameManager->SetGameLevel(EGameLevel::Pausemenu);
 					g_FrameRateController->zeroDeltaTime = true;
 				}
 			}
@@ -254,6 +256,8 @@ int main(int argc, char* args[])
 		{
 			
 		case EGameLevel::Mainmenu:
+			g_GameManager->SetGameLevel(EGameLevel::Mainmenu);
+
 			g_InputManager->Update();
 
 			while (ShowCursor(true) < 0); // Shows cursor
@@ -277,8 +281,7 @@ int main(int argc, char* args[])
 			if (ImGui::Button("Controls", { 100,50 }))
 			{
 				g_GameManager->PlayButtonClick();
-				g_GameManager->prevLevel = g_GameManager->currentLevel;
-				g_GameManager->currentLevel = EGameLevel::ControlScreen;
+				g_GameManager->SetGameLevel(EGameLevel::ControlScreen);
 			}
 
 			if (ImGui::Button("Quit", { 100, 50 }))
@@ -398,12 +401,12 @@ int main(int argc, char* args[])
 			if (g_InputManager->isKeyTriggered(SDL_SCANCODE_ESCAPE))
 			{
 				if (!(g_GameManager->currentLevel == EGameLevel::Pausemenu)) {
-					g_GameManager->currentLevel = EGameLevel::Pausemenu;
+					g_GameManager->SetGameLevel(EGameLevel::Pausemenu);
 					g_FrameRateController->zeroDeltaTime = true;
 				}
 				else
 				{
-					g_GameManager->currentLevel = g_GameManager->prevLevel;
+					g_GameManager->SetGameLevel(g_GameManager->actualRunningLevel);
 					g_FrameRateController->zeroDeltaTime = false;
 				}
 			}
@@ -451,8 +454,7 @@ int main(int argc, char* args[])
 					if (ImGui::Button("Continue", { 100, 50 }))
 					{
 						g_GameManager->PlayButtonClick();
-						g_GameManager->prevLevel = g_GameManager->currentLevel;
-						g_GameManager->currentLevel = EGameLevel::SurvivalLevel;
+						g_GameManager->SetGameLevel(EGameLevel::SurvivalLevel);
 						g_FrameRateController->zeroDeltaTime = false;
 					}
 				}
@@ -460,30 +462,26 @@ int main(int argc, char* args[])
 				if (ImGui::Button("Main Menu", { 100,50 }))
 				{
 					g_GameManager->PlayButtonClick();
-					g_GameManager->prevLevel = g_GameManager->currentLevel;
-					g_GameManager->currentLevel = EGameLevel::Mainmenu;
+					g_GameManager->SetGameLevel(EGameLevel::Mainmenu);
 				}
 
 				if (ImGui::Button("Options", { 100,50 }))
 				{
 					g_GameManager->PlayButtonClick();
-					g_GameManager->prevLevel = g_GameManager->currentLevel;
-					g_GameManager->currentLevel = EGameLevel::OptionsScreen;
+					g_GameManager->SetGameLevel(EGameLevel::OptionsScreen);
+
 				}
 
 				if (ImGui::Button("Credits", { 100,50 }))
 				{
 					g_GameManager->PlayButtonClick();
-					g_GameManager->prevLevel = g_GameManager->currentLevel;
-					g_GameManager->currentLevel = EGameLevel::CreditsScreen;
-
+					g_GameManager->SetGameLevel(EGameLevel::CreditsScreen);
 				}
 
 				if (ImGui::Button("Controls", { 100,50 }))
 				{
 					g_GameManager->PlayButtonClick();
-					g_GameManager->prevLevel = g_GameManager->currentLevel;
-					g_GameManager->currentLevel = EGameLevel::ControlScreen;
+					g_GameManager->SetGameLevel(EGameLevel::ControlScreen);
 				}
 
 				if (ImGui::Button("Quit", { 100, 50 }))
