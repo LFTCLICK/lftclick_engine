@@ -99,8 +99,8 @@ Source: ".\INSTALLERFILES\panel_image_*.bmp"; Flags: dontcopy
 Source: .\GAMEDIRECTORY\*; DestDir: {app}; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ;Chris Onorati: You need to place any redists you want to install here under files, and then install them under the RUN section
-Source: ".\REDIST\VC_redist.x86.exe"; DestDir: {tmp}; Flags: deleteafterinstall
-Source: ".\REDIST\dxwebsetup.exe"; DestDir: {tmp}; Flags: deleteafterinstall
+Source: ".\REDIST\VC_redist.x64.exe"; DestDir: {tmp}; Flags: deleteafterinstall
+;Source: ".\REDIST\dxwebsetup.exe"; DestDir: {tmp}; Flags: deleteafterinstall
 
 ; This is the list of shortcuts that the installer will setup for you.
 ; Of note, this will create the uninstaller automatically.
@@ -121,8 +121,8 @@ Name: {commondesktop}\{#ApplicationName}; Filename: {app}\{#ApplicationName}.exe
 ;   the installer exits as required by the TCRs.
 ; TODO: Update this list with the correct redistributables for your game.
 [Run]
-Filename: {tmp}\vcredist_x86.exe; Parameters: /q /quiet /passive /silent /norestart /noreboot; StatusMsg: Installing Visual C++ {#CPlusPlusYearVersion} Redistributable...
-Filename: {tmp}\dxwebsetup.exe; Parameters: /Q; StatusMsg: Installing DirectX...
+Filename: {tmp}\VC_redist.x64.exe; Parameters: /q /quiet /passive /silent /norestart /noreboot REBOOT=ReallySuppress; StatusMsg: Installing Visual C++ {#CPlusPlusYearVersion} Redistributable...
+;Filename: {tmp}\dxwebsetup.exe; Parameters: /Q; StatusMsg: Installing DirectX...
 Filename: {app}\{#ApplicationName}.exe; Description: {cm:LaunchProgram,{#ApplicationName}}; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
