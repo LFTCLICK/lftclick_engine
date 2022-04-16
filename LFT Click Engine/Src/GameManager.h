@@ -95,7 +95,8 @@ enum class EGameLevel
 	SideScrollerLevel,
 	CreditsScreen,
 	ControlScreen,
-	OptionsScreen
+	OptionsScreen,
+	GameOverScreen
 };
 
 struct TimedMessage 
@@ -188,6 +189,8 @@ public:
 	void SetMenuMusic(std::string name, float volume);
 	void SetButtonClickSound(std::string name, float volume);
 
+	void SetGameLevel(EGameLevel level);
+
 	void PauseLevelAudio();
 	void UnpauseLevelAudio();
 	void PlayMenuMusic();
@@ -236,6 +239,7 @@ public:
 	EGameLevel currentLevel;
 	EGameLevel prevLevel;
 
+	EGameLevel actualRunningLevel;
 	EGameLevel prevFrameLevel;
 
 	std::queue<TimedMessage> messageQueue;
