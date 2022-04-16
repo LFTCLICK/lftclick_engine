@@ -88,7 +88,7 @@ int main(int argc, char* args[])
 	windowFlags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 #endif
 
-	g_pWindow = SDL_CreateWindow("The Bear Grylls Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, windowFlags);
+	g_pWindow = SDL_CreateWindow("Bike Mechanic Gone Wrong! Can I Survive in a Zombie Infested Forest?!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT, windowFlags);
 
 	if (!g_pWindow)
 		return 1;

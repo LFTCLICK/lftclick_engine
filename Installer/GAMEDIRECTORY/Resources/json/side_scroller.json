@@ -1,0 +1,404 @@
+{
+  "Prefabs": [
+    {
+      "prefab": "Resources\\json\\wall.json",
+      "tag": "wall"
+    },
+    {
+      "prefab": "Resources\\json\\floor.json",
+      "tag": "floor"
+    },
+    {
+      "prefab": "Resources\\json\\enemy.json",
+      "tag": "enemy"
+    },
+    {
+      "prefab": "Resources\\json\\bullet.json",
+      "tag": "bullet"
+    },
+    {
+      "prefab": "Resources\\json\\grass.json",
+      "tag": "grass"
+    },
+    {
+      "prefab": "Resources\\json\\tree.json",
+      "tag": "tree"
+    },
+    {
+      "prefab": "Resources\\json\\player.json",
+      "tag": "player"
+    },
+    {
+      "prefab": "Resources\\json\\doorwayObj.json",
+      "tag": "door"
+    },
+    {
+      "prefab": "Resources\\json\\woodpile.json",
+      "tag": "wood"
+    },
+    {
+      "prefab": "Resources\\json\\crosshairs.json",
+      "tag": "crosshairs"
+    },
+    {
+      "prefab": "Resources\\json\\zombie.json",
+      "tag": "zombie"
+    },
+    {
+      "prefab": "Resources\\json\\ghost.json",
+      "tag": "ghost"
+    },
+    {
+      "prefab": "Resources\\json\\junkForSideScroller.json",
+      "tag": "junk"
+    },
+    {
+      "prefab": "Resources\\json\\big_tree.json",
+      "tag": "big_tree"
+    },
+    {
+      "prefab": "Resources\\json\\enemySpawner.json",
+      "tag": "enemy_spawner"
+    },
+    {
+      "prefab": "Resources\\json\\water_puddle.json",
+      "tag": "water_puddle"
+    },
+    {
+      "prefab": "Resources\\json\\vortex.json",
+      "tag": "vortex"
+    },
+    {
+      "prefab": "Resources\\json\\couch.json",
+      "tag": "couch"
+    },
+    {
+      "prefab": "Resources\\json\\road.json",
+      "tag": "road"
+    }
+  ],
+  "Map": {
+    "path": "Resources\\images\\side_scroller_map.png",
+    "key": {
+      "5b3d2e": "wall",
+      "f5b0cb": "junk",
+      "fbbc05": "tree",
+      "a37900": "big_tree",
+      "fe3c3c": "enemy_spawner",
+      "0bffff": "water_puddle",
+      "c6d32f": "zombie",
+      "4285f4": "vortex",
+      "3c2e5b": "couch"
+    },
+    "objectSize": 60
+  },
+  "MenuMusic": {
+    "name": ".\\Resources\\music\\Menu.mp3",
+    "volume": 50
+  },
+  "Level": [
+    {
+      "object": "road",
+      "overrides": [
+        {
+          "1": {
+            "startX": 0.0,
+            "startY": 0.0,
+            "scaleX": 25500,
+            "scaleY": 800,
+            "rot": 0,
+            "zPos": 98
+          }
+        }
+      ]
+    },
+    {
+      "object": "player",
+      "overrides": [
+        {
+          "1": {
+            "startX": -12300.0,
+            "startY": 35.0,
+            "scaleX": 90,
+            "scaleY": 90,
+            "rot": 0,
+            "zPos": 15
+          },
+          "2": {
+            "onlyUVOverrides": false,
+            "xScale": 1,
+            "yScale": 1,
+            "vertices": [
+              {
+                "pos": [ -0.5, -0.5, 0 ],
+                "uv": [ 0, 1 ]
+              },
+              {
+                "pos": [ -0.5, 0.5, 0 ],
+                "uv": [ 0, 0 ]
+              },
+              {
+                "pos": [ 0.5, 0.5, 0 ],
+                "uv": [ 1, 0 ]
+              },
+              {
+                "pos": [ 0.5, -0.5, 0 ],
+                "uv": [ 1, 1 ]
+              }
+            ],
+            "indicies": [ 0, 1, 2, 2, 3, 0 ],
+            "image": "Resources\\images\\player_on_bike.png"
+          },
+          "6": {
+            "spriteSheetWidth": 1,
+            "spriteSheetHeight": 1,
+            "animations": [
+              {
+                "name": "idlePlayerRight",
+                "length": 2,
+                "frameDuration": 1,
+                "onIdle": true,
+                "direction": "right"
+              },
+              {
+                "name": "movingPlayerRight",
+                "length": 2,
+                "frameDuration": 0.25,
+                "onMove": true,
+                "direction": "right"
+              },
+              {
+                "name": "idlePlayerLeft",
+                "length": 2,
+                "frameDuration": 1,
+                "onIdle": true,
+                "direction": "left"
+              },
+              {
+                "name": "movingPlayerLeft",
+                "length": 2,
+                "frameDuration": 0.25,
+                "onMove": true,
+                "direction": "left"
+              },
+              {
+                "name": "damagedPlayer",
+                "length": 2,
+                "frameDuration": 0.125,
+                "onDamage": true
+              },
+              {
+                "name": "deadPlayer",
+                "length": 2,
+                "frameDuration": 1,
+                "onDeath": true
+              }
+            ]
+          },
+          "4": {
+            "center": [ 0.0, 0.0, 0.0 ],
+            "width": 60,
+            "height": 80,
+            "trigger": false,
+            "static": false,
+            "deleteOnCollison": false
+          },
+          "7": {
+            "script": "Resources\\LuaScripts\\playerScriptSidescroller.lua"
+          },
+          "8": {
+            "sounds": [
+              {
+                "name": ".\\Resources\\music\\background.mp3",
+                "loop": true,
+                "volume": 15,
+                "playEvents": [
+                  1000
+                ],
+                "stopEvents": [
+                  2000
+                ],
+                "startTime": 0,
+                "isMusic": true
+              },
+              {
+                "name": ".\\Resources\\sounds\\hit.mp3",
+                "loop": false,
+                "volume": 20,
+                "pitchRange": [ 0.7, 1.1 ],
+                "playEvents": [
+                  1003
+                ]
+              },
+              {
+                "name": ".\\Resources\\sounds\\oof.mp3",
+                "loop": false,
+                "volume": 40,
+                "pitchRange": [ 0.7, 1.1 ],
+                "playEvents": [
+                  1003
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "zombie",
+      "overrides": [
+        {
+          "103": {
+            "attackTimer": 3.0,
+            "damage": 15.0,
+            "speed": 325.0
+          }
+        }
+      ]
+    },
+    {
+      "object": "crosshairs",
+      "overrides": []
+    },
+    {
+      "object": "grass",
+      "overrides": [
+        {
+          "1": {
+            "startX": -30750.0,
+            "startY": 30.0,
+            "scaleX": 15360,
+            "scaleY": 15360,
+            "rot": 0,
+            "zPos": 100
+          },
+          "2": {
+            "onlyUVOverrides": false,
+            "xScale": 1,
+            "yScale": 1,
+            "vertices": [
+              {
+                "pos": [ -0.5, -0.5, 0 ],
+                "uv": [ 0, 1 ]
+              },
+              {
+                "pos": [ -0.5, 0.5, 0 ],
+                "uv": [ 0, 0 ]
+              },
+              {
+                "pos": [ 0.5, 0.5, 0 ],
+                "uv": [ 1, 0 ]
+              },
+              {
+                "pos": [ 0.5, -0.5, 0 ],
+                "uv": [ 1, 1 ]
+              }
+            ],
+            "indicies": [ 0, 1, 2, 2, 3, 0 ],
+            "image": "Resources\\images\\grass_large_sidescroll.png"
+          }
+        }
+      ]
+    },
+    {
+      "object": "grass",
+      "overrides": [
+        {
+          "1": {
+            "startX": -15390.0,
+            "startY": 30.0,
+            "scaleX": 15360,
+            "scaleY": 15360,
+            "rot": 0,
+            "zPos": 100
+          },
+          "2": {
+            "onlyUVOverrides": false,
+            "xScale": 1,
+            "yScale": 1,
+            "vertices": [
+              {
+                "pos": [ -0.5, -0.5, 0 ],
+                "uv": [ 0, 1 ]
+              },
+              {
+                "pos": [ -0.5, 0.5, 0 ],
+                "uv": [ 0, 0 ]
+              },
+              {
+                "pos": [ 0.5, 0.5, 0 ],
+                "uv": [ 1, 0 ]
+              },
+              {
+                "pos": [ 0.5, -0.5, 0 ],
+                "uv": [ 1, 1 ]
+              }
+            ],
+            "indicies": [ 0, 1, 2, 2, 3, 0 ],
+            "image": "Resources\\images\\grass_large_sidescroll.png"
+          }
+        }
+      ]
+    },
+    {
+      "object": "grass",
+      "overrides": [
+        {
+          "1": {
+            "startX": -30.0,
+            "startY": 30.0,
+            "scaleX": 15360,
+            "scaleY": 15360,
+            "rot": 0,
+            "zPos": 100
+          },
+          "2": {
+            "onlyUVOverrides": false,
+            "xScale": 1,
+            "yScale": 1,
+            "vertices": [
+              {
+                "pos": [ -0.5, -0.5, 0 ],
+                "uv": [ 0, 1 ]
+              },
+              {
+                "pos": [ -0.5, 0.5, 0 ],
+                "uv": [ 0, 0 ]
+              },
+              {
+                "pos": [ 0.5, 0.5, 0 ],
+                "uv": [ 1, 0 ]
+              },
+              {
+                "pos": [ 0.5, -0.5, 0 ],
+                "uv": [ 1, 1 ]
+              }
+            ],
+            "indicies": [ 0, 1, 2, 2, 3, 0 ],
+            "image": "Resources\\images\\grass_large_sidescroll.png"
+          }
+        }
+      ]
+    },
+    {
+      "object": "enemy_spawner",
+      "overrides": [
+        {
+          "101": {
+            "enemyTypes": [
+              {
+                "name": "zombie",
+                "spawnChance": 80
+              },
+              {
+                "name": "ghost",
+                "spawnChance": 0
+              }
+            ],
+            "spawnAroundPlayer": true
+          }
+        }
+      ]
+    }
+  ]
+}
