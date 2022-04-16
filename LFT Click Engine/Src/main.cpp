@@ -270,7 +270,6 @@ int main(int argc, char* args[])
 
 			if (ImGui::Button("Play", { 100,50 }))
 			{
-
 				g_GameManager->PlayButtonClick();
 				g_GameManager->LoadLevel(dataJsonSurvival, EGameLevel::SurvivalLevel);
 			}
