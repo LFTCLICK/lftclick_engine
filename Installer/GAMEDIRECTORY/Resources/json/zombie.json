@@ -10,7 +10,7 @@
   "2": {
     "onlyUVOverrides": false,
     "xScale": 0.25,
-    "yScale": 0.125,
+    "yScale": 0.05,
     "vertices": [
       {
         "pos": [ -0.5, -0.5, 0 ],
@@ -35,7 +35,7 @@
   },
   "6": {
     "spriteSheetWidth": 4,
-    "spriteSheetHeight": 8,
+    "spriteSheetHeight": 20,
     "animations": [
       {
         "name": "idleZombieDown",
@@ -92,6 +92,98 @@
         "frameDuration": 0.25,
         "onMove": true,
         "direction": "right"
+      },
+      {
+        "name": "idleZombieDownDamaged",
+        "length": 4,
+        "frameDuration": 0.125,
+        "onIdle": true,
+        "onDamage": true,
+        "direction": "down"
+      },
+      {
+        "name": "movingZombieDownDamaged",
+        "length": 4,
+        "frameDuration": 0.125,
+        "onMove": true,
+        "onDamage": true,
+        "direction": "down"
+      },
+      {
+        "name": "idleZombieUpDamaged",
+        "length": 4,
+        "frameDuration": 0.125,
+        "onIdle": true,
+        "onDamage": true,
+        "direction": "up"
+      },
+      {
+        "name": "movingZombieUpDamaged",
+        "length": 4,
+        "frameDuration": 0.125,
+        "onMove": true,
+        "onDamage": true,
+        "direction": "up"
+      },
+      {
+        "name": "idleZombieLeftDamaged",
+        "length": 4,
+        "frameDuration": 0.125,
+        "onIdle": true,
+        "onDamage": true,
+        "direction": "left"
+      },
+      {
+        "name": "movingZombieLeftDamaged",
+        "length": 4,
+        "frameDuration": 0.125,
+        "onMove": true,
+        "onDamage": true,
+        "direction": "left"
+      },
+      {
+        "name": "idleZombieRightDamaged",
+        "length": 4,
+        "frameDuration": 0.125,
+        "onIdle": true,
+        "onDamage": true,
+        "direction": "right"
+      },
+      {
+        "name": "movingZombieRightDamaged",
+        "length": 4,
+        "frameDuration": 0.125,
+        "onMove": true,
+        "onDamage": true,
+        "direction": "right"
+      },
+      {
+        "name": "zombieDownDead",
+        "length": 4,
+        "frameDuration": 0.1875,
+        "onDeath": true,
+        "direction": "down"
+      },
+      {
+        "name": "zombieUpDead",
+        "length": 4,
+        "frameDuration": 0.1875,
+        "onDeath": true,
+        "direction": "up"
+      },
+      {
+        "name": "zombieLeftDead",
+        "length": 4,
+        "frameDuration": 0.1875,
+        "onDeath": true,
+        "direction": "left"
+      },
+      {
+        "name": "zombieRightDead",
+        "length": 4,
+        "frameDuration": 0.1875,
+        "onDeath": true,
+        "direction": "right"
       }
     ]
   },
@@ -100,7 +192,7 @@
       {
         "name": ".\\Resources\\sounds\\zombiedamage.mp3",
         "loop": false,
-        "volume": 30,
+        "volume": 7,
         "pitchRange": [ 0.85, 1.15 ],
         "playEvents": [
           1003
@@ -109,7 +201,7 @@
       {
         "name": ".\\Resources\\sounds\\zombiedeathrattle.mp3",
         "loop": false,
-        "volume": 40,
+        "volume": 15,
         "pitchRange": [ 0.85, 1.15 ],
         "playEvents": [
           1004
@@ -121,10 +213,23 @@
         "volume": 40,
         "pitchRange": [ 0.85, 1.15 ],
         "playEvents": [
-          1007
+          1007,
+          1010
         ],
         "stopEvents": [
           1004
+        ]
+      },
+      {
+        "name": ".\\Resources\\sounds\\zombieatdoor.mp3",
+        "loop": false,
+        "volume": 15,
+        "pitchRange": [ 0.25, 0.55 ],
+        "playEvents": [
+          1009
+        ],
+        "stopEvents": [
+          2000
         ]
       }
     ]
@@ -142,6 +247,6 @@
   "103": {
     "attackTimer": 3.0,
     "damage": 15.0,
-    "speed": 100.0
+    "speed": 150.0
   }
 }

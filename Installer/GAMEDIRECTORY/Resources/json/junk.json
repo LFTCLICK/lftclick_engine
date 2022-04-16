@@ -65,7 +65,7 @@
       {
         "name": ".\\Resources\\sounds\\searching.mp3",
         "loop": true,
-        "volume": 15,
+        "volume": 6,
         "pitchRange": [ 0.9, 1.1 ],
         "playEvents": [
           1005
@@ -76,19 +76,29 @@
         ]
       },
       {
-        "name": ".\\Resources\\sounds\\bwee.mp3",
+        "name": ".\\Resources\\sounds\\woodget.mp3",
         "loop": false,
-        "volume": 5,
-        "pitchRange": [ 0.65, 0.85 ],
+        "volume": 10,
+        "pitchRange": [ 0.9, 1.1 ],
         "playEvents": [
           1006
+        ]
+      },
+      {
+        "name": ".\\Resources\\sounds\\partget.mp3",
+        "loop": false,
+        "volume": 10,
+        "pitchRange": [ 0.9, 1.1 ],
+        "playEvents": [
+          1008
         ]
       }
     ]
   },
   "14": {
-    "timeToCollect": 1,
-    "woodPerCollect": 3,
-    "interactDistance": 200
+    "timeToCollect": 4,
+    "woodPerCollect": 1,
+    "interactDistance": 200,
+    "hasParts": true
   }
 }

@@ -87,11 +87,20 @@
     {
       "prefab": "Resources\\json\\chair_right.json",
       "tag": "chair_right"
+    },
+    {
+      "prefab": "Resources\\json\\credits.json",
+      "tag": "credits"
+    },
+    {
+      "prefab": "Resources\\json\\wrecked_bike.json",
+      "tag": "wrecked_bike"
     }
   ],
   "Map": {
     "path": "Resources\\images\\map3.png",
     "key": {
+      "000000": "player",
       "5b3d2e": "wall",
       "133832": "junk",
       "a06524": "tree",
@@ -103,14 +112,30 @@
       "2817ba": "couch_right",
       "845786": "chair_left",
       "974582": "chair_right",
-      "00ffd6": "enemy_spawner"
+      "00ffd6": "enemy_spawner",
+      "861010": "wrecked_bike"
     },
     "objectSize": 60
+  },
+  "MenuMusic": {
+    "name": ".\\Resources\\music\\Menu.mp3",
+    "volume": 50
   },
   "Level": [
     {
       "object": "player",
-      "overrides": []
+      "overrides": [
+        {
+          "1": {
+            "startX": -180.0,
+            "startY": -2200.0,
+            "scaleX": 60,
+            "scaleY": 60,
+            "rot": 0,
+            "zPos": 15
+          }
+        }
+      ]
     },
     {
       "object": "door",
@@ -120,17 +145,17 @@
             "startX": -30.0,
             "startY": 960.0,
             "scaleX": 240,
-            "scaleY": 60,
+            "scaleY": 33,
             "rot": 0,
             "zPos": 9
           },
-          "102":{
-            "woodPileOffset": [ -128.0, -64.0],
+          "102": {
+            "woodPileOffset": [ -160.0, -55.0 ],
             "woodPileRadius": 25.0,
             "doorPhases": 5,
-            "hp": 100,
+            "hp": 450,
             "woodRequiredPerPhase": 5,
-            "repairTime": 3
+            "repairTime": 2.2
           }
         }
       ]
@@ -143,17 +168,17 @@
             "startX": -810.0,
             "startY": -900.0,
             "scaleX": 240,
-            "scaleY": 60,
+            "scaleY": 33,
             "rot": 0,
             "zPos": 9
           },
-          "102":{
-            "woodPileOffset": [ 128.0, 64.0],
+          "102": {
+            "woodPileOffset": [ 128.0, 64.0 ],
             "woodPileRadius": 25.0,
             "doorPhases": 5,
-            "hp": 100,
+            "hp": 450,
             "woodRequiredPerPhase": 5,
-            "repairTime": 3
+            "repairTime": 2.2
           }
         }
       ]
@@ -171,6 +196,10 @@
       "overrides": []
     },
     {
+      "object": "credits",
+      "overrides": []
+    },
+    {
       "object": "enemy_spawner",
       "overrides": [
         {
@@ -182,11 +211,7 @@
               },
               {
                 "name": "ghost",
-                "spawnChance": 15
-              },
-              {
-                "name": "ghost",
-                "spawnChance": 5
+                "spawnChance": 20
               }
             ],
             "spawnAroundPlayer": true
