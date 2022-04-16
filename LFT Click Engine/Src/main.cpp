@@ -48,7 +48,7 @@ SDL_Window* g_pWindow;
 
 bool DoesPlayerReallyWantToLeave(bool &quitPopup)
 {
-	bool toReturn=true;
+	bool toReturn = true;
 	ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(g_Renderer->GetHeight()) / 2));
 	ImGui::Begin("quit", nullptr,
 		ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
@@ -539,11 +539,19 @@ int main(int argc, char* args[])
 
 		if (showQuitWindow)
 		{
-			while (ShowCursor(true) < 0); // Shows cursor
+			while (ShowCursor(true) < 0); 
 			g_FrameRateController->zeroDeltaTime = true;
+
 			isInGame = DoesPlayerReallyWantToLeave(showQuitWindow);
-			if(showQuitWindow==false)
-				g_FrameRateController->zeroDeltaTime = false;
+
+			//resume
+			if (showQuitWindow == false)
+			{
+				if (g_GameManager->currentLevel == g_GameManager->actualRunningLevel)
+					g_FrameRateController->zeroDeltaTime = false;
+
+				g_GameManager->SetGameLevel(g_GameManager->currentLevel);
+			}
 		}
 		g_Renderer->PresentFrame();
 	}
