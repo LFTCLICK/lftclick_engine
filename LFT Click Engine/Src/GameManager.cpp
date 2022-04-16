@@ -32,6 +32,7 @@ void GameManager::LoadLevel(json file, EGameLevel toSet)
 		this->playerObj = playerObj;
 		this->mainCamera = playerObj->getComponent<Camera>();
 		this->playerTrans = playerObj->getComponent<Transform>();
+		this->playerPos = playerTrans->CurrentPos();
 		
 		this->time = 0;
 
@@ -73,7 +74,9 @@ TimedMessage GameManager::GetPlayerMessage()
 }
 
 void GameManager::Update() {
-	//std::cout << g_AudioManager->GetGroupVolume(MUSIC_MASTER_CHANNEL_GROUP) << std::endl;
+	if (!playerDead)
+		playerPos = playerTrans->CurrentPos();
+
 	UpdateCheats();
 	UpdateTime();
 	UpdateDanger();
@@ -87,6 +90,9 @@ void GameManager::Update() {
 
 void GameManager::UpdateCheats()
 {
+	// Cheats for wood/part gains are in Player.cpp at the end of Update().
+	// The rest are here.
+
 	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F3)) {
 		if (time < SUN_DOWN)
 			time = SUN_DOWN;
@@ -94,6 +100,14 @@ void GameManager::UpdateCheats()
 			time = SUN_UP;
 		else
 			time = DAY_LENGTH;
+	}
+
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F5)) {
+		godMode = !godMode;
+	}
+
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F6)) {
+		g_AudioManager->ToggleMuteMusic();
 	}
 }
 
@@ -120,15 +134,13 @@ void GameManager::UpdateTime()
 
 	if (currentLevel == EGameLevel::SurvivalLevel)
 	{
-		if (time < SUN_DOWN) darknessLevel = 1 - ((SUN_DOWN - time) / (SUN_DOWN - SUN_SETTING));
+		if (time < SUN_DOWN) darknessLevel = 1 - ((SUN_DOWN - time) / SUN_DOWN);
 		else if (time < SUN_RISING) darknessLevel = 1;
 		else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
 		else  darknessLevel = 0;
 	}
-	else
-	{
-
-	}
+	else if (darknessLevel != 0.1)
+		darknessLevel = 0.1;
 
 	static float fadeInTimer = 0.0f;
 	static float fadeOutTimer = 0.0f;
@@ -232,7 +244,7 @@ void GameManager::UpdateLevel()
 
 void GameManager::UpdateInsideHouse()
 {
-	playerInsideHouse = IsPosInsideHouse(playerTrans->CurrentPos());
+	playerInsideHouse = IsPosInsideHouse(playerPos);
 }
 
 void GameManager::UpdateSpawners()
@@ -364,7 +376,12 @@ bool GameManager::IsPosInsideHouse(DirectX::SimpleMath::Vector2 pos)
 void GameManager::SetMenuMusic(std::string name, float volume) {
 	menuMusicName = name;
 	g_AudioManager->SetGroupVolume(MENU_MUSIC_MASTER_CHANNEL_GROUP, volume);
-	g_AudioManager->LoadSound(menuMusicName, true, false, false);
+	g_AudioManager->LoadSound(menuMusicName, true, false, true);
+}
+void GameManager::SetButtonClickSound(std::string name, float volume) {
+	buttonClickSoundName = name;
+	g_AudioManager->SetGroupVolume(BUTTON_CLICK_MASTER_CHANNEL_GROUP, volume);
+	g_AudioManager->LoadSound(buttonClickSoundName);
 }
 
 void GameManager::PauseLevelAudio() {
@@ -377,8 +394,14 @@ void GameManager::UnpauseLevelAudio() {
 }
 void GameManager::PlayMenuMusic() {
 	g_AudioManager->PlaySound(menuMusicName, MENU_MUSIC_MASTER_CHANNEL_GROUP);
-	g_AudioManager->SetGroupSpatialPosition(MENU_MUSIC_MASTER_CHANNEL_GROUP, playerTrans->CurrentPos());
+	g_AudioManager->SetGroupSpatialPosition(MENU_MUSIC_MASTER_CHANNEL_GROUP, playerPos);
 }
 void GameManager::StopMenuMusic() {
 	g_AudioManager->StopGroup(MENU_MUSIC_MASTER_CHANNEL_GROUP);
+}
+void GameManager::PlayButtonClick() {
+	if (buttonClickSoundName != "none") {
+		g_AudioManager->PlaySound(buttonClickSoundName, BUTTON_CLICK_MASTER_CHANNEL_GROUP);
+		g_AudioManager->SetGroupSpatialPosition(BUTTON_CLICK_MASTER_CHANNEL_GROUP, playerPos);
+	}
 }

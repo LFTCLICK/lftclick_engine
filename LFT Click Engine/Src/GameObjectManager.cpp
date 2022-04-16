@@ -247,6 +247,8 @@ void GameObjectManager::Deserialize(GameObjectFactory* gof, json j, bool isPrefa
 
 	if (j.contains("MenuMusic"))
 		g_GameManager->SetMenuMusic(j["MenuMusic"]["name"], j["MenuMusic"]["volume"]);
+	if (j.contains("ButtonClickSound"))
+		g_GameManager->SetButtonClickSound(j["ButtonClickSound"]["name"], j["ButtonClickSound"]["volume"]);
 
 	if (j.contains("Map"))
 	{

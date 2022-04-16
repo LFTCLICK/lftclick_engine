@@ -13,6 +13,10 @@
       "tag": "introCamera"
     }
   ],
+  "ButtonClickSound": {
+    "name": ".\\Resources\\sounds\\clicky.mp3",
+    "volume": 25
+  },
   "Level": [
     {
       "object": "introCamera",

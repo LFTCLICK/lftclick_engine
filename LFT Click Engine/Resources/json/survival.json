@@ -91,6 +91,10 @@
     {
       "prefab": "Resources\\json\\credits.json",
       "tag": "credits"
+    },
+    {
+      "prefab": "Resources\\json\\wrecked_bike.json",
+      "tag": "wrecked_bike"
     }
   ],
   "Map": {
@@ -108,7 +112,8 @@
       "2817ba": "couch_right",
       "845786": "chair_left",
       "974582": "chair_right",
-      "00ffd6": "enemy_spawner"
+      "00ffd6": "enemy_spawner",
+      "861010": "wrecked_bike"
     },
     "objectSize": 60
   },
@@ -122,8 +127,8 @@
       "overrides": [
         {
           "1": {
-            "startX": 0,
-            "startY": 0,
+            "startX": -180.0,
+            "startY": -2200.0,
             "scaleX": 60,
             "scaleY": 60,
             "rot": 0,
@@ -144,8 +149,8 @@
             "rot": 0,
             "zPos": 9
           },
-          "102":{
-            "woodPileOffset": [ -160.0, -55.0],
+          "102": {
+            "woodPileOffset": [ -160.0, -55.0 ],
             "woodPileRadius": 25.0,
             "doorPhases": 5,
             "hp": 450,
@@ -167,8 +172,8 @@
             "rot": 0,
             "zPos": 9
           },
-          "102":{
-            "woodPileOffset": [ 128.0, 64.0],
+          "102": {
+            "woodPileOffset": [ 128.0, 64.0 ],
             "woodPileRadius": 25.0,
             "doorPhases": 5,
             "hp": 450,
@@ -206,11 +211,7 @@
               },
               {
                 "name": "ghost",
-                "spawnChance": 15
-              },
-              {
-                "name": "ghost",
-                "spawnChance": 5
+                "spawnChance": 20
               }
             ],
             "spawnAroundPlayer": true

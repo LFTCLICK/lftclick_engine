@@ -258,12 +258,19 @@ void Player::Update()
 			myTransform->Move(0, negativeBound.y - pos.y);
 	}
 
-
+	// The rest of the cheats are in GameManager, in UpdateCheats.
 	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F1)) {
 		collectibleparts++;
 	}
 	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F2)) {
 		collectibleWood++;
+	}
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F7)) {
+		collectibleparts = 8;
+	}
+	if (g_InputManager->isKeyTriggered(SDL_SCANCODE_F8)) {
+		playerHealth = 0;
+		g_GameManager->playerDead = true;
 	}
 }
 
@@ -298,20 +305,17 @@ void Player::HandleMessage(Message* e)
 		}
 
 		Enemy* enemyComp = e->otherObject->componentOwner->getComponent<Enemy>();
-		if (enemyComp != nullptr) 
+		if (enemyComp != nullptr && damageCooldownTimer < 0 && !g_GameManager->godMode)
 		{
-			if (damageCooldownTimer < 0) 
-			{
-				hitDirection = cm->deltaPos;
-				hitDirection.Normalize();
-				hitSpeed = enemyComp->speed * 6;
+			hitDirection = cm->deltaPos;
+			hitDirection.Normalize();
+			hitSpeed = enemyComp->speed * 6;
 
-				PlayerCollidedWithEnemy();
-				damageCooldownTimer = 2;
+			PlayerCollidedWithEnemy();
+			damageCooldownTimer = 2;
 
-				DirectX::SimpleMath::Vector2 movement = hitDirection * hitSpeed * g_FrameRateController->DeltaTime();
-				Move(movement.x, movement.y);
-			}
+			DirectX::SimpleMath::Vector2 movement = hitDirection * hitSpeed * g_FrameRateController->DeltaTime();
+			Move(movement.x, movement.y);
 		}
 		else {
 			Move(cm->deltaPos.x, cm->deltaPos.y);
