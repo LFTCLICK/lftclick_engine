@@ -46,6 +46,26 @@ std::unique_ptr<AStarTerrain> g_AStarTerrain;
 
 SDL_Window* g_pWindow;
 
+bool DoesPlayerReallyWantToLeave(bool &quitPopup)
+{
+	bool toReturn=true;
+	ImGui::SetNextWindowPos(ImVec2(static_cast<float>(g_Renderer->GetWidth()) / 2 - 50, static_cast<float>(g_Renderer->GetHeight()) / 2));
+	ImGui::Begin("quit", nullptr,
+		ImGuiWindowFlags_::ImGuiWindowFlags_NoMove | ImGuiWindowFlags_::ImGuiWindowFlags_NoTitleBar
+		| ImGuiWindowFlags_::ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Text("Are you sure you want to quit?");
+	if (ImGui::Button("Yes"))
+	{
+		toReturn = false;
+	}
+	if (ImGui::Button("No"))
+	{
+		quitPopup = false;
+	}
+	ImGui::End();
+	return toReturn;
+}
+
 int main(int argc, char* args[])
 {
 	HRESULT hr = CoInitializeEx(nullptr, COINITBASE_MULTITHREADED);
@@ -115,7 +135,9 @@ int main(int argc, char* args[])
 	g_GameObjManager->FindObjectOfTag("digi_logo")->isOnScreen = true;
 	g_FrameRateController->Tick();
 	g_FrameRateController->Tick();
-	while (e.type != SDL_QUIT)
+	bool isInGame = true;
+	bool showQuitWindow = false;
+	while (isInGame)
 	{
 		SDL_PollEvent(&e);
 
@@ -218,7 +240,7 @@ int main(int argc, char* args[])
 	srand(time(NULL));
 	g_GameManager->currentLevel = EGameLevel::Mainmenu;
 	RECT rect;
-	while (e.type != SDL_QUIT)
+	while (isInGame)
 	{
 		SDL_PollEvent(&e);
 
@@ -240,6 +262,12 @@ int main(int argc, char* args[])
 				}
 			}
 			break;
+		}
+
+		if (e.type == SDL_QUIT)
+		{
+			showQuitWindow = true;
+			e.type = SDL_WINDOWEVENT_SIZE_CHANGED;
 		}
 
 
@@ -284,7 +312,7 @@ int main(int argc, char* args[])
 			if (ImGui::Button("Quit", { 100, 50 }))
 			{
 				g_GameManager->PlayButtonClick();
-				e.type = SDL_QUIT;
+				showQuitWindow = true;
 			}
 
 			ImGui::End();
@@ -489,7 +517,7 @@ int main(int argc, char* args[])
 				if (ImGui::Button("Quit", { 100, 50 }))
 				{
 					g_GameManager->PlayButtonClick();
-					e.type = SDL_QUIT;
+					showQuitWindow = true;
 				}
 
 				ImGui::End();
@@ -511,6 +539,14 @@ int main(int argc, char* args[])
 			break;
 		}
 
+		if (showQuitWindow)
+		{
+			while (ShowCursor(true) < 0); // Shows cursor
+			g_FrameRateController->zeroDeltaTime = true;
+			isInGame = DoesPlayerReallyWantToLeave(showQuitWindow);
+			if(showQuitWindow==false)
+				g_FrameRateController->zeroDeltaTime = false;
+		}
 		g_Renderer->PresentFrame();
 	}
 
