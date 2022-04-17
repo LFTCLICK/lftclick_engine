@@ -21,7 +21,7 @@
 ;   5) Update the redistributables required for your game.
 [Setup]
 
-#define ApplicationName 'The Bear Grylls Game'
+#define ApplicationName 'Bike Mechanic Gone Wrong! Can I Survive in a Zombie Infested Forest!'
 #define ApplicationVersion '0.9.0'
 #define CPlusPlusYearVersion '2019'
 
