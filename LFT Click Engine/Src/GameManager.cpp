@@ -140,8 +140,8 @@ void GameManager::UpdateTime()
 		else if (time < SUN_UP) darknessLevel = (SUN_UP - time) / (SUN_UP - SUN_RISING);
 		else  darknessLevel = 0;
 	}
-	else if (darknessLevel != 0.1)
-		darknessLevel = 0.1;
+	/*else if (darknessLevel != 0.1)
+		darknessLevel = 0.1;*/
 
 	static float fadeInTimer = 0.0f;
 	static float fadeOutTimer = 0.0f;
